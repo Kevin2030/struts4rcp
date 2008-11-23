@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -290,12 +290,12 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		try {
-			Actions.init("transport.properties");
-			new Main();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Properties properties = new Properties();
+		properties.setProperty("server.host", (args != null && args.length > 0) ? args[0] : "localhost");
+		properties.setProperty("server.host", (args != null && args.length > 1) ? args[1] : "8080");
+		properties.setProperty("context.path", (args != null && args.length > 2) ? args[2] : "struts4rcpdemo");
+		Actions.init(properties);
+		new Main();
 	}
 
 }
