@@ -16,14 +16,17 @@ public class Configuration {
 
 	private final String description;
 
+	private final String defaultValue;
+
 	private final Collection<String> options;
 
-	public Configuration(String key, String value, String name, String description, Collection<String> options) {
+	public Configuration(String key, String value, String name, String description, String defaultValue, Collection<String> options) {
 		super();
 		this.key = key;
 		this.value = value;
 		this.name = name;
 		this.description = description;
+		this.defaultValue = defaultValue;
 		this.options = options;
 	}
 
@@ -57,6 +60,14 @@ public class Configuration {
 	 */
 	public String getDescription() {
 		return description;
+	}
+
+	/**
+	 * 获取默认值
+	 * @return 默认值
+	 */
+	public String getDefaultValue() {
+		return defaultValue;
 	}
 
 	public Collection<String> getOptions() {

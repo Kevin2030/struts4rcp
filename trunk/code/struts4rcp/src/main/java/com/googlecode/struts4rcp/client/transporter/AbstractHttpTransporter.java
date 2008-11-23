@@ -185,7 +185,7 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 		serverHost = PropertiesUtils.getStringProperty(config, SERVER_HOST_PARAM_NAME, null);
 		if (serverHost == null)
 			throw new NullPointerException("server.host == null, 服务器主机名不能为空!");
-		client.getConfigurationManager().register(SERVER_HOST_PARAM_NAME, "服务器主机名", "暂未实现动态切换服务器名，修改后不会生效!");
+		client.getConfigurationManager().register(SERVER_HOST_PARAM_NAME, "服务器主机名", "暂未实现动态切换服务器名，修改后不会生效!", "");
 
 		// 读取服务器端口
 		serverPort = PropertiesUtils.getIntProperty(config, SERVER_PORT_PARAM_NAME, UNKNOWN_SERVER_PORT);
@@ -193,7 +193,7 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 
 		// 读取上下文路径
 		contextPath = PropertiesUtils.getStringProperty(config, CONTEXT_PATH_PARAM_NAME, "");
-		client.getConfigurationManager().register(CONTEXT_PATH_PARAM_NAME,  "应用上下文路径", "暂未实现动态切换应用上下文路径，修改后不会生效!");
+		client.getConfigurationManager().register(CONTEXT_PATH_PARAM_NAME,  "应用上下文路径", "暂未实现动态切换应用上下文路径，修改后不会生效!", "/");
 
 		// 读取Action后缀
 		actionSuffix = PropertiesUtils.getStringProperty(config, ACTION_SUFFIX_PARAM_NAME, DEFAULT_ACTION_SUFFIX);
