@@ -144,12 +144,12 @@ public class ConfigurationPane extends JPanel {
 				Collection<String> options = configuration.getOptions();
 				String newValue;
 				if (options == null || options.size() == 0)
-					newValue = JOptionPane.showInputDialog(ConfigurationPane.this, "请输入配置项\"" + configuration.getNameOrKey() + "\"的新值：", configuration.getValue());
+					newValue = JOptionPane.showInputDialog(ConfigurationPane.this, "请输入配置项\"" + configuration.getNameOrKey() + "\"的新值：", configuration.getValueOrDefault());
 				else
-					newValue = (String)JOptionPane.showInputDialog(ConfigurationPane.this, "请输入配置项\"" + configuration.getNameOrKey() + "\"的新值：", "选择", JOptionPane.INFORMATION_MESSAGE, Images.getIcon("edit.gif"), options.toArray(), configuration.getValue());
-				if (newValue != null && ! newValue.equals(configuration.getValue())) {
+					newValue = (String)JOptionPane.showInputDialog(ConfigurationPane.this, "请输入配置项\"" + configuration.getNameOrKey() + "\"的新值：", "选择", JOptionPane.INFORMATION_MESSAGE, Images.getIcon("edit.gif"), options.toArray(), configuration.getValueOrDefault());
+				if (newValue != null) {
 					client.getConfigurationManager().setValue(configuration.getKey(), newValue);
-					JOptionPane.showMessageDialog(ConfigurationPane.this, "配置项修改成功!", "修改配置项", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(ConfigurationPane.this, "修改配置项成功!", "修改配置项", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
