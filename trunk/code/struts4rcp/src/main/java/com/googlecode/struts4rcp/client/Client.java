@@ -10,7 +10,7 @@ import com.googlecode.struts4rcp.client.event.ExceptionListener;
 import com.googlecode.struts4rcp.client.event.ExecutionListener;
 import com.googlecode.struts4rcp.client.event.Listener;
 import com.googlecode.struts4rcp.client.event.TransportationListener;
-import com.googlecode.struts4rcp.client.provider.DefaultActionProvider;
+import com.googlecode.struts4rcp.client.provider.DefaultActionManager;
 import com.googlecode.struts4rcp.client.transporter.HttpURLConnectionTransporter;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.Shutdownable;
@@ -26,7 +26,7 @@ public class Client implements Shutdownable {
 	/**
 	 * Action代理供给策略配置参数名
 	 */
-	public static final String ACTION_PROVIDER_PARAM_NAME = "actionProvider";
+	public static final String ACTION_MANAGER_PARAM_NAME = "actionManager";
 
 	/**
 	 * Action代理供给策略配置参数名
@@ -42,7 +42,7 @@ public class Client implements Shutdownable {
 
 	private final Transporter transporter;
 
-	private final ActionProvider actionProvider;
+	private final ActionManager actionManager;
 
 	private static Transporter loadTransporter(Properties config) {
 		 return PropertiesUtils.getInstanceProperty(config,
@@ -50,10 +50,10 @@ public class Client implements Shutdownable {
 					HttpURLConnectionTransporter.class);
 	}
 
-	private static ActionProvider loadActionProvider(Properties config) {
+	private static ActionManager loadActionManager(Properties config) {
 		 return PropertiesUtils.getInstanceProperty(
-					config, ACTION_PROVIDER_PARAM_NAME, ActionProvider.class,
-					DefaultActionProvider.class);
+					config, ACTION_MANAGER_PARAM_NAME, ActionManager.class,
+					DefaultActionManager.class);
 	}
 
 	private static ConfigurationManager loadConfigurationManager(Properties config) {
@@ -63,20 +63,20 @@ public class Client implements Shutdownable {
 	}
 
 	public Client(Properties config) {
-		this(config, loadTransporter(config), loadActionProvider(config), loadConfigurationManager(config));
+		this(config, loadTransporter(config), loadActionManager(config), loadConfigurationManager(config));
 	}
 
 	public Client(Properties config, Transporter transporter) {
-		this(config, transporter, loadActionProvider(config), loadConfigurationManager(config));
+		this(config, transporter, loadActionManager(config), loadConfigurationManager(config));
 	}
 
 	public Client(Properties config, Transporter transporter,
-			ActionProvider actionProvider) {
-		this(config, transporter, actionProvider, loadConfigurationManager(config));
+			ActionManager actionManager) {
+		this(config, transporter, actionManager, loadConfigurationManager(config));
 	}
 
 	public Client(Properties config, Transporter transporter,
-			ActionProvider actionProvider,
+			ActionManager actionManager,
 			ConfigurationManager configurationManager) {
 		if (config == null)
 			throw new NullPointerException("properties == null!");
@@ -84,16 +84,16 @@ public class Client implements Shutdownable {
 			throw new NullPointerException("configurationManager == null!");
 		if (transporter == null)
 				throw new NullPointerException("transporter == null!");
-		if (actionProvider == null)
-			throw new NullPointerException("actionProvider == null!");
+		if (actionManager == null)
+			throw new NullPointerException("actionManager == null!");
 
 		this.configurationManager = configurationManager;
 		this.transporter = transporter;
-		this.actionProvider = actionProvider;
+		this.actionManager = actionManager;
 		config = new UnmodifiableProperties(config);
 		configurationManager.init(this, config);
 		transporter.init(this, config);
-		actionProvider.init(this, config);
+		actionManager.init(this, config);
 		// 读取监听器
 		List<Listener> listeners = PropertiesUtils.getInstancesProperty(
 				config, LISTENERS_PARAM_NAME, Listener.class);
@@ -110,8 +110,8 @@ public class Client implements Shutdownable {
 		return transporter;
 	}
 
-	public ActionProvider getActionProvider() {
-		return actionProvider;
+	public ActionManager getActionManager() {
+		return actionManager;
 	}
 
 	public void shutdown() {
@@ -119,7 +119,7 @@ public class Client implements Shutdownable {
 			transporter.shutdown();
 		} finally {
 			try {
-				actionProvider.shutdown();
+				actionManager.shutdown();
 			} finally {
 				configurationManager.shutdown();
 			}
@@ -139,10 +139,10 @@ public class Client implements Shutdownable {
 			this.getTransporter().addTransportationListener(
 					(TransportationListener) listener);
 		if (listener instanceof ExecutionListener)
-			this.getActionProvider().addExecutionListener(
+			this.getActionManager().addExecutionListener(
 					(ExecutionListener) listener);
 		if (listener instanceof ExceptionListener)
-			this.getActionProvider().addExceptionListener(
+			this.getActionManager().addExceptionListener(
 					(ExceptionListener) listener);
 		if (listener instanceof ConfigurationListener)
 			this.getConfigurationManager()
@@ -162,10 +162,10 @@ public class Client implements Shutdownable {
 					.removeTransportationListener(
 							(TransportationListener) listener);
 		if (listener instanceof ExecutionListener)
-			this.getActionProvider().removeExecutionListener(
+			this.getActionManager().removeExecutionListener(
 					(ExecutionListener) listener);
 		if (listener instanceof ExceptionListener)
-			this.getActionProvider().removeExceptionListener(
+			this.getActionManager().removeExceptionListener(
 					(ExceptionListener) listener);
 		if (listener instanceof ConfigurationListener)
 			this.getConfigurationManager()
