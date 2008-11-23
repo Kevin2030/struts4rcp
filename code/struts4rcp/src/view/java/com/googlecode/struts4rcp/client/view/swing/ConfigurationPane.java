@@ -141,8 +141,13 @@ public class ConfigurationPane extends JPanel {
 					if (ch != JOptionPane.YES_OPTION)
 						return;
 				}
-				String newValue = JOptionPane.showInputDialog(ConfigurationPane.this, "请输入配置项\"" + configuration.getNameOrKey() + "\"的新值：", configuration.getValue());
-				if (newValue != null) {
+				Collection<String> options = configuration.getOptions();
+				String newValue;
+				if (options == null || options.size() == 0)
+					newValue = JOptionPane.showInputDialog(ConfigurationPane.this, "请输入配置项\"" + configuration.getNameOrKey() + "\"的新值：", configuration.getValue());
+				else
+					newValue = (String)JOptionPane.showInputDialog(ConfigurationPane.this, "请输入配置项\"" + configuration.getNameOrKey() + "\"的新值：", "选择", JOptionPane.INFORMATION_MESSAGE, Images.getIcon("edit.gif"), options.toArray(), configuration.getValue());
+				if (newValue != null && ! newValue.equals(configuration.getValue())) {
 					client.getConfigurationManager().setValue(configuration.getKey(), newValue);
 					JOptionPane.showMessageDialog(ConfigurationPane.this, "配置项修改成功!", "修改配置项", JOptionPane.INFORMATION_MESSAGE);
 				}

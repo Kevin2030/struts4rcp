@@ -39,7 +39,7 @@ public class DialogTest {
 	}
 
 	public static JDialog createTestDialog(JFrame frame) {
-		return new ExceptionDialog(frame, Actions.getClient());
+		return new ControlDialog(frame, Actions.getClient());
 	}
 
 }
