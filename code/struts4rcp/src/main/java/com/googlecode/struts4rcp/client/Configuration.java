@@ -1,5 +1,7 @@
 package com.googlecode.struts4rcp.client;
 
+import java.util.Collection;
+
 /**
  * 配置项
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
@@ -14,12 +16,15 @@ public class Configuration {
 
 	private final String description;
 
-	public Configuration(String key, String value, String name, String description) {
+	private final Collection<String> options;
+
+	public Configuration(String key, String value, String name, String description, Collection<String> options) {
 		super();
 		this.key = key;
 		this.value = value;
 		this.name = name;
 		this.description = description;
+		this.options = options;
 	}
 
 	/**
@@ -52,6 +57,10 @@ public class Configuration {
 	 */
 	public String getDescription() {
 		return description;
+	}
+
+	public Collection<String> getOptions() {
+		return options;
 	}
 
 	/**
