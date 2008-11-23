@@ -138,7 +138,7 @@ public class ConfigurationManager implements ClientElement {
 			throw new NullPointerException("name == null!");
 		synchronized (values) {
 			if (! values.containsKey(key)) {
-				setValue(key, defaultValue);
+				values.put(key, "");
 			}
 		}
 		names.put(key, name);
