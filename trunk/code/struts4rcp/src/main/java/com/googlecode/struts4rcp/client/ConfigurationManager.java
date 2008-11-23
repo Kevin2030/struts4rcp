@@ -1,6 +1,7 @@
 package com.googlecode.struts4rcp.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,13 +26,15 @@ public class ConfigurationManager implements ClientElement {
 
 	private final Map<String, String> descriptions = Collections.synchronizedMap(new HashMap<String, String>());
 
+	private final Map<String, Collection<String>> options = Collections.synchronizedMap(new HashMap<String, Collection<String>>());
+
 	/**
 	 * 获取配置项
 	 * @param key 配置项索引
 	 * @return 配置项
 	 */
 	public Configuration getConfiguration(String key) {
-		return new Configuration(key, values.get(key), names.get(key), descriptions.get(key));
+		return new Configuration(key, values.get(key), names.get(key), descriptions.get(key), options.get(key));
 	}
 
 	/**
@@ -44,7 +47,7 @@ public class ConfigurationManager implements ClientElement {
 			for (Map.Entry<String, String> entry : values.entrySet()) {
 				String key = entry.getKey();
 				String value = entry.getValue();
-				configurations.add(new Configuration(key, value, names.get(key), descriptions.get(key)));
+				configurations.add(new Configuration(key, value, names.get(key), descriptions.get(key), options.get(key)));
 			}
 		}
 		return configurations;
@@ -57,7 +60,7 @@ public class ConfigurationManager implements ClientElement {
 	public void removeConfiguration(String key) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
-		Configuration configuration = new Configuration(key, values.get(key), names.get(key), descriptions.get(key));
+		Configuration configuration = new Configuration(key, values.get(key), names.get(key), descriptions.get(key), options.get(key));
 		values.remove(key);
 		names.remove(key);
 		descriptions.remove(key);
@@ -108,7 +111,7 @@ public class ConfigurationManager implements ClientElement {
 		String old = values.get(key);
 		if (isChanged(old, value)) {
 			values.put(key, value);
-			configurationPublisher.publishEvent(new ConfigurationEvent(this, new Configuration(key, value, names.get(key), descriptions.get(key)), old, false));
+			configurationPublisher.publishEvent(new ConfigurationEvent(this, new Configuration(key, value, names.get(key), descriptions.get(key), options.get(key)), old, false));
 		}
 	}
 
@@ -126,19 +129,22 @@ public class ConfigurationManager implements ClientElement {
 	 * @param name 配置项名
 	 * @param desc 配置项描述
 	 */
-	public void register(String key, String name, String desc, String defaultValue, String... optionValues) {
+	public void register(String key, String name, String desc, String... optionsValue) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
 		if (name == null)
 			throw new NullPointerException("name == null!");
 		synchronized (values) {
 			if (! values.containsKey(key)) {
-				setValue(key, defaultValue);
+				values.put(key, "");
 			}
 		}
 		names.put(key, name);
-		if (desc != null)
+		if (desc != null && desc.length() > 0)
 			descriptions.put(key, desc);
+		if (optionsValue != null
+				&& optionsValue.length > 0)
+			options.put(key, Collections.unmodifiableCollection(Arrays.asList(optionsValue)));
 	}
 
 	private final ConfigurationPublisher configurationPublisher = new ConfigurationPublisher();
