@@ -9,6 +9,8 @@ import com.googlecode.struts4rcp.client.event.ExceptionListener;
 import com.googlecode.struts4rcp.client.event.ExecutionListener;
 import com.googlecode.struts4rcp.client.event.Listener;
 import com.googlecode.struts4rcp.client.event.TransportationListener;
+import com.googlecode.struts4rcp.client.transporter.CommonsHttpClientTransporter;
+import com.googlecode.struts4rcp.client.transporter.HttpClientTransporter;
 import com.googlecode.struts4rcp.client.transporter.HttpURLConnectionTransporter;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.Shutdownable;
@@ -87,6 +89,19 @@ public class Client implements Shutdownable {
 		configurationManager.init(this, config);
 		transporter.init(this, config);
 		actionManager.init(this, config);
+		configurationManager.register(TRANSPORTER_PARAM_NAME,
+				"传输策略", "暂未实现传输策略动态切换!",
+				HttpURLConnectionTransporter.class.getName(),
+				CommonsHttpClientTransporter.class.getName(),
+				HttpClientTransporter.class.getName());
+		configurationManager.register(ACTION_MANAGER_PARAM_NAME,
+				"Action管理器", "暂未实现Action管理器动态切换!",
+				ActionManager.class.getName());
+		configurationManager.register(CONFIGURATION_MANAGER_PARAM_NAME,
+				"配置管理器", "暂未实现配置管理器动态切换!",
+				ConfigurationManager.class.getName());
+		configurationManager.register(LISTENERS_PARAM_NAME,
+				"事件监听器", "暂未实现动态注册事件监听器!");
 		// 读取监听器
 		List<Listener> listeners = PropertiesUtils.getInstancesProperty(
 				config, LISTENERS_PARAM_NAME, Listener.class);

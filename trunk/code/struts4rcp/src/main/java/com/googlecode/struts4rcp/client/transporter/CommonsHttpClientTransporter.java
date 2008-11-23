@@ -75,8 +75,10 @@ public class CommonsHttpClientTransporter extends AbstractHttpTransporter<PostMe
 		super.init(client, config);
 		// 读取空闲连接超时时间
 		idleConnectionTimeout = PropertiesUtils.getIntProperty(config, IDLE_CONNECTION_TIMEOUT_PARAM_NAME, UNKNOWN_IDLE_CONNECTION_TIMEOUT);
+		client.getConfigurationManager().register(IDLE_CONNECTION_TIMEOUT_PARAM_NAME,  "空闲连接超时时间(ms)", "暂未实现动态修改空闲连接超时时间!", "3000");
 		// 读取空闲连接检查时间间隔
 		idleConnectionCheckInterval = PropertiesUtils.getIntProperty(config, IDLE_CONNECTION_CHECK_INTERVAL_PARAM_NAME, UNKNOWN_IDLE_CONNECTION_CHECK_INTERVAL);
+		client.getConfigurationManager().register(IDLE_CONNECTION_CHECK_INTERVAL_PARAM_NAME,  "空闲连接检查时间间隔(ms)", "暂未实现动态修改空闲连接检查时间间隔!", "1000");
 		// 设置
 		httpClient = createHttpClient();
 		if (httpClient == null)
