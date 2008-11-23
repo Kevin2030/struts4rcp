@@ -29,7 +29,11 @@
 		<mkdir dir="${build}" />
 		<javac srcdir="${src}" destdir="${build}" classpathref="project.class.path" encoding="UTF-8" debug="true" fork="true" />
 		<copy todir="${build}" includeEmptyDirs="no">
-			<fileset dir="${res}" defaultexcludes="true"></fileset>
+			<fileset dir="${res}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+				<include name="META-INF/services/*" />
+			</fileset>
 		</copy>
 	</target>
 
@@ -39,6 +43,7 @@
 		<jar destfile="${dist}/struts4rcp-server-${version}.jar" encoding="UTF-8">
 			<fileset dir="${build}">
 				<exclude name="com/googlecode/struts4rcp/client/**" />
+				<exclude name="META-INF/services/com.googlecode.struts4rcp.client.*" />
 			</fileset>
 			<manifest>
 				<attribute name="Implementation-Title" value="${title}" />
@@ -50,6 +55,7 @@
 		<jar destfile="${dist}/struts4rcp-client-${version}.jar" encoding="UTF-8">
 			<fileset dir="${build}">
 				<exclude name="com/googlecode/struts4rcp/server/**" />
+				<exclude name="META-INF/services/com.googlecode.struts4rcp.server.*" />
 			</fileset>
 			<manifest>
 				<attribute name="Implementation-Title" value="${title}" />
@@ -66,7 +72,10 @@
 		<javac srcdir="${vsrc}" destdir="${build}" classpathref="project.class.path" classpath="${dist}/struts4rcp-client-${version}.jar" encoding="UTF-8" debug="true" fork="true" />
 		<copy todir="${build}" includeEmptyDirs="no">
 			<fileset dir="${vres}">
-				<fileset dir="${res}" defaultexcludes="true"></fileset>
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+				<include name="**/*.gif" />
+				<include name="META-INF/services/*" />
 			</fileset>
 		</copy>
 	</target>
@@ -77,6 +86,7 @@
 		<jar destfile="${dist}/struts4rcp-swing-${version}.jar" encoding="UTF-8">
 			<fileset dir="${build}">
 				<exclude name="com/googlecode/struts4rcp/client/view/jface/**" />
+				<exclude name="META-INF/services/com.googlecode.struts4rcp.client.view.jface.*" />
 			</fileset>
 			<manifest>
 				<attribute name="Implementation-Title" value="${title}" />
@@ -88,6 +98,7 @@
 		<jar destfile="${dist}/struts4rcp-jface-${version}.jar" encoding="UTF-8">
 			<fileset dir="${build}">
 				<exclude name="com/googlecode/struts4rcp/client/view/swing/**" />
+				<exclude name="META-INF/services/com.googlecode.struts4rcp.client.view.swing.*" />
 			</fileset>
 			<manifest>
 				<attribute name="Implementation-Title" value="${title}" />
