@@ -71,11 +71,6 @@ public class Client implements Shutdownable {
 	}
 
 	public Client(Properties config, Transporter transporter,
-			ActionManager actionManager) {
-		this(config, transporter, actionManager, loadConfigurationManager(config));
-	}
-
-	public Client(Properties config, Transporter transporter,
 			ActionManager actionManager,
 			ConfigurationManager configurationManager) {
 		if (config == null)
