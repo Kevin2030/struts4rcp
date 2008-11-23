@@ -29,10 +29,7 @@
 		<mkdir dir="${build}" />
 		<javac srcdir="${src}" destdir="${build}" classpathref="project.class.path" encoding="UTF-8" debug="true" fork="true" />
 		<copy todir="${build}" includeEmptyDirs="no">
-			<fileset dir="${res}">
-				<include name="**/*.properties" />
-				<include name="**/*.xml" />
-			</fileset>
+			<fileset dir="${res}" defaultexcludes="true"></fileset>
 		</copy>
 	</target>
 
@@ -69,9 +66,7 @@
 		<javac srcdir="${vsrc}" destdir="${build}" classpathref="project.class.path" classpath="${dist}/struts4rcp-client-${version}.jar" encoding="UTF-8" debug="true" fork="true" />
 		<copy todir="${build}" includeEmptyDirs="no">
 			<fileset dir="${vres}">
-				<include name="**/*.properties" />
-				<include name="**/*.xml" />
-				<include name="**/*.gif" />
+				<fileset dir="${res}" defaultexcludes="true"></fileset>
 			</fileset>
 		</copy>
 	</target>
