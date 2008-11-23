@@ -178,11 +178,11 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 		serverHost = PropertiesUtils.getStringProperty(config, SERVER_HOST_PARAM_NAME, null);
 		if (serverHost == null)
 			throw new NullPointerException("server.host == null, 服务器主机名不能为空!");
-		client.getConfigurationManager().setName(SERVER_HOST_PARAM_NAME, "服务器主机名", "此配置项用于传输实现，修改此配置需重启应用!");
+		client.getConfigurationManager().register(SERVER_HOST_PARAM_NAME, "服务器主机名", "此配置项用于传输实现，修改此配置需重启应用!", "");
 
 		// 读取服务器端口
 		serverPort = PropertiesUtils.getIntProperty(config, SERVER_PORT_PARAM_NAME, UNKNOWN_SERVER_PORT);
-		client.getConfigurationManager().setName(SERVER_PORT_PARAM_NAME,  "服务器端口", "此配置项用于传输实现，修改此配置需重启应用!");
+		client.getConfigurationManager().register(SERVER_PORT_PARAM_NAME,  "服务器端口", "此配置项用于传输实现，修改此配置需重启应用!", "80");
 
 		// 读取上下文路径
 		contextPath = PropertiesUtils.getStringProperty(config, CONTEXT_PATH_PARAM_NAME, "");

@@ -50,6 +50,20 @@ public class ConfigurationManager implements ClientElement {
 		return configurations;
 	}
 
+	/**
+	 * 移除配置项
+	 * @param key 配置项索引
+	 */
+	public void removeConfiguration(String key) {
+		if (key == null)
+			throw new NullPointerException("key == null!");
+		Configuration configuration = new Configuration(key, values.get(key), names.get(key), descriptions.get(key));
+		values.remove(key);
+		names.remove(key);
+		descriptions.remove(key);
+		configurationPublisher.publishEvent(new ConfigurationEvent(this, configuration, null, true));
+	}
+
 	@SuppressWarnings("unchecked")
 	public void init(Client client, Properties config) {
 		if (client == null)
@@ -94,7 +108,7 @@ public class ConfigurationManager implements ClientElement {
 		String old = values.get(key);
 		if (isChanged(old, value)) {
 			values.put(key, value);
-			configurationPublisher.publishEvent(new ConfigurationEvent(this, new Configuration(key, value, names.get(key), descriptions.get(key))));
+			configurationPublisher.publishEvent(new ConfigurationEvent(this, new Configuration(key, value, names.get(key), descriptions.get(key)), old, false));
 		}
 	}
 
@@ -107,44 +121,24 @@ public class ConfigurationManager implements ClientElement {
 	}
 
 	/**
-	 * 添加配置项名称
-	 * @param key 配置项索引
-	 * @param name 配置项名
-	 */
-	public void setName(String key, String name) {
-		setName(key, name, null);
-	}
-
-	/**
-	 * 添加配置项名称和描述，当用户修改配置时，将提示该描述信息
+	 * 注册配置项名称和描述，当用户修改配置时，将提示该描述信息
 	 * @param key 配置项索引
 	 * @param name 配置项名
 	 * @param desc 配置项描述
 	 */
-	public void setName(String key, String name, String desc) {
+	public void register(String key, String name, String desc, String defaultValue, String... optionValues) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
 		if (name == null)
 			throw new NullPointerException("name == null!");
 		synchronized (values) {
 			if (! values.containsKey(key)) {
-				values.put(key, "");
+				setValue(key, defaultValue);
 			}
 		}
 		names.put(key, name);
 		if (desc != null)
 			descriptions.put(key, desc);
-	}
-
-	/**
-	 * 移除配置项描述
-	 * @param key 配置项索引
-	 */
-	public void removeName(String key) {
-		if (key == null)
-			throw new NullPointerException("key == null!");
-		names.remove(key);
-		descriptions.remove(key);
 	}
 
 	private final ConfigurationPublisher configurationPublisher = new ConfigurationPublisher();

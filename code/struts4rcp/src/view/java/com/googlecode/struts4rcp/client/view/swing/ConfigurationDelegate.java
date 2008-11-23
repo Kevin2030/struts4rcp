@@ -27,17 +27,57 @@ public class ConfigurationDelegate implements ConfigurationListener {
 		this.runOnNonUI = runOnNonUI;
 	}
 
-	public void onChanged(final ConfigurationEvent event) {
+	public void onConfigurationChanged(final ConfigurationEvent event) {
 		try {
 			if (EventQueue.isDispatchThread()) {
 				if (runOnUI) {
-					listener.onChanged(event);
+					listener.onConfigurationChanged(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					EventQueue.invokeAndWait(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onChanged(event);
+							listener.onConfigurationChanged(event);
+						}
+					});
+				}
+			}
+		} catch (Throwable e) {
+			// ignore
+		}
+	}
+
+	public void onConfigurationAdded(final ConfigurationEvent event) {
+		try {
+			if (EventQueue.isDispatchThread()) {
+				if (runOnUI) {
+					listener.onConfigurationAdded(event);
+				}
+			} else {
+				if (runOnNonUI) {
+					EventQueue.invokeAndWait(new Runnable() { // 在UI线程内执行
+						public void run() {
+							listener.onConfigurationAdded(event);
+						}
+					});
+				}
+			}
+		} catch (Throwable e) {
+			// ignore
+		}
+	}
+
+	public void onConfigurationRemoved(final ConfigurationEvent event) {
+		try {
+			if (EventQueue.isDispatchThread()) {
+				if (runOnUI) {
+					listener.onConfigurationRemoved(event);
+				}
+			} else {
+				if (runOnNonUI) {
+					EventQueue.invokeAndWait(new Runnable() { // 在UI线程内执行
+						public void run() {
+							listener.onConfigurationRemoved(event);
 						}
 					});
 				}

@@ -183,7 +183,7 @@ public class ConfigurationPane extends JPanel {
 		}
 
 		configurationListener = new ConfigurationDelegate(new ConfigurationAdapter() {
-			public void onChanged(final ConfigurationEvent event) {
+			public void onConfigurationChanged(final ConfigurationEvent event) {
 				Configuration configuration = event.getConfiguration();
 				synchronized (configurationModel) {
 					configurationModel.removeElement(configuration);

@@ -4,7 +4,13 @@ public class ConfigurationPublisher extends Publisher<ConfigurationListener, Con
 
 	@Override
 	protected void doEvent(ConfigurationListener listener, ConfigurationEvent event) {
-		listener.onChanged(event);
+		if (event.isRemoved())
+			listener.onConfigurationRemoved(event);
+		else
+			if (event.getOldValue() == null)
+				listener.onConfigurationAdded(event);
+			else
+				listener.onConfigurationChanged(event);
 	}
 
 }
