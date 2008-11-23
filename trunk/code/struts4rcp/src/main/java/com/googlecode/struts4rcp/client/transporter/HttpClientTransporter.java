@@ -82,7 +82,11 @@ public class HttpClientTransporter extends AbstractHttpTransporter<HttpPost> {
 		StatusLine status = response.getStatusLine();
 		assertSuccessStatusCode(status.getStatusCode(), status.getReasonPhrase());
 		HttpEntity entity = response.getEntity();
-		return serializer.deserialize(entity.getContent());
+		try {
+			return serializer.deserialize(entity.getContent());
+		} finally {
+			entity.consumeContent();
+		}
 	}
 
 	@Override
