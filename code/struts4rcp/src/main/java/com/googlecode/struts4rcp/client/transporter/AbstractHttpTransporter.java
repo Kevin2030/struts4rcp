@@ -302,11 +302,11 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 
 	/**
 	 * 获取请求信息
-	 * @param actionName Action名称
+	 * @param url Action名称
 	 * @return 请求信息
 	 * @throws IOException
 	 */
-	protected abstract T getRequest(String actionName) throws IOException;
+	protected abstract T getRequest(String url) throws IOException;
 
 	/**
 	 * 传输对象
