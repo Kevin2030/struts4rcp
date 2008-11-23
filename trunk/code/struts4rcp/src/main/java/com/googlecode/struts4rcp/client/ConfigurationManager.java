@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -146,11 +145,12 @@ public class ConfigurationManager implements ClientElement {
 		if (desc != null && desc.length() > 0)
 			descriptions.put(key, desc);
 		if (defaultValue != null && defaultValue.length() > 0)
-			descriptions.put(key, defaultValue);
+			defaults.put(key, defaultValue);
 		if (optionsValue != null
 				&& optionsValue.length > 0) {
-			List<String> list = Arrays.asList(optionsValue);
-			list.add(0, defaultValue);
+			Collection<String> list = new ArrayList<String>();
+			list.add(defaultValue);
+			list.addAll(Arrays.asList(optionsValue));
 			options.put(key, Collections.unmodifiableCollection(list));
 		}
 	}
