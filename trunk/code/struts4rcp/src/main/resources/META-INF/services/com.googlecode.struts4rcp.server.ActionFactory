@@ -1,0 +1,4 @@
+com.googlecode.struts4rcp.server.factory.SpringActionFactory
+com.googlecode.struts4rcp.server.factory.GuiceActionFactory
+com.googlecode.struts4rcp.server.factory.PropertiesActionFactory
+com.googlecode.struts4rcp.server.factory.ClassActionFactory

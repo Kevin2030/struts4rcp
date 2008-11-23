@@ -1,0 +1,6 @@
+com.googlecode.struts4rcp.util.logger.CommonsLoggerProvider
+com.googlecode.struts4rcp.util.logger.Log4jLoggerProvider
+com.googlecode.struts4rcp.util.logger.Slf4jLoggerProvider
+com.googlecode.struts4rcp.util.logger.AvalonLoggerProvider
+com.googlecode.struts4rcp.util.logger.JdkLoggerProvider
+com.googlecode.struts4rcp.util.logger.SimpleLoggerProvider

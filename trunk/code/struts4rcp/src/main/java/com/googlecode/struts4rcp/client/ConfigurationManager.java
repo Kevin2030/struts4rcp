@@ -148,9 +148,10 @@ public class ConfigurationManager implements ClientElement {
 			defaults.put(key, defaultValue);
 		if (optionsValue != null
 				&& optionsValue.length > 0) {
-			Collection<String> list = new ArrayList<String>();
-			list.add(defaultValue);
+			ArrayList<String> list = new ArrayList<String>();
 			list.addAll(Arrays.asList(optionsValue));
+			if (! list.contains(defaultValue))
+				list.add(0, defaultValue);
 			options.put(key, Collections.unmodifiableCollection(list));
 		}
 	}

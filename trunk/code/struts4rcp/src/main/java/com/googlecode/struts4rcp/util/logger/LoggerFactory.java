@@ -1,5 +1,7 @@
 package com.googlecode.struts4rcp.util.logger;
 
+import com.googlecode.struts4rcp.util.ServiceUtils;
+
 /**
  * 日志输出器工厂
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
@@ -9,45 +11,28 @@ public class LoggerFactory {
 	private LoggerFactory() {}
 
 	static { // 查找常用的日志框架
+		setLoggerProvider(findLoggerProvider());
+	}
+
+	private static LoggerProvider findLoggerProvider() {
 		try {
-			LoggerProvider loggerProvider = new CommonsLoggerProvider();
-			Logger logger = loggerProvider.getLogger(LoggerFactory.class.getName());
-			logger.info("Using LoggerProvider:" + CommonsLoggerProvider.class.getName());
-			setLoggerProvider(loggerProvider);
-		} catch (Throwable e) {
-			try {
-				LoggerProvider loggerProvider = new Log4jLoggerProvider();
-				Logger logger = loggerProvider.getLogger(LoggerFactory.class.getName());
-				logger.info("Using LoggerProvider:" + Log4jLoggerProvider.class.getName());
-				setLoggerProvider(loggerProvider);
-			} catch (Throwable e2) {
-				try {
-					LoggerProvider loggerProvider = new AvalonLoggerProvider();
-					Logger logger = loggerProvider.getLogger(LoggerFactory.class.getName());
-					logger.info("Using LoggerProvider:" + AvalonLoggerProvider.class.getName());
-					setLoggerProvider(loggerProvider);
-				} catch (Throwable e3) {
+			Class<LoggerProvider>[] loggerProviderClasses = ServiceUtils.getServices(LoggerProvider.class);
+			if (loggerProviderClasses != null && loggerProviderClasses.length > 0) {
+				for (Class<LoggerProvider> loggerProviderClass : loggerProviderClasses) {
 					try {
-						LoggerProvider loggerProvider = new Slf4jLoggerProvider();
+						LoggerProvider loggerProvider = loggerProviderClass.newInstance();
 						Logger logger = loggerProvider.getLogger(LoggerFactory.class.getName());
-						logger.info("Using LoggerProvider:" + Slf4jLoggerProvider.class.getName());
-						setLoggerProvider(loggerProvider);
-					} catch (Throwable e4) {
-						try {
-							LoggerProvider loggerProvider = new JdkLoggerProvider();
-							Logger logger = loggerProvider.getLogger(LoggerFactory.class.getName());
-							logger.info("Using LoggerProvider:" + JdkLoggerProvider.class.getName());
-							setLoggerProvider(loggerProvider);
-						} catch (Throwable e5) {
-							LoggerProvider loggerProvider = new SimpleLoggerProvider();
-							Logger logger = loggerProvider.getLogger(LoggerFactory.class.getName());
-							logger.info("Using LoggerProvider:" + SimpleLoggerProvider.class.getName());
-							setLoggerProvider(loggerProvider);
-						}
+						logger.info("Using LoggerProvider:" + CommonsLoggerProvider.class.getName());
+						return loggerProvider;
+					} catch (Throwable e) {
+						// ignore
 					}
 				}
 			}
+		} catch (Throwable e) {
+			// ignore
 		}
+		return new SimpleLoggerProvider();
 	}
 
 	private static LoggerProvider loggerProvider;

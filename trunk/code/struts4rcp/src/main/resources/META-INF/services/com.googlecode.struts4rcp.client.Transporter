@@ -1,0 +1,3 @@
+com.googlecode.struts4rcp.client.transporter.HttpURLConnectionTransporter
+com.googlecode.struts4rcp.client.transporter.CommonsHttpClientTransporter
+com.googlecode.struts4rcp.client.transporter.HttpClientTransporter
