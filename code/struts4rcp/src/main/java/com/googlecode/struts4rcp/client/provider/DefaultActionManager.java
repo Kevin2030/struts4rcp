@@ -51,7 +51,10 @@ public class DefaultActionManager implements ActionManager {
 
 	private Collection<Execution> backExecutions = new HashSet<Execution>();
 
-
+	/**
+	 * 获取所有正在执行的执行项
+	 * @return 正在前台执行的执行项
+	 */
 	public Collection<Execution> getExecutions() {
 		Collection<Execution> copies = new HashSet<Execution>();
 		synchronized (foreExecutions) {
@@ -63,7 +66,10 @@ public class DefaultActionManager implements ActionManager {
 		return Collections.unmodifiableCollection(copies);
 	}
 
-
+	/**
+	 * 是否正在执行
+	 * @return 是否正在执行
+	 */
 	public boolean isExecuting() {
 		synchronized (foreExecutions) {
 			if (! foreExecutions.isEmpty())
@@ -76,7 +82,10 @@ public class DefaultActionManager implements ActionManager {
 		return false;
 	}
 
-
+	/**
+	 * 获取正在前台执行的执行项
+	 * @return 正在前台执行的执行项
+	 */
 	public Collection<Execution> getForeExecutions() {
 		Collection<Execution> copies = new HashSet<Execution>();
 		synchronized (foreExecutions) {
@@ -85,14 +94,20 @@ public class DefaultActionManager implements ActionManager {
 		return Collections.unmodifiableCollection(copies);
 	}
 
-
+	/**
+	 * 是否正在前台执行
+	 * @return 是否正在前台执行
+	 */
 	public boolean isForeExecuting() {
 		synchronized (foreExecutions) {
 			return ! foreExecutions.isEmpty();
 		}
 	}
 
-
+	/**
+	 * 获取正在后台执行的执行项
+	 * @return 正在后台执行的执行项
+	 */
 	public Collection<Execution> getBackExecutions() {
 		Collection<Execution> copies = new HashSet<Execution>();
 		synchronized (backExecutions) {
@@ -101,7 +116,10 @@ public class DefaultActionManager implements ActionManager {
 		return Collections.unmodifiableCollection(copies);
 	}
 
-
+	/**
+	 * 是否正在后台执行
+	 * @return 是否正在后台执行
+	 */
 	public boolean isBackExecuting() {
 		synchronized (backExecutions) {
 			return ! backExecutions.isEmpty();
@@ -161,24 +179,36 @@ public class DefaultActionManager implements ActionManager {
 
 	private ExecutionPublisher executionPublisher = new ExecutionPublisher();
 
-
+	/**
+	 * 添加前台执行监听器
+	 * @param listener 前台执行监听器
+	 */
 	public void addExecutionListener(ExecutionListener listener) {
 		executionPublisher.addListener(listener);
 	}
 
-
+	/**
+	 * 移除前台执行监听器
+	 * @param listener 前台执行监听器
+	 */
 	public void removeExecutionListener(ExecutionListener listener) {
 		executionPublisher.removeListener(listener);
 	}
 
 	private ExceptionPublisher exceptionPublisher = new ExceptionPublisher();
 
-
+	/**
+	 * 添加异常事件监听器
+	 * @param listener 异常事件监听器
+	 */
 	public void addExceptionListener(ExceptionListener listener) {
 		exceptionPublisher.addListener(listener);
 	}
 
-
+	/**
+	 * 移除异常事件监听器
+	 * @param listener 异常事件监听器
+	 */
 	public void removeExceptionListener(ExceptionListener listener) {
 		exceptionPublisher.removeListener(listener);
 	}
@@ -195,23 +225,59 @@ public class DefaultActionManager implements ActionManager {
 		}
 	}
 
+	/**
+	 * 获取同步Action代理
+	 *
+	 * @param transporter 传输器
+	 * @param actionName action名称
+	 * @param backable 是否允许转为后台运行
+	 * @param abortable 是否允许中止
+	 * @return 同步Action代理
+	 */
 	public <M extends Serializable, R extends Serializable> Action<M, R> getAction(
 			Transporter transporter, String actionName, boolean backable, boolean abortable) {
 		return new SyncActionProxy<M, R>(transporter, actionName, false, backable, abortable);
 	}
 
+	/**
+	 * 获取异步Action代理
+	 *
+	 * @param transporter 传输器
+	 * @param actionName action名称
+	 * @param actionCallback 回调接口
+	 * @param backable 是否允许转为后台运行
+	 * @param abortable 是否允许中止
+	 * @return 异步Action代理
+	 */
 	public <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(
 			Transporter transporter, String actionName, ActionCallback<R> actionCallback, boolean backable, boolean abortable) {
 		return new AsyncActionProxy<M, R>(transporter, actionName, actionCallback, false, backable, abortable);
 	}
 
-
+	/**
+	 * 获取后台同步Action代理
+	 *
+	 * @param transporter 传输器
+	 * @param actionName action名称
+	 * @param backable 是否允许转为后台运行
+	 * @param abortable 是否允许中止
+	 * @return 后台同步Action代理
+	 */
 	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAction(
 			Transporter transporter, String actionName, boolean abortable) {
 		return new SyncActionProxy<M, R>(transporter, actionName, true, false, abortable);
 	}
 
-
+	/**
+	 * 获取后台异步Action代理
+	 *
+	 * @param transporter 传输器
+	 * @param actionName action名称
+	 * @param actionCallback 回调接口
+	 * @param backable 是否允许转为后台运行
+	 * @param abortable 是否允许中止
+	 * @return 后台异步Action代理
+	 */
 	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(
 			Transporter transporter, String actionName,
 			ActionCallback<R> actionCallback, boolean abortable) {
