@@ -101,7 +101,7 @@ public class Client implements Shutdownable {
 				"配置管理器", "暂未实现配置管理器动态切换，修改后不会生效!",
 				ConfigurationManager.class.getName());
 		configurationManager.register(LISTENERS_PARAM_NAME,
-				"事件监听器", "暂未实现动态注册事件监听器，修改后不会生效!");
+				"事件监听器", "暂未实现动态注册事件监听器，修改后不会生效!", "");
 		// 读取监听器
 		List<Listener> listeners = PropertiesUtils.getInstancesProperty(
 				config, LISTENERS_PARAM_NAME, Listener.class);
