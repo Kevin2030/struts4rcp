@@ -190,6 +190,18 @@ public class ConfigurationPane extends JPanel {
 					configurationModel.addElement(configuration);
 				}
 			}
+			public void onConfigurationAdded(ConfigurationEvent event) {
+				Configuration configuration = event.getConfiguration();
+				synchronized (configurationModel) {
+					configurationModel.addElement(configuration);
+				}
+			}
+			public void onConfigurationRemoved(ConfigurationEvent event) {
+				Configuration configuration = event.getConfiguration();
+				synchronized (configurationModel) {
+					configurationModel.removeElement(configuration);
+				}
+			}
 		});
 		client.addListener(configurationListener);
 	}
