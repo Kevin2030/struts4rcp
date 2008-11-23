@@ -3,6 +3,7 @@ package com.googlecode.struts4rcp.client;
 import java.util.List;
 import java.util.Properties;
 
+import com.googlecode.struts4rcp.client.action.DefaultActionManager;
 import com.googlecode.struts4rcp.client.config.DefaultConfigurationManager;
 import com.googlecode.struts4rcp.client.event.ConfigurationListener;
 import com.googlecode.struts4rcp.client.event.ConnectionListener;
@@ -10,7 +11,6 @@ import com.googlecode.struts4rcp.client.event.ExceptionListener;
 import com.googlecode.struts4rcp.client.event.ExecutionListener;
 import com.googlecode.struts4rcp.client.event.Listener;
 import com.googlecode.struts4rcp.client.event.TransportationListener;
-import com.googlecode.struts4rcp.client.provider.DefaultActionManager;
 import com.googlecode.struts4rcp.client.transporter.HttpURLConnectionTransporter;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.Shutdownable;
