@@ -1,0 +1,106 @@
+<project name="struts4rcp" default="all" basedir=".">
+
+	<description>Struts for RCP</description>
+
+	<property name="title" value="Struts for RCP" />
+	<property name="version" value="0.1" />
+	<property name="vendor" value="http://struts4rcp.googlecode.com" />
+	<property name="src" location="src/main/java" />
+	<property name="res" location="src/main/resources" />
+	<property name="vsrc" location="src/view/java" />
+	<property name="vres" location="src/view/resources" />
+	<property name="build" location="build" />
+	<property name="lib" location="lib" />
+	<property name="dist" location="dist" />
+
+	<property environment="env" />
+	<path id="project.class.path">
+		<pathelement path="${env.classpath}" />
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="all" depends="jar,jar-view">
+	</target>
+
+	<target name="compile">
+		<delete dir="${build}" failonerror="false" />
+		<mkdir dir="${build}" />
+		<javac srcdir="${src}" destdir="${build}" classpathref="project.class.path" encoding="UTF-8" debug="true" fork="true" />
+		<copy todir="${build}" includeEmptyDirs="no">
+			<fileset dir="${res}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="jar" depends="compile">
+		<mkdir dir="${dist}" />
+		<delete file="${dist}/struts4rcp-server-${version}.jar" failonerror="false" />
+		<jar destfile="${dist}/struts4rcp-server-${version}.jar" encoding="UTF-8">
+			<fileset dir="${build}">
+				<exclude name="com/googlecode/struts4rcp/client/**" />
+			</fileset>
+			<manifest>
+				<attribute name="Implementation-Title" value="${title}" />
+				<attribute name="Implementation-Version" value="${version}" />
+				<attribute name="Implementation-Vendor" value="${vendor}" />
+			</manifest>
+		</jar>
+		<delete file="${dist}/struts4rcp-client-${version}.jar" failonerror="false" />
+		<jar destfile="${dist}/struts4rcp-client-${version}.jar" encoding="UTF-8">
+			<fileset dir="${build}">
+				<exclude name="com/googlecode/struts4rcp/server/**" />
+			</fileset>
+			<manifest>
+				<attribute name="Implementation-Title" value="${title}" />
+				<attribute name="Implementation-Version" value="${version}" />
+				<attribute name="Implementation-Vendor" value="${vendor}" />
+			</manifest>
+		</jar>
+		<delete dir="${build}" failonerror="false" />
+	</target>
+
+	<target name="compile-view">
+		<delete dir="${build}" failonerror="false" />
+		<mkdir dir="${build}" />
+		<javac srcdir="${vsrc}" destdir="${build}" classpathref="project.class.path" classpath="${dist}/struts4rcp-client-${version}.jar" encoding="UTF-8" debug="true" fork="true" />
+		<copy todir="${build}" includeEmptyDirs="no">
+			<fileset dir="${vres}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+				<include name="**/*.gif" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="jar-view" depends="compile-view">
+		<mkdir dir="${dist}" />
+		<delete file="${dist}/struts4rcp-swing-${version}.jar" failonerror="false" />
+		<jar destfile="${dist}/struts4rcp-swing-${version}.jar" encoding="UTF-8">
+			<fileset dir="${build}">
+				<exclude name="com/googlecode/struts4rcp/client/view/jface/**" />
+			</fileset>
+			<manifest>
+				<attribute name="Implementation-Title" value="${title}" />
+				<attribute name="Implementation-Version" value="${version}" />
+				<attribute name="Implementation-Vendor" value="${vendor}" />
+			</manifest>
+		</jar>
+		<delete file="${dist}/struts4rcp-jface-${version}.jar" failonerror="false" />
+		<jar destfile="${dist}/struts4rcp-jface-${version}.jar" encoding="UTF-8">
+			<fileset dir="${build}">
+				<exclude name="com/googlecode/struts4rcp/client/view/swing/**" />
+			</fileset>
+			<manifest>
+				<attribute name="Implementation-Title" value="${title}" />
+				<attribute name="Implementation-Version" value="${version}" />
+				<attribute name="Implementation-Vendor" value="${vendor}" />
+			</manifest>
+		</jar>
+		<delete dir="${build}" failonerror="false" />
+	</target>
+
+</project>
