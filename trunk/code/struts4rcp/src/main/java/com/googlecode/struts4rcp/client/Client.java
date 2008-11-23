@@ -3,8 +3,6 @@ package com.googlecode.struts4rcp.client;
 import java.util.List;
 import java.util.Properties;
 
-import com.googlecode.struts4rcp.client.action.DefaultActionManager;
-import com.googlecode.struts4rcp.client.config.DefaultConfigurationManager;
 import com.googlecode.struts4rcp.client.event.ConfigurationListener;
 import com.googlecode.struts4rcp.client.event.ConnectionListener;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
@@ -53,13 +51,13 @@ public class Client implements Shutdownable {
 	private static ActionManager loadActionManager(Properties config) {
 		 return PropertiesUtils.getInstanceProperty(
 					config, ACTION_MANAGER_PARAM_NAME, ActionManager.class,
-					DefaultActionManager.class);
+					ActionManager.class);
 	}
 
 	private static ConfigurationManager loadConfigurationManager(Properties config) {
 		 return PropertiesUtils.getInstanceProperty(config,
 					CONFIGURATION_MANAGER_PARAM_NAME, ConfigurationManager.class,
-					DefaultConfigurationManager.class);
+					ConfigurationManager.class);
 	}
 
 	public Client(Properties config) {
