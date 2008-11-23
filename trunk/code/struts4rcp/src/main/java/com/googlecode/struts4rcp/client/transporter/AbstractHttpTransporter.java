@@ -268,7 +268,7 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 		}
 	}
 
-	protected final Collection<Execution> executions = new HashSet<Execution>();
+	private final Collection<Execution> executions = new HashSet<Execution>();
 
 	public boolean isTransporting() {
 		synchronized (executions) {
