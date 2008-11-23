@@ -79,9 +79,19 @@ public class Configuration {
 	 * @return 配置项名称
 	 */
 	public String getNameOrKey() {
-		if (name != null)
+		if (name != null && name.length() > 0)
 			return name;
 		return key;
+	}
+
+	/**
+	 * 获取配置项值
+	 * @return 配置项值
+	 */
+	public String getValueOrDefault() {
+		if (value != null && value.length() > 0)
+			return value;
+		return defaultValue;
 	}
 
 	@Override
