@@ -24,10 +24,19 @@ public class DefaultConfigurationManager implements ConfigurationManager {
 
 	private final Map<String, String> descriptions = Collections.synchronizedMap(new HashMap<String, String>());
 
+	/**
+	 * 获取配置项
+	 * @param key 配置项索引
+	 * @return 配置项
+	 */
 	public Configuration getConfiguration(String key) {
 		return new Configuration(key, values.get(key), names.get(key), descriptions.get(key));
 	}
 
+	/**
+	 * 获取所有配置项
+	 * @return 所有配置项
+	 */
 	public Collection<Configuration> getConfigurations() {
 		Collection<Configuration> configurations = new ArrayList<Configuration>();
 		synchronized (values) {
@@ -52,16 +61,30 @@ public class DefaultConfigurationManager implements ConfigurationManager {
 		this.values.putAll((Map)config);
 	}
 
+	/**
+	 * 获取所有配置项
+	 * @return 不可变配置集合
+	 */
 	public Map<String, String> getValues() {
 		return Collections.unmodifiableMap(values);
 	}
 
+	/**
+	 * 获取配置项值
+	 * @param key 配置项索引
+	 * @return 配置项值
+	 */
 	public String getValue(String key) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
 		return values.get(key);
 	}
 
+	/**
+	 * 设置配置项值
+	 * @param key 配置项索引
+	 * @param value 配置项值
+	 */
 	public void setValue(String key, String value) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
@@ -82,10 +105,21 @@ public class DefaultConfigurationManager implements ConfigurationManager {
 		return ! s1.equals(s2);
 	}
 
+	/**
+	 * 添加配置项名称
+	 * @param key 配置项索引
+	 * @param name 配置项名
+	 */
 	public void setName(String key, String name) {
 		setName(key, name, null);
 	}
 
+	/**
+	 * 添加配置项名称和描述，当用户修改配置时，将提示该描述信息
+	 * @param key 配置项索引
+	 * @param name 配置项名
+	 * @param desc 配置项描述
+	 */
 	public void setName(String key, String name, String desc) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
@@ -101,6 +135,10 @@ public class DefaultConfigurationManager implements ConfigurationManager {
 			descriptions.put(key, desc);
 	}
 
+	/**
+	 * 移除配置项描述
+	 * @param key 配置项索引
+	 */
 	public void removeName(String key) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
@@ -110,10 +148,18 @@ public class DefaultConfigurationManager implements ConfigurationManager {
 
 	private final ConfigurationPublisher configurationPublisher = new ConfigurationPublisher();
 
+	/**
+	 * 添加配置改变事件监听器
+	 * @param listener 配置改变事件监听器
+	 */
 	public void addConfigurationListener(ConfigurationListener listener) {
 		configurationPublisher.addListener(listener);
 	}
 
+	/**
+	 * 移除配置改变事件监听器
+	 * @param listener 配置改变事件监听器
+	 */
 	public void removeConfigurationListener(ConfigurationListener listener) {
 		configurationPublisher.removeListener(listener);
 	}
