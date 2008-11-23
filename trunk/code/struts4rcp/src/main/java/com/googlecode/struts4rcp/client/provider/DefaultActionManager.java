@@ -27,7 +27,7 @@ import com.googlecode.struts4rcp.util.logger.LoggerFactory;
  * Action代理供给策略缺省实现
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class DefaultActionManager extends ActionManager {
+public class DefaultActionManager implements ActionManager {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -51,7 +51,7 @@ public class DefaultActionManager extends ActionManager {
 
 	private Collection<Execution> backExecutions = new HashSet<Execution>();
 
-	@Override
+
 	public Collection<Execution> getExecutions() {
 		Collection<Execution> copies = new HashSet<Execution>();
 		synchronized (foreExecutions) {
@@ -63,7 +63,7 @@ public class DefaultActionManager extends ActionManager {
 		return Collections.unmodifiableCollection(copies);
 	}
 
-	@Override
+
 	public boolean isExecuting() {
 		synchronized (foreExecutions) {
 			if (! foreExecutions.isEmpty())
@@ -76,7 +76,7 @@ public class DefaultActionManager extends ActionManager {
 		return false;
 	}
 
-	@Override
+
 	public Collection<Execution> getForeExecutions() {
 		Collection<Execution> copies = new HashSet<Execution>();
 		synchronized (foreExecutions) {
@@ -85,14 +85,14 @@ public class DefaultActionManager extends ActionManager {
 		return Collections.unmodifiableCollection(copies);
 	}
 
-	@Override
+
 	public boolean isForeExecuting() {
 		synchronized (foreExecutions) {
 			return ! foreExecutions.isEmpty();
 		}
 	}
 
-	@Override
+
 	public Collection<Execution> getBackExecutions() {
 		Collection<Execution> copies = new HashSet<Execution>();
 		synchronized (backExecutions) {
@@ -101,7 +101,7 @@ public class DefaultActionManager extends ActionManager {
 		return Collections.unmodifiableCollection(copies);
 	}
 
-	@Override
+
 	public boolean isBackExecuting() {
 		synchronized (backExecutions) {
 			return ! backExecutions.isEmpty();
@@ -161,24 +161,24 @@ public class DefaultActionManager extends ActionManager {
 
 	private ExecutionPublisher executionPublisher = new ExecutionPublisher();
 
-	@Override
+
 	public void addExecutionListener(ExecutionListener listener) {
 		executionPublisher.addListener(listener);
 	}
 
-	@Override
+
 	public void removeExecutionListener(ExecutionListener listener) {
 		executionPublisher.removeListener(listener);
 	}
 
 	private ExceptionPublisher exceptionPublisher = new ExceptionPublisher();
 
-	@Override
+
 	public void addExceptionListener(ExceptionListener listener) {
 		exceptionPublisher.addListener(listener);
 	}
 
-	@Override
+
 	public void removeExceptionListener(ExceptionListener listener) {
 		exceptionPublisher.removeListener(listener);
 	}
@@ -205,13 +205,13 @@ public class DefaultActionManager extends ActionManager {
 		return new AsyncActionProxy<M, R>(transporter, actionName, actionCallback, false, backable, abortable);
 	}
 
-	@Override
+
 	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAction(
 			Transporter transporter, String actionName, boolean abortable) {
 		return new SyncActionProxy<M, R>(transporter, actionName, true, false, abortable);
 	}
 
-	@Override
+
 	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(
 			Transporter transporter, String actionName,
 			ActionCallback<R> actionCallback, boolean abortable) {
