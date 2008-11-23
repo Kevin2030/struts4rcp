@@ -177,7 +177,7 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 
 		// 读取序列化器
 		serializer = PropertiesUtils.getInstanceProperty(config, SERIALIZER_PARAM_NAME, Serializer.class, JavaSerializer.class);
-		client.getConfigurationManager().register(SERIALIZER_PARAM_NAME, "序列化策略", "暂未实现动态切换序列化策略!",
+		client.getConfigurationManager().register(SERIALIZER_PARAM_NAME, "序列化策略", "暂未实现动态切换序列化策略，修改后不会生效!",
 				JavaSerializer.class.getName(), JBossSerializer.class.getName(), XmlSerializer.class.getName(),
 				XStreamSerializer.class.getName(), JsonSerializer.class.getName());
 
@@ -185,31 +185,31 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 		serverHost = PropertiesUtils.getStringProperty(config, SERVER_HOST_PARAM_NAME, null);
 		if (serverHost == null)
 			throw new NullPointerException("server.host == null, 服务器主机名不能为空!");
-		client.getConfigurationManager().register(SERVER_HOST_PARAM_NAME, "服务器主机名", "暂未实现动态切换服务器名!");
+		client.getConfigurationManager().register(SERVER_HOST_PARAM_NAME, "服务器主机名", "暂未实现动态切换服务器名，修改后不会生效!");
 
 		// 读取服务器端口
 		serverPort = PropertiesUtils.getIntProperty(config, SERVER_PORT_PARAM_NAME, UNKNOWN_SERVER_PORT);
-		client.getConfigurationManager().register(SERVER_PORT_PARAM_NAME,  "服务器端口", "暂未实现动态切换服务器端口!", "80");
+		client.getConfigurationManager().register(SERVER_PORT_PARAM_NAME,  "服务器端口", "暂未实现动态切换服务器端口，修改后不会生效!", "80");
 
 		// 读取上下文路径
 		contextPath = PropertiesUtils.getStringProperty(config, CONTEXT_PATH_PARAM_NAME, "");
-		client.getConfigurationManager().register(CONTEXT_PATH_PARAM_NAME,  "应用上下文路径", "暂未实现动态切换应用上下文路径!");
+		client.getConfigurationManager().register(CONTEXT_PATH_PARAM_NAME,  "应用上下文路径", "暂未实现动态切换应用上下文路径，修改后不会生效!");
 
 		// 读取Action后缀
 		actionSuffix = PropertiesUtils.getStringProperty(config, ACTION_SUFFIX_PARAM_NAME, DEFAULT_ACTION_SUFFIX);
-		client.getConfigurationManager().register(ACTION_SUFFIX_PARAM_NAME,  "Action后缀", "暂未实现动态修改Action后缀!", "data");
+		client.getConfigurationManager().register(ACTION_SUFFIX_PARAM_NAME,  "Action后缀", "暂未实现动态修改Action后缀，修改后不会生效!", "data");
 
 		// 读取连接超时时间
 		connectionTimeout = PropertiesUtils.getIntProperty(config, CONNECTION_TIMEOUT_PARAM_NAME, UNKNOWN_CONNECTION_TIMEOUT);
-		client.getConfigurationManager().register(CONNECTION_TIMEOUT_PARAM_NAME,  "HTTP请求连接超时时间(ms)", "暂未实现动态修改HTTP请求连接超时时间!", "30000");
+		client.getConfigurationManager().register(CONNECTION_TIMEOUT_PARAM_NAME,  "HTTP请求连接超时时间(ms)", "暂未实现动态修改HTTP请求连接超时时间，修改后不会生效!", "30000");
 
 		// 读取套接字读取超时时间
 		socketTimeout = PropertiesUtils.getIntProperty(config, SOCKET_TIMEOUT_PARAM_NAME, UNKNOWN_SOCKET_TIMEOUT);
-		client.getConfigurationManager().register(SOCKET_TIMEOUT_PARAM_NAME,  "套接字读取超时时间(ms)", "暂未实现动态修改套接字读取超时时间!", "0");
+		client.getConfigurationManager().register(SOCKET_TIMEOUT_PARAM_NAME,  "套接字读取超时时间(ms)", "暂未实现动态修改套接字读取超时时间，修改后不会生效!", "0");
 
 		// 读取监控时间间隔
 		connectionCheckInterval = PropertiesUtils.getIntProperty(config, CONNECTION_CHECK_INTERVAL_PARAM_NAME, DEFAULT_CONNECTION_CHECK_INTERVAL);
-		client.getConfigurationManager().register(CONNECTION_CHECK_INTERVAL_PARAM_NAME,  "网络连接状态检查时间间隔(ms)", "暂未实现动态修改网络连接状态检查时间间隔!", "0");
+		client.getConfigurationManager().register(CONNECTION_CHECK_INTERVAL_PARAM_NAME,  "网络连接状态检查时间间隔(ms)", "暂未实现动态修改网络连接状态检查时间间隔，修改后不会生效!", "0");
 		if (connectionCheckInterval > 0) {
 			scheduler = Executors.newScheduledThreadPool(1);
 			future = scheduler.scheduleWithFixedDelay(new Runnable() {
