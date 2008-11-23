@@ -1,0 +1,65 @@
+<project name="struts4rcpdemo" default="war" basedir=".">
+
+	<description>Struts for RCP Demo</description>
+
+	<property name="title" value="Struts for RCP Demo" />
+	<property name="version" value="0.1" />
+	<property name="vendor" value="http://struts4rcp.googlecode.com" />
+	<property name="src" location="src/main/java" />
+	<property name="res" location="src/main/resources" />
+	<property name="build" location="bin" />
+	<property name="lib" location="lib" />
+	<property name="dist" location="dist" />
+	<property name="web" location="web" />
+
+	<property environment="env" />
+	<path id="project.class.path">
+		<pathelement path="${env.classpath}" />
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="compile">
+		<delete dir="${build}" failonerror="false" />
+		<mkdir dir="${build}" />
+		<javac srcdir="${src}" destdir="${build}" classpathref="project.class.path" encoding="UTF-8" debug="true" fork="true" />
+		<copy todir="${build}" includeEmptyDirs="no">
+			<fileset dir="${res}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="jar" depends="compile">
+		<delete file="${web}/client/struts4rcpdemo-client-${version}.jar" failonerror="false" />
+		<jar destfile="${web}/client/struts4rcpdemo-client-${version}.jar" encoding="UTF-8">
+			<fileset dir="${build}">
+				<include name="com/xxx/demo/client/**" />
+			</fileset>
+			<manifest>
+				<attribute name="Implementation-Title" value="${title}" />
+				<attribute name="Implementation-Version" value="${version}" />
+				<attribute name="Implementation-Vendor" value="${vendor}" />
+				<attribute name="Main-Class" value="com.xxx.demo.client.Main" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="war" depends="jar">
+		<delete dir="${web}/WEB-INF/classes" failonerror="false" />
+		<mkdir dir="${web}/WEB-INF/classes" />
+		<copy todir="${web}/WEB-INF/classes" includeEmptyDirs="no">
+			<fileset dir="${build}">
+				<exclude name="com/xxx/demo/client/**" />
+			</fileset>
+		</copy>
+		<mkdir dir="${dist}" />
+		<delete file="${dist}/struts4rcpdemo-server-${version}.war" failonerror="false" />
+		<war destfile="${dist}/struts4rcpdemo-server-${version}.war" basedir="${web}" webxml="${web}/WEB-INF/web.xml" encoding="utf-8" />
+		<delete dir="${web}/WEB-INF/classes" failonerror="false" />
+		<delete dir="${build}" failonerror="false" />
+	</target>
+
+</project>
