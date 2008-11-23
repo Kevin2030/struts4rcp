@@ -8,7 +8,7 @@ import java.util.Properties;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.client.ActionCallback;
-import com.googlecode.struts4rcp.client.ActionProvider;
+import com.googlecode.struts4rcp.client.ActionManager;
 import com.googlecode.struts4rcp.client.Backable;
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.Execution;
@@ -27,7 +27,7 @@ import com.googlecode.struts4rcp.util.logger.LoggerFactory;
  * Action代理供给策略缺省实现
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class DefaultActionProvider extends ActionProvider {
+public class DefaultActionManager extends ActionManager {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -262,13 +262,13 @@ public class DefaultActionProvider extends ActionProvider {
 		@SuppressWarnings("unchecked")
 		public R execute(final M model) throws Exception {
 			final Execution execution = new Execution(actionName, model, back, backable, abortable);
-			DefaultActionProvider.this.addExecution(execution);
+			DefaultActionManager.this.addExecution(execution);
 			try {
 				Serializable result = transporter.transport(execution);
 				assertResult(result);
 				return (R)result;
 			} finally {
-				DefaultActionProvider.this.removeExecution(execution);
+				DefaultActionManager.this.removeExecution(execution);
 			}
 		}
 	}
@@ -310,7 +310,7 @@ public class DefaultActionProvider extends ActionProvider {
 				@SuppressWarnings("unchecked")
 				public void run() {
 					Execution execution = new Execution(actionName, model, back, backable, abortable);
-					DefaultActionProvider.this.addExecution(execution);
+					DefaultActionManager.this.addExecution(execution);
 					try {
 						try {
 							Serializable obj = transporter.transport(execution);
@@ -325,10 +325,10 @@ public class DefaultActionProvider extends ActionProvider {
 								throw e;
 						}
 					} catch (Throwable e) {
-						DefaultActionProvider.this.publishException(e, back);
+						DefaultActionManager.this.publishException(e, back);
 						logger.error(e.getMessage(), e);
 					} finally {
-						DefaultActionProvider.this.removeExecution(execution);
+						DefaultActionManager.this.removeExecution(execution);
 					}
 				}
 			});

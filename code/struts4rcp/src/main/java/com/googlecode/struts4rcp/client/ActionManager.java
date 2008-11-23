@@ -11,7 +11,7 @@ import com.googlecode.struts4rcp.client.event.ExecutionListener;
  * Action代理供给策略接口
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public abstract class ActionProvider implements ClientElement {
+public abstract class ActionManager implements ClientElement {
 
 	/**
 	 * 获取同步Action代理
