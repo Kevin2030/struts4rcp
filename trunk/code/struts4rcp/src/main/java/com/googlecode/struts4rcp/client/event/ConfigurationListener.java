@@ -10,6 +10,18 @@ public interface ConfigurationListener extends Listener {
 	 * 当配置改变时触发
 	 * @param event 配置改变事件信息
 	 */
-	void onChanged(ConfigurationEvent event);
+	void onConfigurationChanged(ConfigurationEvent event);
+
+	/**
+	 * 当配置改变时触发
+	 * @param event 配置改变事件信息
+	 */
+	void onConfigurationAdded(ConfigurationEvent event);
+
+	/**
+	 * 当配置改变时触发
+	 * @param event 配置改变事件信息
+	 */
+	void onConfigurationRemoved(ConfigurationEvent event);
 
 }

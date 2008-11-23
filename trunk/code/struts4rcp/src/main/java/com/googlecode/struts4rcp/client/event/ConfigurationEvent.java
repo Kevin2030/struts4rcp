@@ -12,9 +12,15 @@ public class ConfigurationEvent extends Event {
 
 	private final Configuration configuration;
 
-	public ConfigurationEvent(Object source, Configuration configuration) {
+	private final String oldValue;
+
+	private final boolean removed;
+
+	public ConfigurationEvent(Object source, Configuration configuration, String oldValue, boolean removed) {
 		super(source);
 		this.configuration = configuration;
+		this.oldValue = oldValue;
+		this.removed = removed;
 	}
 
 	/**
@@ -23,6 +29,14 @@ public class ConfigurationEvent extends Event {
 	 */
 	public Configuration getConfiguration() {
 		return configuration;
+	}
+
+	public String getOldValue() {
+		return oldValue;
+	}
+
+	public boolean isRemoved() {
+		return removed;
 	}
 
 }
