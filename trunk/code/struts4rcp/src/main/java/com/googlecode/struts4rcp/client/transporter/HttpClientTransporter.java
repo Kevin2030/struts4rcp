@@ -43,6 +43,7 @@ public class HttpClientTransporter extends AbstractHttpTransporter<HttpPost> {
 	protected HttpClient createHttpClient() {
 		HttpParams params = new BasicHttpParams();
 		SchemeRegistry registry = new SchemeRegistry();
+		registry.register(new Scheme("http", MultihomePlainSocketFactory.getSocketFactory(), 80));
 		return new DefaultHttpClient(new ThreadSafeClientConnManager(params, registry), params);
 	}
 
@@ -52,8 +53,6 @@ public class HttpClientTransporter extends AbstractHttpTransporter<HttpPost> {
 		httpClient = createHttpClient();
 		if (httpClient == null)
 			throw new NullPointerException("HttpClient == null!");
-		if (httpClient.getConnectionManager().getSchemeRegistry().get("http") == null)
-			httpClient.getConnectionManager().getSchemeRegistry().register(new Scheme("http", MultihomePlainSocketFactory.getSocketFactory(), 80));
 		if (connectionTimeout != UNKNOWN_CONNECTION_TIMEOUT)
 			HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), connectionTimeout);
 		if (socketTimeout != UNKNOWN_SOCKET_TIMEOUT)
