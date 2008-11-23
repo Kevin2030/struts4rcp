@@ -23,14 +23,11 @@ import com.googlecode.struts4rcp.client.event.TransportationEvent;
 import com.googlecode.struts4rcp.client.event.TransportationListener;
 import com.googlecode.struts4rcp.client.event.TransportationPublisher;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
+import com.googlecode.struts4rcp.util.ServiceUtils;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
-import com.googlecode.struts4rcp.util.serializer.JBossSerializer;
 import com.googlecode.struts4rcp.util.serializer.JavaSerializer;
-import com.googlecode.struts4rcp.util.serializer.JsonSerializer;
 import com.googlecode.struts4rcp.util.serializer.Serializer;
-import com.googlecode.struts4rcp.util.serializer.XStreamSerializer;
-import com.googlecode.struts4rcp.util.serializer.XmlSerializer;
 
 /**
  * HTTP传输器基类
@@ -178,8 +175,7 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 		// 读取序列化器
 		serializer = PropertiesUtils.getInstanceProperty(config, SERIALIZER_PARAM_NAME, Serializer.class, JavaSerializer.class);
 		client.getConfigurationManager().register(SERIALIZER_PARAM_NAME, "序列化策略", "暂未实现动态切换序列化策略，修改后不会生效!",
-				JavaSerializer.class.getName(), JBossSerializer.class.getName(), XmlSerializer.class.getName(),
-				XStreamSerializer.class.getName(), JsonSerializer.class.getName());
+				JavaSerializer.class.getName(), ServiceUtils.getServices(Serializer.class.getName()));
 
 		// 读取服务器主机名
 		serverHost = PropertiesUtils.getStringProperty(config, SERVER_HOST_PARAM_NAME, null);

@@ -1,0 +1,5 @@
+com.googlecode.struts4rcp.util.serializer.JavaSerializer
+com.googlecode.struts4rcp.util.serializer.JBossSerializer
+com.googlecode.struts4rcp.util.serializer.XmlSerializer
+com.googlecode.struts4rcp.util.serializer.XStreamSerializer
+com.googlecode.struts4rcp.util.serializer.JsonSerializer
