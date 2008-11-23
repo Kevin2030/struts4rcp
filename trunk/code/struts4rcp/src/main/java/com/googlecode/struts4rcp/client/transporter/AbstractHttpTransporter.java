@@ -145,16 +145,16 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 	protected int connectionCheckInterval = DEFAULT_CONNECTION_CHECK_INTERVAL;
 
 	// HTTP协议前缀
-	protected final static String HTTP_PROTOCAL = "http://";
+	private final static String HTTP_PROTOCAL = "http://";
 
 	// HTTP缺省端口
-	protected final static int HTTP_DEFAULT_PORT = 80;
+	private final static int HTTP_DEFAULT_PORT = 80;
 
 	// Action请求URL前缀
-	protected String urlPrefix;
+	private String urlPrefix;
 
 	// Action请求URL后缀
-	protected String urlSuffix;
+	private String urlSuffix;
 
 	private Client client;
 
@@ -311,12 +311,12 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 	/**
 	 * 传输对象
 	 * @param request 请求信息
-	 * @param actionName Action名称
+	 * @param url 请求路径
 	 * @param model 传入对象
 	 * @return 传回对象
 	 * @throws IOException 传输出错时抛出
 	 */
-	protected abstract Serializable transport(T request, String actionName, Serializable model) throws IOException;
+	protected abstract Serializable transport(T request, String url, Serializable model) throws IOException;
 
 	/**
 	 * 打断连接
