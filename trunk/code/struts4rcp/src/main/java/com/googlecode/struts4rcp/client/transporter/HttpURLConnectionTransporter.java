@@ -13,12 +13,12 @@ import java.net.URL;
 public class HttpURLConnectionTransporter extends AbstractHttpTransporter<HttpURLConnection> {
 
 	@Override
-	protected HttpURLConnection getRequest(String actionName) throws IOException {
-		return (HttpURLConnection) new URL(actionName).openConnection();
+	protected HttpURLConnection getRequest(String url) throws IOException {
+		return (HttpURLConnection) new URL(url).openConnection();
 	}
 
 	@Override
-	protected Serializable transport(HttpURLConnection request, String actionName, Serializable model) throws IOException {
+	protected Serializable transport(HttpURLConnection request, String url, Serializable model) throws IOException {
 		try {
 			if (connectionTimeout != UNKNOWN_CONNECTION_TIMEOUT)
 				request.setConnectTimeout(connectionTimeout);

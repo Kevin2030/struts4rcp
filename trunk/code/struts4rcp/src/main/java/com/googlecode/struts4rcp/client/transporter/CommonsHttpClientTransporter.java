@@ -113,12 +113,12 @@ public class CommonsHttpClientTransporter extends AbstractHttpTransporter<PostMe
 	}
 
 	@Override
-	protected PostMethod getRequest(String actionName) throws IOException {
-		return new PostMethod(actionName);
+	protected PostMethod getRequest(String url) throws IOException {
+		return new PostMethod(url);
 	}
 
 	@Override
-	protected Serializable transport(PostMethod request, String actionName, Serializable model)
+	protected Serializable transport(PostMethod request, String url, Serializable model)
 			throws IOException {
 		try {
 			request.setRequestEntity(new SerializeEntity(serializer, model));
