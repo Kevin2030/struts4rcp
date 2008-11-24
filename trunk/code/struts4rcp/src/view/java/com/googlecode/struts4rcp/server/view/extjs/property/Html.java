@@ -4,6 +4,8 @@ import com.googlecode.struts4rcp.server.view.extjs.ComponentTag;
 
 public class Html extends ComponentTag {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	protected String getComponentDefine() {
 		String html = "";
