@@ -29,7 +29,7 @@ Spring配置：
 	<property name="loginService" ref="loginService" />
 </bean>
 }}}
-更多信息，请参见：[http://code.google.com/p/struts4rcp/wiki/server 服务器端开发说明]
+更多信息，请参见：[http://code.google.com/p/struts4rcp/wiki/server 服务器端使用说明]
 ====2. 客户端开发 ====
 导入：(struts4rcp-client.jar)
 {{{
@@ -68,7 +68,7 @@ Action<Account, User> loginAction = Actions.getBackAsyncAction("loginAction", ne
 });
 loginAction.execute(account); // 后台执行，并立即返回null
 }}}
-更多信息，请参见：[http://code.google.com/p/struts4rcp/wiki/client 客户端开发说明]
+更多信息，请参见：[http://code.google.com/p/struts4rcp/wiki/client 客户端使用说明]
 ====3. AJAX页面开发====
 导入：(struts4rcp.js)
 {{{
