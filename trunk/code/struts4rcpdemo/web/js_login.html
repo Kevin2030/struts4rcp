@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>JS Login</title>
+		<script type="text/javascript" src="struts4rcp.js"></script>
+		<script type="text/javascript">
+			function getAccount() {
+				return {"username": document.getElementById("usernameField").value,
+						"password": document.getElementById("passwordField").value,
+						"className": document.getElementById("classNameField").value};
+			}
+			function syncLogin() {
+				var loginAction = Actions.getAction("loginAction");
+				var account = getAccount();
+				var user = loginAction.execute(account);
+				alert("This is Sync JSON Result!\nHello " + user.username + ", Welcome to xxx system!\nyour email is: " + user.email);
+			}
+			function asyncLogin() {
+				var loginAction = Actions.getAsyncAction("loginAction", function(user) {
+					alert("This is Async JSON Result!\nHello " + user.username + ", Welcome to xxx system!\nyour email is: " + user.email);
+				});
+				var account = getAccount();
+				loginAction.execute(account);
+			}
+		</script>
+	</head>
+	<boby>
+		JS Login<br/>
+		Username: <input type="text" id="usernameField" name="username"/><br/>
+		Password: <input type="password" id="passwordField" name="password"/><br/>
+		<input type="hidden" id="classNameField" name="className" value="com.xxx.demo.domain.Account"/>
+		<button onclick="syncLogin()">Sync Login</button>
+		<button onclick="asyncLogin()">Async Login</button>
+	</body>
+</html>
