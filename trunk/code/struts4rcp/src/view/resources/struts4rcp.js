@@ -45,11 +45,16 @@ Actions = {
 				var url = Actions._getUrl(actionName, model);
 				request.open("GET", url, false);
 				request.send(null);
-				return eval("(" + request.responseText + ")");
+				var result = eval("(" + request.responseText + ")");
+				if (result && result.className && result.className.length >= 9
+						&& result.className.substring(result.className.length - 9) == "Exception") {
+					throw result;
+				}
+				return result;
 			}
 		};
 	},
-	getAsyncAction: function(actionName, callback) {
+	getAsyncAction: function(actionName, callback, catchException) {
 		return {
 			actionName: actionName,
 			callback: callback,
@@ -60,20 +65,50 @@ Actions = {
 				if (request.onreadystatechange) {
 					request.onreadystatechange = new function() {
 						if (xmlRequest.readyState == 4) {
-							callback(eval("(" + request.responseText + ")"));
+							var result = eval("(" + request.responseText + ")");
+							if (result && result.className && result.className.length >= 9
+									&& result.className.substring(result.className.length - 9) == "Exception") {
+								if (catchException) {
+									catchException(result);
+								} else {
+									alert(result.className + ":\n" + (result.message || ""));
+								}
+							} else {
+								callback();
+							}
 						}
 					};
 				} else if (request.onReadyStateChange) {
 					request.onReadyStateChange = new function() {
 						if (xmlRequest.readyState == 4) {
-							callback(eval("(" + request.responseText + ")"));
+							var result = eval("(" + request.responseText + ")");
+							if (result && result.className && result.className.length >= 9
+									&& result.className.substring(result.className.length - 9) == "Exception") {
+								if (catchException) {
+									catchException(result);
+								} else {
+									alert(result.className + ":\n" + (result.message || ""));
+								}
+							} else {
+								callback();
+							}
 						}
 					};
 				} else {
 					var interval = window.setInterval(function() {
 						if (request.readyState == 4) {
 							window.clearInterval(interval);
-							callback(eval("(" + request.responseText + ")"));
+							var result = eval("(" + request.responseText + ")");
+							if (result && result.className && result.className.length >= 9
+									&& result.className.substring(result.className.length - 9) == "Exception") {
+								if (catchException) {
+									catchException(result);
+								} else {
+									alert(result.className + ":\n" + (result.message || ""));
+								}
+							} else {
+								callback();
+							}
 						}
 					}, 100);
 				}
