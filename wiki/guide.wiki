@@ -1,5 +1,5 @@
 #labels Featured,Phase-Support
-==用户使用指南==
+==综合使用说明==
 ====1. 服务器端开发====
 导入：(struts4rcp-server.jar)
 {{{
