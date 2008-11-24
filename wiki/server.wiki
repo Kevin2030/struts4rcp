@@ -56,9 +56,9 @@ ActionServlet另外一个初始化参数为actionFactory，用于切换Action实
 </servlet>
 }}}
 缺省使用SpringActionFactory，内置提供：
-	* com.googlecode.struts4rcp.server.factory.SpringActionFactory 与Spring IoC/DI容器的适配策略
-	* com.googlecode.struts4rcp.server.factory.GuiceActionFactory 与Google-Guice IoC/DI容器的适配策略
-	* com.googlecode.struts4rcp.server.factory.PropertiesActionFactory 使用一个简单的actions.properties来注册Action实例，如：loginAction=com.xxx.LoginAction，不提供注入功能，通常用于非IoC/DI的服务工厂获取方式中，如：LoginService loginService = ServiceFactory.getService("loginService");
+	* (1) com.googlecode.struts4rcp.server.factory.SpringActionFactory 与Spring IoC/DI容器的适配策略
+	* (2) com.googlecode.struts4rcp.server.factory.GuiceActionFactory 与Google-Guice IoC/DI容器的适配策略
+	* (3) com.googlecode.struts4rcp.server.factory.PropertiesActionFactory 使用一个简单的actions.properties来注册Action实例，如：loginAction=com.xxx.LoginAction，不提供注入功能，通常用于非IoC/DI的服务工厂获取方式中，如：LoginService loginService = ServiceFactory.getService("loginService");
 因为缺省使用SpringActionFactory，所以还需要配置Spring容器，框架未做任何包装，与Spring在其它地方的使用相同：
 {{{
 <context-param>
@@ -115,9 +115,9 @@ var user = loginAction.execute(account); // 同步执行，并取得结果
 	* com/xxx/LoginAction.ftl 或者，FreeMarker模板(序列化器：com.googlecode.struts4rcp.server.serializer.FreeMarkerSerializer)
 	* com/xxx/LoginAction.vtl 或者，Velocity模板(序列化器：com.googlecode.struts4rcp.server.serializer.VelocitySerializer)
 当Action执行完后，将调用相应页面或模板进行数据格式化，并输出。
-如果想改变页面位置，可以使用Page标注：(页面路径不要带后缀)
+如果想改变页面位置，可以使用Page标注：
 {{{
-@Page("/WEB-INF/xxx")
+@Page("/WEB-INF/xxx") // 页面路径不要带后缀
 public class LoginAction implements Action<Account, User> {
 	// ......
 }
