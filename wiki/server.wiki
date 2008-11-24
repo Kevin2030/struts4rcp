@@ -115,6 +115,7 @@ var user = loginAction.execute(account); // 同步执行，并取得结果
 	* com/xxx/LoginAction.ftl 或者，FreeMarker模板(序列化器：com.googlecode.struts4rcp.server.serializer.FreeMarkerSerializer)
 	* com/xxx/LoginAction.vtl 或者，Velocity模板(序列化器：com.googlecode.struts4rcp.server.serializer.VelocitySerializer)
 当Action执行完后，将调用相应页面或模板进行数据格式化，并输出。
+需要注意的是，JSP页面不能打包到jar中，必须散开在/WEB-INF/classes/目录下，否则访问不到，模板页面不受此限制。
 如果想改变页面位置，可以使用Page标注：
 {{{
 @Page("/WEB-INF/xxx") // 页面路径不要带后缀
@@ -180,4 +181,3 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 
 }
 }}}
-需要注意的是，JSP页面不能打包到jar中，必须散开在/WEB-INF/classes/目录下，否则访问不到，模板页面不受此限制。
