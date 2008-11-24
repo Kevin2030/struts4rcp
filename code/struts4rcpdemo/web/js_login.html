@@ -7,17 +7,23 @@
 			function getAccount() {
 				return {"username": document.getElementById("usernameField").value,
 						"password": document.getElementById("passwordField").value,
-						"className": document.getElementById("classNameField").value};
+						"className": document.getElementById("classNameField").value,
+						"delay": document.getElementById("delayField").value,
+						"exception": document.getElementById("exceptionField").checked};
 			}
 			function syncLogin() {
 				var loginAction = Actions.getAction("loginAction");
 				var account = getAccount();
-				var user = loginAction.execute(account);
-				alert("This is Sync JSON Result!\nHello " + user.username + ", Welcome to xxx system!\nyour email is: " + user.email + "\nyour password is: " + user.password + "\nyour id is: " + user.id);
+				try {
+					var user = loginAction.execute(account);
+					alert("This is Sync JSON Result!\nHello " + user.username + ", Welcome to xxx system!\nyour email is: " + user.email + "\nyour password is: " + user.password + "\nyour id is: " + user.id);
+				} catch (e) {
+					alert(e.className + ":\n"+ e.message);
+				}
 			}
 			function asyncLogin() {
 				var loginAction = Actions.getAsyncAction("loginAction", function(user) {
-					alert("This is Async JSON Result!\nHello " + user.username + ", Welcome to xxx system!\nyour email is: " + user.email + "\nyour password is: " + user.password + "\nyour id is: " + user.id);
+						alert("This is Async JSON Result!\nHello " + user.username + ", Welcome to xxx system!\nyour email is: " + user.email + "\nyour password is: " + user.password + "\nyour id is: " + user.id);
 				});
 				var account = getAccount();
 				loginAction.execute(account);
@@ -29,6 +35,8 @@
 		Username: <input type="text" id="usernameField" name="username"/><br/>
 		Password: <input type="password" id="passwordField" name="password"/><br/>
 		<input type="hidden" id="classNameField" name="className" value="com.xxx.demo.domain.Account"/>
+		Server Side Delay(ms): <input type="text" id="delayField" name="delay" value="1000"/><br/>
+		<input type="checkbox" id="exceptionField" name="exception" value="false"/>Server Side Throw Exception<br/>
 		<button onclick="syncLogin()">Sync Login</button>
 		<button onclick="asyncLogin()">Async Login</button>
 	</body>
