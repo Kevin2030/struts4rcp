@@ -105,6 +105,9 @@ Actions.getClient().addListener(new ExecutionDelegate(new ExecutionAdapter() {
 	public void onExecuting(ExecutionEvent event) {
 		// change ui
 	}
+	public void onBackExecuting(ExecutionEvent event) {
+		// change ui
+	}
 	public void onExecuted(ExecutionEvent event) {
 		// change ui
 	}
@@ -141,7 +144,13 @@ ExceptionDelegate和ExceptionAdapter的作用和上面的连接事件的说明�
 在配置项改变时，触发此事件。
 {{{
 Actions.getClient().addListener(new ConfigurationDelegate(new ConfigurationAdapter() {
-	public void onChanged(ConfigurationEvent event) {
+	public void onConfigurationAdded(ConfigurationEvent event) {
+		// change ui
+	}
+	public void onConfigurationChanged(ConfigurationEvent event) {
+		// change ui
+	}
+	public void onConfigurationRemoved(ConfigurationEvent event) {
 		// change ui
 	}
 }));
