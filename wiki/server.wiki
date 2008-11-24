@@ -1,3 +1,4 @@
+#labels Featured
 #服务器开发说明
 =服务器开发说明=
 导入：(rcpstruts-server.jar)
