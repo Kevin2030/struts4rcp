@@ -1,5 +1,5 @@
 #labels Featured,Phase-Support
-===综合配置说明===
+===配置说明===
 ====1. 服务器端 (web.xml)====
 最简配置：
 {{{
