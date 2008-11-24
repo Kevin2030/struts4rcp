@@ -13,6 +13,11 @@ import java.io.Writer;
 public interface TextSerializer extends Serializer {
 
 	/**
+	 * 类元属性名
+	 */
+	public static final String CLASS_NAME = "className";
+
+	/**
 	 * 获取内容编码
 	 * @return 内容编码
 	 */

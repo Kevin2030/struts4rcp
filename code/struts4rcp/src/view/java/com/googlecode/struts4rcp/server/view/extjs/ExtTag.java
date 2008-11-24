@@ -10,8 +10,8 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.googlecode.struts4rcp.util.logger.Logger;
+import com.googlecode.struts4rcp.util.logger.LoggerFactory;
 
 /**
  * EXT标签基类

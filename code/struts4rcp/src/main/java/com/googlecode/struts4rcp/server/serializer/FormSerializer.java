@@ -19,7 +19,7 @@ public abstract class FormSerializer extends AbstractServletSerializer {
 
 	public Serializable deserialize(HttpServletRequest request)
 			throws IOException {
-		String className = request.getParameter("class");
+		String className = request.getParameter(CLASS_NAME);
 		try {
 			if (className != null && className.length() > 0) {
 				Class<?> cls = ClassUtils.forName(className);
@@ -28,7 +28,7 @@ public abstract class FormSerializer extends AbstractServletSerializer {
 				Serializable model = (Serializable)cls.newInstance();
 				for (Enumeration<?> names = request.getParameterNames(); names.hasMoreElements();) {
 					String name = (String)names.nextElement();
-					if (! "class".equals(name)) {
+					if (! CLASS_NAME.equals(name)) {
 						String value = request.getParameter(name);
 						try {
 							BeanUtils.setProperty(model, name, value);
