@@ -33,7 +33,7 @@ public final class JsonUtils {
 	/**
 	 * 类元属性名
 	 */
-	public static final String CLASS_PROPERTY_NAME = "class";
+	public static final String CLASS_NAME = "className";
 
 	/**
 	 * 将JSON字符串解析成对象(或数组)。
@@ -66,8 +66,8 @@ public final class JsonUtils {
 			return jsonToArray(createJsonArray(json));
 		if (json.trim().startsWith("{") && json.trim().endsWith("}"))
 			return jsonToObject(createJsonObject(json));
-		Map<String, Object> map = (Map)jsonToObject(createJsonObject("{root:" + json + "}"));
-		return map.get("root");
+		Map<String, Object> map = (Map)jsonToObject(createJsonObject("{tmp:" + json + "}"));
+		return map.get("tmp");
 	}
 
 	/**
@@ -105,7 +105,7 @@ public final class JsonUtils {
 	private static Object jsonToObject(JSONObject json) {
 		if (json == null)
 			return null;
-		Object classProperty = getJsonProperty(json, CLASS_PROPERTY_NAME);
+		Object classProperty = getJsonProperty(json, CLASS_NAME);
 		String className = classProperty == null ? null : String.valueOf(classProperty);
 		Object bean;
 		if (className != null && className.length() > 0) {
@@ -115,15 +115,17 @@ public final class JsonUtils {
 		}
 		for (Iterator<String> iterator = json.keys(); iterator.hasNext();) {
 			String key = (String)iterator.next();
-			Object value = getJsonProperty(json, key);
-			if (value instanceof JSONObject) {
-				JSONObject obj = (JSONObject) value;
-				setJsonProperty(bean, key, jsonToObject(obj));
-			} else if (value instanceof JSONArray) {
-				JSONArray arr = (JSONArray) value;
-				setJsonProperty(bean, key, jsonToArray(arr));
-			} else {
-				setJsonProperty(bean, key, value);
+			if (! CLASS_NAME.equals(key)) {
+				Object value = getJsonProperty(json, key);
+				if (value instanceof JSONObject) {
+					JSONObject obj = (JSONObject) value;
+					setJsonProperty(bean, key, jsonToObject(obj));
+				} else if (value instanceof JSONArray) {
+					JSONArray arr = (JSONArray) value;
+					setJsonProperty(bean, key, jsonToArray(arr));
+				} else {
+					setJsonProperty(bean, key, value);
+				}
 			}
 		}
 		return bean;
@@ -276,31 +278,24 @@ public final class JsonUtils {
 
 	// 添加Map
 	private static void appendMap(Class<?> cls, Map<String, Object> properties, StringBuffer buf, Stack<Object> ref) {
-		buf.append("{class:\"");
+		buf.append("{\"");
+		buf.append(CLASS_NAME);
+		buf.append("\":\"");
 		buf.append(cls.getName());
 		buf.append("\"");
 		for (Iterator<Map.Entry<String, Object>> iterator = properties.entrySet().iterator(); iterator.hasNext();) {
-			buf.append(",");
 			Map.Entry<String, Object> entry = (Map.Entry<String, Object>)iterator.next();
-			buf.append(filterKey(entry.getKey()));
-			buf.append(":");
-			appendObject(entry.getValue(), buf, ref);
+			if (! CLASS_NAME.equals(entry.getKey())) {
+				buf.append(",\"");
+				buf.append(escapeJavaScript(entry.getKey()));
+				buf.append("\":");
+				appendObject(entry.getValue(), buf, ref);
+			}
 		}
 		buf.append("}");
 	}
 
 	// 过滤名称
-	private static String filterKey(Object property) {
-		if (isNamed(String.valueOf(property)))
-			return String.valueOf(property);
-		return "\"" + escapeJavaScript(property.toString()) + "\"";
-	}
-
-	private static boolean isNamed(final String name) {
-		return name != null && name.length() > 0
-				&& name.matches("^[_|A-Z|a-z][_|0-9|A-Z|a-z]*$");
-	}
-
     private static String escapeJavaScript(String input) {
         if (input == null)
             return null;

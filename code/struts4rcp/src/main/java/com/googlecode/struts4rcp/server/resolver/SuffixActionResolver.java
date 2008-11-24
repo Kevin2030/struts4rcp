@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.googlecode.struts4rcp.server.ActionResolver;
 import com.googlecode.struts4rcp.server.ActionServletContext;
+import com.googlecode.struts4rcp.server.serializer.CommonTemplateSerializer;
 import com.googlecode.struts4rcp.server.serializer.JsonSerializer;
 import com.googlecode.struts4rcp.server.serializer.JspSerializer;
 import com.googlecode.struts4rcp.util.ClassUtils;
@@ -76,6 +77,8 @@ public class SuffixActionResolver implements ActionResolver {
 			return new JsonSerializer();
 		} else if ("page".equals(suffix)) {
 			return new JspSerializer();
+		} else if ("template".equals(suffix)) {
+			return new CommonTemplateSerializer();
 		}
 		return null;
 	}
