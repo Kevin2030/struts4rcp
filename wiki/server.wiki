@@ -1,0 +1,30 @@
+#服务器开发说明
+=服务器开发说明=
+导入：(rcpstruts-server.jar)
+{{{
+import com.googlecode.rcpstruts.Action;
+}}}
+Action实现类：
+{{{
+public class LoginAction implements Action<Account, User> {
+
+	public User execute(Account account) throws Exception {
+		// 如果需要跳转：throw new ActionForwardException("xxxAction", account);
+		return loginService.login(account.getUsername(), account.getPassword());
+	}
+
+	private LoginService loginService;
+
+	// IoC/DI注入
+	public void setLoginService(LoginService loginService) {
+		this.loginService = loginService;
+	}
+
+}
+}}}
+Spring配置：
+{{{
+<bean id="loginAction" class="com.xxx.LoginAction">
+	<property name="loginService" ref="loginService" />
+</bean>
+}}}
