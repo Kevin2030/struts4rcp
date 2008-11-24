@@ -1,0 +1,128 @@
+#labels Featured,Phase-Support
+==用户使用指南==
+====1. 服务器端开发====
+导入：(rcpstruts-server.jar)
+{{{
+import com.googlecode.rcpstruts.Action;
+}}}
+Action实现类：
+{{{
+public class LoginAction implements Action<Account, User> {
+
+	public User execute(Account account) throws Exception {
+		// 如果需要跳转：throw new ActionForwardException("xxxAction", account);
+		return loginService.login(account.getUsername(), account.getPassword());
+	}
+
+	private LoginService loginService;
+
+	// IoC/DI注入
+	public void setLoginService(LoginService loginService) {
+		this.loginService = loginService;
+	}
+
+}
+}}}
+Spring配置：
+{{{
+<bean id="loginAction" class="com.xxx.LoginAction">
+	<property name="loginService" ref="loginService" />
+</bean>
+}}}
+更多信息，请参见：[http://code.google.com/p/rcpstruts/wiki/ServerDevelop 服务器端开发说明]
+====2. 客户端开发 ====
+导入：(rcpstruts-client.jar)
+{{{
+import com.googlecode.rcpstruts.Action;
+import com.googlecode.rcpstruts.client.Actions;
+import com.googlecode.rcpstruts.client.ActionCallback;
+}}}
+同步执行：(阻塞当前线程)
+{{{
+Account account = new Account("james", "123456"); // 传入数据模型
+Action<Account, User> loginAction = Actions.getAction("loginAction"); // 对应Spring配置中的<bean id="loginAction">
+User user = loginAction.execute(account); // 同步执行，并取得结果
+}}}
+异步执行：(弹出模态框)
+{{{
+Account account = new Account("james", "123456"); // 传入数据模型
+Action<Account, User> loginAction = Actions.getAsyncAction("loginAction", new ActionCallback<User>() {
+    public void callback(User user) throws Exception {
+        // 异步执行完成后，通过此接口回传执行结果
+    }
+});
+loginAction.execute(account); // 异步执行，并立即返回null
+}}}
+后台执行：(不弹出模态框)
+{{{
+Account account = new Account("james", "123456"); // 传入数据模型
+Action<Account, User> loginAction = Actions.getBackAction("loginAction"); // 对应Spring配置中的<bean id="loginAction">
+User user = loginAction.execute(account); // 同步执行，并取得结果
+}}}
+{{{
+Account account = new Account("james", "123456"); // 传入数据模型
+Action<Account, User> loginAction = Actions.getBackAsyncAction("loginAction", new ActionCallback<User>() {
+    public void callback(User user) throws Exception {
+        // 后台执行完成后，通过此接口回传执行结果
+    }
+});
+loginAction.execute(account); // 后台执行，并立即返回null
+}}}
+更多信息，请参见：[http://code.google.com/p/rcpstruts/wiki/ClientDevelop 客户端开发说明]
+====3. AJAX页面开发====
+导入：(rcpstruts.js)
+{{{
+<script type="text/javascript" src="rcpstruts.js"></script>
+}}}
+同步执行：
+{{{
+<script type="text/javascript">
+var account = {username: "james", password: "123456", class: "com.xxx.Account"}; // 传入数据模型，若不指定class属性，表示使用Map类型
+var loginAction = Actions.getAction("loginAction"); // 对应Spring配置中的<bean id="loginAction">
+var user = loginAction.execute(account); // 同步执行并取得结果
+</script>
+}}}
+异步执行：
+{{{
+<script type="text/javascript">
+var account = {username: "james", password: "123456", class: "com.xxx.Account"}; // 传入数据模型，若不指定class属性，表示使用Map类型
+var loginAction = Actions.getAsyncAction("loginAction", function(user) {
+    // 异步执行完成后，通过此接口回传执行结果
+});
+loginAction.execute(account); // 异步执行
+</script>
+}}}
+====4. JSP页面开发====
+{{{
+<form action="loginAction.page" method="post">
+    <input type="text" name="username" />
+    <input type="password" name="password" />
+    <!--若不指定class属性，表示使用Map类型-->
+    <input type="hidden" name="class" value="com.xxx.Account" />
+</form>
+}}}
+LoginAction.jsp (与LoginAction.class同名称，同目录，不可打入jar包，必需放在/WEB-INF/classes目录下)
+{{{
+<html>
+    <body>
+        您好，${username}，您的邮箱是：${email}
+    </body>
+<html>
+}}}
+====5. 模板(CommonTemplate/FreeMarker/Velocity)页面开发====
+{{{
+<form action="loginAction.page" method="post">
+    <input type="text" name="username" />
+    <input type="password" name="password" />
+    <!--若不指定class属性，表示使用Map类型-->
+    <input type="hidden" name="class" value="com.xxx.Account" />
+</form>
+}}}
+LoginAction.ctl (与LoginAction.class同名称，同目录，可打入jar包中)
+{{{
+<html>
+    <body>
+        您好，${username}，您的邮箱是：${email}
+    </body>
+<html>
+}}}
