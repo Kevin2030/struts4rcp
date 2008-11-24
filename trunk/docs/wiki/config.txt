@@ -1,0 +1,108 @@
+===初始化配置指南===
+====1. 服务器端 (web.xml)====
+最简配置：
+{{{
+<servlet>
+    <servlet-name>actionServlet</servlet-name>
+    <servlet-class>com.googlecode.struts4rcp.server.ActionServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+<servlet-mapping>
+    <servlet-name>actionServlet</servlet-name>
+    <url-pattern>*.data</url-pattern>
+</servlet-mapping>
+<!--AND/OR:-->
+<servlet-mapping>
+    <servlet-name>actionServlet</servlet-name>
+    <url-pattern>*.json</url-pattern>
+</servlet-mapping>
+<!--AND/OR:-->
+<servlet-mapping>
+    <servlet-name>actionServlet</servlet-name>
+    <url-pattern>*.page</url-pattern>
+</servlet-mapping>
+}}}
+可选配置：
+{{{
+<servlet>
+    <servlet-name>actionServlet</servlet-name>
+    <servlet-class>com.googlecode.struts4rcp.server.ActionServlet</servlet-class>
+    <init-param>
+        <param-name>actionFactory</param-name>
+        <param-value>
+            <!--DEFAULT:-->
+            com.googlecode.struts4rcp.server.factory.SpringActionFactory
+            <!--OPTIONAL:-->
+            <!--com.googlecode.struts4rcp.server.factory.GuiceActionFactory-->
+            <!--com.googlecode.struts4rcp.server.factory.PropertiesActionFactory-->
+            <!--com.googlecode.struts4rcp.server.factory.ClassActionFactory-->
+        </param-value>
+    </init-param>
+    <init-param>
+        <param-name>serializers</param-name>
+        <param-value>
+            <!--DEFAULT:-->
+            data: com.googlecode.struts4rcp.util.serializer.JavaSerializer,
+            json: com.googlecode.struts4rcp.server.serializer.JsonSerializer,
+            page: com.googlecode.struts4rcp.server.serializer.JspSerializer
+            <!--OPTIONAL:-->
+            <!--data: com.googlecode.struts4rcp.util.serializer.JBossSerializer-->
+            <!--data: com.googlecode.struts4rcp.util.serializer.JsonSerializer-->
+            <!--data: com.googlecode.struts4rcp.util.serializer.XmlSerializer-->
+            <!--data: com.googlecode.struts4rcp.util.serializer.XStreamSerializer-->
+            <!--page: com.googlecode.struts4rcp.server.serializer.CommonTemplateSerializer-->
+            <!--page: com.googlecode.struts4rcp.server.serializer.FreeMarkerSerializer-->
+            <!--page: com.googlecode.struts4rcp.server.serializer.VelocitySerializer-->
+        </param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+<servlet-mapping>
+    <servlet-name>actionServlet</servlet-name>
+    <url-pattern>*.data</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>actionServlet</servlet-name>
+    <url-pattern>*.json</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>actionServlet</servlet-name>
+    <url-pattern>*.page</url-pattern>
+</servlet-mapping>
+}}}
+Spring配置：(参见：[http://www.springframework.org])
+{{{
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath*:beans.xml</param-value>
+</context-param>
+<listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+}}}
+====2. 客户端 (transport.properties)====
+最简配置：
+{{{
+server.host=127.0.0.1
+server.port=8080
+context.path=xxx
+}}}
+可选配置：
+{{{
+transporter=com.googlecode.struts4rcp.client.transport.HttpURLConnectionTransporter
+#transporter=com.googlecode.struts4rcp.client.transport.CommonsHttpClientTransporter
+#transporter=com.googlecode.struts4rcp.client.transport.HttpClientTransporter
+serializer=com.googlecode.struts4rcp.util.serialize.JavaSerializer
+#serializer=com.googlecode.struts4rcp.util.serialize.JBossSerializer
+#serializer=com.googlecode.struts4rcp.util.serialize.JsonSerializer
+#serializer=com.googlecode.struts4rcp.util.serialize.XmlSerializer
+#serializer=com.googlecode.struts4rcp.util.serialize.XStreamSerializer
+listeners=com.xxx.XXXListener,com.yyy.YYYListener
+server.host=127.0.0.1
+server.port=8080
+context.path=xxx
+action.suffix=data
+connection.timeout=30000
+socket.timeout=0
+connection.check.interval=5000
+}}}
