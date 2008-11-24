@@ -7,7 +7,7 @@ import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.client.Actions;
 import com.googlecode.struts4rcp.client.ActionCallback;
 }}}
-如果需要，也可以导入图形工具包：struts4rcp-swing.jar或struts4rcp-jface.jar，其中包含了一个简易连接管理窗口和按钮，请参见：[http://code.google.com/p/struts4rcp/wiki/GUITools 图形工具包说明]
+如果需要，也可以导入图形工具包：struts4rcp-swing.jar或struts4rcp-jface.jar，其中包含了一个简易连接管理窗口和按钮，请参见：[http://code.google.com/p/struts4rcp/wiki/gui 图形工具包说明]
 ==2. 执行==
 ===(1) 同步执行===
 最简单的调用方式就是同步执行，如：
@@ -42,7 +42,7 @@ Action<Account, User> loginAction = Actions.getAsyncAction("loginAction", new Ac
 loginAction.execute(account); // 后台执行，并立即返回null
 }}}
 ===(3) 后台执行===
-上面的执行过程都会触发执行事件，如果注册了UI组件(参见：[http://code.google.com/p/struts4rcp/wiki/GUITools 图形工具包说明])，会自动弹出模态框(注：如果是在UI线程内执行，因UI线程被阻塞，整个UI界面都不能响应，不会弹出模态框)，如果不想触发执行事件，可以使用后台执行，如：
+上面的执行过程都会触发执行事件，如果注册了UI组件(参见：[http://code.google.com/p/struts4rcp/wiki/gui 图形工具包说明])，会自动弹出模态框(注：如果是在UI线程内执行，因UI线程被阻塞，整个UI界面都不能响应，不会弹出模态框)，如果不想触发执行事件，可以使用后台执行，如：
 {{{
 new Thread() {
 	public void run() {
@@ -84,7 +84,7 @@ Actions.getBackAction("loginAction", false);
 ===(4) 其它 ===
 如果需要其它传输策略，可继承com.googlecode.struts4rcp.client.transporter.AbstractHttpTransporter类，进行适配实现。
 ==4. 事件==
-框架为重点状态的改变，提供了事件支持，图形工具包就是基于这些事件实现的(参见：[http://code.google.com/p/struts4rcp/wiki/GUITools 图形工具包说明])。事件类型如下：
+框架为重点状态的改变，提供了事件支持，图形工具包就是基于这些事件实现的(参见：[http://code.google.com/p/struts4rcp/wiki/gui 图形工具包说明])。事件类型如下：
 ===(1) 连接事件 ===
 当网络连接状态的改变时，触发此事件。
 {{{
