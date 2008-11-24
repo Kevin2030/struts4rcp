@@ -23,7 +23,7 @@
 			}
 			function asyncLogin() {
 				var loginAction = Actions.getAsyncAction("loginAction", function(user) {
-						alert("This is Async JSON Result!\nHello " + user.username + ", Welcome to xxx system!\nyour email is: " + user.email + "\nyour password is: " + user.password + "\nyour id is: " + user.id);
+					alert("This is Async JSON Result!\nHello " + user.username + ", Welcome to xxx system!\nyour email is: " + user.email + "\nyour password is: " + user.password + "\nyour id is: " + user.id);
 				});
 				var account = getAccount();
 				loginAction.execute(account);

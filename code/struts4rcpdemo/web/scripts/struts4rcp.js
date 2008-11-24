@@ -74,7 +74,7 @@ Actions = {
 									alert(result.className + ":\n" + (result.message || ""));
 								}
 							} else {
-								callback();
+								callback(result);
 							}
 						}
 					};
@@ -90,7 +90,7 @@ Actions = {
 									alert(result.className + ":\n" + (result.message || ""));
 								}
 							} else {
-								callback();
+								callback(result);
 							}
 						}
 					};
@@ -107,7 +107,7 @@ Actions = {
 									alert(result.className + ":\n" + (result.message || ""));
 								}
 							} else {
-								callback();
+								callback(result);
 							}
 						}
 					}, 100);
