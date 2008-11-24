@@ -1,0 +1,55 @@
+#图形工具包说明.
+
+= 图形工具包说明 =
+==1. 使用说明==
+===导入：(struts4rcp-swing.jar)===
+{{{
+import com.googlecode.struts4rcp.client.view.swing.ConnectionButton;
+}}}
+===调用：===
+{{{
+ConnectionButton connectionButton = new ConnectionButton(frame, Actions.getClient());
+}}}
+===示例：===
+{{{
+// 初始化
+Properties properties = new Properties();
+properties.setProperty("server.host", "localhost");
+properties.setProperty("server.port", "8080");
+properties.setProperty("context.path", "struts4rcpdemo");
+Actions.init(properties);
+// 创建窗口
+try{UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());}catch(Throwable e){}
+JFrame frame = new JFrame();
+frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+frame.setSize(800, 600);
+frame.getContentPane().setLayout(new BorderLayout());
+frame.addWindowListener(new WindowAdapter(){public void windowClosing(WindowEvent e){Actions.destroy();}});
+// 创建状态栏
+JToolBar statusBar = new JToolBar();
+statusBar.setFloatable(false);
+statusBar.setLayout(new BorderLayout());
+frame.getContentPane().add(BorderLayout.SOUTH, statusBar);
+// 创建连接按钮
+ConnectionButton connectionButton = new ConnectionButton(frame, Actions.getClient());
+statusBar.add(BorderLayout.EAST, connectionButton);
+// 显示窗口
+frame.setVisible(true);
+}}}
+==2. 功能截图==
+===当网络连通时，按钮图片自动显示：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/connected.gif]
+===当网络断开时，按钮图片自动显示：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/disconnected.gif]
+===当有传输任务时，按钮图片自动显示：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/transporting.gif]
+===当前台执行时，自动弹出模态框：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/execution_dialog.gif]
+===当前台执行出错时，自动弹出错误信息对话框：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/exception_dialog.gif]
+===当后台执行时，点击按钮，弹出控制台，选择传输管理界面：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/transportation_pane.gif]
+===当后台执行出错时，点击按钮，弹出控制台，选择异常管理界面：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/exception_pane.gif]
+===点击按钮，弹出控制台，选择配置管理界面：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/configuration_pane.gif]

@@ -1,0 +1,103 @@
+==扩展指南==
+====(1) 序列化器====
+=====扩展点：=====
+客户端(包括Web页面)与服务器端之间传递的数据格式转换。
+=====扩展接口：=====
+	* com.googlecode.struts4rcp.util.serializer.Serializer
+	* com.googlecode.struts4rcp.util.serializer.AbstractSerializer
+	* com.googlecode.struts4rcp.util.serializer.TextSerializer
+	* com.googlecode.struts4rcp.util.serializer.AbstractTextSerializer
+	* com.googlecode.struts4rcp.server.serializer.ServletSerializer
+	* com.googlecode.struts4rcp.server.serializer.AbstractServletSerializer
+=====内置实现：=====
+	* com.googlecode.struts4rcp.util.serializer.JavaSerializer
+	* com.googlecode.struts4rcp.util.serializer.JBossSerializer
+	* com.googlecode.struts4rcp.util.serializer.JsonSerializer
+	* com.googlecode.struts4rcp.util.serializer.XmlSerializer
+	* com.googlecode.struts4rcp.util.serializer.XStreamSerializer
+	* com.googlecode.struts4rcp.server.serializer.JspSerializer
+	* com.googlecode.struts4rcp.server.serializer.CommonTemplateSerializer
+	* com.googlecode.struts4rcp.server.serializer.FreeMarkerSerializer
+	* com.googlecode.struts4rcp.server.serializer.VelocitySerializer
+	* com.googlecode.struts4rcp.server.serializer.JsonSerializer
+=====注册方式：=====
+	* 客户端配置：serializer=com.googlecode.struts4rcp.util.serializer.JavaSerializer
+	* 服务器端web.xml配置：&lt;init-param&gt;&lt;param-name&gt;serializers&lt;/param-name&gt;&lt;param-value&gt;data:com.googlecode.struts4rcp.util.serializer.JavaSerializer&lt;/param-value&gt;&lt;/init-param&gt;
+====(2) 服务器端Action实例化工厂====
+=====扩展点：=====
+服务器端Action实例的创建和装配。
+=====扩展接口：=====
+	* com.googlecode.struts4rcp.server.ActionFactory
+=====内置实现：=====
+	* com.googlecode.struts4rcp.server.factory.SpringActionFactory
+	* com.googlecode.struts4rcp.server.factory.GuiceActionFactory
+	* com.googlecode.struts4rcp.server.factory.PropertiesActionFactory
+=====注册方式：=====
+	* ActionServletContext.getContext().setActionFactory(actionFactory);
+	* 服务器端web.xml配置：&lt;init-param&gt;&lt;param-name&gt;actionFactory&lt;/param-name&gt;&lt;param-value&gt;com.googlecode.struts4rcp.server.factory.SpringActionFactory&lt;/param-value&gt;&lt;/init-param&gt;
+====(3) 服务器端Action拦截器====
+=====扩展点：=====
+服务器端Action实例执行过程的前后拦截，可用于权限控制，前端检验等。
+=====扩展接口：=====
+	* com.googlecode.struts4rcp.server.ActionInterceptor
+=====注册方式：=====
+	* 使用SpringActionFactory配置：(beans.xml) &lt;bean id="xxxActionInterceptor" class="com.xxx.XxxActionInterceptor"&gt;&lt;/bean&gt;
+	* 使用PropertiesActionFactory配置：(actions.properties) actionInterceptor1=com.xxx.XxxActionInterceptor
+====(4) 客户端传输器====
+=====扩展点：=====
+客户端与服务器端数据交换协议与策略实现。
+=====扩展接口：=====
+	* com.googlecode.struts4rcp.client.Transporter
+	* com.googlecode.struts4rcp.client.transport.AbstractTransporter
+=====内置实现：=====
+	* com.googlecode.struts4rcp.client.transport.HttpURLConnectionTransporter
+	* com.googlecode.struts4rcp.client.transport.CommonsHttpClientTransporter
+	* com.googlecode.struts4rcp.client.transport.HttpClientTransporter
+=====注册方式：=====
+	* new Client(config, xxxTransporter);
+	* 客户端配置：transporter=com.xxx.XxxTransporter
+====(5) 客户端连接状态事件监听器====
+=====扩展点：=====
+客户端的网络状态改变时触发此事件。
+=====扩展接口：=====
+	* com.googlecode.struts4rcp.client.event.ConnectionListener
+	* com.googlecode.struts4rcp.client.event.ConnectionAdapter
+=====注册方式：=====
+	* Actions.getClient().addListener(xxxConnectionListener);
+	* 客户端配置：listeners=com.xxx.XXXConnectionListener
+====(6) 客户端执行状态事件监听器====
+=====扩展点：=====
+客户端正在前台执行Action时以及执行结束时触发此事件。
+=====扩展接口：=====
+	* com.googlecode.struts4rcp.client.event.ExecutionListener
+	* com.googlecode.struts4rcp.client.event.ExecutionAdapter
+=====注册方式：=====
+	* Actions.getClient().addListener(xxxExecutionListener);
+	* 客户端配置：listeners=com.xxx.XXXExecutionListener
+====(7) 客户端传输状态事件监听器====
+=====扩展点：=====
+客户端正在与服务器传输数据时以及传输结束时触发此事件。
+=====扩展接口：=====
+	* com.googlecode.struts4rcp.client.event.TransportationListener
+	* com.googlecode.struts4rcp.client.event.TransportationAdapter
+=====注册方式：=====
+	* Actions.getClient().addListener(xxxTransportationListener);
+	* 客户端配置：listeners=com.xxx.XXXTransportationListener
+====(8) 客户端异常事件监听器====
+=====扩展点：=====
+在异步执行时，当有异常未被业务逻辑捕获时，触发此事件。
+=====扩展接口：=====
+	* com.googlecode.struts4rcp.client.event.ExceptionListener
+	* com.googlecode.struts4rcp.client.event.ExceptionAdapter
+=====注册方式：=====
+	* Actions.getClient().addListener(xxxExceptionListener);
+	* 客户端配置：listeners=com.xxx.XXXExceptionListener
+====(9) 客户端配置改变事件监听器====
+=====扩展点：=====
+在配置项改变时，触发此事件。
+=====扩展接口：=====
+	* com.googlecode.struts4rcp.client.event.ConfigurationListener
+	* com.googlecode.struts4rcp.client.event.ConfigurationAdapter
+=====注册方式：=====
+	* Actions.getClient().addListener(xxxConfigurationListener);
+	* 客户端配置：listeners=com.xxx.XXXConfigurationListener
