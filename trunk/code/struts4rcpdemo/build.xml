@@ -25,12 +25,11 @@
 		<delete dir="${bin}" failonerror="false" />
 		<mkdir dir="${bin}" />
 		<javac srcdir="${src}" destdir="${bin}" classpathref="project.class.path" encoding="UTF-8" debug="true" fork="true" />
-		<copy todir="${bin}" includeEmptyDirs="no">
+		<copy todir="${bin}" includeEmptyDirs="no" overwrite="true">
 			<fileset dir="${src}">
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-		<delete dir="${jar}" failonerror="false" />
 		<mkdir dir="${jar}" />
 		<jar destfile="${jar}/${ant.project.name}-client-${version}.jar" encoding="UTF-8">
 			<fileset dir="${bin}">
@@ -39,7 +38,7 @@
 				<include name="${pkg}/exception/**" />
 			</fileset>
 		</jar>
-		<copy todir="${jar}" includeEmptyDirs="no">
+		<copy todir="${jar}" includeEmptyDirs="no" overwrite="true">
 			<fileset dir="${lib}">
 				<include name="**/*.jar" />
 			</fileset>
@@ -56,7 +55,6 @@
 	</target>
 
 	<target name="war" depends="compile" description="Build the war files">
-		<delete file="${war}/${ant.project.name}-${version}.war" failonerror="false" />
 		<war destfile="${war}/${ant.project.name}-${version}.war" basedir="${web}" webxml="${web}/WEB-INF/web.xml" encoding="utf-8" />
 		<delete dir="${bin}" failonerror="false" />
 	</target>
