@@ -5,7 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v5.5"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="web/client/struts4rcp-client-0.1.jar"/>
-	<classpathentry kind="lib" path="web/client/struts4rcp-swing-0.1.jar"/>
+	<classpathentry kind="lib" path="lib/struts4rcp-client-0.1.jar"/>
+	<classpathentry kind="lib" path="lib/struts4rcp-swing-0.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

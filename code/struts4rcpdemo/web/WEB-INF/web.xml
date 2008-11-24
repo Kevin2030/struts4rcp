@@ -2,7 +2,7 @@
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-	<display-name>rcpstrutsdemo</display-name>
+	<display-name>struts4rcpdemo</display-name>
 	<!-- Spring Config -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -11,19 +11,51 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*.json</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*.jsppage</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*.ctlpage</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*.ftlpage</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*.vtlpage</url-pattern>
+	</filter-mapping>
 	<!-- RCP Struts Config -->
 	<servlet>
 		<servlet-name>actionServlet</servlet-name>
-		<servlet-class>com.googlecode.rcpstruts.server.ActionServlet</servlet-class>
+		<servlet-class>com.googlecode.struts4rcp.server.ActionServlet</servlet-class>
 		<init-param>
 			<param-name>serializers</param-name>
 			<param-value>
-				page: com.googlecode.rcpstruts.server.serializer.CommonTemplateSerializer
-				<!--
-				page: com.googlecode.rcpstruts.server.serializer.CommonTemplateSerializer
-				page: com.googlecode.rcpstruts.server.serializer.FreeMarkerSerializer
-				page: com.googlecode.rcpstruts.server.serializer.VelocitySerializer
-				-->
+				data: com.googlecode.struts4rcp.util.serializer.JavaSerializer,
+				json: com.googlecode.struts4rcp.server.serializer.JsonSerializer,
+				jsppage: com.googlecode.struts4rcp.server.serializer.JspSerializer,
+				ctlpage: com.googlecode.struts4rcp.server.serializer.CommonTemplateSerializer,
+				ftlpage: com.googlecode.struts4rcp.server.serializer.FreeMarkerSerializer,
+				vtlpage: com.googlecode.struts4rcp.server.serializer.VelocitySerializer
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
@@ -38,6 +70,40 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>actionServlet</servlet-name>
-		<url-pattern>*.page</url-pattern>
+		<url-pattern>*.jsppage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>actionServlet</servlet-name>
+		<url-pattern>*.ctlpage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>actionServlet</servlet-name>
+		<url-pattern>*.ftlpage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>actionServlet</servlet-name>
+		<url-pattern>*.vtlpage</url-pattern>
+	</servlet-mapping>
+	<!-- JNLP Config -->
+	<servlet>
+		<servlet-name>jnlpServlet</servlet-name>
+		<servlet-class>com.googlecode.struts4rcp.server.launcher.JnlpServlet</servlet-class>
+		<init-param>
+			<param-name>jars</param-name>
+			<param-value>
+				client/struts4rcp-client-0.1.jar,
+				client/struts4rcp-swing-0.1.jar,
+				client/struts4rcpdemo-client-0.1.jar
+			</param-value>
+		</init-param>
+		<init-param>
+			<param-name>launcher</param-name>
+			<param-value>com.xxx.demo.client.LoginLauncher</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>jnlpServlet</servlet-name>
+		<url-pattern>/struts4rcpdemo.jnlp</url-pattern>
 	</servlet-mapping>
 </web-app>

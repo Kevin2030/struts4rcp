@@ -1,0 +1,2 @@
+call ant compile
+pause

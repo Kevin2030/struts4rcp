@@ -2,15 +2,16 @@
 
 	<description>Struts for RCP Demo</description>
 
-	<property name="title" value="Struts for RCP Demo" />
+	<property name="pkg" value="com/xxx/demo" />
+	<property name="pwd" value="123456" />
 	<property name="version" value="0.1" />
-	<property name="vendor" value="http://struts4rcp.googlecode.com" />
-	<property name="src" location="src/main/java" />
-	<property name="res" location="src/main/resources" />
-	<property name="build" location="bin" />
+
+	<property name="src" location="src" />
 	<property name="lib" location="lib" />
-	<property name="dist" location="dist" />
 	<property name="web" location="web" />
+	<property name="bin" location="${web}/WEB-INF/classes" />
+	<property name="jar" location="${web}/client" />
+	<property name="war" location="." />
 
 	<property environment="env" />
 	<path id="project.class.path">
@@ -20,46 +21,44 @@
 		</fileset>
 	</path>
 
-	<target name="compile">
-		<delete dir="${build}" failonerror="false" />
-		<mkdir dir="${build}" />
-		<javac srcdir="${src}" destdir="${build}" classpathref="project.class.path" encoding="UTF-8" debug="true" fork="true" />
-		<copy todir="${build}" includeEmptyDirs="no">
-			<fileset dir="${res}">
-				<include name="**/*.properties" />
-				<include name="**/*.xml" />
+	<target name="compile" description="Build the class and jar files">
+		<delete dir="${bin}" failonerror="false" />
+		<mkdir dir="${bin}" />
+		<javac srcdir="${src}" destdir="${bin}" classpathref="project.class.path" encoding="UTF-8" debug="true" fork="true" />
+		<copy todir="${bin}" includeEmptyDirs="no">
+			<fileset dir="${src}">
+				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-	</target>
-
-	<target name="jar" depends="compile">
-		<delete file="${web}/client/struts4rcpdemo-client-${version}.jar" failonerror="false" />
-		<jar destfile="${web}/client/struts4rcpdemo-client-${version}.jar" encoding="UTF-8">
-			<fileset dir="${build}">
-				<include name="com/xxx/demo/client/**" />
+		<delete dir="${jar}" failonerror="false" />
+		<mkdir dir="${jar}" />
+		<jar destfile="${jar}/${ant.project.name}-client-${version}.jar" encoding="UTF-8">
+			<fileset dir="${bin}">
+				<include name="${pkg}/client/**" />
+				<include name="${pkg}/domain/**" />
+				<include name="${pkg}/exception/**" />
 			</fileset>
-			<manifest>
-				<attribute name="Implementation-Title" value="${title}" />
-				<attribute name="Implementation-Version" value="${version}" />
-				<attribute name="Implementation-Vendor" value="${vendor}" />
-				<attribute name="Main-Class" value="com.xxx.demo.client.Main" />
-			</manifest>
 		</jar>
-	</target>
-
-	<target name="war" depends="jar">
-		<delete dir="${web}/WEB-INF/classes" failonerror="false" />
-		<mkdir dir="${web}/WEB-INF/classes" />
-		<copy todir="${web}/WEB-INF/classes" includeEmptyDirs="no">
-			<fileset dir="${build}">
-				<exclude name="com/xxx/demo/client/**" />
+		<copy todir="${jar}" includeEmptyDirs="no">
+			<fileset dir="${lib}">
+				<include name="**/*.jar" />
 			</fileset>
 		</copy>
-		<mkdir dir="${dist}" />
-		<delete file="${dist}/struts4rcpdemo-server-${version}.war" failonerror="false" />
-		<war destfile="${dist}/struts4rcpdemo-server-${version}.war" basedir="${web}" webxml="${web}/WEB-INF/web.xml" encoding="utf-8" />
-		<delete dir="${web}/WEB-INF/classes" failonerror="false" />
-		<delete dir="${build}" failonerror="false" />
+		<signjar keystore=".keystore" alias="${ant.project.name}" keypass="${pwd}" storepass="${pwd}">
+			<fileset dir="${jar}">
+				<include name="**/*.jar" />
+			</fileset>
+		</signjar>
+	</target>
+
+	<target name="jar" depends="compile" description="Build the jar files">
+		<delete dir="${bin}" failonerror="false" />
+	</target>
+
+	<target name="war" depends="compile" description="Build the war files">
+		<delete file="${war}/${ant.project.name}-${version}.war" failonerror="false" />
+		<war destfile="${war}/${ant.project.name}-${version}.war" basedir="${web}" webxml="${web}/WEB-INF/web.xml" encoding="utf-8" />
+		<delete dir="${bin}" failonerror="false" />
 	</target>
 
 </project>
