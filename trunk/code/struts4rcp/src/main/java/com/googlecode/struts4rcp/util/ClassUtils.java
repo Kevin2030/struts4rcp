@@ -55,4 +55,31 @@ public final class ClassUtils {
 		throw new NoSuchMethodException("No such method:" + methodName + " from class: " + cls.getName());
 	}
 
+	public static Object getInstance(String value) {
+		if (value == null)
+			return null;
+		try {
+			return forName(value).newInstance();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static <T> T getInstance(String value, Class<T> baseClass, Class<T> defaultClass) {
+		try {
+			if (value == null)
+				return defaultClass.newInstance();
+			value = value.trim();
+			if (value.length() == 0)
+				return defaultClass.newInstance();
+			try {
+				return forName(value).asSubclass(baseClass).newInstance();
+			} catch (Exception e) {
+				return defaultClass.newInstance();
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }
