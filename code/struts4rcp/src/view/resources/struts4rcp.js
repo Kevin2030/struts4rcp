@@ -1,5 +1,5 @@
 Actions = {
-	actionSuffix: "json",
+	suffix: "json",
 	_getRequest: function() {
 		var request;
 		try {
@@ -27,7 +27,7 @@ Actions = {
 	_getUrl: function(actionName, model) {
 		var url = window.location.href;
 		url = url.substring(0, url.lastIndexOf('/') + 1);
-		url = url + actionName + "." + Actions.actionSuffix;
+		url = url + actionName + "." + Actions.suffix;
 		if(model) {
 			var first = true;
 			for(var key in model) {
