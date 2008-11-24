@@ -5,7 +5,7 @@
 {{{
 <servlet>
     <servlet-name>actionServlet</servlet-name>
-    <servlet-class>com.googlecode.rcpstruts.server.ActionServlet</servlet-class>
+    <servlet-class>com.googlecode.struts4rcp.server.ActionServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
 </servlet>
 <servlet-mapping>
@@ -27,33 +27,33 @@
 {{{
 <servlet>
     <servlet-name>actionServlet</servlet-name>
-    <servlet-class>com.googlecode.rcpstruts.server.ActionServlet</servlet-class>
+    <servlet-class>com.googlecode.struts4rcp.server.ActionServlet</servlet-class>
     <init-param>
         <param-name>actionFactory</param-name>
         <param-value>
             <!--DEFAULT:-->
-            com.googlecode.rcpstruts.server.factory.SpringActionFactory
+            com.googlecode.struts4rcp.server.factory.SpringActionFactory
             <!--OPTIONAL:-->
-            <!--com.googlecode.rcpstruts.server.factory.GuiceActionFactory-->
-            <!--com.googlecode.rcpstruts.server.factory.PropertiesActionFactory-->
-            <!--com.googlecode.rcpstruts.server.factory.ClassActionFactory-->
+            <!--com.googlecode.struts4rcp.server.factory.GuiceActionFactory-->
+            <!--com.googlecode.struts4rcp.server.factory.PropertiesActionFactory-->
+            <!--com.googlecode.struts4rcp.server.factory.ClassActionFactory-->
         </param-value>
     </init-param>
     <init-param>
         <param-name>serializers</param-name>
         <param-value>
             <!--DEFAULT:-->
-            data: com.googlecode.rcpstruts.util.serializer.JavaSerializer,
-            json: com.googlecode.rcpstruts.server.serializer.JsonSerializer,
-            page: com.googlecode.rcpstruts.server.serializer.JspSerializer
+            data: com.googlecode.struts4rcp.util.serializer.JavaSerializer,
+            json: com.googlecode.struts4rcp.server.serializer.JsonSerializer,
+            page: com.googlecode.struts4rcp.server.serializer.JspSerializer
             <!--OPTIONAL:-->
-            <!--data: com.googlecode.rcpstruts.util.serializer.JBossSerializer-->
-            <!--data: com.googlecode.rcpstruts.util.serializer.JsonSerializer-->
-            <!--data: com.googlecode.rcpstruts.util.serializer.XmlSerializer-->
-            <!--data: com.googlecode.rcpstruts.util.serializer.XStreamSerializer-->
-            <!--page: com.googlecode.rcpstruts.server.serializer.CommonTemplateSerializer-->
-            <!--page: com.googlecode.rcpstruts.server.serializer.FreeMarkerSerializer-->
-            <!--page: com.googlecode.rcpstruts.server.serializer.VelocitySerializer-->
+            <!--data: com.googlecode.struts4rcp.util.serializer.JBossSerializer-->
+            <!--data: com.googlecode.struts4rcp.util.serializer.JsonSerializer-->
+            <!--data: com.googlecode.struts4rcp.util.serializer.XmlSerializer-->
+            <!--data: com.googlecode.struts4rcp.util.serializer.XStreamSerializer-->
+            <!--page: com.googlecode.struts4rcp.server.serializer.CommonTemplateSerializer-->
+            <!--page: com.googlecode.struts4rcp.server.serializer.FreeMarkerSerializer-->
+            <!--page: com.googlecode.struts4rcp.server.serializer.VelocitySerializer-->
         </param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
@@ -90,14 +90,14 @@ context.path=xxx
 }}}
 可选配置：
 {{{
-transporter=com.googlecode.rcpstruts.client.transport.HttpURLConnectionTransporter
-#transporter=com.googlecode.rcpstruts.client.transport.CommonsHttpClientTransporter
-#transporter=com.googlecode.rcpstruts.client.transport.HttpClientTransporter
-serializer=com.googlecode.rcpstruts.util.serialize.JavaSerializer
-#serializer=com.googlecode.rcpstruts.util.serialize.JBossSerializer
-#serializer=com.googlecode.rcpstruts.util.serialize.JsonSerializer
-#serializer=com.googlecode.rcpstruts.util.serialize.XmlSerializer
-#serializer=com.googlecode.rcpstruts.util.serialize.XStreamSerializer
+transporter=com.googlecode.struts4rcp.client.transport.HttpURLConnectionTransporter
+#transporter=com.googlecode.struts4rcp.client.transport.CommonsHttpClientTransporter
+#transporter=com.googlecode.struts4rcp.client.transport.HttpClientTransporter
+serializer=com.googlecode.struts4rcp.util.serialize.JavaSerializer
+#serializer=com.googlecode.struts4rcp.util.serialize.JBossSerializer
+#serializer=com.googlecode.struts4rcp.util.serialize.JsonSerializer
+#serializer=com.googlecode.struts4rcp.util.serialize.XmlSerializer
+#serializer=com.googlecode.struts4rcp.util.serialize.XStreamSerializer
 listeners=com.xxx.XXXListener,com.yyy.YYYListener
 server.host=127.0.0.1
 server.port=8080
