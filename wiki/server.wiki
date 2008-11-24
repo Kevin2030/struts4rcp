@@ -1,6 +1,5 @@
 #labels Featured,Phase-Support
-#服务器开发说明
-=服务器开发说明=
+=服务器使用说明=
 导入：(struts4rcp-server.jar)
 {{{
 import com.googlecode.struts4rcp.Action;
