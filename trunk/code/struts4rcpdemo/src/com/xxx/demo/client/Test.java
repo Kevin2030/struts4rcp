@@ -8,7 +8,7 @@ package com.xxx.demo.client;
 public class Test {
 
 	public static void main(String[] args) {
-		new LoginLauncher().start("localhost", 8080, "struts4rcpdemo", "data");
+		new LoginLauncher().start("localhost", 8080, "struts4rcpdemo");
 	}
 
 }
