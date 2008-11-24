@@ -11,6 +11,9 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	<listener>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -84,7 +87,7 @@
 		<servlet-name>actionServlet</servlet-name>
 		<url-pattern>*.vtlpage</url-pattern>
 	</servlet-mapping>
-	<!-- JNLP Config -->
+	<!-- Cleint JNLP Config -->
 	<servlet>
 		<servlet-name>jnlpServlet</servlet-name>
 		<servlet-class>com.googlecode.struts4rcp.server.launcher.JnlpServlet</servlet-class>
