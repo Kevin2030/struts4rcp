@@ -42,7 +42,7 @@ Action<Account, User> loginAction = Actions.getAsyncAction("loginAction", new Ac
 loginAction.execute(account); // 后台执行，并立即返回null
 }}}
 ===(3) 后台执行===
-上面的执行过程都会触发执行事件，如果注册了UI组件(参见：[http://code.google.com/p/struts4rcp/wiki/gui 图形工具包使用说明])，会自动弹出模态框(注：如果是在UI线程内执行，因UI线程被阻塞，整个UI界面都不能响应，不会弹出模态框)，如果不想触发执行事件，可以使用后台执行，如：
+上面的执行过程都会触发前台执行事件，如果注册了UI组件(参见：[http://code.google.com/p/struts4rcp/wiki/gui 图形工具包使用说明])，会自动弹出模态框(注：如果是在UI线程内执行，因UI线程被阻塞，整个UI界面都不能响应，不会弹出模态框)，如果不想触发前台执行事件，可以使用后台执行，如：
 {{{
 new Thread() {
 	public void run() {
