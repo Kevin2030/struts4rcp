@@ -1,3 +1,4 @@
+#labels Featured,Phase-Design
 ==设计说明==
 =====(1) 部署图=====
 [http://rcpstruts.googlecode.com/svn/trunk/docs/design/uml/rcpstruts_deploy_diagram.gif]
