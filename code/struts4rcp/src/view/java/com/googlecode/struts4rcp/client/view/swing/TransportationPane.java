@@ -173,7 +173,7 @@ public class TransportationPane extends JPanel {
 	}
 
 	private void refreshTransportationList() {
-		Collection<Execution> executions = client.getTransporter().getExecutions();
+		Collection<Execution> executions = client.getTransporter().getTransportingExecutions();
 		synchronized (transportationModel) {
 			transportationModel.clear();
 			for (Execution execution : executions) {

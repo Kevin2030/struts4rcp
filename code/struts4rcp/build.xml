@@ -85,8 +85,10 @@
 		<delete file="${dist}/struts4rcp-swing-${version}.jar" failonerror="false" />
 		<jar destfile="${dist}/struts4rcp-swing-${version}.jar" encoding="UTF-8">
 			<fileset dir="${build}">
+				<exclude name="com/googlecode/struts4rcp/server/**" />
 				<exclude name="com/googlecode/struts4rcp/client/view/jface/**" />
 				<exclude name="META-INF/services/com.googlecode.struts4rcp.client.view.jface.*" />
+				<exclude name="META-INF/*.tld" />
 			</fileset>
 			<manifest>
 				<attribute name="Implementation-Title" value="${title}" />
@@ -97,8 +99,21 @@
 		<delete file="${dist}/struts4rcp-jface-${version}.jar" failonerror="false" />
 		<jar destfile="${dist}/struts4rcp-jface-${version}.jar" encoding="UTF-8">
 			<fileset dir="${build}">
+				<exclude name="com/googlecode/struts4rcp/server/**" />
 				<exclude name="com/googlecode/struts4rcp/client/view/swing/**" />
 				<exclude name="META-INF/services/com.googlecode.struts4rcp.client.view.swing.*" />
+				<exclude name="META-INF/*.tld" />
+			</fileset>
+			<manifest>
+				<attribute name="Implementation-Title" value="${title}" />
+				<attribute name="Implementation-Version" value="${version}" />
+				<attribute name="Implementation-Vendor" value="${vendor}" />
+			</manifest>
+		</jar>
+		<delete file="${dist}/struts4rcp-extjs-${version}.jar" failonerror="false" />
+		<jar destfile="${dist}/struts4rcp-extjs-${version}.jar" encoding="UTF-8">
+			<fileset dir="${build}">
+				<exclude name="com/googlecode/struts4rcp/client/**" />
 			</fileset>
 			<manifest>
 				<attribute name="Implementation-Title" value="${title}" />

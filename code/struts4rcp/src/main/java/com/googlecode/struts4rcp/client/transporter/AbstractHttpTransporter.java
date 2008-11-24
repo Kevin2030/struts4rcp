@@ -284,7 +284,7 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 		}
 	}
 
-	public Collection<Execution> getExecutions() {
+	public Collection<Execution> getTransportingExecutions() {
 		Collection<Execution> copies = new HashSet<Execution>();
 		synchronized (executions) {
 			copies.addAll(executions);

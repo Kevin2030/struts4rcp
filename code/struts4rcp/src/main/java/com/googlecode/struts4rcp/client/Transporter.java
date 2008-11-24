@@ -24,7 +24,7 @@ public interface Transporter extends ConnectionMonitor {
 	 * 获取正在前台运行的传输项列表
 	 * @return 正在运行的传输项列表
 	 */
-	public abstract Collection<Execution> getExecutions();
+	public abstract Collection<Execution> getTransportingExecutions();
 
 	/**
 	 * 是否正在前台传输
