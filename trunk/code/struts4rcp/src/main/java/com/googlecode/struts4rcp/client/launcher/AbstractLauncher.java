@@ -8,13 +8,11 @@ public class AbstractLauncher implements Launcher {
 
 	public void start(String serverHost,
 			int serverPort,
-			String contextPath,
-			String actionSuffix) {
+			String contextPath) {
 		Properties properties = new Properties();
 		properties.setProperty("server.host", serverHost);
 		properties.setProperty("server.port", String.valueOf(serverPort));
 		properties.setProperty("context.path", contextPath);
-		properties.setProperty("action.suffix", actionSuffix);
 		start(properties);
 	}
 

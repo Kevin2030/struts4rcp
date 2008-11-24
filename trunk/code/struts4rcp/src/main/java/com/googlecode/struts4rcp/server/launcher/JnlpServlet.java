@@ -18,8 +18,6 @@ public class JnlpServlet extends HttpServlet {
 
 	private String launcher;
 
-	private String actionSuffix;
-
 	private String os;
 
 	private String title;
@@ -45,9 +43,6 @@ public class JnlpServlet extends HttpServlet {
 		launcher = getParam("launcher");
 		if (launcher == null)
 			throw new ServletException("The \"launcher\" param is required in JnlpServlet!");
-		actionSuffix = getParam("actionSuffix");
-		if (actionSuffix == null)
-			actionSuffix = "data";
 		os = getParam("os");
 		title = getParam("title");
 		vendor = getParam("vendor");
@@ -102,7 +97,6 @@ public class JnlpServlet extends HttpServlet {
 		writer.write("		<argument>" + serverHost + "</argument>\n");
 		writer.write("		<argument>" + serverPort + "</argument>\n");
 		writer.write("		<argument>" + contextPath + "</argument>\n");
-		writer.write("		<argument>" + actionSuffix + "</argument>\n");
 		writer.write("	</application-desc>\n");
 		writer.write("</jnlp>\n");
 	}
