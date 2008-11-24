@@ -43,11 +43,7 @@ public abstract class FormSerializer extends AbstractServletSerializer {
 				for (Enumeration<?> names = request.getParameterNames(); names.hasMoreElements();) {
 					String name = (String)names.nextElement();
 					String value = request.getParameter(name);
-					try {
-						BeanUtils.setProperty(model, name, value);
-					} catch (Throwable e) {
-						logger.error(e.getMessage(), e);
-					}
+					model.put(name, value);
 				}
 				return model;
 			}
