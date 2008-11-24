@@ -1,7 +1,5 @@
 #labels Featured,Phase-Support
-#图形工具包说明.
-
-= 图形工具包说明 =
+= 图形工具包使用说明 =
 ==1. 使用说明==
 ===导入：(struts4rcp-swing.jar)===
 {{{
