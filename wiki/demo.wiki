@@ -1,6 +1,6 @@
 #labels Featured,Phase-Deploy
 =演示程序使用说明=
-下载struts4rcp-0.1.zip，其中包括： 
+下载struts4rcp-releases-0.1.zip，其中包括： 
 	* struts4rcpdemo 为演示工程源代码
 	* struts4rcpdemo-0.1.war 为演示war包
 	* struts4rcpminidemo-0.1.war 为裁减的最小演示war包(只包含C/S测试) 
