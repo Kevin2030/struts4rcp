@@ -1,7 +1,7 @@
 #labels Featured,Phase-Deploy
 =V0.1=
 ==发布包：==
-[http://www.commontemplate.org/struts4rcp/struts4rcp-release-0.1.zip struts4rcp-release-0.1.zip]
+[http://www.commontemplate.org/struts4rcp/struts4rcp-releases-0.1.zip struts4rcp-releases-0.1.zip]
 ===包括：===
 	* struts4rcp 主工程源代码目录
 	* struts4rcp-server-0.1.jar 服务器端框架包，参见：[http://code.google.com/p/struts4rcp/wiki/server 服务器端使用说明]
