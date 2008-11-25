@@ -68,7 +68,12 @@ public class JnlpServlet extends HttpServlet {
 						});
 						if (files != null && files.length > 0) {
 							for (File file : files) {
-								jars.add(file.getAbsolutePath().substring(root.length()).replace('\\', '/'));
+								String name = file.getAbsolutePath().substring(root.length()).replace('\\', '/');
+								if (file.getName().startsWith("struts4rcp-client")) {
+									jars.add(0, name);
+								} else {
+									jars.add(name);
+								}
 							}
 						}
 					}
@@ -79,6 +84,8 @@ public class JnlpServlet extends HttpServlet {
 		}
 		if (jars.size() == 0)
 			throw new ServletException("The \"jars\" param is required in JnlpServlet!");
+		if (jars.get(0).indexOf("struts4rcp-client") == -1)
+			throw new ServletException("No such struts4rcp-client-x.x.jar!");
 		launcher = getParam("launcher");
 		if (launcher == null)
 			throw new ServletException("The \"launcher\" param is required in JnlpServlet!");
