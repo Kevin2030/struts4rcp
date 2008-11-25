@@ -3,6 +3,7 @@ package com.googlecode.struts4rcp.client.launcher;
 import java.util.Properties;
 
 import com.googlecode.struts4rcp.client.Actions;
+import com.googlecode.struts4rcp.client.transporter.AbstractHttpTransporter;
 
 public class AbstractLauncher implements Launcher {
 
@@ -10,9 +11,9 @@ public class AbstractLauncher implements Launcher {
 			int serverPort,
 			String contextPath) {
 		Properties properties = new Properties();
-		properties.setProperty("server.host", serverHost);
-		properties.setProperty("server.port", String.valueOf(serverPort));
-		properties.setProperty("context.path", contextPath);
+		properties.setProperty(AbstractHttpTransporter.SERVER_HOST_PARAM_NAME, serverHost);
+		properties.setProperty(AbstractHttpTransporter.SERVER_PORT_PARAM_NAME, String.valueOf(serverPort));
+		properties.setProperty(AbstractHttpTransporter.CONTEXT_PATH_PARAM_NAME, contextPath);
 		start(properties);
 	}
 
