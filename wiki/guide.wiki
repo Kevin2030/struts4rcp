@@ -5,7 +5,7 @@
 {{{
 import com.googlecode.struts4rcp.Action;
 }}}
-Action实现类：
+Action实现类： 
 {{{
 public class LoginAction implements Action<Account, User> {
 
