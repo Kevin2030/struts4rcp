@@ -27,7 +27,7 @@ new Thread() {
 }.start();
 }}}
 ===(2) 异步执行===
-而下面的异步执行方式，等价于上面的启动新的线程处理，但接口更友好，性能也更优，并且框架将统一处理异常，如：
+而下面的异步执行方式，等价于上面的启动新的线程处理，但接口更友好，性能也更优(统一管理连接池)，并且框架将统一处理异常，如：
 {{{
 Account account = new Account("james", "123456");
 Action<Account, User> loginAction = Actions.getAsyncAction("loginAction", new ActionCallback<User>() {
@@ -36,7 +36,7 @@ Action<Account, User> loginAction = Actions.getAsyncAction("loginAction", new Ac
 	}
 	/*如果业务逻辑需要处理异常，可以覆盖此函数
 	public void catchException(Exception exception) throws Exception {
-		throw exception; // 不需要处理的异常，直接抛出，框架将发布异常事件
+		throw exception; // 不需要处理的异常，直接抛出，框架将发布异常事件，UI界面收到事件通知后会作提示
 	}*/
 });
 loginAction.execute(account); // 后台执行，并立即返回null
