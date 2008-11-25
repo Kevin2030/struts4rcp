@@ -108,6 +108,63 @@ var loginAction = Actions.getAction("loginAction"); // 对应Spring配置中的<
 var user = loginAction.execute(account); // 同步执行，并取得结果
 </script>
 }}}
+更多使用方式请参见：[http://code.google.com/p/struts4rcp/wiki/client 客户端使用说明]，
+如果希望一个Action实例可以处理多个请求，可以继承于DispatchAction，它将分发请求到多个函数，如：
+{{{
+public class UserManageAction implements DispatchAction<User> {
+
+	public Serializable saveUser(User user) throws Exception {
+		// ......
+	}
+
+	public Serializable updateUser(User user) throws Exception {
+		// ......
+	}
+
+	public Serializable removeUser(User user) throws Exception {
+		// ......
+	}
+
+	public Serializable searchUser(User user) throws Exception {
+		// ......
+	}
+
+}
+}}}
+然后配置多个名称指向同一个Bean，如下： (name属性用于取别名，也可以分开写多个，如：<bean id="userManageAction.saveUser">)
+{{{
+<bean id="userManageAction" name="userManageAction.saveUser,userManageAction.updateUser,userManageAction.removeUser,,userManageAction.searchUser" class="com.xxx.UserManageAction">
+	<property name="loginService" ref="loginService" />
+</bean>
+}}}
+如果希望按HTTP请求的方法类型区分函数，可以继承于RestfulAction，如：
+{{{
+public class UserManageAction implements RestfulAction<User> {
+
+	public Serializable post(User user) throws Exception {
+		// save user ......
+	}
+
+	public Serializable put(User user) throws Exception {
+		// update user ......
+	}
+
+	public Serializable delete(User user) throws Exception {
+		// remove user ......
+	}
+
+	public Serializable get(User user) throws Exception {
+		// search user......
+	}
+
+}
+}}}
+因为分派方法是固定的，只需要配置一个bean即可，如：
+{{{
+<bean id="userManageAction" class="com.xxx.UserManageAction">
+	<property name="loginService" ref="loginService" />
+</bean>
+}}}
 如果是传统的JSP页面，或模板页面，则需要在Action实现类的旁边放置同名的页面或模板，如：
 	* com/xxx/LoginAction.java Action实现类
 	* com/xxx/LoginAction.jsp 与Action同名同目录的JSP页面(序列化器：com.googlecode.struts4rcp.server.serializer.JspSerializer)
@@ -115,8 +172,13 @@ var user = loginAction.execute(account); // 同步执行，并取得结果
 	* com/xxx/LoginAction.ftl 或者，FreeMarker模板(序列化器：com.googlecode.struts4rcp.server.serializer.FreeMarkerSerializer)
 	* com/xxx/LoginAction.vtl 或者，Velocity模板(序列化器：com.googlecode.struts4rcp.server.serializer.VelocitySerializer)
 当Action执行完后，将调用相应页面或模板进行数据格式化，并输出。
+如果是DispatchAction或RestfulAction，页面名称需带上函数名，如：
+	* com/xxx/LoginAction.login.jsp
+	* com/xxx/LoginAction.login.ctl
+	* com/xxx/LoginAction.login.ftl
+	* com/xxx/LoginAction.login.vtl
 需要注意的是，JSP页面不能打包到jar中，必须散开在/WEB-INF/classes/目录下，否则访问不到，模板页面不受此限制。
-如果想改变页面位置，可以使用Page标注：
+如果想改变页面位置，可以使用Page标注：(如果是DispatchAction或RestfulAction，标注要写在函数上)
 {{{
 @Page("/WEB-INF/xxx") // 页面路径不要带后缀
 public class LoginAction implements Action<Account, User> {
@@ -161,7 +223,7 @@ public class LoginAction implements PageAction<Account, User> {
 	<property name="loginService" ref="loginService" />
 </bean>
 }}}
-或者继承于AbstractAction类，它将作各种检查，如：
+或者继承于AbstractAction类，它将作各种检查，如：(DispatchAction和RestfulAction都继承于AbstractAction类)
 {{{
 public abstract class AbstractAction<M extends Serializable, R extends Serializable> implements PageAction<M, R> {
 
