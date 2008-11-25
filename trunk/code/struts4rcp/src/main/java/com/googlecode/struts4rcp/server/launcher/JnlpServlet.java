@@ -1,5 +1,7 @@
 package com.googlecode.struts4rcp.server.launcher;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -35,9 +37,46 @@ public class JnlpServlet extends HttpServlet {
 		if (jarsConfig == null)
 			throw new ServletException("The \"jars\" param is required in JnlpServlet!");
 		jars = new ArrayList<String>();
-		for (String token: jarsConfig.split("\\,"))
-			if (token != null && token.trim().length() > 0)
-				jars.add(token.trim());
+		String root = super.getServletContext().getRealPath("/");
+		root = root.replace('\\', '/');
+		if (! root.endsWith("/"))
+			root = root + "/";
+		for (String token: jarsConfig.split("\\,")) {
+			if (token != null && token.trim().length() > 0 && ! "*".equals(token)) {
+				token = token.replace('\\', '/');
+				if (token.startsWith("/"))
+					token.substring(1);
+				int i = token.indexOf('*');
+				if (i >= 0) {
+					String prefix = token.substring(0, i);
+					final String suffix = token.substring(i + 1);
+					String dir = root;
+					if (prefix.length() > 0) {
+						int j = prefix.lastIndexOf('/');
+						if (j >= 0) {
+							dir = root + prefix.substring(0, j);
+							prefix = prefix.substring(j + 1);
+						}
+					}
+					File dirFile = new File(dir);
+					if (dirFile.exists() && dirFile.isDirectory()) {
+						File[] files = dirFile.listFiles(new FileFilter() {
+							public boolean accept(File file) {
+								return file.isFile() &&
+									(suffix == null || suffix.length() == 0 || file.getAbsolutePath().endsWith(suffix));
+							}
+						});
+						if (files != null && files.length > 0) {
+							for (File file : files) {
+								jars.add(file.getAbsolutePath().substring(root.length()).replace('\\', '/'));
+							}
+						}
+					}
+				} else {
+					jars.add(token.trim());
+				}
+			}
+		}
 		if (jars.size() == 0)
 			throw new ServletException("The \"jars\" param is required in JnlpServlet!");
 		launcher = getParam("launcher");
