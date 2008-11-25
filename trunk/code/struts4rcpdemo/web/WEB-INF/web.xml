@@ -94,14 +94,12 @@
 		<init-param>
 			<param-name>jars</param-name>
 			<param-value>
-				client/struts4rcp-client-0.1.jar,
-				client/struts4rcp-swing-0.1.jar,
-				client/struts4rcpdemo-client-0.1.jar
+				client/*.jar
 			</param-value>
 		</init-param>
 		<init-param>
 			<param-name>launcher</param-name>
-			<param-value>com.xxx.demo.client.LoginLauncher</param-value>
+			<param-value>com.xxx.demo.client.ConfigLauncher</param-value>
 		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
