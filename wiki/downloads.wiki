@@ -1,4 +1,4 @@
-#labels Featured,Phase-Deploy
+#labels Deprecated,Phase-Deploy
 =V0.1=
 ==发布包：==
 [http://www.commontemplate.org/struts4rcp/struts4rcp-releases-0.1.zip struts4rcp-releases-0.1.zip]
