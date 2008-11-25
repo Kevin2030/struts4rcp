@@ -1,6 +1,6 @@
 #labels Featured,Phase-Support
 =服务器使用说明=
-服务器端使用时需导入：struts4rcp-server.jar，并在web.xml中配置ActionServlet，如：
+服务器端使用时需导入：struts4rcp-server.jar，并在web.xml中配置ActionServlet，如： 
 {{{
 <servlet>
     <servlet-name>actionServlet</servlet-name>
