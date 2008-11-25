@@ -27,7 +27,7 @@
 	* 模拟服务器端耗时操作(ms)，服务器端LonginAction将调用：Thread.sleep(delay);
 	* 模拟服务器端抛出异常，服务器端LonginAction将调用：if (exception) throw new LoginException("模拟登录失败");
 	* 是否允许转为后台运行，是否允许中止运行，用于控制下图中的两个按钮：
-[http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/execution.gif]
+[http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/exetution.gif]
 =====按扭说明：=====
 	* 同步运行：在UI线程内执行Action，执行过程中，整个UI线程将被阻塞
 	* 新线程运行：启动一个新的线程来执行Action
@@ -55,6 +55,7 @@ statusBar.add(BorderLayout.EAST, statusButton);
 [http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/jsp.gif]
 =====对应页面：=====
 struts4rcpdemo/web/jsp_login.html
+=====点击"Loign"，将跳转到：=====
 [http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/jsp_result.gif]
 =====对应页面：=====
 struts4rcpdemo/src/com/xxx/demo/action/LoginAction.jsp
@@ -62,6 +63,7 @@ struts4rcpdemo/src/com/xxx/demo/action/LoginAction.jsp
 [http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/ctl.gif]
 =====对应页面：=====
 struts4rcpdemo/web/ctl_login.html
+=====点击"Loign"，将跳转到：=====
 [http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/ctl_result.gif]
 =====对应页面：=====
 struts4rcpdemo/src/com/xxx/demo/action/LoginAction.ctl
@@ -69,6 +71,7 @@ struts4rcpdemo/src/com/xxx/demo/action/LoginAction.ctl
 [http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/ftl.gif]
 =====对应页面：=====
 struts4rcpdemo/web/ftl_login.html
+=====点击"Loign"，将跳转到：=====
 [http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/ftl_result.gif]
 =====对应页面：=====
 struts4rcpdemo/src/com/xxx/demo/action/LoginAction.ftl
@@ -76,6 +79,7 @@ struts4rcpdemo/src/com/xxx/demo/action/LoginAction.ftl
 [http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/vtl.gif]
 =====对应页面：=====
 struts4rcpdemo/web/vtl_login.html
+=====点击"Loign"，将跳转到：=====
 [http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/vtl_result.gif]
 =====对应页面：=====
 struts4rcpdemo/src/com/xxx/demo/action/LoginAction.vtl
