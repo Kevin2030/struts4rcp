@@ -1,7 +1,7 @@
 #labels Featured,Phase-Deploy
 =主工程SVN目录=
 [http://struts4rcp.googlecode.com/svn/trunk/code/struts4rcp]
-=====使用SVN检出以上URL，可直接导入Eclipse=====
+=====使用SVN检出以上URL，可直接作为项目导入Eclipse=====
 =演示工程SVN目录=
 [http://struts4rcp.googlecode.com/svn/trunk/code/struts4rcpdemo]
-=====使用SVN检出以上URL，可直接导入Eclipse=====
+=====使用SVN检出以上URL，可直接作为项目导入Eclipse=====
