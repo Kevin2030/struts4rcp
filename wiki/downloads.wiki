@@ -13,5 +13,5 @@
 	* struts4rcpminidemo-0.1.war 裁减最小演示war包(只包含C/S演示)
 ==依赖包：==
 [http://struts4rcp.googlecode.com/files/struts4rcp-dependencies-0.1.zip struts4rcp-dependencies-0.1.zip]
-===说明：===
-工程所依赖的jar包单独下载
+===包括：===
+工程所依赖的jar包
