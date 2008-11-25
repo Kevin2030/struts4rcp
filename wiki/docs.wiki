@@ -1,0 +1,11 @@
+#labels Deprecated,Phase-Deploy
+=文档列表=
+	* [http://code.google.com/p/struts4rcp/wiki/demo 演示程序使用说明]
+	* [http://code.google.com/p/struts4rcp/wiki/guide 综合使用说明]
+	* [http://code.google.com/p/struts4rcp/wiki/server 服务器端使用说明]
+	* [http://code.google.com/p/struts4rcp/wiki/client 客户端使用说明]
+	* [http://code.google.com/p/struts4rcp/wiki/gui 图形工具包使用说明]
+	* [http://code.google.com/p/struts4rcp/wiki/webstart WebStart集成说明]
+	* [http://code.google.com/p/struts4rcp/wiki/config 配置说明]
+	* [http://code.google.com/p/struts4rcp/wiki/extension 扩展说明]
+	* [http://code.google.com/p/struts4rcp/wiki/design 设计说明]
