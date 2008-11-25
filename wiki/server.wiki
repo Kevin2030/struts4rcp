@@ -131,7 +131,7 @@ public class UserManageAction implements DispatchAction<User> {
 
 }
 }}}
-然后配置多个名称指向同一个Bean，如下： (name属性用于取别名，也可以分开写多个，如：<bean id="userManageAction.saveUser">)
+然后配置多个名称指向同一个Bean，如下： (name属性用于取别名，也可以分开写多个，如：&lt;bean id="userManageAction.saveUser"&gt;)
 {{{
 <bean id="userManageAction" name="userManageAction.saveUser,userManageAction.updateUser,userManageAction.removeUser,,userManageAction.searchUser" class="com.xxx.UserManageAction">
 	<property name="loginService" ref="loginService" />
