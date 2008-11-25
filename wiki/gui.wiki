@@ -1,215 +1,56 @@
 #labels Featured,Phase-Support
-=客户端使用说明=
-==1. 引用==
-客户端使用时需导入：struts4rcp-client.jar，通常使用的几个主要类如下：
+#图形工具包说明.
+
+= 图形工具包说明 =
+==1. 使用说明==
+===导入：(struts4rcp-swing.jar)===
 {{{
-import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.client.Actions;
-import com.googlecode.struts4rcp.client.ActionCallback;
+import com.googlecode.struts4rcp.client.view.swing.ConnectionButton;
 }}}
-如果需要，也可以导入图形工具包：struts4rcp-swing.jar或struts4rcp-jface.jar，其中包含了一个简易连接管理窗口和按钮，请参见：[http://code.google.com/p/struts4rcp/wiki/gui 图形工具包使用说明]
-==2. 执行==
-===(1) 同步执行===
-最简单的调用方式就是同步执行，如：
+===调用：===
 {{{
-Account account = new Account("james", "123456"); // 传入数据模型
-Action<Account, User> loginAction = Actions.getAction("loginAction"); // 对应Spring配置中的<bean id="loginAction">
-User user = loginAction.execute(account); // 同步执行，并取得结果
+ConnectionButton connectionButton = new ConnectionButton(frame, Actions.getClient());
 }}}
-不建议在UI线程内使用同步执行，因AWT/Swing或SWT/JFace等UI库都是设计为单线程的，如果传输过程时间过长，会使整个UI界面都没有响应，如果确定执行过程很短，就不会有太大影响。通常在UI控件上回调的事件，都属于UI线程的范围，如：按钮的点击事件中，最好启动新的线程来执行传输，如：
+===示例：===
 {{{
-new Thread() {
-	public void run() {
-		Account account = new Account("james", "123456");
-		Action<Account, User> loginAction = Actions.getAction("loginAction");
-		User user = loginAction.execute(account);
-	}
-}.start();
-}}}
-===(2) 异步执行===
-而下面的异步执行方式，等价于上面的启动新的线程处理，但接口更友好，性能也更优，并且框架将统一处理异常，如：
-{{{
-Account account = new Account("james", "123456");
-Action<Account, User> loginAction = Actions.getAsyncAction("loginAction", new ActionCallback<User>() {
-	public void callback(User user) throws Exception {
-		// 后台执行完成后，通过此接口回传执行结果
-	}
-	/*如果业务逻辑需要处理异常，可以覆盖此函数
-	public void catchException(Exception exception) throws Exception {
-		throw exception; // 不需要处理的异常，直接抛出，框架将发布异常事件
-	}*/
-});
-loginAction.execute(account); // 后台执行，并立即返回null
-}}}
-===(3) 后台执行===
-上面的执行过程都会触发执行事件，如果注册了UI组件(参见：[http://code.google.com/p/struts4rcp/wiki/gui 图形工具包使用说明])，会自动弹出模态框(注：如果是在UI线程内执行，因UI线程被阻塞，整个UI界面都不能响应，不会弹出模态框)，如果不想触发执行事件，可以使用后台执行，如：
-{{{
-new Thread() {
-	public void run() {
-		Account account = new Account("james", "123456");
-		Action<Account, User> loginAction = Actions.getBackAction("loginAction");
-		User user = loginAction.execute(account);
-	}
-}.start();
-}}}
-或者：
-{{{
-Account account = new Account("james", "123456");
-Action<Account, User> loginAction = Actions.getBackAsyncAction("loginAction", new ActionCallback<User>() {
-    public void callback(User user) throws Exception {
-        // ......
-    }
-});
-loginAction.execute(account);
-}}}
-===(4) 可选参数===
-非后台运行Action，有两个可选参数，用于决定是否允许转为后台运行，以及是否允许中止运行，如：
-{{{
-// 第一个boolean参数表示是否允许转为后台运行(缺省为true)
-// 第二个boolean参数表示是否允许中止运行(缺省为true)
-Actions.getAction("loginAction", false, false);
-}}}
-后台运行Action，有一个可选参数，用于决定是否允许中止运行，如：
-{{{
-// boolean参数表示是否允许中止运行(缺省为true)
-Actions.getBackAction("loginAction", false);
-}}}
-==3. 传输策略==
-===(1) 缺省 ===
-客户端使用com.googlecode.struts4rcp.client.transporter.HttpURLConnectionTransporter作为缺省传输策略，其适配实现于java.net.HttpURLConnection类。
-===(2) HttpClient3 ===
-如果需要使用common-httpclient-3.1.jar作为传输策略，可在transport.properties中配置：transporter=com.googlecode.struts4rcp.client.transporter.CommonsHttpClientTransporter，其适配实现于org.apache.commons.httpclient.HttpClient类。
-===(3) HttpClient4 ===
-同理，如果想使用apache-httpclient-4.0.jar作为传输策略，可在transport.properties中配置：transporter=com.googlecode.struts4rcp.client.transporter.HttpClientTransporter，其适配实现于org.apache.http.client.HttpClient类。
-===(4) 其它 ===
-如果需要其它传输策略，可继承com.googlecode.struts4rcp.client.transporter.AbstractHttpTransporter类，进行适配实现。
-==4. 事件==
-框架为重点状态的改变，提供了事件支持，图形工具包就是基于这些事件实现的(参见：[http://code.google.com/p/struts4rcp/wiki/gui 图形工具包使用说明])。事件类型如下：
-===(1) 连接事件 ===
-当网络连接状态的改变时，触发此事件。
-{{{
-Actions.getClient().addListener(new ConnectionDelegate(new ConnectionAdapter() {
-	public void onConnected(ConnectionEvent event) {
-		connectionStatusLabel.setIcon(connectionIcon);
-	}
-	public void onDisconnected(ConnectionEvent event) {
-		connectionStatusLabel.setIcon(disconnectionIcon);
-	}
-}));
-}}}
-如果在事件监听器中调用了UI控件，需要用ConnectionDelegate来包装事件监听器，用于保证事件监听器在UI线程内执行，而ConnectionAdapter是ConnectionListener的空方法适配实现，类似于Swing中的其它事件监听器。
-===(2) 执行事件 ===
-当在前台执行Action和执行完成时，触发此事件，后台执行不触发此事件。
-{{{
-Actions.getClient().addListener(new ExecutionDelegate(new ExecutionAdapter() {
-	public void onExecuting(ExecutionEvent event) {
-		// change ui
-	}
-	public void onExecuted(ExecutionEvent event) {
-		// change ui
-	}
-}));
-}}}
-ExecutionDelegate和ExecutionAdapter的作用和上面的连接事件的说明相同。
-===(3) 传输事件 ===
-当开始网络传输和传输完成时，触发此事件。
-{{{
-Actions.getClient().addListener(new TransportationDelegate(new TransportationAdapter() {
-	public void onTransporting(final TransportationEvent event) {
-		// change ui
-	}
-	public void onTransported(final TransportationEvent event) {
-		// change ui
-	}
-}));
-}}}
-TransportationDelegate和TransportationAdapter的作用和上面的连接事件的说明相同。
-===(4) 异常事件 ===
-在异步执行时，当有异常未被业务逻辑捕获时，触发此事件。
-{{{
-Actions.getClient().addListener(new ExceptionDelegate(new ExceptionAdapter() {
-	public void onCatched(ExceptionEvent event) {
-		// popup ui dialog
-	}
-	public void onBackCatched(ExceptionEvent event) {
-		// popup ui dialog
-	}
-}));
-}}}
-ExceptionDelegate和ExceptionAdapter的作用和上面的连接事件的说明相同。
-===(5) 配置事件 ===
-在配置项改变时，触发此事件。
-{{{
-Actions.getClient().addListener(new ConfigurationDelegate(new ConfigurationAdapter() {
-	public void onChanged(ConfigurationEvent event) {
-		// change ui
-	}
-}));
-}}}
-ConfigurationDelegate和ConfigurationAdapter的作用和上面的连接事件的说明相同。
-==5. 配置==
-===(1) 加载 ===
-在应用程序启动时，调用：
-{{{
-// 初始化默认客户端实例，获取默认客户端实例：Actions.getClient();
+// 初始化
+Properties properties = new Properties();
+properties.setProperty("server.host", "localhost");
+properties.setProperty("server.port", "8080");
+properties.setProperty("context.path", "struts4rcpdemo");
 Actions.init(properties);
+// 创建窗口
+try{UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());}catch(Throwable e){}
+JFrame frame = new JFrame();
+frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+frame.setSize(800, 600);
+frame.getContentPane().setLayout(new BorderLayout());
+frame.addWindowListener(new WindowAdapter(){public void windowClosing(WindowEvent e){Actions.destroy();}});
+// 创建状态栏
+JToolBar statusBar = new JToolBar();
+statusBar.setFloatable(false);
+statusBar.setLayout(new BorderLayout());
+frame.getContentPane().add(BorderLayout.SOUTH, statusBar);
+// 创建连接按钮
+ConnectionButton connectionButton = new ConnectionButton(frame, Actions.getClient());
+statusBar.add(BorderLayout.EAST, connectionButton);
+// 显示窗口
+frame.setVisible(true);
 }}}
-在应用程序关闭时，调用：
-{{{
-// 关闭所有客户端实例
-Actions.destroy();
-}}}
-如果应用需要向多个服务器交互数据，可以添加多个客户端实例，如：
-{{{
-// 添加客户端实例，获取客户端实例：Actions.getClient(clientName);
-Actions.addClient(clientName, properties);
-}}}
-Actions中的所有函数(除了init和destroy)，都有重载第一个参数为客户端实例名，如：
-{{{
-// 第一个参数为客户端实例名
-Actions.getAction(clientName, actionName);
-}}}
-如果使用默认客户端实例，不需要带客户端实例名，如：
-{{{
-// 不需要带客户端实例名
-Actions.getAction(actionName);
-}}}
-===(2) 配置项 ===
-====最简配置：====
-{{{
-server.host=127.0.0.1
-server.port=8080
-context.path=xxx
-}}}
-	* server.host为服务器主机名或IP
-	* server.port为服务器端口
-	* context.path为部署应用的上下文名
-====可选配置：====
-{{{
-transporter=com.googlecode.struts4rcp.client.transport.HttpURLConnectionTransporter
-#transporter=com.googlecode.struts4rcp.client.transport.CommonsHttpClientTransporter
-#transporter=com.googlecode.struts4rcp.client.transport.HttpClientTransporter
-serializer=com.googlecode.struts4rcp.util.serialize.JavaSerializer
-#serializer=com.googlecode.struts4rcp.util.serialize.JBossSerializer
-#serializer=com.googlecode.struts4rcp.util.serialize.JsonSerializer
-#serializer=com.googlecode.struts4rcp.util.serialize.XmlSerializer
-#serializer=com.googlecode.struts4rcp.util.serialize.XStreamSerializer
-listeners=com.xxx.XXXListener,com.yyy.YYYListener
-server.host=127.0.0.1
-server.port=8080
-context.path=xxx
-action.suffix=data
-connection.timeout=30000
-socket.timeout=0
-connection.check.interval=5000
-}}}
-	* transporter为传输策略
-	* serializer为序列化策略
-	* listeners为监听器注册
-	* server.host为服务器主机名或IP
-	* server.port为服务器端口
-	* context.path为部署应用的上下文名
-	* action.suffix为请求的后缀名
-	* connection.timeout为HTTP请求超时时间，单位：毫秒
-	* socket.timeout为套接字读取超时时间，单位：毫秒
-	* connection.check.interval为连接状态监控检查时间间隔，单位：毫秒
+==2. 功能截图==
+===当网络连通时，按钮图片自动显示：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/connected.gif]
+===当网络断开时，按钮图片自动显示：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/disconnected.gif]
+===当有传输任务时，按钮图片自动显示：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/transporting.gif]
+===当前台执行时，自动弹出模态框：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/execution_dialog.gif]
+===当前台执行出错时，自动弹出错误信息对话框：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/exception_dialog.gif]
+===当后台执行时，点击按钮，弹出控制台，选择传输管理界面：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/transportation_pane.gif]
+===当后台执行出错时，点击按钮，弹出控制台，选择异常管理界面：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/exception_pane.gif]
+===点击按钮，弹出控制台，选择配置管理界面：===
+[http://struts4rcp.googlecode.com/svn/trunk/docs/view/swing/configuration_pane.gif]
