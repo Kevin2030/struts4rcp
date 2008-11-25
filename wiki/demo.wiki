@@ -1,9 +1,9 @@
 #labels Featured,Phase-Deploy
 =演示程序使用说明=
 下载struts4rcp-releases-0.1.zip，其中包括： 
-	* struts4rcpdemo 为演示工程源代码
-	* struts4rcpdemo-0.1.war 为演示war包
-	* struts4rcpminidemo-0.1.war 为裁减的最小演示war包(只包含C/S测试) 
+	* struts4rcpdemo 演示工程源代码
+	* struts4rcpdemo-0.1.war 演示war包
+	* struts4rcpminidemo-0.1.war 裁减最小演示war包(只包含C/S测试) 
 将演示war包放到：TOMCAT/webapp/struts4rcpdemo-0.1.war，
 访问：http://localhost:8080/struts4rcpdemo-0.1/
 =====将看到：=====
