@@ -22,7 +22,7 @@
 	* VTL 演示Velocity模板页面访问
 =====点击"Client"，加载成功后，弹出配置窗口：=====
 [http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/config.gif]
-=====点击"确定后，弹出窗口：=====
+=====点击"确定"后，弹出窗口：=====
 [http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/client.gif]
 =====表单元素说明：=====
 	* 用户名，密码，用于模拟登录业务逻辑数据，服务器端LonginAction将调用：loginService.login(username, password);
