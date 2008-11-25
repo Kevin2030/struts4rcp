@@ -31,8 +31,8 @@
 	* 异步运行：与前面的新线程运行相同，用新的线程来执行Action，但由框架来管理线程和异常，通过ActionCallback接口代替Runnable
 	* 后台运行：前面的几种执行方式都会发布前台执行事件，图形工具包将弹出模态窗口，后台运行方式将不弹出模态框
 =====状态栏说明：=====
-=====  =====
 你有没有注意到右下角那个按钮：
+=====  =====
 [http://struts4rcp.googlecode.com/svn/trunk/docs/views/demo/status.gif]
 =====  =====
 此按钮由框架实现，详细请参见：[http://code.google.com/p/struts4rcp/wiki/gui 图形工具包使用说明]，调用方式如：
