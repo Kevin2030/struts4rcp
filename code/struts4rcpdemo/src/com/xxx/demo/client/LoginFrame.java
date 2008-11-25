@@ -20,6 +20,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.UIManager;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.client.ActionCallback;
@@ -32,6 +33,14 @@ import com.xxx.demo.domain.User;
 public class LoginFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+
+	static {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
 
 	private JTextArea resultArea = new JTextArea();
 
