@@ -1,0 +1,55 @@
+#labels Featured,Phase-Deploy
+=WebStart集成说明=
+首先需要在web.xml中配置：
+{{{
+<servlet>
+	<servlet-name>jnlpServlet</servlet-name>
+	<servlet-class>com.googlecode.struts4rcp.server.launcher.JnlpServlet</servlet-class>
+	<init-param>
+		<param-name>jars</param-name>
+		<param-value>
+			client/struts4rcp-client-0.1.jar,
+			client/struts4rcp-swing-0.1.jar,
+			client/struts4rcpdemo-client-0.1.jar
+		</param-value>
+	</init-param>
+	<init-param>
+		<param-name>launcher</param-name>
+		<param-value>com.xxx.demo.client.LoginLauncher</param-value>
+	</init-param>
+	<load-on-startup>2</load-on-startup>
+</servlet>
+<servlet-mapping>
+	<servlet-name>jnlpServlet</servlet-name>
+	<url-pattern>/struts4rcpdemo.jnlp</url-pattern>
+</servlet-mapping>
+}}}
+参数说明：
+====jars参数====
+表示需要下载的jar文件，jar文件必需能直接访问到，也说是不能放在/WEB-INF目录下，并且所有jar包需用同一证书签名，签名命令行方式如：
+	* keytool -genkey -alias struts4rcpdemo
+	* jarsigner struts4rcp-client-0.1.jar struts4rcpdemo
+====launcher参数====
+表示启动类，必需实现com.googlecode.struts4rcp.client.launcher.Launcher接口，或者继承AbstractLauncher，如：
+{{{
+public class MyLauncher extends AbstractLauncher {
+
+	@Override
+	protected void start(Properties properties) {
+		// 配置可选项
+		properties.setProperty(Client.TRANSPORTER_PARAM_NAME, CommonsHttpClientTransporter.class.getName());
+		// 初始化客户端
+		super.start(properties);
+		// 创建主窗口
+		new LoginFrame();
+	}
+
+}
+}}}
+====可选参数====
+	* os：操作系统类型，缺省为Windows
+	* title：标题，缺省为jnlp文件名
+	* vendor：服务商，缺省为域名
+	* homepage 主页，缺省为首页，即："/"
+	* description 描述，缺省为请求全路径
+配置好后，就可以通过类似于： http://localhost:8080/struts4rcpdemo/struts4rcpdemo.jnlp 的地址进行访问。
