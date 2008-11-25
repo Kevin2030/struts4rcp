@@ -24,7 +24,7 @@
 	* lib 客户端依赖包
 	* src 源代码 (包括客户端与服务器端)
 	* web 服务器端WEB应用根目录
-		* client 客户端构建并签名后的jar包存放位置
+		* client 客户端构建并签名后的jar包发布目录(JNLP读取)
 		* scripts JS脚本库
 		* WEB-INF 服务器端依赖包
 			* lib 服务器端依赖包
