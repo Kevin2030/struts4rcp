@@ -18,6 +18,8 @@ public class JnlpServlet extends HttpServlet {
 
 	private List<String> jars;
 
+	private String mainJar;
+
 	private String launcher;
 
 	private String os;
@@ -33,6 +35,7 @@ public class JnlpServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
+		mainJar = getParam("mainJar");
 		String jarsConfig = getParam("jars");
 		if (jarsConfig == null)
 			throw new ServletException("The \"jars\" param is required in JnlpServlet!");
@@ -69,8 +72,9 @@ public class JnlpServlet extends HttpServlet {
 						if (files != null && files.length > 0) {
 							for (File file : files) {
 								String name = file.getAbsolutePath().substring(root.length()).replace('\\', '/');
-								if (file.getName().startsWith("struts4rcp-client")) {
-									jars.add(0, name);
+								if (mainJar == null
+										&& file.getName().startsWith("struts4rcp-client")) {
+									mainJar = name;
 								} else {
 									jars.add(name);
 								}
@@ -84,7 +88,7 @@ public class JnlpServlet extends HttpServlet {
 		}
 		if (jars.size() == 0)
 			throw new ServletException("The \"jars\" param is required in JnlpServlet!");
-		if (jars.get(0).indexOf("struts4rcp-client") == -1)
+		if (mainJar == null)
 			throw new ServletException("No such struts4rcp-client-x.x.jar!");
 		launcher = getParam("launcher");
 		if (launcher == null)
@@ -135,6 +139,7 @@ public class JnlpServlet extends HttpServlet {
 		writer.write("	<security><all-permissions/></security>\n");
 		writer.write("	<resources os=\"" + (os != null ? os : "Windows") + "\">\n");
 		writer.write("		<j2se version=\"1.5+\"/>\n");
+		writer.write("		<jar href=\"" + mainJar + "\"/>\n");
 		for (String jar : jars)
 			writer.write("		<jar href=\"" + jar + "\"/>\n");
 		writer.write("	</resources>\n");
