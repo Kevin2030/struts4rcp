@@ -31,6 +31,7 @@
 			</fileset>
 		</copy>
 		<mkdir dir="${jar}" />
+		<delete file="${jar}/${ant.project.name}-client-${version}.jar" failonerror="false" />
 		<jar destfile="${jar}/${ant.project.name}-client-${version}.jar" encoding="UTF-8">
 			<fileset dir="${bin}">
 				<include name="${pkg}/client/**" />
@@ -55,6 +56,7 @@
 	</target>
 
 	<target name="war" depends="compile" description="Build the war files">
+		<delete file="${war}/${ant.project.name}-${version}.war" failonerror="false" />
 		<war destfile="${war}/${ant.project.name}-${version}.war" basedir="${web}" webxml="${web}/WEB-INF/web.xml" encoding="utf-8" />
 		<delete dir="${bin}" failonerror="false" />
 	</target>
