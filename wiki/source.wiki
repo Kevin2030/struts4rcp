@@ -6,15 +6,15 @@
 	* build.xml 构建脚本
 	* lib 依赖包
 	* src 源代码
-		* main 主框架源代码(包括server和client)
-			* java Java源文件
-			* resources 非Java资源文件
-		* view 视图层扩展源代码(包括swing，jface和extjs)
-			* java Java源文件
-			* resources 非Java资源文件
-		* test 测试用例源代码
-			* java Java源文件
-			* resources 非Java资源文件
+		* main 主框架 (包括server和client)
+			* java 源代码
+			* resources 资源文件
+		* view 视图层扩展 (包括swing，jface和extjs)
+			* java 源代码
+			* resources 资源文件
+		* test 测试用例
+			* java 源代码
+			* resources 资源文件
 		* web 脚本源代码(包括struts4rcp.js)
 =演示工程SVN目录=
 [http://struts4rcp.googlecode.com/svn/trunk/code/struts4rcpdemo]
