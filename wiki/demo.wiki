@@ -1,11 +1,6 @@
 #labels Featured,Phase-Deploy
 =演示程序使用说明=
 下载struts4rcp-0.1.zip，其中包括： 
-	* struts4rcp 为主工程源代码(因lib目录中构建过程依赖的jar包太多，所以分开下载：struts4rcp-dependencies-0.1.zip)
-	* struts4rcp-server-0.1.jar 为服务器端框架包
-	* struts4rcp-client-0.1.jar 为客户端框架包
-	* struts4rcp-swing-0.1.jar 为Swing图形工具包
-	* struts4rcp-0.1.js 为AJAX脚本文件
 	* struts4rcpdemo 为演示工程源代码
 	* struts4rcpdemo-0.1.war 为演示war包
 	* struts4rcpminidemo-0.1.war 为裁减的最小演示war包(只包含C/S测试) 
