@@ -139,9 +139,9 @@ public class JnlpServlet extends HttpServlet {
 		writer.write("	<security><all-permissions/></security>\n");
 		writer.write("	<resources os=\"" + (os != null ? os : "Windows") + "\">\n");
 		writer.write("		<j2se version=\"1.5+\"/>\n");
-		writer.write("		<jar href=\"" + mainJar + "\"/>\n");
+		writer.write("		<jar href=\"" + mainJar + "\" main=\"true\"/>\n");
 		for (String jar : jars)
-			writer.write("		<jar href=\"" + jar + "\"/>\n");
+			writer.write("		<jar href=\"" + jar + "\" main=\"false\"/>\n");
 		writer.write("	</resources>\n");
 		writer.write("	<application-desc main-class=\"com.googlecode.struts4rcp.client.launcher.Main\">\n");
 		writer.write("		<argument>" + launcher + "</argument>\n");
