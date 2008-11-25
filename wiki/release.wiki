@@ -1,0 +1,6 @@
+#labels Featured,Phase-Deploy
+=V0.1=
+==发布包==
+[http://struts4rcp.googlecode.com/svn/trunk/release/struts4rcp-release-0.1.zip struts4rcp-release-0.1.zip]
+==依赖的JAR包==
+[http://struts4rcp.googlecode.com/svn/trunk/release/struts4rcp-dependencies-0.1.zip struts4rcp-dependencies-0.1.zip]
