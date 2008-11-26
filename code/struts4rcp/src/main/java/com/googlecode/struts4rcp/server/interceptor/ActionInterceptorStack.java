@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.server.factory;
+package com.googlecode.struts4rcp.server.interceptor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
