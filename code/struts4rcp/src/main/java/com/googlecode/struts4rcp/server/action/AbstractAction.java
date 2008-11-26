@@ -29,7 +29,7 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 
 	@SuppressWarnings("unchecked")
 	public String getPage() {
-		if (page != null)
+		if (page != null && page.length() > 0)
 			return page;
 		return PageSerializer.getPage((Action<Serializable, Serializable>)this);
 	}
