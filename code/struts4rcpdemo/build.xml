@@ -9,6 +9,7 @@
 	<property name="src" location="src" />
 	<property name="lib" location="lib" />
 	<property name="web" location="web" />
+	<property name="weblib" location="${web}/WEB-INF/lib" />
 	<property name="bin" location="${web}/WEB-INF/classes" />
 	<property name="jar" location="${web}/client" />
 	<property name="war" location="." />
@@ -17,6 +18,9 @@
 	<path id="project.class.path">
 		<pathelement path="${env.classpath}" />
 		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${weblib}">
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
