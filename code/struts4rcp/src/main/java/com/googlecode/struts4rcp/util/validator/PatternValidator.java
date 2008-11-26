@@ -6,9 +6,21 @@ package com.googlecode.struts4rcp.util.validator;
  */
 public class PatternValidator extends StringValidator {
 
-	protected final String pattern;
+	protected String pattern;
+
+	public PatternValidator() {
+
+	}
 
 	public PatternValidator(String pattern) {
+		this.pattern = pattern;
+	}
+
+	public String getPattern() {
+		return pattern;
+	}
+
+	public void setPattern(String pattern) {
 		this.pattern = pattern;
 	}
 

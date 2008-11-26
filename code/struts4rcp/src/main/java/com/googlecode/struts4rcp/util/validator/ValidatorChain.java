@@ -1,5 +1,6 @@
 package com.googlecode.struts4rcp.util.validator;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -9,6 +10,10 @@ import java.util.Collection;
 public class ValidatorChain implements Validator {
 
 	private Collection<Validator> validators;
+
+	public ValidatorChain(Validator... validators) {
+		this.validators = Arrays.asList(validators);
+	}
 
 	public ValidatorChain(Collection<Validator> validators) {
 		this.validators = validators;
