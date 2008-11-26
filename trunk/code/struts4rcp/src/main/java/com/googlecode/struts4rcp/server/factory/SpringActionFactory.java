@@ -12,6 +12,7 @@ import org.springframework.web.context.ContextLoader;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.ActionInterceptor;
+import com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack;
 
 /**
  * ActionFactory Spring Implementation. See:
@@ -48,7 +49,7 @@ public class SpringActionFactory extends AbstractActionFactory {
 
 	/**
 	 * 拦截器栈Bean引用ID，该Bean应该为<code>ActionInterceptorStack</code>的实例
-	 * @see com.googlecode.struts4rcp.server.factory.ActionInterceptorStack
+	 * @see com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack
 	 */
 	public static final String ACTION_INTERCEPTOR_STACK_BEAN_ID = "actionInterceptorStack";
 
