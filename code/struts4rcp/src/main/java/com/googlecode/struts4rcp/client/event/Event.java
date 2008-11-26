@@ -24,16 +24,16 @@ public abstract class Event extends EventObject {
 	}
 
 	/**
-	 * 获取传输起始时间
-	 * @return 起始时间
+	 * 获取事件发布时间
+	 * @return 事件发布时间
 	 */
 	public Date getTimestamp() {
 		return timestamp;
 	}
 
 	/**
-	 * 获取传输起始时间
-	 * @return 起始时间
+	 * 获取事件发布线程
+	 * @return 事件发布线程
 	 */
 	public Thread getThread() {
 		return thread;
