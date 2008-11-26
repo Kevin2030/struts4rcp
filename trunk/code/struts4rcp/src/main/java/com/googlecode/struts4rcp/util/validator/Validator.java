@@ -8,9 +8,9 @@ public interface Validator {
 
 	/**
 	 * 验证数据
-	 * @param object 数据
+	 * @param model 数据
 	 * @throws ValidationException 数据验证失败时抛出
 	 */
-	void validate(Object object) throws ValidationException;
+	void validate(Object model) throws ValidationException;
 
 }

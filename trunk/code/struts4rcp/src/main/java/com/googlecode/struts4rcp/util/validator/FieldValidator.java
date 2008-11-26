@@ -20,13 +20,13 @@ public class FieldValidator implements Validator {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void validate(Object object) throws ValidationException {
-		if (object == null)
+	public void validate(Object model) throws ValidationException {
+		if (model == null)
 			validator.validate(null);
-		else if (object instanceof Map)
-			validator.validate(((Map)object).get(filedName));
+		else if (model instanceof Map)
+			validator.validate(((Map)model).get(filedName));
 		else
-			validator.validate(BeanUtils.getProperty(object, filedName));
+			validator.validate(BeanUtils.getProperty(model, filedName));
 	}
 
 }
