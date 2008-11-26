@@ -6,12 +6,32 @@ import java.util.Map;
 
 public class LengthValidator extends AbstractValidator {
 
-	private final int min;
+	private int min;
 
-	private final int max;
+	private int max;
+
+	public LengthValidator() {
+
+	}
 
 	public LengthValidator(int min, int max) {
 		this.min = min;
+		this.max = max;
+	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
 		this.max = max;
 	}
 
