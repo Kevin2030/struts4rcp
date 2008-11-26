@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
+import com.googlecode.struts4rcp.util.validator.Validator;
 
 /**
  * 抽象Action基类
@@ -11,7 +12,7 @@ import com.googlecode.struts4rcp.util.logger.LoggerFactory;
  * @param <M> 传入模型类型
  * @param <R> 返回值类型
  */
-public abstract class AbstractAction<M extends Serializable, R extends Serializable> implements PageAction<M, R> {
+public abstract class AbstractAction<M extends Serializable, R extends Serializable> implements PageAction<M, R>, ValidationAction<M, R> {
 
 	/**
 	 * 日志输出接口
@@ -32,4 +33,13 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 		return getClass().getName().replace('.', '/');
 	}
 
+	private Validator validator;
+
+	public void setValidator(Validator validator) {
+		this.validator = validator;
+	}
+
+	public Validator getValidator() {
+		return validator;
+	}
 }
