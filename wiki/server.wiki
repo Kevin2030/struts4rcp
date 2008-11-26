@@ -137,6 +137,10 @@ public class UserManageAction implements DispatchAction<User> {
 	<property name="loginService" ref="loginService" />
 </bean>
 }}}
+访问如：
+{{{
+Actions.getAction("userManageAction.saveUser");
+}}}
 如果希望按HTTP请求的方法类型区分函数，可以继承于RestfulAction，如：
 {{{
 public class UserManageAction implements RestfulAction<User> {
