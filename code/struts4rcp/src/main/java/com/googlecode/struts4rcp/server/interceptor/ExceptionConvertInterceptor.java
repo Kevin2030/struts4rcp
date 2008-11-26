@@ -32,12 +32,21 @@ public class ExceptionConvertInterceptor implements ActionInterceptor {
 				String name = e.getClass().getName();
 				for (String exception: exceptions) {
 					if (exception != null && name.startsWith(exception)) {
-						throw new RuntimeException(ExceptionUtils.getDetailMessage(e));
+						throw createException(e);
 					}
 				}
 			}
 			throw e;
 		}
+	}
+
+	/**
+	 * 创建客户端识别的异常，子类可覆盖此函数，进行替换
+	 * @param e 服务器端异常
+	 * @return 客户端识别的异常
+	 */
+	protected Exception createException(Exception e) {
+		return new RuntimeException(ExceptionUtils.getDetailMessage(e));
 	}
 
 }
