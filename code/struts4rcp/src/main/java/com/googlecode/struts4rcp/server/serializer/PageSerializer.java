@@ -2,6 +2,7 @@ package com.googlecode.struts4rcp.server.serializer;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +11,7 @@ import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.ActionContext;
 import com.googlecode.struts4rcp.server.action.Page;
 import com.googlecode.struts4rcp.server.action.PageAction;
+import com.googlecode.struts4rcp.util.ClassUtils;
 
 /**
  * 页面序列化器
@@ -28,11 +30,8 @@ public abstract class PageSerializer extends FormSerializer {
 		if (action instanceof PageAction) {
 			PageAction<Serializable, Serializable> pageAction = (PageAction<Serializable, Serializable>)action;
 			page = pageAction.getPage();
-		} else { // 缺省页面名查找方式
-			if (getClass().isAnnotationPresent(Page.class))
-				page = action.getClass().getAnnotation(Page.class).value();
-			else
-				page = action.getClass().getName().replace('.', '/');
+		} else {
+			page = getPage(action);
 		}
 		// 页面扩展名
 		String pageExtension = getPageExtension();
@@ -40,6 +39,24 @@ public abstract class PageSerializer extends FormSerializer {
 				&& pageExtension.length() > 0)
 			page = page + "." + pageExtension;
 		serialize(result, response, page);
+	}
+
+	/**
+	 * Action缺省页面名查找方式
+	 * @param action Action实例
+	 * @return 页面路径(不包含后缀)
+	 */
+	public static String getPage(Action<Serializable, Serializable> action) {
+		if (action.getClass().isAnnotationPresent(Page.class))
+			return action.getClass().getAnnotation(Page.class).value();
+		try {
+			Method method = ClassUtils.getMethod(action.getClass(), "execute");
+			if (method.isAnnotationPresent(Page.class))
+				return method.getAnnotation(Page.class).value();
+		} catch (NoSuchMethodException e) {
+			// ignore
+		}
+		return action.getClass().getName().replace('.', '/');
 	}
 
 	protected Locale getLocale() {
