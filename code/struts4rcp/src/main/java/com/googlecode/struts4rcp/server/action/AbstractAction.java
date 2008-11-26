@@ -24,6 +24,8 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 	private String page;
 
 	public void setPage(String page) {
+		if (page != null)
+			page = page.trim();
 		this.page = page;
 	}
 
