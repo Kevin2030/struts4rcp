@@ -247,7 +247,7 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 
 }
 }}}
-另外，你可能需要在Action执行的前后作一些统一的处理，如果权限控制，全局验证，异常转换，调试信息，性能监控等等，如：
+另外，你可能需要在Action执行的前后作一些统一的处理，如：权限控制，全局验证，异常转换，调试信息，性能监控等等，如：
 {{{
 <bean id="exceptionInterceptor" class="com.xxx.ExceptionInterceptor">
 </bean>
