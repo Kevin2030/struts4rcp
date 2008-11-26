@@ -243,3 +243,44 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 
 }
 }}}
+另外，你可能需要在Action执行的前后作一些统一的处理，如果权限控制，全局验证，异常转换，调试信息，性能监控等等，如：
+{{{
+<bean id="exceptionInterceptor" class="com.xxx.ExceptionInterceptor">
+</bean>
+<bean id="validationInterceptor" class="com.xxx.ValidationInterceptor">
+</bean>
+<bean id="securityInterceptor" class="com.xxx.SecurityInterceptor">
+</bean>
+}}}
+然后通过拦截器栈进行排序：
+{{{
+<bean id="actionInterceptorStack" class="com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack">
+    <property name="actionInterceptors">
+	<list>
+		<ref bean="exceptionInterceptor"/>
+		<ref bean="validationInterceptor"/>
+		<ref bean="securityInterceptor"/>
+	</list>
+    </property>
+</bean>
+}}}
+拦截器栈，栈之间可以相互引用，但根拦截器栈id必需为"actionInterceptorStack"，如：
+{{{
+<bean id="commonInterceptorStack" class="com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack">
+    <property name="actionInterceptors">
+	<list>
+		<ref bean="exceptionInterceptor"/>
+		<ref bean="validationInterceptor"/>
+	</list>
+    </property>
+</bean>
+<!--actionInterceptorStack引用commonInterceptorStack：-->
+<bean id="actionInterceptorStack" class="com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack">
+    <property name="actionInterceptors">
+	<list>
+		<ref bean="commonInterceptorStack"/>
+		<ref bean="securityInterceptor"/>
+	</list>
+    </property>
+</bean>
+}}}
