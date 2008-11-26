@@ -11,7 +11,7 @@ import com.googlecode.struts4rcp.util.ExceptionUtils;
  * 异常转换拦截器(将客户端不识别的异常转换为RuntimeException)
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ExceptionConvertInterceptor implements ActionInterceptor {
+public class ExceptionInterceptor implements ActionInterceptor {
 
 	protected List<String> exceptions;
 
