@@ -77,7 +77,7 @@ loginAction.execute(account); // 后台执行，并立即返回null
 同步执行：
 {{{
 <script type="text/javascript">
-var account = {username: "james", password: "123456", class: "com.xxx.Account"}; // 传入数据模型，若不指定class属性，表示使用Map类型
+var account = {username: "james", password: "123456", className: "com.xxx.Account"}; // 传入数据模型，若不指定className属性，表示使用Map类型
 var loginAction = Actions.getAction("loginAction"); // 对应Spring配置中的<bean id="loginAction">
 var user = loginAction.execute(account); // 同步执行并取得结果
 </script>
@@ -85,7 +85,7 @@ var user = loginAction.execute(account); // 同步执行并取得结果
 异步执行：
 {{{
 <script type="text/javascript">
-var account = {username: "james", password: "123456", class: "com.xxx.Account"}; // 传入数据模型，若不指定class属性，表示使用Map类型
+var account = {username: "james", password: "123456", className: "com.xxx.Account"}; // 传入数据模型，若不指定className属性，表示使用Map类型
 var loginAction = Actions.getAsyncAction("loginAction", function(user) {
     // 异步执行完成后，通过此接口回传执行结果
 });
@@ -97,8 +97,8 @@ loginAction.execute(account); // 异步执行
 <form action="loginAction.page" method="post">
     <input type="text" name="username" />
     <input type="password" name="password" />
-    <!--若不指定class属性，表示使用Map类型-->
-    <input type="hidden" name="class" value="com.xxx.Account" />
+    <!--若不指定className属性，表示使用Map类型-->
+    <input type="hidden" name="className" value="com.xxx.Account" />
 </form>
 }}}
 LoginAction.jsp (与LoginAction.class同名称，同目录，不可打入jar包，必需放在/WEB-INF/classes目录下)
@@ -114,8 +114,8 @@ LoginAction.jsp (与LoginAction.class同名称，同目录，不可打入jar包�
 <form action="loginAction.page" method="post">
     <input type="text" name="username" />
     <input type="password" name="password" />
-    <!--若不指定class属性，表示使用Map类型-->
-    <input type="hidden" name="class" value="com.xxx.Account" />
+    <!--若不指定className属性，表示使用Map类型-->
+    <input type="hidden" name="className" value="com.xxx.Account" />
 </form>
 }}}
 LoginAction.ctl (与LoginAction.class同名称，同目录，可打入jar包中)
