@@ -14,4 +14,15 @@
 	    <property name="loginService" ref="loginService" />
 	</bean>
 
+	<bean id="exceptionInterceptor" class="com.xxx.demo.action.ExceptionInterceptor">
+	</bean>
+
+	<bean id="actionInterceptorStack" class="com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack">
+	    <property name="actionInterceptors">
+	    	<list>
+	    		<ref bean="exceptionInterceptor"/>
+	    	</list>
+	    </property>
+	</bean>
+
 </beans>
