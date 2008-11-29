@@ -165,8 +165,8 @@ public class ExecutionDialog extends JDialog {
 			public void onBackExecuting(ExecutionEvent event) {
 				if (! UIUtils.isUIThread(event.getThread())) {
 					try {
-						if (client.getActionManager().isForeExecuting()) {
-							Execution execution = client.getActionManager().getForeExecutions().iterator().next();
+						if (client.getActionFactory().isForeExecuting()) {
+							Execution execution = client.getActionFactory().getForeExecutions().iterator().next();
 							showExecution(execution);
 							return;
 						}
@@ -179,8 +179,8 @@ public class ExecutionDialog extends JDialog {
 			public void onExecuted(ExecutionEvent event) {
 				if (! UIUtils.isUIThread(event.getThread())) {
 					try {
-						if (client.getActionManager().isForeExecuting()) {
-							Execution execution = client.getActionManager().getForeExecutions().iterator().next();
+						if (client.getActionFactory().isForeExecuting()) {
+							Execution execution = client.getActionFactory().getForeExecutions().iterator().next();
 							showExecution(execution);
 							return;
 						}
