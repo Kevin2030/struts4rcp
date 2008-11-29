@@ -1,13 +1,13 @@
-package com.googlecode.struts4rcp.server.resolver;
+package com.googlecode.struts4rcp.server.util;
 
 import java.io.InputStream;
 import java.util.Properties;
 
 import com.googlecode.struts4rcp.server.ActionServletContext;
 
-public final class PropertiesResolver {
+public final class PropertiesUtils {
 
-	private PropertiesResolver() {}
+	private PropertiesUtils() {}
 
 	public static Properties getProperties(String propertiesName) {
 		Properties properties = new Properties();

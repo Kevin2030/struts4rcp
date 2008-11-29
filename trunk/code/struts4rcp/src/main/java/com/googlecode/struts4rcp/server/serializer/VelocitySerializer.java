@@ -13,7 +13,7 @@ import org.apache.velocity.context.Context;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import com.googlecode.struts4rcp.server.map.ModelMap;
-import com.googlecode.struts4rcp.server.resolver.PropertiesResolver;
+import com.googlecode.struts4rcp.server.util.PropertiesUtils;
 
 /**
  * Velocity模板结果序列化器.
@@ -26,7 +26,7 @@ public class VelocitySerializer extends PageSerializer {
 
 	public VelocitySerializer() {
 		try {
-	        Properties properties = PropertiesResolver.getProperties(getPropertiesName());
+	        Properties properties = PropertiesUtils.getProperties(getPropertiesName());
 	        properties.setProperty("resource.loader", "classpath");
 	        properties.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
 	        velocityEngine = new VelocityEngine(properties);

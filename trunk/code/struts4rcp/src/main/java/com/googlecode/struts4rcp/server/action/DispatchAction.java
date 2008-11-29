@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import com.googlecode.struts4rcp.server.ActionContext;
-import com.googlecode.struts4rcp.server.resolver.ActionMethodResolver;
+import com.googlecode.struts4rcp.server.util.ActionMethodUtils;
 import com.googlecode.struts4rcp.util.ClassUtils;
 
 /**
@@ -24,7 +24,7 @@ public abstract class DispatchAction<M extends Serializable> extends AbstractAct
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
-		return super.getPage() + ActionMethodResolver.getMethodSeparator() + ActionMethodResolver.getMethodName(ActionContext.getContext().getActionName());
+		return super.getPage() + ActionMethodUtils.getMethodSeparator() + ActionMethodUtils.getMethodName(ActionContext.getContext().getActionName());
 	}
 
 	public Serializable execute(M model) throws Exception {
@@ -36,7 +36,7 @@ public abstract class DispatchAction<M extends Serializable> extends AbstractAct
 	}
 
 	protected String getMethodName() {
-		return ActionMethodResolver.getMethodName(ActionContext.getContext().getActionName());
+		return ActionMethodUtils.getMethodName(ActionContext.getContext().getActionName());
 	}
 
 }

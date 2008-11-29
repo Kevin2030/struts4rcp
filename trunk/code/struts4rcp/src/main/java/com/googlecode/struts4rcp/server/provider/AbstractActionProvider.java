@@ -11,7 +11,7 @@ import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.ActionInterceptor;
 import com.googlecode.struts4rcp.server.ActionProvider;
 import com.googlecode.struts4rcp.server.ActionServletContext;
-import com.googlecode.struts4rcp.server.resolver.ActionMethodResolver;
+import com.googlecode.struts4rcp.server.util.ActionMethodUtils;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
 
@@ -39,7 +39,7 @@ public abstract class AbstractActionProvider implements ActionProvider {
 		}
 		if (action == null) { // 处理方法分派
 			try {
-				action = findAction(ActionMethodResolver.getActionName(actionName));
+				action = findAction(ActionMethodUtils.getActionName(actionName));
 			} catch (Exception e) {
 				// ignore
 			}
