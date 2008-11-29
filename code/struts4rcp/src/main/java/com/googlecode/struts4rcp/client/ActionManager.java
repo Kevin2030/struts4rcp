@@ -1,13 +1,16 @@
 package com.googlecode.struts4rcp.client;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.ActionFactory;
+import com.googlecode.struts4rcp.ActionInterceptor;
 import com.googlecode.struts4rcp.client.event.ExceptionEvent;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
 import com.googlecode.struts4rcp.client.event.ExceptionPublisher;
@@ -40,6 +43,20 @@ public class ActionManager implements ActionFactory, ClientElement {
 		if (this.client != null)
 			throw new IllegalStateException("ActionProvider already initialized!");
 		this.client = client;
+	}
+
+	private final List<ActionInterceptor> actionInterceptors = new ArrayList<ActionInterceptor>();
+
+	public void addActionInterceptor(ActionInterceptor actionInterceptor) {
+		synchronized (actionInterceptors) {
+			actionInterceptors.add(actionInterceptor);
+		}
+	}
+
+	public void removeActionInterceptor(ActionInterceptor actionInterceptor) {
+		synchronized (actionInterceptors) {
+			actionInterceptors.remove(actionInterceptor);
+		}
 	}
 
 	private Collection<Execution> foreExecutions = new HashSet<Execution>();
