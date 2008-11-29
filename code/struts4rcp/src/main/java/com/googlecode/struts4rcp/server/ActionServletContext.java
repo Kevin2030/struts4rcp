@@ -26,14 +26,14 @@ public class ActionServletContext {
 	public static void destroy() {
 		if (CONTEXT != null) {
 			try {
-				if (CONTEXT.actionFactory != null) {
-					CONTEXT.actionFactory.shutdown();
-					CONTEXT.actionFactory = null;
+				if (CONTEXT.actionProvider != null) {
+					CONTEXT.actionProvider.shutdown();
+					CONTEXT.actionProvider = null;
 				}
 			} finally {
-				if (CONTEXT.actionResolver != null) {
-					CONTEXT.actionResolver.shutdown();
-					CONTEXT.actionResolver = null;
+				if (CONTEXT.actionReceiver != null) {
+					CONTEXT.actionReceiver.shutdown();
+					CONTEXT.actionReceiver = null;
 				}
 			}
 			CONTEXT = null;
@@ -74,34 +74,34 @@ public class ActionServletContext {
 	}
 
 	// Action工厂
-	private ActionFactory actionFactory;
+	private ActionProvider actionProvider;
 
 	/**
 	 * 设置Action工厂
-	 * @param actionFactory Action工厂
+	 * @param actionProvider Action工厂
 	 */
-	public void setActionFactory(ActionFactory actionFactory) {
-		if (actionFactory == null)
-			throw new NullPointerException("ActionFactory == null!");
-		this.actionFactory = actionFactory;
+	public void setActionProvider(ActionProvider actionProvider) {
+		if (actionProvider == null)
+			throw new NullPointerException("ActionProvider == null!");
+		this.actionProvider = actionProvider;
 	}
 
 	/**
 	 * 获取Action工厂
 	 * @return Action工厂
 	 */
-	public ActionFactory getActionFactory() {
-		return actionFactory;
+	public ActionProvider getActionProvider() {
+		return actionProvider;
 	}
 
-	private ActionResolver actionResolver;
+	private ActionReceiver actionReceiver;
 
-	public ActionResolver getActionResolver() {
-		return actionResolver;
+	public ActionReceiver getActionReceiver() {
+		return actionReceiver;
 	}
 
-	public void setActionResolver(ActionResolver actionResolver) {
-		this.actionResolver = actionResolver;
+	public void setActionReceiver(ActionReceiver actionReceiver) {
+		this.actionReceiver = actionReceiver;
 	}
 
 }

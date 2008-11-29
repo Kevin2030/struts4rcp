@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.server.factory;
+package com.googlecode.struts4rcp.server.provider;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import com.googlecode.struts4rcp.util.ClassUtils;
  * 基于actions.properties配置Action工厂实现
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class PropertiesActionFactory extends AbstractActionFactory {
+public class SimpleActionProvider extends AbstractActionProvider {
 
 	protected final Map<String, Action<Serializable, Serializable>> actions = new HashMap<String, Action<Serializable, Serializable>>();
 

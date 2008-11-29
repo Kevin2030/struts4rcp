@@ -12,8 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.server.factory.SpringActionFactory;
-import com.googlecode.struts4rcp.server.resolver.SuffixActionResolver;
+import com.googlecode.struts4rcp.server.provider.SpringActionProvider;
 import com.googlecode.struts4rcp.server.serializer.ServletSerializer;
 import com.googlecode.struts4rcp.util.BeanUtils;
 import com.googlecode.struts4rcp.util.ClassUtils;
@@ -32,15 +31,15 @@ import com.googlecode.struts4rcp.util.serializer.TextSerializer;
  *     &lt;servlet-name&gt;actionServlet&lt;/servlet-name&gt;
  *     &lt;servlet-class&gt;com.googlecode.struts4rcp.server.ActionServlet&lt;/servlet-class&gt;
  *     &lt;init-param&gt;
- *         &lt;param-name&gt;actionFactory&lt;/param-name&gt;
+ *         &lt;param-name&gt;actionProvider&lt;/param-name&gt;
  *         &lt;param-value&gt;
- *             com.googlecode.struts4rcp.server.factory.SpringActionFactory
+ *             com.googlecode.struts4rcp.server.factory.SpringActionProvider
  *         &lt;/param-value&gt;
  *     &lt;/init-param&gt;
  *     &lt;init-param&gt;
- *         &lt;param-name&gt;actionResolver&lt;/param-name&gt;
+ *         &lt;param-name&gt;actionReceiver&lt;/param-name&gt;
  *         &lt;param-value&gt;
- *             com.googlecode.struts4rcp.server.receiver.SuffixActionResolver
+ *             com.googlecode.struts4rcp.server.receiver.SuffixActionReceiver
  *         &lt;/param-value&gt;
  *     &lt;/init-param&gt;
  *     &lt;init-param&gt;
@@ -84,17 +83,17 @@ public class ActionServlet extends HttpServlet {
 		ActionServletContext.init(getServletContext(), getServletConfig()); // 初始化上下文
 		try {
 			// 加载Action工厂
-			ActionFactory actionFactory = getActionFactory();
-			if (actionFactory == null)// 缺省使用SpringActionFactory
-				actionFactory = new SpringActionFactory();
-			ActionServletContext.getContext().setActionFactory(actionFactory);
-			actionInterceptor = reduceActionInterceptorChain(actionFactory.getActionInterceptors());
+			ActionProvider actionProvider = getActionProvider();
+			if (actionProvider == null)// 缺省使用SpringActionProvider
+				actionProvider = new SpringActionProvider();
+			ActionServletContext.getContext().setActionProvider(actionProvider);
+			actionInterceptor = reduceActionInterceptorChain(actionProvider.getActionInterceptors());
 
 			// 加载Action接收器
-			ActionResolver actionResolver = getActionResolver();
-			if (actionResolver == null) // 缺省使用SuffixActionResolver
-				actionResolver = new SuffixActionResolver();
-			ActionServletContext.getContext().setActionResolver(actionResolver);
+			ActionReceiver actionReceiver = getActionReceiver();
+			if (actionReceiver == null) // 缺省使用ActionReceiver
+				actionReceiver = new ActionReceiver();
+			ActionServletContext.getContext().setActionReceiver(actionReceiver);
 		} catch (ServletException e) {
 			logger.error(e.getMessage(), e);
 			throw e;
@@ -154,7 +153,7 @@ public class ActionServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			Serializer serializer = ActionServletContext.getContext().getActionResolver().getSerializer(request);
+			Serializer serializer = ActionServletContext.getContext().getActionReceiver().getSerializer(request);
 			if (serializer == null) // 接收器不允许为空
 				throw new NullPointerException("Not found serializer by request: " + request.getRequestURI());
 			String contentType = serializer.getContentType();
@@ -166,11 +165,11 @@ public class ActionServlet extends HttpServlet {
 			}
 			response.setContentType(contentType);
 
-			String actionName = ActionServletContext.getContext().getActionResolver().getActionName(request); // 获取Action名称
+			String actionName = ActionServletContext.getContext().getActionReceiver().getActionName(request); // 获取Action名称
 			if (actionName == null) // action名称不允许为空
 				throw new NullPointerException("Can not resolve action name by request: " + request.getRequestURI());
 
-			Action<Serializable, Serializable> action = ActionServletContext.getContext().getActionFactory().getAction(actionName); // 获取Action实例
+			Action<Serializable, Serializable> action = ActionServletContext.getContext().getActionProvider().getAction(actionName); // 获取Action实例
 			if (action == null) // action实例不允许为空
 				throw new NullPointerException("Not existed action: " + actionName);
 			ActionDelegate delegate = new ActionDelegate(actionInterceptor, action);
@@ -240,7 +239,7 @@ public class ActionServlet extends HttpServlet {
 		} catch (ActionForwardException e) {
 			String forwardActionName = e.getActionName(); // 不为空
 			Serializable forwardModel = e.getModel();
-			Action<Serializable, Serializable> forwardAction = ActionServletContext.getContext().getActionFactory().getAction(forwardActionName); // 获取Action实例
+			Action<Serializable, Serializable> forwardAction = ActionServletContext.getContext().getActionProvider().getAction(forwardActionName); // 获取Action实例
 			if (forwardAction == null) // action实例不允许为空
 				throw new NullPointerException("Not existed action: " + forwardActionName);
 			ActionDelegate forwardActionDelegate = new ActionDelegate(actionInterceptor, forwardAction);
@@ -255,25 +254,25 @@ public class ActionServlet extends HttpServlet {
 	}
 
 	/**
-	 * ActionFactory的配置参数名
+	 * ActionProvider的配置参数名
 	 */
-	protected static final String ACTION_FACTORY_PARAM_NAME = "actionFactory";
+	protected static final String ACTION_FACTORY_PARAM_NAME = "actionProvider";
 
 	/**
 	 * 加载Action实例化工厂，子类可通过覆写该方法，拦截加载方式
 	 * @return Action实例化工厂
 	 * @throws Exception 异常均向上抛出，由框架统一处理
 	 */
-	protected ActionFactory getActionFactory() throws Exception {
+	protected ActionProvider getActionProvider() throws Exception {
 		// 加载Action工厂
-		String actionFactoryClassName = super.getInitParameter(ACTION_FACTORY_PARAM_NAME);
-		if (actionFactoryClassName != null && actionFactoryClassName.trim().length() > 0) {
+		String actionProviderClassName = super.getInitParameter(ACTION_FACTORY_PARAM_NAME);
+		if (actionProviderClassName != null && actionProviderClassName.trim().length() > 0) {
 			try {
-				Class<?> actionFactoryClass = ClassUtils.forName(actionFactoryClassName.trim());
-				if (ActionFactory.class.isAssignableFrom(actionFactoryClass)) {
-					return (ActionFactory)actionFactoryClass.newInstance();
+				Class<?> actionProviderClass = ClassUtils.forName(actionProviderClassName.trim());
+				if (ActionProvider.class.isAssignableFrom(actionProviderClass)) {
+					return (ActionProvider)actionProviderClass.newInstance();
 				} else {
-					logger.error(actionFactoryClass.getName() + " unimplementet interface " + ActionFactory.class.getName());
+					logger.error(actionProviderClass.getName() + " unimplementet interface " + ActionProvider.class.getName());
 				}
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
@@ -283,25 +282,25 @@ public class ActionServlet extends HttpServlet {
 	}
 
 	/**
-	 * ActionResolver的配置参数名
+	 * ActionReceiver的配置参数名
 	 */
-	protected static final String ACTION_RESOLVER_PARAM_NAME = "actionResolver";
+	protected static final String ACTION_RESOLVER_PARAM_NAME = "actionReceiver";
 
 	/**
 	 * 加载Action接收决策器，子类可通过覆写该方法，拦截加载方式
 	 * @return Action接收决策器
 	 * @throws Exception 异常均向上抛出，由框架统一处理
 	 */
-	protected ActionResolver getActionResolver() throws Exception {
+	protected ActionReceiver getActionReceiver() throws Exception {
 		// 加载模型转换器
-		String actionResolverClassName = super.getInitParameter(ACTION_RESOLVER_PARAM_NAME);
-		if (actionResolverClassName != null && actionResolverClassName.trim().length() > 0) {
+		String actionReceiverClassName = super.getInitParameter(ACTION_RESOLVER_PARAM_NAME);
+		if (actionReceiverClassName != null && actionReceiverClassName.trim().length() > 0) {
 			try {
-				Class<?> actionResolverClass = ClassUtils.forName(actionResolverClassName.trim());
-				if (ActionResolver.class.isAssignableFrom(actionResolverClass)) {
-					return (ActionResolver)actionResolverClass.newInstance();
+				Class<?> actionReceiverClass = ClassUtils.forName(actionReceiverClassName.trim());
+				if (ActionReceiver.class.isAssignableFrom(actionReceiverClass)) {
+					return (ActionReceiver)actionReceiverClass.newInstance();
 				} else {
-					logger.error(actionResolverClass.getName() + " unimplementet interface " + ActionResolver.class.getName());
+					logger.error(actionReceiverClass.getName() + " unimplementet interface " + ActionReceiver.class.getName());
 				}
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);

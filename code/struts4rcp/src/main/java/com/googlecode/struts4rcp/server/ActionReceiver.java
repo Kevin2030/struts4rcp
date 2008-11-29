@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.server.resolver;
+package com.googlecode.struts4rcp.server;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,29 +7,28 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import com.googlecode.struts4rcp.server.ActionResolver;
-import com.googlecode.struts4rcp.server.ActionServletContext;
 import com.googlecode.struts4rcp.server.serializer.CommonTemplateSerializer;
 import com.googlecode.struts4rcp.server.serializer.JsonSerializer;
 import com.googlecode.struts4rcp.server.serializer.JspSerializer;
 import com.googlecode.struts4rcp.util.ClassUtils;
+import com.googlecode.struts4rcp.util.Shutdownable;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
 import com.googlecode.struts4rcp.util.serializer.JavaSerializer;
 import com.googlecode.struts4rcp.util.serializer.Serializer;
 
 /**
- * 基于请求后缀的决策方案
+ * 收接方案决策器
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class SuffixActionResolver implements ActionResolver {
+public class ActionReceiver implements Shutdownable {
 
 	/**
 	 * 日志输出接口
 	 */
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public SuffixActionResolver() {
+	public ActionReceiver() {
 		init(ActionServletContext.getContext().getServletContext(), ActionServletContext.getContext().getServletConfig());
 	}
 
@@ -43,6 +42,12 @@ public class SuffixActionResolver implements ActionResolver {
 		}
 	}
 
+
+	/**
+	 * 判断收接方案
+	 * @param request 请求信息
+	 * @return 收接器
+	 */
 	public Serializer getSerializer(HttpServletRequest request) {
 		String suffix = getSuffix(request);
 		Serializer serializer = getSerializer(suffix);
@@ -167,6 +172,12 @@ public class SuffixActionResolver implements ActionResolver {
 		return serializers;
 	}
 
+	/**
+	 * 获取Action名称
+	 * @param request 请求信息
+	 * @return Action名称
+	 * @throws Exception 异常均向上抛出，由框架统一处理
+	 */
 	public String getActionName(HttpServletRequest request) {
 		String actionName = request.getRequestURI();
 		String context = request.getContextPath();

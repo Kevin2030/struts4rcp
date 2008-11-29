@@ -10,7 +10,7 @@ import com.googlecode.struts4rcp.util.Shutdownable;
  * Action工厂SPI接口
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public interface ActionFactory extends Shutdownable {
+public interface ActionProvider extends Shutdownable {
 
 	/**
 	 * 获取Action实例

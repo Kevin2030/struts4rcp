@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.server.factory;
+package com.googlecode.struts4rcp.server.provider;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import com.googlecode.struts4rcp.util.ClassUtils;
  * 类名反射Action工厂实现
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ClassActionFactory extends AbstractActionFactory {
+public class ClassActionProvider extends AbstractActionProvider {
 
 	protected final List<ActionInterceptor> actionInterceptors = new ArrayList<ActionInterceptor>();
 
