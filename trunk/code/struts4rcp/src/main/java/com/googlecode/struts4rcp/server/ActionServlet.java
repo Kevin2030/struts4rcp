@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.struts4rcp.Action;
+import com.googlecode.struts4rcp.ActionInterceptor;
 import com.googlecode.struts4rcp.server.provider.SpringActionProvider;
 import com.googlecode.struts4rcp.server.serializer.ServletSerializer;
 import com.googlecode.struts4rcp.util.BeanUtils;

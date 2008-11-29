@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.server.ActionInterceptor;
+import com.googlecode.struts4rcp.ActionInterceptor;
 import com.googlecode.struts4rcp.util.ExceptionUtils;
 
 /**
