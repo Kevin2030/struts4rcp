@@ -1,11 +1,9 @@
 package com.googlecode.struts4rcp.client;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Properties;
 
 import com.googlecode.struts4rcp.Action;
@@ -45,17 +43,29 @@ public class ActionManager implements ActionFactory, ClientElement {
 		this.client = client;
 	}
 
-	private final List<ActionInterceptor> actionInterceptors = new ArrayList<ActionInterceptor>();
+	private ActionInterceptorChain actionInterceptorChain = null;
 
 	public void addActionInterceptor(ActionInterceptor actionInterceptor) {
-		synchronized (actionInterceptors) {
-			actionInterceptors.add(actionInterceptor);
+		ActionInterceptorChain next = new ActionInterceptorChain(actionInterceptor);
+		if (actionInterceptorChain == null) {
+			actionInterceptorChain = next;
+		} else {
+			actionInterceptorChain.setNext(next);
 		}
 	}
 
 	public void removeActionInterceptor(ActionInterceptor actionInterceptor) {
-		synchronized (actionInterceptors) {
-			actionInterceptors.remove(actionInterceptor);
+		if (actionInterceptorChain == null || actionInterceptor == null)
+			return;
+		if (actionInterceptorChain.getActionInterceptor() == actionInterceptor)
+			actionInterceptorChain = actionInterceptorChain.getNext();
+		ActionInterceptorChain curr = actionInterceptorChain.getNext();
+		while (curr != null) {
+			if (curr.getActionInterceptor() == actionInterceptor) {
+				curr.setNext(curr.getNext());
+				break;
+			}
+			curr = curr.getNext();
 		}
 	}
 
@@ -259,7 +269,7 @@ public class ActionManager implements ActionFactory, ClientElement {
 	 * @return 同步Action代理
 	 */
 	public <M extends Serializable, R extends Serializable> Action<M, R> getAction(String actionName, boolean backable, boolean abortable) {
-		return new SyncActionProxy<M, R>(client.getTransporter(), actionName, false, backable, abortable);
+		return new ActionProxy<M, R>(client.getTransporter(), actionName, false, backable, abortable);
 	}
 
 	/**
@@ -285,7 +295,8 @@ public class ActionManager implements ActionFactory, ClientElement {
 	 * @return 异步Action代理
 	 */
 	public <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(String actionName, ActionCallback<R> actionCallback, boolean backable, boolean abortable) {
-		return new AsyncActionProxy<M, R>(client.getTransporter(), actionName, actionCallback, false, backable, abortable);
+		Action<M, R> action = getAction(actionName, backable, abortable);
+		return new AsyncActionProxy<M, R>(action, actionCallback, false);
 	}
 
 	/**
@@ -308,7 +319,7 @@ public class ActionManager implements ActionFactory, ClientElement {
 	 * @return 后台同步Action代理
 	 */
 	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAction(String actionName, boolean abortable) {
-		return new SyncActionProxy<M, R>(client.getTransporter(), actionName, true, false, abortable);
+		return new ActionProxy<M, R>(client.getTransporter(), actionName, true, false, abortable);
 	}
 
 	/**
@@ -334,7 +345,8 @@ public class ActionManager implements ActionFactory, ClientElement {
 	 */
 	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(String actionName,
 			ActionCallback<R> actionCallback, boolean abortable) {
-		return new AsyncActionProxy<M, R>(client.getTransporter(), actionName, actionCallback, true, false, abortable);
+		Action<M, R> action = getAction(actionName, false, abortable);
+		return new AsyncActionProxy<M, R>(action, actionCallback, true);
 	}
 
 	protected void assertResult(Serializable result) throws Exception {
@@ -351,10 +363,10 @@ public class ActionManager implements ActionFactory, ClientElement {
 	}
 
 	/**
-	 * 同步Action代理
+	 * Action代理
 	 * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
 	 */
-	protected final class SyncActionProxy<M extends Serializable, R extends Serializable> implements Action<M, R> {
+	protected final class ActionProxy<M extends Serializable, R extends Serializable> implements Action<M, R> {
 
 		protected final Transporter transporter;
 
@@ -366,7 +378,7 @@ public class ActionManager implements ActionFactory, ClientElement {
 
 		protected final boolean abortable;
 
-		SyncActionProxy(Transporter transporter, String actionName, boolean back, boolean backable, boolean abortable) {
+		ActionProxy(Transporter transporter, String actionName, boolean back, boolean backable, boolean abortable) {
 			if (transporter == null)
 				throw new NullPointerException("transporter == null!");
 			if (actionName == null)
@@ -398,43 +410,24 @@ public class ActionManager implements ActionFactory, ClientElement {
 	 */
 	protected final class AsyncActionProxy<M extends Serializable, R extends Serializable> implements Action<M, R> {
 
-		protected final Transporter transporter;
-
-		protected final String actionName;
+		protected final Action<M, R> action;
 
 		protected final ActionCallback<R> actionCallback;
 
 		protected final boolean back;
 
-		protected final boolean backable;
-
-		protected final boolean abortable;
-
-		AsyncActionProxy(Transporter transporter, String actionName, ActionCallback<R> actionCallback,
-				boolean back, boolean backable, boolean abortable) {
-			if (transporter == null)
-				throw new NullPointerException("transporter == null!");
-			if (actionName == null)
-				throw new NullPointerException("actionName == null!");
-			this.transporter = transporter;
-			this.actionName = actionName;
+		AsyncActionProxy(Action<M, R> action, ActionCallback<R> actionCallback, boolean back) {
+			this.action = action;
 			this.actionCallback = actionCallback;
 			this.back = back;
-			this.backable = backable;
-			this.abortable = abortable;
 		}
 
 		public R execute(final M model) throws Exception {
 			ThreadUtils.execute(new Runnable() {
-				@SuppressWarnings("unchecked")
 				public void run() {
-					Execution execution = new Execution(actionName, model, back, backable, abortable);
-					ActionManager.this.addExecution(execution);
 					try {
 						try {
-							Serializable obj = transporter.transport(execution);
-							assertResult(obj);
-							R result = (R)obj;
+							R result = action.execute(model);
 							if (actionCallback != null)
 								actionCallback.callback(result);
 						} catch (Exception e) {
@@ -446,13 +439,112 @@ public class ActionManager implements ActionFactory, ClientElement {
 					} catch (Throwable e) {
 						ActionManager.this.publishException(e, back);
 						logger.error(e.getMessage(), e);
-					} finally {
-						ActionManager.this.removeExecution(execution);
 					}
 				}
 			});
 			return null;
 		}
+	}
+
+	/**
+	 * Action 拦截代理
+	 * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
+	 */
+	protected final class InterceptActionProxy<M extends Serializable, R extends Serializable> implements Action<M, R> {
+
+		private final Action<M, R> action;
+
+		public InterceptActionProxy(Action<M, R> action) {
+			this.action = action;
+		}
+
+		@SuppressWarnings("unchecked")
+		public R execute(M model) throws Exception {
+			final ActionInterceptorChain chain = actionInterceptorChain;
+			if (chain != null)
+				return (R)actionInterceptorChain.intercept((Action) action, model);
+			return action.execute(model);
+		}
+
+	}
+
+	/**
+	 * 拦截器链
+	 * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
+	 */
+	protected static final class ActionInterceptorChain implements ActionInterceptor {
+
+		// 当前拦截器
+		private final ActionInterceptor actionInterceptor;
+
+		/**
+		 * 构造拦截器链
+		 * @param actionInterceptor 当前拦截器
+		 */
+		ActionInterceptorChain(ActionInterceptor actionInterceptor) {
+			if (actionInterceptor == null)
+				throw new NullPointerException("actionInterceptor == null");
+			this.actionInterceptor = actionInterceptor;
+		}
+
+		ActionInterceptor getActionInterceptor() {
+			return actionInterceptor;
+		}
+
+		// 下一拦截器
+		private ActionInterceptorChain next;
+
+		/**
+		 * 设置下载拦截器链节点
+		 * @param next 下一拦截器
+		 */
+		void setNext(ActionInterceptorChain next) {
+			this.next = next;
+		}
+
+		ActionInterceptorChain getNext() {
+			return next;
+		}
+
+		void clear() {
+			if (next != null) {
+				next.clear();
+				next = null;
+			}
+		}
+
+		public Serializable intercept(Action<Serializable, Serializable> action, Serializable model) throws Exception {
+			if (next == null)
+				return actionInterceptor.intercept(action, model); // 如果没有下一拦载器，传入实际Action实例
+			return actionInterceptor.intercept(new ActionDelegate(next, action), model); // 如果有下一拦载器，则代理下一拦截器
+		}
+
+	}
+
+
+	/**
+	 * Action拦截委托
+	 * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
+	 */
+	protected static final class ActionDelegate implements Action<Serializable, Serializable> {
+
+		private final ActionInterceptor actionInterceptor;
+
+		private final Action<Serializable, Serializable> action;
+
+		ActionDelegate(ActionInterceptor actionInterceptor, Action<Serializable, Serializable> action) {
+			if (action == null)
+				throw new NullPointerException("action == null!");
+			this.actionInterceptor = actionInterceptor;
+			this.action = action;
+		}
+
+		public Serializable execute(Serializable model) throws Exception {
+			if (actionInterceptor != null)
+				return actionInterceptor.intercept(action, model); // 如果有拦截器，则执行拦截器
+			return action.execute(model); // 否则，直接执行Action实例
+		}
+
 	}
 
 }
