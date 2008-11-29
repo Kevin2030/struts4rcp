@@ -7,7 +7,7 @@ import java.net.URL;
 import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.struts4rcp.server.map.ModelMap;
-import com.googlecode.struts4rcp.server.resolver.PropertiesResolver;
+import com.googlecode.struts4rcp.server.util.PropertiesUtils;
 
 import freemarker.cache.URLTemplateLoader;
 import freemarker.template.Configuration;
@@ -26,7 +26,7 @@ public class FreeMarkerSerializer extends PageSerializer {
 	public FreeMarkerSerializer() {
 		try {
 			configuration.setTemplateLoader(new ClasspathTemplateLoader());
-	        configuration.setSettings(PropertiesResolver.getProperties(getPropertiesName()));
+	        configuration.setSettings(PropertiesUtils.getProperties(getPropertiesName()));
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {

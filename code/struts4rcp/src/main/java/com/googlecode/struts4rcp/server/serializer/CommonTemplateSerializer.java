@@ -17,7 +17,7 @@ import org.commontemplate.tools.bean.ServletClassResourceLoader;
 import org.commontemplate.tools.web.ModelMap;
 
 import com.googlecode.struts4rcp.server.ActionServletContext;
-import com.googlecode.struts4rcp.server.resolver.PropertiesResolver;
+import com.googlecode.struts4rcp.server.util.PropertiesUtils;
 
 /**
  * CommonTemplate模板结果序列化器.
@@ -31,7 +31,7 @@ public class CommonTemplateSerializer extends PageSerializer {
 	public CommonTemplateSerializer() {
 		try {
 			ServletContext servletContext = ActionServletContext.getContext().getServletContext();
-	        Properties properties = PropertiesResolver.getProperties(getPropertiesName());
+	        Properties properties = PropertiesUtils.getProperties(getPropertiesName());
 	        ConfigurationSettings config = PropertiesConfigurationLoader.loadConfiguration(properties, new ServletClassResourceLoader(servletContext), null);
 	        config.setSourceLoader(new ClasspathSourceLoader());
 	        engine = new Engine(config);

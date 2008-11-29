@@ -13,7 +13,7 @@ import javax.servlet.ServletContext;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.ActionInterceptor;
-import com.googlecode.struts4rcp.server.resolver.PropertiesResolver;
+import com.googlecode.struts4rcp.server.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ClassUtils;
 
 /**
@@ -34,7 +34,7 @@ public class SimpleActionProvider extends AbstractActionProvider {
 	protected void init(ServletContext servletContext, ServletConfig servletConfig) {
 		try {
 			Map<String, ActionInterceptor> interceptors = new TreeMap<String, ActionInterceptor>();
-			Properties properties = PropertiesResolver.getProperties(getPropertiesName());
+			Properties properties = PropertiesUtils.getProperties(getPropertiesName());
 			for (Map.Entry<?, ?> entry : properties.entrySet()) {
 				String key = (String)entry.getKey();
 				String value = (String)entry.getValue();
