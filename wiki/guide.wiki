@@ -101,7 +101,7 @@ loginAction.execute(account); // 异步执行
     <input type="hidden" name="className" value="com.xxx.Account" />
 </form>
 }}}
-LoginAction.jsp (与LoginAction.class同名称，同目录，不可打入jar包，必需放在/WEB-INF/classes目录下)
+LoginAction.jsp (页面的查找采用Codebehind方式，缺省为：与LoginAction.class同名称，同目录，不可打入jar包，必需放在/WEB-INF/classes目录下)
 {{{
 <html>
     <body>
