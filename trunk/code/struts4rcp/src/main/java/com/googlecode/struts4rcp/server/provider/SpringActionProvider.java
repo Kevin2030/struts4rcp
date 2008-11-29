@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.server.factory;
+package com.googlecode.struts4rcp.server.provider;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,11 +15,11 @@ import com.googlecode.struts4rcp.server.ActionInterceptor;
 import com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack;
 
 /**
- * ActionFactory Spring Implementation. See:
+ * ActionProvider Spring Implementation. See:
  * <a href="http://www.springframework.org">http://www.springframework.org</a>
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class SpringActionFactory extends AbstractActionFactory {
+public class SpringActionProvider extends AbstractActionProvider {
 
 	private ServletContext servletContext;
 

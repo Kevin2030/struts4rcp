@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.server.factory;
+package com.googlecode.struts4rcp.server.provider;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,11 +15,11 @@ import com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack;
 import com.googlecode.struts4rcp.util.ClassUtils;
 
 /**
- * ActionFactory Google Guice Implementation. See: <a
+ * ActionProvider Google Guice Implementation. See: <a
  * href="http://code.google.com/p/google-guice">http://code.google.com/p/google-guice</a>
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class GuiceActionFactory extends AbstractActionFactory {
+public class GuiceActionProvider extends AbstractActionProvider {
 
 	private Injector injector;
 

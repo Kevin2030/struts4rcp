@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.server.factory;
+package com.googlecode.struts4rcp.server.provider;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -8,21 +8,21 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.server.ActionFactory;
+import com.googlecode.struts4rcp.server.ActionProvider;
 import com.googlecode.struts4rcp.server.ActionInterceptor;
 import com.googlecode.struts4rcp.server.ActionServletContext;
 import com.googlecode.struts4rcp.server.resolver.ActionMethodResolver;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
 
-public abstract class AbstractActionFactory implements ActionFactory {
+public abstract class AbstractActionProvider implements ActionProvider {
 
 	/**
 	 * 日志输出接口
 	 */
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public AbstractActionFactory() {
+	public AbstractActionProvider() {
 		init(ActionServletContext.getContext().getServletContext(), ActionServletContext.getContext().getServletConfig());
 	}
 
