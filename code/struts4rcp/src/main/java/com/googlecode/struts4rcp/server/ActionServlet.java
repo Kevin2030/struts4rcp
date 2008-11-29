@@ -38,12 +38,6 @@ import com.googlecode.struts4rcp.util.serializer.TextSerializer;
  *         &lt;/param-value&gt;
  *     &lt;/init-param&gt;
  *     &lt;init-param&gt;
- *         &lt;param-name&gt;actionReceiver&lt;/param-name&gt;
- *         &lt;param-value&gt;
- *             com.googlecode.struts4rcp.server.receiver.SuffixActionReceiver
- *         &lt;/param-value&gt;
- *     &lt;/init-param&gt;
- *     &lt;init-param&gt;
  *         &lt;param-name&gt;serializers&lt;/param-name&gt;
  *         &lt;param-value&gt;
  *             data: com.googlecode.struts4rcp.util.serializer.JavaSerializer,
