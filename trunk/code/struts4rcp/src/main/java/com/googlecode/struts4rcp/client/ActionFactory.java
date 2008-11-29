@@ -21,7 +21,7 @@ import com.googlecode.struts4rcp.util.logger.LoggerFactory;
  * Action代理供给策略接口
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ActionManager implements ClientElement {
+public class ActionFactory implements ClientElement {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -322,13 +322,13 @@ public class ActionManager implements ClientElement {
 		@SuppressWarnings("unchecked")
 		public R execute(final M model) throws Exception {
 			final Execution execution = new Execution(actionName, model, back, backable, abortable);
-			ActionManager.this.addExecution(execution);
+			ActionFactory.this.addExecution(execution);
 			try {
 				Serializable result = transporter.transport(execution);
 				assertResult(result);
 				return (R)result;
 			} finally {
-				ActionManager.this.removeExecution(execution);
+				ActionFactory.this.removeExecution(execution);
 			}
 		}
 	}
@@ -370,7 +370,7 @@ public class ActionManager implements ClientElement {
 				@SuppressWarnings("unchecked")
 				public void run() {
 					Execution execution = new Execution(actionName, model, back, backable, abortable);
-					ActionManager.this.addExecution(execution);
+					ActionFactory.this.addExecution(execution);
 					try {
 						try {
 							Serializable obj = transporter.transport(execution);
@@ -385,10 +385,10 @@ public class ActionManager implements ClientElement {
 								throw e;
 						}
 					} catch (Throwable e) {
-						ActionManager.this.publishException(e, back);
+						ActionFactory.this.publishException(e, back);
 						logger.error(e.getMessage(), e);
 					} finally {
-						ActionManager.this.removeExecution(execution);
+						ActionFactory.this.removeExecution(execution);
 					}
 				}
 			});
