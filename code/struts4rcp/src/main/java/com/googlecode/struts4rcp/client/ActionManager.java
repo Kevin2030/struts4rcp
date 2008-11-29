@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Properties;
 
 import com.googlecode.struts4rcp.Action;
+import com.googlecode.struts4rcp.ActionFactory;
 import com.googlecode.struts4rcp.client.event.ExceptionEvent;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
 import com.googlecode.struts4rcp.client.event.ExceptionPublisher;
@@ -21,7 +22,7 @@ import com.googlecode.struts4rcp.util.logger.LoggerFactory;
  * Action代理供给策略接口
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ActionManager implements ClientElement {
+public class ActionManager implements ActionFactory, ClientElement {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -224,13 +225,36 @@ public class ActionManager implements ClientElement {
 	 *
 	 * @param transporter 传输器
 	 * @param actionName action名称
+	 * @return 同步Action代理
+	 */
+	public <M extends Serializable, R extends Serializable> Action<M, R> getAction(
+			String actionName) {
+		return getAction(actionName, true, true);
+	}
+
+	/**
+	 * 获取同步Action代理
+	 *
+	 * @param transporter 传输器
+	 * @param actionName action名称
 	 * @param backable 是否允许转为后台运行
 	 * @param abortable 是否允许中止
 	 * @return 同步Action代理
 	 */
-	public <M extends Serializable, R extends Serializable> Action<M, R> getAction(
-			Transporter transporter, String actionName, boolean backable, boolean abortable) {
-		return new SyncActionProxy<M, R>(transporter, actionName, false, backable, abortable);
+	public <M extends Serializable, R extends Serializable> Action<M, R> getAction(String actionName, boolean backable, boolean abortable) {
+		return new SyncActionProxy<M, R>(client.getTransporter(), actionName, false, backable, abortable);
+	}
+
+	/**
+	 * 获取异步Action代理
+	 *
+	 * @param transporter 传输器
+	 * @param actionName action名称
+	 * @param actionCallback 回调接口
+	 * @return 异步Action代理
+	 */
+	public <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(String actionName, ActionCallback<R> actionCallback) {
+		return getAsyncAction(actionName, actionCallback, true, true);
 	}
 
 	/**
@@ -243,9 +267,8 @@ public class ActionManager implements ClientElement {
 	 * @param abortable 是否允许中止
 	 * @return 异步Action代理
 	 */
-	public <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(
-			Transporter transporter, String actionName, ActionCallback<R> actionCallback, boolean backable, boolean abortable) {
-		return new AsyncActionProxy<M, R>(transporter, actionName, actionCallback, false, backable, abortable);
+	public <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(String actionName, ActionCallback<R> actionCallback, boolean backable, boolean abortable) {
+		return new AsyncActionProxy<M, R>(client.getTransporter(), actionName, actionCallback, false, backable, abortable);
 	}
 
 	/**
@@ -253,13 +276,22 @@ public class ActionManager implements ClientElement {
 	 *
 	 * @param transporter 传输器
 	 * @param actionName action名称
-	 * @param backable 是否允许转为后台运行
+	 * @return 后台同步Action代理
+	 */
+	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAction(String actionName) {
+		return getBackAction(actionName, true);
+	}
+
+	/**
+	 * 获取后台同步Action代理
+	 *
+	 * @param transporter 传输器
+	 * @param actionName action名称
 	 * @param abortable 是否允许中止
 	 * @return 后台同步Action代理
 	 */
-	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAction(
-			Transporter transporter, String actionName, boolean abortable) {
-		return new SyncActionProxy<M, R>(transporter, actionName, true, false, abortable);
+	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAction(String actionName, boolean abortable) {
+		return new SyncActionProxy<M, R>(client.getTransporter(), actionName, true, false, abortable);
 	}
 
 	/**
@@ -268,14 +300,24 @@ public class ActionManager implements ClientElement {
 	 * @param transporter 传输器
 	 * @param actionName action名称
 	 * @param actionCallback 回调接口
-	 * @param backable 是否允许转为后台运行
+	 * @return 后台异步Action代理
+	 */
+	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(String actionName, ActionCallback<R> actionCallback) {
+		return getBackAsyncAction(actionName, actionCallback, true);
+	}
+
+	/**
+	 * 获取后台异步Action代理
+	 *
+	 * @param transporter 传输器
+	 * @param actionName action名称
+	 * @param actionCallback 回调接口
 	 * @param abortable 是否允许中止
 	 * @return 后台异步Action代理
 	 */
-	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(
-			Transporter transporter, String actionName,
+	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(String actionName,
 			ActionCallback<R> actionCallback, boolean abortable) {
-		return new AsyncActionProxy<M, R>(transporter, actionName, actionCallback, true, false, abortable);
+		return new AsyncActionProxy<M, R>(client.getTransporter(), actionName, actionCallback, true, false, abortable);
 	}
 
 	protected void assertResult(Serializable result) throws Exception {

@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.ContextLoader;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.server.ActionInterceptor;
+import com.googlecode.struts4rcp.ActionInterceptor;
 import com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack;
 
 /**
