@@ -49,12 +49,12 @@ public class ActionReceiver implements Shutdownable {
 	 * @return 收接器
 	 */
 	public Serializer getSerializer(HttpServletRequest request) {
-		String suffix = getSuffix(request);
-		Serializer serializer = getSerializer(suffix);
+		String serializerName = getSerializerName(request);
+		Serializer serializer = getSerializer(serializerName);
 		if (serializer == null) { // 注册缺省序列化器
-			serializer = getDefaultSerializer(suffix);
+			serializer = getDefaultSerializer(serializerName);
 			if (serializer != null) {
-				addSerializer(suffix, serializer);
+				addSerializer(serializerName, serializer);
 			}
 		}
 		if (serializer == null) // 接收器不允许为空
@@ -62,7 +62,7 @@ public class ActionReceiver implements Shutdownable {
 		return serializer;
 	}
 
-	protected String getSuffix(HttpServletRequest request) {
+	protected String getSerializerName(HttpServletRequest request) {
 		String uri = request.getRequestURI();
 		int suffixIndex = uri.lastIndexOf('.');
 		if (suffixIndex < 0 || suffixIndex >= uri.length()) // 后缀不能为空
