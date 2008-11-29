@@ -302,7 +302,7 @@ public class Actions {
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getAction(
 			String clientName, String actionName,
 			boolean backable, boolean abortable) {
-		return getClient(clientName).getActionFactory().getAction(
+		return getClient(clientName).getActionManager().getAction(
 				getClient(clientName).getTransporter(), actionName,
 				backable, abortable);
 	}
@@ -341,7 +341,7 @@ public class Actions {
 			String clientName, String actionName,
 			ActionCallback<R> actionCallback,
 			boolean backable, boolean abortable) {
-		return getClient(clientName).getActionFactory().getAsyncAction(
+		return getClient(clientName).getActionManager().getAsyncAction(
 				getClient(clientName).getTransporter(), actionName,
 				actionCallback, backable, abortable);
 	}
@@ -372,7 +372,7 @@ public class Actions {
 	 */
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getBackAction(
 			String clientName, String actionName, boolean abortable) {
-		return getClient(clientName).getActionFactory().getBackAction(
+		return getClient(clientName).getActionManager().getBackAction(
 				getClient(clientName).getTransporter(), actionName, abortable);
 	}
 
@@ -408,7 +408,7 @@ public class Actions {
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(
 			String clientName, String actionName,
 			ActionCallback<R> actionCallback, boolean abortable) {
-		return getClient(clientName).getActionFactory().getBackAsyncAction(
+		return getClient(clientName).getActionManager().getBackAsyncAction(
 				getClient(clientName).getTransporter(), actionName,
 				actionCallback, abortable);
 	}

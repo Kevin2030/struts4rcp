@@ -25,7 +25,7 @@ public class Client implements Shutdownable {
 	/**
 	 * Action代理供给策略配置参数名
 	 */
-	public static final String ACTION_MANAGER_PARAM_NAME = "actionFactory";
+	public static final String ACTION_MANAGER_PARAM_NAME = "actionManager";
 
 	/**
 	 * Action代理供给策略配置参数名
@@ -41,7 +41,7 @@ public class Client implements Shutdownable {
 
 	private final Transporter transporter;
 
-	private final ActionFactory actionFactory;
+	private final ActionManager actionManager;
 
 	private static Transporter loadTransporter(Properties config) {
 		 return PropertiesUtils.getInstanceProperty(config,
@@ -49,10 +49,10 @@ public class Client implements Shutdownable {
 					HttpURLConnectionTransporter.class);
 	}
 
-	private static ActionFactory loadActionFactory(Properties config) {
+	private static ActionManager loadActionManager(Properties config) {
 		 return PropertiesUtils.getInstanceProperty(
-					config, ACTION_MANAGER_PARAM_NAME, ActionFactory.class,
-					ActionFactory.class);
+					config, ACTION_MANAGER_PARAM_NAME, ActionManager.class,
+					ActionManager.class);
 	}
 
 	private static ConfigurationManager loadConfigurationManager(Properties config) {
@@ -62,15 +62,15 @@ public class Client implements Shutdownable {
 	}
 
 	public Client(Properties config) {
-		this(config, loadTransporter(config), loadActionFactory(config), loadConfigurationManager(config));
+		this(config, loadTransporter(config), loadActionManager(config), loadConfigurationManager(config));
 	}
 
 	public Client(Properties config, Transporter transporter) {
-		this(config, transporter, loadActionFactory(config), loadConfigurationManager(config));
+		this(config, transporter, loadActionManager(config), loadConfigurationManager(config));
 	}
 
 	public Client(Properties config, Transporter transporter,
-			ActionFactory actionFactory,
+			ActionManager actionManager,
 			ConfigurationManager configurationManager) {
 		if (config == null)
 			throw new NullPointerException("properties == null!");
@@ -78,22 +78,22 @@ public class Client implements Shutdownable {
 			throw new NullPointerException("configurationManager == null!");
 		if (transporter == null)
 				throw new NullPointerException("transporter == null!");
-		if (actionFactory == null)
-			throw new NullPointerException("actionFactory == null!");
+		if (actionManager == null)
+			throw new NullPointerException("actionManager == null!");
 
 		this.configurationManager = configurationManager;
 		this.transporter = transporter;
-		this.actionFactory = actionFactory;
+		this.actionManager = actionManager;
 		config = new UnmodifiableProperties(config);
 		configurationManager.init(this, config);
 		transporter.init(this, config);
-		actionFactory.init(this, config);
+		actionManager.init(this, config);
 		configurationManager.register(TRANSPORTER_PARAM_NAME,
 				"传输策略", "暂未实现传输策略动态切换，修改后不会生效!",
 				HttpURLConnectionTransporter.class.getName(), ServiceUtils.getServices(Transporter.class.getName()));
 		configurationManager.register(ACTION_MANAGER_PARAM_NAME,
 				"Action管理器", "暂未实现Action管理器动态切换，修改后不会生效!",
-				ActionFactory.class.getName(), ServiceUtils.getServices(ActionFactory.class.getName()));
+				ActionManager.class.getName(), ServiceUtils.getServices(ActionManager.class.getName()));
 		configurationManager.register(CONFIGURATION_MANAGER_PARAM_NAME,
 				"配置管理器", "暂未实现配置管理器动态切换，修改后不会生效!",
 				ConfigurationManager.class.getName(), ServiceUtils.getServices(ConfigurationManager.class.getName()));
@@ -115,8 +115,8 @@ public class Client implements Shutdownable {
 		return transporter;
 	}
 
-	public ActionFactory getActionFactory() {
-		return actionFactory;
+	public ActionManager getActionManager() {
+		return actionManager;
 	}
 
 	public void shutdown() {
@@ -124,7 +124,7 @@ public class Client implements Shutdownable {
 			transporter.shutdown();
 		} finally {
 			try {
-				actionFactory.shutdown();
+				actionManager.shutdown();
 			} finally {
 				configurationManager.shutdown();
 			}
@@ -144,10 +144,10 @@ public class Client implements Shutdownable {
 			this.getTransporter().addTransportationListener(
 					(TransportationListener) listener);
 		if (listener instanceof ExecutionListener)
-			this.getActionFactory().addExecutionListener(
+			this.getActionManager().addExecutionListener(
 					(ExecutionListener) listener);
 		if (listener instanceof ExceptionListener)
-			this.getActionFactory().addExceptionListener(
+			this.getActionManager().addExceptionListener(
 					(ExceptionListener) listener);
 		if (listener instanceof ConfigurationListener)
 			this.getConfigurationManager()
@@ -167,10 +167,10 @@ public class Client implements Shutdownable {
 					.removeTransportationListener(
 							(TransportationListener) listener);
 		if (listener instanceof ExecutionListener)
-			this.getActionFactory().removeExecutionListener(
+			this.getActionManager().removeExecutionListener(
 					(ExecutionListener) listener);
 		if (listener instanceof ExceptionListener)
-			this.getActionFactory().removeExceptionListener(
+			this.getActionManager().removeExceptionListener(
 					(ExceptionListener) listener);
 		if (listener instanceof ConfigurationListener)
 			this.getConfigurationManager()
