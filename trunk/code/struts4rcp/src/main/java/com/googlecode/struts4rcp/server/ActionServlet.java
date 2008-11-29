@@ -257,7 +257,7 @@ public class ActionServlet extends HttpServlet {
 	/**
 	 * ActionProvider的配置参数名
 	 */
-	protected static final String ACTION_FACTORY_PARAM_NAME = "actionProvider";
+	protected static final String ACTION_PROVIDER_PARAM_NAME = "actionProvider";
 
 	/**
 	 * 加载Action实例化工厂，子类可通过覆写该方法，拦截加载方式
@@ -266,7 +266,7 @@ public class ActionServlet extends HttpServlet {
 	 */
 	protected ActionProvider getActionProvider() throws Exception {
 		// 加载Action工厂
-		String actionProviderClassName = super.getInitParameter(ACTION_FACTORY_PARAM_NAME);
+		String actionProviderClassName = super.getInitParameter(ACTION_PROVIDER_PARAM_NAME);
 		if (actionProviderClassName != null && actionProviderClassName.trim().length() > 0) {
 			try {
 				Class<?> actionProviderClass = ClassUtils.forName(actionProviderClassName.trim());
@@ -285,7 +285,7 @@ public class ActionServlet extends HttpServlet {
 	/**
 	 * ActionReceiver的配置参数名
 	 */
-	protected static final String ACTION_RESOLVER_PARAM_NAME = "actionReceiver";
+	protected static final String ACTION_RECEIVER_PARAM_NAME = "actionReceiver";
 
 	/**
 	 * 加载Action接收决策器，子类可通过覆写该方法，拦截加载方式
@@ -294,7 +294,7 @@ public class ActionServlet extends HttpServlet {
 	 */
 	protected ActionReceiver getActionReceiver() throws Exception {
 		// 加载模型转换器
-		String actionReceiverClassName = super.getInitParameter(ACTION_RESOLVER_PARAM_NAME);
+		String actionReceiverClassName = super.getInitParameter(ACTION_RECEIVER_PARAM_NAME);
 		if (actionReceiverClassName != null && actionReceiverClassName.trim().length() > 0) {
 			try {
 				Class<?> actionReceiverClass = ClassUtils.forName(actionReceiverClassName.trim());
