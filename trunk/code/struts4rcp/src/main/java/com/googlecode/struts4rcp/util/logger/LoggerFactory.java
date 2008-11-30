@@ -22,7 +22,7 @@ public class LoggerFactory {
 					try {
 						LoggerProvider loggerProvider = loggerProviderClass.newInstance();
 						Logger logger = loggerProvider.getLogger(LoggerFactory.class.getName());
-						logger.info("Using LoggerProvider:" + CommonsLoggerProvider.class.getName());
+						logger.info("Using LoggerProvider:" + loggerProvider.getClass().getName());
 						return loggerProvider;
 					} catch (Throwable e) {
 						// ignore
