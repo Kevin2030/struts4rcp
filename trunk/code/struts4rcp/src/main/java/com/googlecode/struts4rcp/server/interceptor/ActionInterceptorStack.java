@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.googlecode.struts4rcp.ActionInterceptor;
+import com.googlecode.struts4rcp.server.ActionInterceptor;
 
 /**
  * Action拦截器栈，用于排序拦截器。

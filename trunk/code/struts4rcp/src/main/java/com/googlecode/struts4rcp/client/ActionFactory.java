@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.Properties;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.ActionFactory;
-import com.googlecode.struts4rcp.ActionInterceptor;
 import com.googlecode.struts4rcp.client.event.ExceptionEvent;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
 import com.googlecode.struts4rcp.client.event.ExceptionPublisher;
@@ -23,7 +21,7 @@ import com.googlecode.struts4rcp.util.logger.LoggerFactory;
  * Action代理供给策略接口
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ActionManager implements ActionFactory, ClientElement {
+public class ActionFactory implements ClientElement {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -41,32 +39,6 @@ public class ActionManager implements ActionFactory, ClientElement {
 		if (this.client != null)
 			throw new IllegalStateException("ActionProvider already initialized!");
 		this.client = client;
-	}
-
-	private ActionInterceptorChain actionInterceptorChain = null;
-
-	public void addActionInterceptor(ActionInterceptor actionInterceptor) {
-		ActionInterceptorChain next = new ActionInterceptorChain(actionInterceptor);
-		if (actionInterceptorChain == null) {
-			actionInterceptorChain = next;
-		} else {
-			actionInterceptorChain.setNext(next);
-		}
-	}
-
-	public void removeActionInterceptor(ActionInterceptor actionInterceptor) {
-		if (actionInterceptorChain == null || actionInterceptor == null)
-			return;
-		if (actionInterceptorChain.getActionInterceptor() == actionInterceptor)
-			actionInterceptorChain = actionInterceptorChain.getNext();
-		ActionInterceptorChain curr = actionInterceptorChain.getNext();
-		while (curr != null) {
-			if (curr.getActionInterceptor() == actionInterceptor) {
-				curr.setNext(curr.getNext());
-				break;
-			}
-			curr = curr.getNext();
-		}
 	}
 
 	private Collection<Execution> foreExecutions = new HashSet<Execution>();
@@ -393,13 +365,13 @@ public class ActionManager implements ActionFactory, ClientElement {
 		@SuppressWarnings("unchecked")
 		public R execute(final M model) throws Exception {
 			final Execution execution = new Execution(actionName, model, back, backable, abortable);
-			ActionManager.this.addExecution(execution);
+			ActionFactory.this.addExecution(execution);
 			try {
 				Serializable result = transporter.transport(execution);
 				assertResult(result);
 				return (R)result;
 			} finally {
-				ActionManager.this.removeExecution(execution);
+				ActionFactory.this.removeExecution(execution);
 			}
 		}
 	}
@@ -437,114 +409,13 @@ public class ActionManager implements ActionFactory, ClientElement {
 								throw e;
 						}
 					} catch (Throwable e) {
-						ActionManager.this.publishException(e, back);
+						ActionFactory.this.publishException(e, back);
 						logger.error(e.getMessage(), e);
 					}
 				}
 			});
 			return null;
 		}
-	}
-
-	/**
-	 * Action 拦截代理
-	 * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
-	 */
-	protected final class InterceptActionProxy<M extends Serializable, R extends Serializable> implements Action<M, R> {
-
-		private final Action<M, R> action;
-
-		public InterceptActionProxy(Action<M, R> action) {
-			this.action = action;
-		}
-
-		@SuppressWarnings("unchecked")
-		public R execute(M model) throws Exception {
-			final ActionInterceptorChain chain = actionInterceptorChain;
-			if (chain != null)
-				return (R)actionInterceptorChain.intercept((Action) action, model);
-			return action.execute(model);
-		}
-
-	}
-
-	/**
-	 * 拦截器链
-	 * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
-	 */
-	protected static final class ActionInterceptorChain implements ActionInterceptor {
-
-		// 当前拦截器
-		private final ActionInterceptor actionInterceptor;
-
-		/**
-		 * 构造拦截器链
-		 * @param actionInterceptor 当前拦截器
-		 */
-		ActionInterceptorChain(ActionInterceptor actionInterceptor) {
-			if (actionInterceptor == null)
-				throw new NullPointerException("actionInterceptor == null");
-			this.actionInterceptor = actionInterceptor;
-		}
-
-		ActionInterceptor getActionInterceptor() {
-			return actionInterceptor;
-		}
-
-		// 下一拦截器
-		private ActionInterceptorChain next;
-
-		/**
-		 * 设置下载拦截器链节点
-		 * @param next 下一拦截器
-		 */
-		void setNext(ActionInterceptorChain next) {
-			this.next = next;
-		}
-
-		ActionInterceptorChain getNext() {
-			return next;
-		}
-
-		void clear() {
-			if (next != null) {
-				next.clear();
-				next = null;
-			}
-		}
-
-		public Serializable intercept(Action<Serializable, Serializable> action, Serializable model) throws Exception {
-			if (next == null)
-				return actionInterceptor.intercept(action, model); // 如果没有下一拦载器，传入实际Action实例
-			return actionInterceptor.intercept(new ActionDelegate(next, action), model); // 如果有下一拦载器，则代理下一拦截器
-		}
-
-	}
-
-
-	/**
-	 * Action拦截委托
-	 * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
-	 */
-	protected static final class ActionDelegate implements Action<Serializable, Serializable> {
-
-		private final ActionInterceptor actionInterceptor;
-
-		private final Action<Serializable, Serializable> action;
-
-		ActionDelegate(ActionInterceptor actionInterceptor, Action<Serializable, Serializable> action) {
-			if (action == null)
-				throw new NullPointerException("action == null!");
-			this.actionInterceptor = actionInterceptor;
-			this.action = action;
-		}
-
-		public Serializable execute(Serializable model) throws Exception {
-			if (actionInterceptor != null)
-				return actionInterceptor.intercept(action, model); // 如果有拦截器，则执行拦截器
-			return action.execute(model); // 否则，直接执行Action实例
-		}
-
 	}
 
 }

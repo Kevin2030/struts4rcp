@@ -1,6 +1,8 @@
-package com.googlecode.struts4rcp;
+package com.googlecode.struts4rcp.server;
 
 import java.io.Serializable;
+
+import com.googlecode.struts4rcp.Action;
 
 /**
  * Action拦截器接口
