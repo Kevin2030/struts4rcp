@@ -10,7 +10,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.ActionInterceptor;
+import com.googlecode.struts4rcp.server.ActionInterceptor;
 import com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack;
 import com.googlecode.struts4rcp.util.ClassUtils;
 

@@ -3,8 +3,8 @@ package com.googlecode.struts4rcp.server.interceptor;
 import java.io.Serializable;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.ActionInterceptor;
 import com.googlecode.struts4rcp.server.ActionContext;
+import com.googlecode.struts4rcp.server.ActionInterceptor;
 import com.googlecode.struts4rcp.server.action.ValidationAction;
 import com.googlecode.struts4rcp.util.validator.Validator;
 

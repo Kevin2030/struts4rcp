@@ -8,7 +8,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.ActionInterceptor;
+import com.googlecode.struts4rcp.server.ActionInterceptor;
 import com.googlecode.struts4rcp.util.ClassUtils;
 
 /**
