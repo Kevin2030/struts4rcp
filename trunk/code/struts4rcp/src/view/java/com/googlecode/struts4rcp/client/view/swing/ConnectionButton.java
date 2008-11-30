@@ -94,6 +94,8 @@ public class ConnectionButton extends JButton {
 	}
 
 	public ConnectionButton(Frame frame, Client client) {
+		if (client == null)
+			throw new NullPointerException("Client == null!");
 		// 初始化图片
 		this.connectedIcon = Images.getIcon("connected.gif");
 		this.disconnectedIcon = Images.getIcon("disconnected.gif");

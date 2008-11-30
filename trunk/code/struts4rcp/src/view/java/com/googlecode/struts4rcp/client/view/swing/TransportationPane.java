@@ -68,6 +68,8 @@ public class TransportationPane extends JPanel {
 	private final Client client;
 
 	public TransportationPane(final Client client) {
+		if (client == null)
+			throw new NullPointerException("Client == null!");
 		this.client = client;
 		this.setLayout(new BorderLayout());
 

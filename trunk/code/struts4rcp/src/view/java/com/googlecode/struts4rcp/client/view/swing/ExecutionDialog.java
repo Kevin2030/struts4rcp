@@ -47,6 +47,8 @@ public class ExecutionDialog extends JDialog {
 
 	public ExecutionDialog(final Frame owner, final Client client) {
 		super(owner, true);
+		if (client == null)
+			throw new NullPointerException("Client == null!");
 		this.client = client;
 		this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		this.setTitle("正在传输");

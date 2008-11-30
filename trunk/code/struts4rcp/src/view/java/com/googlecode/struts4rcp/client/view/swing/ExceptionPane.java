@@ -46,6 +46,8 @@ public class ExceptionPane extends JPanel {
 	private final Client client;
 
 	public ExceptionPane(Client client) {
+		if (client == null)
+			throw new NullPointerException("Client == null!");
 		this.client = client;
 		this.setLayout(new BorderLayout());
 

@@ -22,6 +22,8 @@ public class ControlDialog extends JDialog {
 
 	public ControlDialog(Frame owner, Client client) {
 		super(owner, true);
+		if (client == null)
+			throw new NullPointerException("Client == null!");
 		transportationPane = new TransportationPane(client);
 		exceptionPane = new ExceptionPane(client);
 		configurationPane = new ConfigurationPane(client);
