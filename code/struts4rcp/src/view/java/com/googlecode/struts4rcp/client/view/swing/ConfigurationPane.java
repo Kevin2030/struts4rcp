@@ -62,6 +62,8 @@ public class ConfigurationPane extends JPanel {
 	private final Client client;
 
 	public ConfigurationPane(final Client client) {
+		if (client == null)
+			throw new NullPointerException("Client == null!");
 		this.client = client;
 		this.setLayout(new BorderLayout());
 
