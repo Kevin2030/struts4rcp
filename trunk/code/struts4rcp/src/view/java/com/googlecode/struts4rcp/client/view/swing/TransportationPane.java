@@ -23,6 +23,9 @@ import javax.swing.event.ListSelectionListener;
 
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.Execution;
+import com.googlecode.struts4rcp.client.event.ExecutionAdapter;
+import com.googlecode.struts4rcp.client.event.ExecutionEvent;
+import com.googlecode.struts4rcp.client.event.ExecutionListener;
 import com.googlecode.struts4rcp.client.event.TransportationAdapter;
 import com.googlecode.struts4rcp.client.event.TransportationEvent;
 import com.googlecode.struts4rcp.client.event.TransportationListener;
@@ -75,8 +78,8 @@ public class TransportationPane extends JPanel {
 		statusBar.setLayout(new BorderLayout());
 		this.add(BorderLayout.SOUTH, statusBar);
 		JPanel descPane = new JPanel();
-		descPane.add(new JLabel("可中止", enableIcon, JLabel.LEFT));
-		descPane.add(new JLabel("不可中止", disableIcon, JLabel.LEFT));
+		descPane.add(new JLabel("传输中", enableIcon, JLabel.LEFT));
+		descPane.add(new JLabel("已挂起", disableIcon, JLabel.LEFT));
 		statusBar.add(BorderLayout.EAST, descPane);
 
 		final JLabel timeLabel = new JLabel();
@@ -151,9 +154,9 @@ public class TransportationPane extends JPanel {
 				}
 			}
 		});
+		executionListener = new ExecutionDelegate(new ExecutionAdapter() {
 
-		transportationListener = new TransportationDelegate(new TransportationAdapter() {
-			public void onTransporting(final TransportationEvent event) {
+			public void onExecuting(ExecutionEvent event) {
 				Execution execution = event.getExecution();
 				if (! execution.isTransported()) {
 					synchronized (transportationModel) {
@@ -162,13 +165,27 @@ public class TransportationPane extends JPanel {
 					}
 				}
 			}
-			public void onTransported(final TransportationEvent event) {
+
+			public void onBackExecuting(ExecutionEvent event) {
+				onExecuting(event);
+			}
+
+			public void onExecuted(ExecutionEvent event) {
 				Execution execution = event.getExecution();
 				synchronized (transportationModel) {
 					transportationModel.removeElement(execution);
 				}
 			}
+
 		});
+		transportationListener = new TransportationDelegate(new TransportationAdapter() {
+			public void onTransporting(final TransportationEvent event) {
+				synchronized (transportationModel) {
+					transportationList.repaint();
+				}
+			}
+		});
+		client.addListener(executionListener);
 		client.addListener(transportationListener);
 	}
 
@@ -184,9 +201,12 @@ public class TransportationPane extends JPanel {
 		}
 	}
 
+	private final ExecutionListener executionListener;
+
 	private final TransportationListener transportationListener;
 
 	public void dispose() {
+		client.removeListener(executionListener);
 		client.removeListener(transportationListener);
 	}
 
@@ -204,7 +224,7 @@ public class TransportationPane extends JPanel {
 				int index, boolean isSelected, boolean cellHasFocus) {
 			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 			Execution execution = (Execution)value;
-			if (execution.isAbortable())
+			if (execution.isTransporting())
 				this.setIcon(enableIcon);
 			else
 				this.setIcon(disableIcon);

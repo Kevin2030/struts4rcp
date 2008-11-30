@@ -145,6 +145,21 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 	 */
 	protected int connectionCheckInterval = DEFAULT_CONNECTION_CHECK_INTERVAL;
 
+	/**
+	 * 最大连接数配置参数名
+	 */
+	public final static String MAX_CONNECTION_SIZE_PARAM_NAME = "max.connection.size";
+
+	/**
+	 * 缺省最大连接数
+	 */
+	protected final static int DEFAULT_MAX_CONNECTION_SIZE = 20;
+
+	/**
+	 * 最大连接数
+	 */
+	protected int maxConnectionSize = DEFAULT_MAX_CONNECTION_SIZE;
+
 	// HTTP协议前缀
 	private final static String HTTP_PROTOCAL = "http://";
 
@@ -294,6 +309,13 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 
 	protected void addExecution(Execution execution, Abortable abortor) {
 		synchronized (executions) {
+			if (executions.size() >= maxConnectionSize) {
+				try {
+					executions.wait();
+				} catch (InterruptedException e) {
+					// ignore
+				}
+			}
 			executions.add(execution);
 		}
 		execution.transporting(abortor);
@@ -303,6 +325,7 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 	protected void removeExecution(Execution execution, Serializable result) {
 		synchronized (executions) {
 			executions.remove(execution);
+			executions.notify();
 		}
 		execution.transported(result);
 		transportationPublisher.publishEvent(new TransportationEvent(AbstractHttpTransporter.this, execution));
