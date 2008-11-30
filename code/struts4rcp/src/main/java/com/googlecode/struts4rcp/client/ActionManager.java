@@ -345,7 +345,7 @@ public class ActionManager implements ActionFactory, ClientElement {
 	 */
 	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(String actionName,
 			ActionCallback<R> actionCallback, boolean abortable) {
-		Action<M, R> action = getAction(actionName, false, abortable);
+		Action<M, R> action = getBackAction(actionName, abortable);
 		return new AsyncActionProxy<M, R>(action, actionCallback, true);
 	}
 
