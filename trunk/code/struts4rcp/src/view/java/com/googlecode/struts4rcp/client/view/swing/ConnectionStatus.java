@@ -29,7 +29,7 @@ import com.googlecode.struts4rcp.client.event.ConnectionEvent;
  * @see com.googlecode.struts4rcp.client.view.swing.TransportationPane
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ConnectionButton extends JButton {
+public class ConnectionStatus extends JButton {
 
 	private static final long serialVersionUID = 1L;
 
@@ -80,20 +80,20 @@ public class ConnectionButton extends JButton {
 	protected void refreshStatus() {
 		if (connected) {
 			if (transporting) {
-				ConnectionButton.this.setIcon(ConnectionButton.this.transportingIcon);
-				ConnectionButton.this.setToolTipText("Transporting");
+				ConnectionStatus.this.setIcon(ConnectionStatus.this.transportingIcon);
+				ConnectionStatus.this.setToolTipText("Transporting");
 			} else {
-				ConnectionButton.this.setIcon(ConnectionButton.this.connectedIcon);
-				ConnectionButton.this.setToolTipText("Online");
+				ConnectionStatus.this.setIcon(ConnectionStatus.this.connectedIcon);
+				ConnectionStatus.this.setToolTipText("Online");
 			}
 		} else {
-			ConnectionButton.this.setIcon(ConnectionButton.this.disconnectedIcon);
-			ConnectionButton.this.setToolTipText("Offline");
+			ConnectionStatus.this.setIcon(ConnectionStatus.this.disconnectedIcon);
+			ConnectionStatus.this.setToolTipText("Offline");
 
 		}
 	}
 
-	public ConnectionButton(Frame frame, Client client) {
+	public ConnectionStatus(Frame frame, Client client) {
 		if (client == null)
 			throw new NullPointerException("Client == null!");
 		// 初始化图片
