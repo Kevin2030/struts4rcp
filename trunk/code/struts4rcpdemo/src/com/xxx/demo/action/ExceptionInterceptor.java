@@ -3,7 +3,7 @@ package com.xxx.demo.action;
 import java.io.Serializable;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.server.ActionInterceptor;
+import com.googlecode.struts4rcp.ActionInterceptor;
 
 public class ExceptionInterceptor implements ActionInterceptor {
 
