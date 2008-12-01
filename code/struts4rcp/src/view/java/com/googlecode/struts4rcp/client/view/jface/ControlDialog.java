@@ -51,7 +51,6 @@ public class ControlDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		// set the dialog shell point
 		final Display display = Display.getCurrent();
 		Rectangle displayBounds = display.getClientArea();
 		Rectangle shellBounds = newShell.getBounds();
@@ -141,7 +140,6 @@ public class ControlDialog extends Dialog {
 				appendText(ExceptionUtils.getDetailMessage(event.getException()));
 			}
 		});
-		appendText("aaaaaaaaaa");
 		client.addListener(exceptionListener);
 		return exceptionPane;
 	}
