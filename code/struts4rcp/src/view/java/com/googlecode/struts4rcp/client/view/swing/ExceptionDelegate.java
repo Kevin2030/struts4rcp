@@ -1,7 +1,5 @@
 package com.googlecode.struts4rcp.client.view.swing;
 
-import java.awt.EventQueue;
-
 import com.googlecode.struts4rcp.client.event.ExceptionEvent;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
 
@@ -29,13 +27,13 @@ public class ExceptionDelegate implements ExceptionListener {
 
 	public void onCatched(final ExceptionEvent event) {
 		try {
-			if (EventQueue.isDispatchThread()) {
+			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
 					listener.onCatched(event);
 				}
 			} else {
 				if (runOnNonUI) {
-					EventQueue.invokeAndWait(new Runnable() { // 在UI线程内执行
+					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onCatched(event);
 						}
@@ -49,13 +47,13 @@ public class ExceptionDelegate implements ExceptionListener {
 
 	public void onBackCatched(final ExceptionEvent event) {
 		try {
-			if (EventQueue.isDispatchThread()) {
+			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
 					listener.onBackCatched(event);
 				}
 			} else {
 				if (runOnNonUI) {
-					EventQueue.invokeAndWait(new Runnable() { // 在UI线程内执行
+					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onBackCatched(event);
 						}

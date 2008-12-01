@@ -1,7 +1,5 @@
 package com.googlecode.struts4rcp.client.view.swing;
 
-import java.awt.EventQueue;
-
 import com.googlecode.struts4rcp.client.event.ExecutionEvent;
 import com.googlecode.struts4rcp.client.event.ExecutionListener;
 
@@ -29,13 +27,13 @@ public class ExecutionDelegate implements ExecutionListener {
 
 	public void onExecuting(final ExecutionEvent event) {
 		try {
-			if (EventQueue.isDispatchThread()) {
+			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
 					listener.onExecuting(event);
 				}
 			} else {
 				if (runOnNonUI) {
-					EventQueue.invokeAndWait(new Runnable() { // 在UI线程内执行
+					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onExecuting(event);
 						}
@@ -49,13 +47,13 @@ public class ExecutionDelegate implements ExecutionListener {
 
 	public void onBackExecuting(final ExecutionEvent event) {
 		try {
-			if (EventQueue.isDispatchThread()) {
+			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
 					listener.onBackExecuting(event);
 				}
 			} else {
 				if (runOnNonUI) {
-					EventQueue.invokeAndWait(new Runnable() { // 在UI线程内执行
+					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onBackExecuting(event);
 						}
@@ -69,13 +67,13 @@ public class ExecutionDelegate implements ExecutionListener {
 
 	public void onExecuted(final ExecutionEvent event) {
 		try {
-			if (EventQueue.isDispatchThread()) {
+			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
 					listener.onExecuted(event);
 				}
 			} else {
 				if (runOnNonUI) {
-					EventQueue.invokeAndWait(new Runnable() { // 在UI线程内执行
+					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onExecuted(event);
 						}

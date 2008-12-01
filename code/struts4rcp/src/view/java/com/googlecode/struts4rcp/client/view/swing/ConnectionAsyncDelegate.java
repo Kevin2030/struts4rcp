@@ -1,7 +1,5 @@
 package com.googlecode.struts4rcp.client.view.swing;
 
-import java.awt.EventQueue;
-
 import com.googlecode.struts4rcp.client.event.ConnectionEvent;
 import com.googlecode.struts4rcp.client.event.ConnectionListener;
 
@@ -29,13 +27,13 @@ public class ConnectionAsyncDelegate implements ConnectionListener {
 
 	public void onConnected(final ConnectionEvent event) {
 		try {
-			if (EventQueue.isDispatchThread()) {
+			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
 					listener.onConnected(event);
 				}
 			} else {
 				if (runOnNonUI) {
-					EventQueue.invokeLater(new Runnable() { // 在UI线程内执行
+					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onConnected(event);
 						}
@@ -49,13 +47,13 @@ public class ConnectionAsyncDelegate implements ConnectionListener {
 
 	public void onDisconnected(final ConnectionEvent event) {
 		try {
-			if (EventQueue.isDispatchThread()) {
+			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
 					listener.onDisconnected(event);
 				}
 			} else {
 				if (runOnNonUI) {
-					EventQueue.invokeLater(new Runnable() { // 在UI线程内执行
+					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onDisconnected(event);
 						}

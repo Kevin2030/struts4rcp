@@ -1,7 +1,5 @@
 package com.googlecode.struts4rcp.client.view.swing;
 
-import java.awt.EventQueue;
-
 import com.googlecode.struts4rcp.client.event.TransportationEvent;
 import com.googlecode.struts4rcp.client.event.TransportationListener;
 
@@ -29,13 +27,13 @@ public class TransportationDelegate implements TransportationListener {
 
 	public void onTransporting(final TransportationEvent event) {
 		try {
-			if (EventQueue.isDispatchThread()) {
+			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
 					listener.onTransporting(event);
 				}
 			} else {
 				if (runOnNonUI) {
-					EventQueue.invokeAndWait(new Runnable() { // 在UI线程内执行
+					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onTransporting(event);
 						}
@@ -49,13 +47,13 @@ public class TransportationDelegate implements TransportationListener {
 
 	public void onTransported(final TransportationEvent event) {
 		try {
-			if (EventQueue.isDispatchThread()) {
+			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
 					listener.onTransported(event);
 				}
 			} else {
 				if (runOnNonUI) {
-					EventQueue.invokeAndWait(new Runnable() { // 在UI线程内执行
+					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onTransported(event);
 						}

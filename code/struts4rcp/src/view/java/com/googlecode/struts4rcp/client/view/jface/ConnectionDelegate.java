@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.client.view.swing;
+package com.googlecode.struts4rcp.client.view.jface;
 
 import com.googlecode.struts4rcp.client.event.ConnectionEvent;
 import com.googlecode.struts4rcp.client.event.ConnectionListener;
