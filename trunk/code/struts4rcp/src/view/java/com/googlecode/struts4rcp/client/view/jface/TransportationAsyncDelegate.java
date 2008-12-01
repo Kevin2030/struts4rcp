@@ -1,41 +1,41 @@
-package com.googlecode.struts4rcp.client.view.swing;
+package com.googlecode.struts4rcp.client.view.jface;
 
-import com.googlecode.struts4rcp.client.event.ExceptionEvent;
-import com.googlecode.struts4rcp.client.event.ExceptionListener;
+import com.googlecode.struts4rcp.client.event.TransportationEvent;
+import com.googlecode.struts4rcp.client.event.TransportationListener;
 
 /**
- * 连接事件监听器UI线程执行委托，如果UI线程非空闲，则等待。
+ * 传输事件监听器UI线程执行委托，如果UI线程非空闲，则异步延后处理。
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ExceptionAsyncDelegate implements ExceptionListener {
+public class TransportationAsyncDelegate implements TransportationListener {
 
-	private final ExceptionListener listener;
+	private final TransportationListener listener;
 
 	private final boolean runOnUI;
 
 	private final boolean runOnNonUI;
 
-	public ExceptionAsyncDelegate(ExceptionListener listener) {
+	public TransportationAsyncDelegate(TransportationListener listener) {
 		this(listener, true, true);
 	}
 
-	public ExceptionAsyncDelegate(ExceptionListener listener, boolean runOnUI, boolean runOnNonUI) {
+	public TransportationAsyncDelegate(TransportationListener listener, boolean runOnUI, boolean runOnNonUI) {
 		this.listener = listener;
 		this.runOnUI = runOnUI;
 		this.runOnNonUI = runOnNonUI;
 	}
 
-	public void onCatched(final ExceptionEvent event) {
+	public void onTransporting(final TransportationEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onCatched(event);
+					listener.onTransporting(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onCatched(event);
+							listener.onTransporting(event);
 						}
 					});
 				}
@@ -45,17 +45,17 @@ public class ExceptionAsyncDelegate implements ExceptionListener {
 		}
 	}
 
-	public void onBackCatched(final ExceptionEvent event) {
+	public void onTransported(final TransportationEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onBackCatched(event);
+					listener.onTransported(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onBackCatched(event);
+							listener.onTransported(event);
 						}
 					});
 				}

@@ -1,13 +1,13 @@
-package com.googlecode.struts4rcp.client.view.swing;
+package com.googlecode.struts4rcp.client.view.jface;
 
 import com.googlecode.struts4rcp.client.event.ConnectionEvent;
 import com.googlecode.struts4rcp.client.event.ConnectionListener;
 
 /**
- * 连接事件监听器UI线程执行委托，如果UI线程非空闲，则等待。
+ * 连接事件监听器UI线程执行委托，如果UI线程非空闲，则异步延后处理。
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ConnectionDelegate implements ConnectionListener {
+public class ConnectionAsyncDelegate implements ConnectionListener {
 
 	private final ConnectionListener listener;
 
@@ -15,11 +15,11 @@ public class ConnectionDelegate implements ConnectionListener {
 
 	private final boolean runOnNonUI;
 
-	public ConnectionDelegate(ConnectionListener listener) {
+	public ConnectionAsyncDelegate(ConnectionListener listener) {
 		this(listener, true, true);
 	}
 
-	public ConnectionDelegate(ConnectionListener listener, boolean runOnUI, boolean runOnNonUI) {
+	public ConnectionAsyncDelegate(ConnectionListener listener, boolean runOnUI, boolean runOnNonUI) {
 		this.listener = listener;
 		this.runOnUI = runOnUI;
 		this.runOnNonUI = runOnNonUI;
@@ -33,7 +33,7 @@ public class ConnectionDelegate implements ConnectionListener {
 				}
 			} else {
 				if (runOnNonUI) {
-					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
+					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onConnected(event);
 						}
@@ -53,7 +53,7 @@ public class ConnectionDelegate implements ConnectionListener {
 				}
 			} else {
 				if (runOnNonUI) {
-					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
+					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onDisconnected(event);
 						}

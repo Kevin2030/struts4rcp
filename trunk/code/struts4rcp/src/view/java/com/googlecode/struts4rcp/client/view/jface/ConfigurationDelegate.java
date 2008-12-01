@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.client.view.swing;
+package com.googlecode.struts4rcp.client.view.jface;
 
 import com.googlecode.struts4rcp.client.event.ConfigurationEvent;
 import com.googlecode.struts4rcp.client.event.ConfigurationListener;
@@ -7,7 +7,7 @@ import com.googlecode.struts4rcp.client.event.ConfigurationListener;
  * 连接事件监听器UI线程执行委托，如果UI线程非空闲，则等待。
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ConfigurationAsyncDelegate implements ConfigurationListener {
+public class ConfigurationDelegate implements ConfigurationListener {
 
 	private final ConfigurationListener listener;
 
@@ -15,11 +15,11 @@ public class ConfigurationAsyncDelegate implements ConfigurationListener {
 
 	private final boolean runOnNonUI;
 
-	public ConfigurationAsyncDelegate(ConfigurationListener listener) {
+	public ConfigurationDelegate(ConfigurationListener listener) {
 		this(listener, true, true);
 	}
 
-	public ConfigurationAsyncDelegate(ConfigurationListener listener, boolean runOnUI, boolean runOnNonUI) {
+	public ConfigurationDelegate(ConfigurationListener listener, boolean runOnUI, boolean runOnNonUI) {
 		this.listener = listener;
 		this.runOnUI = runOnUI;
 		this.runOnNonUI = runOnNonUI;
@@ -33,7 +33,7 @@ public class ConfigurationAsyncDelegate implements ConfigurationListener {
 				}
 			} else {
 				if (runOnNonUI) {
-					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
+					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onConfigurationChanged(event);
 						}
@@ -53,7 +53,7 @@ public class ConfigurationAsyncDelegate implements ConfigurationListener {
 				}
 			} else {
 				if (runOnNonUI) {
-					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
+					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onConfigurationAdded(event);
 						}
@@ -73,7 +73,7 @@ public class ConfigurationAsyncDelegate implements ConfigurationListener {
 				}
 			} else {
 				if (runOnNonUI) {
-					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
+					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
 							listener.onConfigurationRemoved(event);
 						}

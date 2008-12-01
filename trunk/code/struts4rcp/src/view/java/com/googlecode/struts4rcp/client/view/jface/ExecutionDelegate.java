@@ -1,41 +1,41 @@
-package com.googlecode.struts4rcp.client.view.swing;
+package com.googlecode.struts4rcp.client.view.jface;
 
-import com.googlecode.struts4rcp.client.event.ConfigurationEvent;
-import com.googlecode.struts4rcp.client.event.ConfigurationListener;
+import com.googlecode.struts4rcp.client.event.ExecutionEvent;
+import com.googlecode.struts4rcp.client.event.ExecutionListener;
 
 /**
- * 连接事件监听器UI线程执行委托，如果UI线程非空闲，则等待。
+ * 阻塞事件监听器UI线程执行委托，如果UI线程非空闲，则等待。
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ConfigurationDelegate implements ConfigurationListener {
+public class ExecutionDelegate implements ExecutionListener {
 
-	private final ConfigurationListener listener;
+	private final ExecutionListener listener;
 
 	private final boolean runOnUI;
 
 	private final boolean runOnNonUI;
 
-	public ConfigurationDelegate(ConfigurationListener listener) {
+	public ExecutionDelegate(ExecutionListener listener) {
 		this(listener, true, true);
 	}
 
-	public ConfigurationDelegate(ConfigurationListener listener, boolean runOnUI, boolean runOnNonUI) {
+	public ExecutionDelegate(ExecutionListener listener, boolean runOnUI, boolean runOnNonUI) {
 		this.listener = listener;
 		this.runOnUI = runOnUI;
 		this.runOnNonUI = runOnNonUI;
 	}
 
-	public void onConfigurationChanged(final ConfigurationEvent event) {
+	public void onExecuting(final ExecutionEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onConfigurationChanged(event);
+					listener.onExecuting(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onConfigurationChanged(event);
+							listener.onExecuting(event);
 						}
 					});
 				}
@@ -45,17 +45,17 @@ public class ConfigurationDelegate implements ConfigurationListener {
 		}
 	}
 
-	public void onConfigurationAdded(final ConfigurationEvent event) {
+	public void onBackExecuting(final ExecutionEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onConfigurationAdded(event);
+					listener.onBackExecuting(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onConfigurationAdded(event);
+							listener.onBackExecuting(event);
 						}
 					});
 				}
@@ -65,17 +65,17 @@ public class ConfigurationDelegate implements ConfigurationListener {
 		}
 	}
 
-	public void onConfigurationRemoved(final ConfigurationEvent event) {
+	public void onExecuted(final ExecutionEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onConfigurationRemoved(event);
+					listener.onExecuted(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onConfigurationRemoved(event);
+							listener.onExecuted(event);
 						}
 					});
 				}

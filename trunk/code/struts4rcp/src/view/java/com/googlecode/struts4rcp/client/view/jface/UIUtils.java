@@ -1,6 +1,6 @@
-package com.googlecode.struts4rcp.client.view.swing;
+package com.googlecode.struts4rcp.client.view.jface;
 
-import java.awt.EventQueue;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * UI工具类
@@ -11,11 +11,11 @@ public class UIUtils {
 	private UIUtils() {}
 
 	public static boolean isUIThread() {
-		return EventQueue.isDispatchThread();
+		return isUIThread(Thread.currentThread());
 	}
 
 	public static boolean isUIThread(Thread thread) {
-		return "java.awt.EventDispatchThread".equals(thread.getClass().getName());
+		return thread != Display.getDefault().getThread();
 	}
 
 	public static boolean isNonUIThread() {
@@ -27,17 +27,11 @@ public class UIUtils {
 	}
 
 	public static void syncExecute(Runnable runnable) {
-		try {
-			EventQueue.invokeAndWait(runnable);
-		} catch (RuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
+		Display.getDefault().syncExec(runnable);
 	}
 
 	public static void asyncExecute(Runnable runnable) {
-		EventQueue.invokeLater(runnable);
+		Display.getDefault().asyncExec(runnable);
 	}
 
 }
