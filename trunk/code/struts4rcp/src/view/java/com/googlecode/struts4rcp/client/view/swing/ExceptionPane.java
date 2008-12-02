@@ -73,6 +73,11 @@ public class ExceptionPane extends JPanel {
 				int i = fileChooser.showSaveDialog(ExceptionPane.this);
 				if (i == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
+					if (file.exists()) {
+						int ch = JOptionPane.showConfirmDialog(ExceptionPane.this, "文件已存在，是否覆盖?", "保存", JOptionPane.YES_NO_OPTION);
+						if (ch != JOptionPane.YES_OPTION)
+							return;
+					}
 					try {
 						FileWriter writer = null;
 						try {

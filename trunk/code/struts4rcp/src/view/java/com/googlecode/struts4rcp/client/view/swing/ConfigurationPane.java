@@ -102,6 +102,11 @@ public class ConfigurationPane extends JPanel {
 				int i = fileChooser.showSaveDialog(ConfigurationPane.this);
 				if (i == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
+					if (file.exists()) {
+						int ch = JOptionPane.showConfirmDialog(ConfigurationPane.this, "文件已存在，是否覆盖?", "保存", JOptionPane.YES_NO_OPTION);
+						if (ch != JOptionPane.YES_OPTION)
+							return;
+					}
 					try {
 						FileWriter writer = null;
 						try {
@@ -129,17 +134,17 @@ public class ConfigurationPane extends JPanel {
 		editButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (getConfigurationModelSize() == 0) {
-					JOptionPane.showMessageDialog(ConfigurationPane.this, "没有任何配置项!", "修改配置项", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(ConfigurationPane.this, "没有任何配置项!", "修改", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				final Configuration configuration = (Configuration)configurationList.getSelectedValue();
 				if (configuration == null) {
-					JOptionPane.showMessageDialog(ConfigurationPane.this, "请选择配置项!", "修改配置项", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(ConfigurationPane.this, "请选择配置项!", "修改", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				String desc = configuration.getDescription();
 				if (desc != null && desc.length() > 0) {
-					int ch = JOptionPane.showConfirmDialog(ConfigurationPane.this, desc + "\n请确认是否继续修改?", "修改配置项", JOptionPane.YES_NO_OPTION);
+					int ch = JOptionPane.showConfirmDialog(ConfigurationPane.this, desc + "\n是否继续修改?", "修改", JOptionPane.YES_NO_OPTION);
 					if (ch != JOptionPane.YES_OPTION)
 						return;
 				}
@@ -151,7 +156,7 @@ public class ConfigurationPane extends JPanel {
 					newValue = (String)JOptionPane.showInputDialog(ConfigurationPane.this, "请选择配置项\"" + configuration.getNameOrKey() + "\"的新值：", "选择", JOptionPane.INFORMATION_MESSAGE, Images.getIcon("edit.gif"), options.toArray(), configuration.getValueOrDefault());
 				if (newValue != null) {
 					client.getConfigurationManager().setValue(configuration.getKey(), newValue);
-					JOptionPane.showMessageDialog(ConfigurationPane.this, "修改配置项成功!", "修改配置项", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(ConfigurationPane.this, "修改配置项成功!", "修改", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
