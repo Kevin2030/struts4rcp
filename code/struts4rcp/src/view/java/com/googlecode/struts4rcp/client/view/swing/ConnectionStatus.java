@@ -6,13 +6,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.ListModel;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.event.ConnectionAdapter;
 import com.googlecode.struts4rcp.client.event.ConnectionEvent;
+import com.googlecode.struts4rcp.client.event.TransportationAdapter;
+import com.googlecode.struts4rcp.client.event.TransportationEvent;
 
 /**
  * 队列信息窗口显示按钮，点击该按钮将弹出Action队列信息管理窗口，可将此按钮添加到工具栏，状态栏上。
@@ -93,7 +92,7 @@ public class ConnectionStatus extends JButton {
 		}
 	}
 
-	public ConnectionStatus(Frame frame, Client client) {
+	public ConnectionStatus(Frame frame, final Client client) {
 		if (client == null)
 			throw new NullPointerException("Client == null!");
 		// 初始化图片
@@ -104,8 +103,6 @@ public class ConnectionStatus extends JButton {
 		controlDialog = new ControlDialog(frame, client);
 		executionDialog = new ExecutionDialog(frame, client);
 		exceptionDialog = new ExceptionDialog(frame, client);
-		// 初始化状态
-		refreshStatus();
 		// 按钮点击事件
 		this.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -125,16 +122,16 @@ public class ConnectionStatus extends JButton {
 				setConnected(false);
 			}
 		}));
-		final ListModel listModel = controlDialog.getTransportationPane().getTransportationList().getModel();
-		listModel.addListDataListener(new ListDataListener(){
-			public void contentsChanged(ListDataEvent e) {}
-			public void intervalAdded(ListDataEvent e) {
-				setTransporting(listModel.getSize() > 0);
+		client.addListener(new TransportationDelegate(new TransportationAdapter() {
+			public void onTransporting(final TransportationEvent event) {
+				setTransporting(client.getTransporter().isTransporting());
 			}
-			public void intervalRemoved(ListDataEvent e) {
-				setTransporting(listModel.getSize() > 0);
+			public void onTransported(TransportationEvent event) {
+				setTransporting(client.getTransporter().isTransporting());
 			}
-		});
+		}));
+		// 初始化状态
+		refreshStatus();
 	}
 
 }

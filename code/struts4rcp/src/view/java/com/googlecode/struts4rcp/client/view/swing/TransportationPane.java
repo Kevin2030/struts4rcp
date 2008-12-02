@@ -80,8 +80,8 @@ public class TransportationPane extends JPanel {
 		statusBar.setLayout(new BorderLayout());
 		this.add(BorderLayout.SOUTH, statusBar);
 		JPanel descPane = new JPanel();
-		descPane.add(new JLabel("传输中", enableIcon, JLabel.LEFT));
-		descPane.add(new JLabel("已挂起", disableIcon, JLabel.LEFT));
+		descPane.add(new JLabel("传输状态", enableIcon, JLabel.LEFT));
+		descPane.add(new JLabel("挂起状态", disableIcon, JLabel.LEFT));
 		statusBar.add(BorderLayout.EAST, descPane);
 
 		final JLabel timeLabel = new JLabel();
@@ -104,16 +104,16 @@ public class TransportationPane extends JPanel {
 		abortButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (getTransportationModelSize() == 0) {
-					JOptionPane.showMessageDialog(TransportationPane.this, "没有任何传输项!", "中止传输项", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(TransportationPane.this, "没有任何传输项!", "中止", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				final Execution execution = (Execution)transportationList.getSelectedValue();
 				if (execution == null) {
-					JOptionPane.showMessageDialog(TransportationPane.this, "请选择传输项!", "中止传输项", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(TransportationPane.this, "请选择传输项!", "中止", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				if (! execution.isAbortable()) {
-					JOptionPane.showMessageDialog(TransportationPane.this, "此传输项不允许中止!", "中止传输项", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(TransportationPane.this, "此传输项不允许中止!", "中止", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				ThreadUtils.execute(new Runnable(){
@@ -150,14 +150,13 @@ public class TransportationPane extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					refreshTransportationList();
-					JOptionPane.showMessageDialog(TransportationPane.this, "刷新传输列表成功!", "刷新传输列表", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(TransportationPane.this, "刷新传输列表成功!", "刷新", JOptionPane.INFORMATION_MESSAGE);
 				} catch (Throwable t) {
-					JOptionPane.showMessageDialog(TransportationPane.this, "刷新传输列表失败! 原因: " + t.getMessage(), "刷新传输列表", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(TransportationPane.this, "刷新传输列表失败! 原因: " + t.getMessage(), "刷新", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
 		executionListener = new ExecutionDelegate(new ExecutionAdapter() {
-
 			public void onExecuting(ExecutionEvent event) {
 				Execution execution = event.getExecution();
 				if (! execution.isTransported()) {
@@ -167,18 +166,15 @@ public class TransportationPane extends JPanel {
 					}
 				}
 			}
-
 			public void onBackExecuting(ExecutionEvent event) {
 				onExecuting(event);
 			}
-
 			public void onExecuted(ExecutionEvent event) {
 				Execution execution = event.getExecution();
 				synchronized (transportationModel) {
 					transportationModel.removeElement(execution);
 				}
 			}
-
 		});
 		transportationListener = new TransportationDelegate(new TransportationAdapter() {
 			public void onTransporting(final TransportationEvent event) {

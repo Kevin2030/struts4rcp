@@ -29,6 +29,7 @@ public abstract class Publisher<L extends Listener, E extends Event> {
 	public void addListener(L listener) {
 		if (listener == null)
 			throw new NullPointerException("Listener == null");
+		logger.debug("add listener: " + listener.getClass().getName());
 		synchronized (listeners) {
 			listeners.add(listener);
 		}
@@ -41,6 +42,7 @@ public abstract class Publisher<L extends Listener, E extends Event> {
 	public void removeListener(L listener) {
 		if (listener == null)
 			throw new NullPointerException("Listener == null");
+		logger.debug("remove listener: " + listener.getClass().getName());
 		synchronized (listeners) {
 			listeners.remove(listener);
 		}
@@ -62,11 +64,14 @@ public abstract class Publisher<L extends Listener, E extends Event> {
 	public void publishEvent(E event) {
 		if (event == null)
 			throw new NullPointerException("Event == null");
+		Collection<L> temp = new HashSet<L>();
 		synchronized (listeners) {
-			for (L listener: listeners) {
-				executeEvent(listener, event);
-			}
+			temp.addAll(listeners);
 		}
+		for (L listener : temp) {
+			executeEvent(listener, event);
+		}
+		temp.clear();
 	}
 
 	/**
@@ -87,25 +92,23 @@ public abstract class Publisher<L extends Listener, E extends Event> {
 	}
 
 	protected void executeEvent(final L listener, final E event) {
-		synchronized (listener) {
-			if (listener.isAsync()) {
-				ThreadUtils.execute(new Runnable() {
-					public void run() {
-						try {
-							doEvent(listener, event);
-						} catch (Throwable t) {
-							logger.debug(t.getMessage(), t);
-							// ignore
-						}
+		if (listener.isAsync()) {
+			ThreadUtils.execute(new Runnable() {
+				public void run() {
+					try {
+						doEvent(listener, event);
+					} catch (Throwable t) {
+						logger.debug(t.getMessage(), t);
+						// ignore
 					}
-				});
-			} else {
-				try {
-					doEvent(listener, event);
-				} catch (Throwable t) {
-					logger.debug(t.getMessage(), t);
-					// ignore
 				}
+			});
+		} else {
+			try {
+				doEvent(listener, event);
+			} catch (Throwable t) {
+				logger.debug(t.getMessage(), t);
+				// ignore
 			}
 		}
 	}
