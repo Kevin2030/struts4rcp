@@ -43,7 +43,7 @@ public class ExecutionDialog extends Dialog {
 		if (client == null)
 			throw new NullPointerException("Client == null!");
 		this.client = client;
-		this.shell = new Shell(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+		this.shell = new Shell(parent, SWT.TITLE | SWT.BORDER | SWT.PRIMARY_MODAL);
 		shell.setSize(450, 180);
 		shell.setText("传输");
 		shell.addShellListener(new ShellAdapter() {
@@ -96,7 +96,7 @@ public class ExecutionDialog extends Dialog {
 		});
 		
 		abortButton = new Button(shell, SWT.PUSH);
-		abortButton.setText("中止运行");
+		abortButton.setText("中止");
 		abortButton.setBounds(348, 110, 80, 24);
 		abortButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
