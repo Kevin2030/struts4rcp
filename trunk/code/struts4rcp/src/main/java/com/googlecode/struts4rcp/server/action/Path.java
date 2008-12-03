@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 请求路径标注
+ * Restful请求路径标注
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
 @Documented
@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 public @interface Path {
 
 	/**
-	 * 请求路径
+	 * Restful请求路径
 	 * @return 请求路径
 	 */
 	String value();
