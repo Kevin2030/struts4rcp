@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.server;
+package com.googlecode.struts4rcp.server.mapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,28 +7,25 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import com.googlecode.struts4rcp.server.ActionMapper;
+import com.googlecode.struts4rcp.server.ActionServletContext;
 import com.googlecode.struts4rcp.server.serializer.CommonTemplateSerializer;
 import com.googlecode.struts4rcp.server.serializer.JsonSerializer;
 import com.googlecode.struts4rcp.server.serializer.JspSerializer;
 import com.googlecode.struts4rcp.util.ClassUtils;
-import com.googlecode.struts4rcp.util.Shutdownable;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
 import com.googlecode.struts4rcp.util.serializer.JavaSerializer;
 import com.googlecode.struts4rcp.util.serializer.Serializer;
 
-/**
- * 收接方案决策器
- * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
- */
-public class ActionReceiver implements Shutdownable {
+public class SuffixActionMapper implements ActionMapper {
 
 	/**
 	 * 日志输出接口
 	 */
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public ActionReceiver() {
+	public SuffixActionMapper() {
 		init(ActionServletContext.getContext().getServletContext(), ActionServletContext.getContext().getServletConfig());
 	}
 
