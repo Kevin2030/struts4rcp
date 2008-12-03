@@ -31,9 +31,9 @@ public class ActionServletContext {
 					CONTEXT.actionProvider = null;
 				}
 			} finally {
-				if (CONTEXT.actionReceiver != null) {
-					CONTEXT.actionReceiver.shutdown();
-					CONTEXT.actionReceiver = null;
+				if (CONTEXT.actionMapper != null) {
+					CONTEXT.actionMapper.shutdown();
+					CONTEXT.actionMapper = null;
 				}
 			}
 			CONTEXT = null;
@@ -94,14 +94,14 @@ public class ActionServletContext {
 		return actionProvider;
 	}
 
-	private ActionReceiver actionReceiver;
+	private ActionMapper actionMapper;
 
-	public ActionReceiver getActionReceiver() {
-		return actionReceiver;
+	public ActionMapper getActionMapper() {
+		return actionMapper;
 	}
 
-	public void setActionReceiver(ActionReceiver actionReceiver) {
-		this.actionReceiver = actionReceiver;
+	public void setActionMapper(ActionMapper actionMapper) {
+		this.actionMapper = actionMapper;
 	}
 
 }

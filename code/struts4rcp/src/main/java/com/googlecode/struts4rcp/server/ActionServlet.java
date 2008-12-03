@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.struts4rcp.Action;
+import com.googlecode.struts4rcp.server.mapper.SuffixActionMapper;
 import com.googlecode.struts4rcp.server.provider.SpringActionProvider;
 import com.googlecode.struts4rcp.server.serializer.ServletSerializer;
 import com.googlecode.struts4rcp.util.BeanUtils;
@@ -84,10 +85,10 @@ public class ActionServlet extends HttpServlet {
 			actionInterceptor = reduceActionInterceptorChain(actionProvider.getActionInterceptors());
 
 			// 加载Action接收器
-			ActionReceiver actionReceiver = getActionReceiver();
-			if (actionReceiver == null) // 缺省使用ActionReceiver
-				actionReceiver = new ActionReceiver();
-			ActionServletContext.getContext().setActionReceiver(actionReceiver);
+			ActionMapper actionMapper = getActionMapper();
+			if (actionMapper == null) // 缺省使用ActionMapper
+				actionMapper = new SuffixActionMapper();
+			ActionServletContext.getContext().setActionMapper(actionMapper);
 		} catch (ServletException e) {
 			logger.error(e.getMessage(), e);
 			throw e;
@@ -147,7 +148,7 @@ public class ActionServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			Serializer serializer = ActionServletContext.getContext().getActionReceiver().getSerializer(request);
+			Serializer serializer = ActionServletContext.getContext().getActionMapper().getSerializer(request);
 			if (serializer == null) // 接收器不允许为空
 				throw new NullPointerException("Not found serializer by request: " + request.getRequestURI());
 			String contentType = serializer.getContentType();
@@ -159,7 +160,7 @@ public class ActionServlet extends HttpServlet {
 			}
 			response.setContentType(contentType);
 
-			String actionName = ActionServletContext.getContext().getActionReceiver().getActionName(request); // 获取Action名称
+			String actionName = ActionServletContext.getContext().getActionMapper().getActionName(request); // 获取Action名称
 			if (actionName == null) // action名称不允许为空
 				throw new NullPointerException("Can not resolve action name by request: " + request.getRequestURI());
 
@@ -276,25 +277,25 @@ public class ActionServlet extends HttpServlet {
 	}
 
 	/**
-	 * ActionReceiver的配置参数名
+	 * ActionMapper的配置参数名
 	 */
-	protected static final String ACTION_RECEIVER_PARAM_NAME = "actionReceiver";
+	protected static final String ACTION_MAPPER_PARAM_NAME = "actionMapper";
 
 	/**
 	 * 加载Action接收决策器，子类可通过覆写该方法，拦截加载方式
 	 * @return Action接收决策器
 	 * @throws Exception 异常均向上抛出，由框架统一处理
 	 */
-	protected ActionReceiver getActionReceiver() throws Exception {
+	protected ActionMapper getActionMapper() throws Exception {
 		// 加载模型转换器
-		String actionReceiverClassName = super.getInitParameter(ACTION_RECEIVER_PARAM_NAME);
-		if (actionReceiverClassName != null && actionReceiverClassName.trim().length() > 0) {
+		String actionMapperClassName = super.getInitParameter(ACTION_MAPPER_PARAM_NAME);
+		if (actionMapperClassName != null && actionMapperClassName.trim().length() > 0) {
 			try {
-				Class<?> actionReceiverClass = ClassUtils.forName(actionReceiverClassName.trim());
-				if (ActionReceiver.class.isAssignableFrom(actionReceiverClass)) {
-					return (ActionReceiver)actionReceiverClass.newInstance();
+				Class<?> actionMapperClass = ClassUtils.forName(actionMapperClassName.trim());
+				if (ActionMapper.class.isAssignableFrom(actionMapperClass)) {
+					return (ActionMapper)actionMapperClass.newInstance();
 				} else {
-					logger.error(actionReceiverClass.getName() + " unimplementet interface " + ActionReceiver.class.getName());
+					logger.error(actionMapperClass.getName() + " unimplementet interface " + ActionMapper.class.getName());
 				}
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
