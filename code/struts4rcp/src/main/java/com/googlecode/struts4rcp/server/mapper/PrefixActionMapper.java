@@ -2,6 +2,10 @@ package com.googlecode.struts4rcp.server.mapper;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 前缀Action映射器
+ * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
+ */
 public class PrefixActionMapper extends AbstractActionMapper {
 
 	/**
@@ -10,11 +14,16 @@ public class PrefixActionMapper extends AbstractActionMapper {
 	 * @return 序列化器名称
 	 */
 	protected String getSerializerName(HttpServletRequest request) {
-		String uri = request.getRequestURI();
-		int suffixIndex = uri.lastIndexOf('.');
-		if (suffixIndex < 0 || suffixIndex >= uri.length()) // 后缀不能为空
-			throw new NullPointerException("Action suffix is required!");
-		return uri.substring(suffixIndex + 1);
+		String serializerName = request.getRequestURI();
+		String contextPath = request.getContextPath();
+		if (contextPath != null && ! "/".equals(contextPath))
+			serializerName = serializerName.substring(contextPath.length());
+		if (serializerName.startsWith("/"))
+			serializerName = serializerName.substring(1);
+		int prefixIndex = serializerName.indexOf('/');
+		if (prefixIndex == -1) // 前缀不能为空
+			throw new NullPointerException("Action prefix is required!");
+		return serializerName.substring(0, prefixIndex);
 	}
 
 	/**
@@ -29,9 +38,9 @@ public class PrefixActionMapper extends AbstractActionMapper {
 			actionName = actionName.substring(contextPath.length());
 		if (actionName.startsWith("/"))
 			actionName = actionName.substring(1);
-		int suffixIndex = actionName.lastIndexOf('.');
-		if (suffixIndex > 0)
-			actionName = actionName.substring(0, suffixIndex);
+		int prefixIndex = actionName.indexOf('/');
+		if (prefixIndex != -1)
+			actionName = actionName.substring(prefixIndex + 1);
 		return actionName;
 	}
 
