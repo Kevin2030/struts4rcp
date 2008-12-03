@@ -47,8 +47,6 @@ public abstract class PageSerializer extends FormSerializer {
 	 * @return 页面路径(不包含后缀)
 	 */
 	public static String getPage(Action<Serializable, Serializable> action) {
-		if (action.getClass().isAnnotationPresent(Page.class))
-			return action.getClass().getAnnotation(Page.class).value();
 		try {
 			Method method = ClassUtils.getMethod(action.getClass(), "execute");
 			if (method.isAnnotationPresent(Page.class))
@@ -56,6 +54,8 @@ public abstract class PageSerializer extends FormSerializer {
 		} catch (NoSuchMethodException e) {
 			// ignore
 		}
+		if (action.getClass().isAnnotationPresent(Page.class))
+			return action.getClass().getAnnotation(Page.class).value();
 		return action.getClass().getName().replace('.', '/');
 	}
 
