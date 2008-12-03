@@ -66,7 +66,7 @@ public class ExceptionDialog extends JDialog {
 
 		final JScrollPane detailPane = new JScrollPane();
 		detailPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		final JTextArea detailText = new JTextArea("非常抱歉，传输出错，请联系管理员！");
+		final JTextArea detailText = new JTextArea();
 		detailText.setEditable(false);
 		detailText.setBackground(Color.WHITE);
 		detailPane.getViewport().setView(detailText);
@@ -93,7 +93,7 @@ public class ExceptionDialog extends JDialog {
 		exceptionListener = new ExceptionAdapter() { // 只在非UI线程执行
 			public void onBackCatched(ExceptionEvent event) {}
 			public void onCatched(ExceptionEvent event) {
-				if (! UIUtils.isUIThread(event.getThread())) {
+				if (UIUtils.isNonUIThread(event.getThread())) {
 					exceptionLabel.setText(event.getException().getMessage());
 					detailText.setText("[" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()) + "]\n" + ExceptionUtils.getDetailMessage(event.getException()));
 					if (! ExceptionDialog.this.isVisible()) {

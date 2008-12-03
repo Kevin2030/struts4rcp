@@ -6,8 +6,6 @@ import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -37,7 +35,7 @@ public class ExecutionDialog extends JDialog {
 
 	private final JButton abortButton;
 
-	private Execution execution; // execution全部在UI线程内使用，所以不需要同步
+	private Execution execution;
 
 	private final Client client;
 
@@ -54,37 +52,6 @@ public class ExecutionDialog extends JDialog {
 		this.setTitle("正在传输");
 		this.setSize(480, 200);
 		this.setResizable(false);
-		this.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				final Execution execution = ExecutionDialog.this.execution;
-				if (execution != null) {
-					if (execution.isBackable()) {
-						ThreadUtils.execute(new Runnable(){
-							public void run() {
-								try {
-									execution.back();
-									JOptionPane.showMessageDialog(ExecutionDialog.this, "传输项已转为后台运行!", "后台运行", JOptionPane.INFORMATION_MESSAGE);
-								} catch (Throwable t) {
-									JOptionPane.showMessageDialog(ExecutionDialog.this, "后台运行传输项失败! 原因: " + t.getMessage(), "后台运行", JOptionPane.WARNING_MESSAGE);
-								}
-							}
-						});
-					} else if (execution.isAbortable()) {
-						ThreadUtils.execute(new Runnable(){
-							public void run() {
-								try {
-									execution.abort();
-									JOptionPane.showMessageDialog(ExecutionDialog.this, "传输项已中止!", "中止", JOptionPane.INFORMATION_MESSAGE);
-								} catch (Throwable t) {
-									JOptionPane.showMessageDialog(ExecutionDialog.this, "中止传输项失败! 原因: " + t.getMessage(), "中止", JOptionPane.WARNING_MESSAGE);
-								}
-							}
-						});
-					}
-				}
-			}
-		});
 
 		this.getContentPane().setLayout(new BorderLayout());
 		JPanel mainPanel = new JPanel();
@@ -128,7 +95,6 @@ public class ExecutionDialog extends JDialog {
 						public void run() {
 							try {
 								execution.back();
-								JOptionPane.showMessageDialog(ExecutionDialog.this, "传输项已转为后台运行!", "后台运行", JOptionPane.INFORMATION_MESSAGE);
 							} catch (Throwable t) {
 								JOptionPane.showMessageDialog(ExecutionDialog.this, "后台运行传输项失败! 原因: " + t.getMessage(), "后台运行", JOptionPane.WARNING_MESSAGE);
 							}
@@ -148,7 +114,6 @@ public class ExecutionDialog extends JDialog {
 						public void run() {
 							try {
 								execution.abort();
-								JOptionPane.showMessageDialog(ExecutionDialog.this, "传输项已中止!", "中止", JOptionPane.INFORMATION_MESSAGE);
 							} catch (Throwable t) {
 								JOptionPane.showMessageDialog(ExecutionDialog.this, "中止传输项失败! 原因: " + t.getMessage(), "中止", JOptionPane.WARNING_MESSAGE);
 							}
@@ -160,7 +125,7 @@ public class ExecutionDialog extends JDialog {
 
 		executionListener = new ExecutionAdapter() { // 只在非UI线程执行
 			public void onExecuting(ExecutionEvent event) {
-				if (! UIUtils.isUIThread(event.getThread())) {
+				if (UIUtils.isNonUIThread(event.getThread())) {
 					showExecution(event.getExecution());
 				}
 			}
@@ -168,7 +133,7 @@ public class ExecutionDialog extends JDialog {
 				onExecuted(event);
 			}
 			public void onExecuted(ExecutionEvent event) {
-				if (! UIUtils.isUIThread(event.getThread())) {
+				if (UIUtils.isNonUIThread(event.getThread())) {
 					try {
 						if (client.getActionFactory().isForeExecuting()) {
 							Execution execution = client.getActionFactory().getForeExecutions().iterator().next();
