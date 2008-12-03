@@ -6,6 +6,7 @@ import com.googlecode.struts4rcp.server.ActionContext;
 
 /**
  * RESTful请求Action
+ * TODO 未实现RESTful风格的URL数据转换
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  * @param <M> RESTful请求数据模型类型
  */
