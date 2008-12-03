@@ -2,6 +2,10 @@ package com.googlecode.struts4rcp.server.mapper;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 后缀Action映射器
+ * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
+ */
 public class SuffixActionMapper extends AbstractActionMapper {
 
 	/**
@@ -12,7 +16,7 @@ public class SuffixActionMapper extends AbstractActionMapper {
 	protected String getSerializerName(HttpServletRequest request) {
 		String uri = request.getRequestURI();
 		int suffixIndex = uri.lastIndexOf('.');
-		if (suffixIndex < 0 || suffixIndex >= uri.length()) // 后缀不能为空
+		if (suffixIndex == -1) // 后缀不能为空
 			throw new NullPointerException("Action suffix is required!");
 		return uri.substring(suffixIndex + 1);
 	}
@@ -30,7 +34,7 @@ public class SuffixActionMapper extends AbstractActionMapper {
 		if (actionName.startsWith("/"))
 			actionName = actionName.substring(1);
 		int suffixIndex = actionName.lastIndexOf('.');
-		if (suffixIndex > 0)
+		if (suffixIndex != -1)
 			actionName = actionName.substring(0, suffixIndex);
 		return actionName;
 	}
