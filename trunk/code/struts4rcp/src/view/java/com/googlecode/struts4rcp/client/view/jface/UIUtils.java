@@ -15,7 +15,7 @@ public class UIUtils {
 	}
 
 	public static boolean isUIThread(Thread thread) {
-		return thread != Display.getDefault().getThread();
+		return thread == Display.getDefault().getThread();
 	}
 
 	public static boolean isNonUIThread() {
