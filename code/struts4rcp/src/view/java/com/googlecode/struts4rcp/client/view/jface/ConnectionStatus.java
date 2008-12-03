@@ -4,6 +4,7 @@ import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -12,6 +13,10 @@ import org.eclipse.swt.widgets.Label;
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.event.ConnectionAdapter;
 import com.googlecode.struts4rcp.client.event.ConnectionEvent;
+import com.googlecode.struts4rcp.client.event.ConnectionListener;
+import com.googlecode.struts4rcp.client.event.TransportationAdapter;
+import com.googlecode.struts4rcp.client.event.TransportationEvent;
+import com.googlecode.struts4rcp.client.event.TransportationListener;
 
 /**
  * 传输状态项，可将此状态项添加到工具栏，状态栏上。
@@ -41,30 +46,46 @@ public class ConnectionStatus extends ContributionItem {
 		this.transportationImage = Images.getImage("transporting.gif");
 	}
 
+	private Cursor handCursor = new Cursor(null, SWT.CURSOR_HAND);
+
 	private Label connectionButton;
+	
+	private ExecutionDialog executionDialog;
+	
+	private ExceptionDialog exceptionDialog;
+	
+	private ControlDialog controlDialog;
 
 	private final Image connectionImage;
 
 	private final Image disconnectionImage;
 
 	private final Image transportationImage;
+	
+	private ConnectionListener connectionListener;
+	
+	private TransportationListener transportationListener;
 
 	@Override
 	public void fill(Composite parent) {
 		try {
+			executionDialog = new ExecutionDialog(parent.getShell(), client);
+			exceptionDialog = new ExceptionDialog(parent.getShell(), client);
+			controlDialog = new ControlDialog(parent.getShell(), client);
 			connectionButton = new Label(parent, SWT.NONE);
+			connectionButton.setCursor(handCursor);
 			// 按钮点击事件
 			connectionButton.addMouseListener(new MouseListener(){
 				public void mouseDoubleClick(MouseEvent event) {}
 				public void mouseDown(MouseEvent event) {}
 				public void mouseUp(MouseEvent event) {
-					// transportControlDialog.setVisible(true);
+					controlDialog.setVisible(true); 
 				}
 			});
 			// 初始化状态
 			refreshStatus();
 			// 连接状态事件
-			client.addListener(new ConnectionAdapter() {
+			connectionListener = new ConnectionAdapter() {
 				public void onConnected(ConnectionEvent event) {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
@@ -79,7 +100,25 @@ public class ConnectionStatus extends ContributionItem {
 						}
 					});
 				}
-			});
+			};
+			client.addListener(connectionListener);
+			transportationListener = new TransportationAdapter() {
+				public void onTransporting(final TransportationEvent event) {
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							setTransporting(client.getTransporter().isTransporting());
+						}
+					});
+				}
+				public void onTransported(TransportationEvent event) {
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							setTransporting(client.getTransporter().isTransporting());
+						}
+					});
+				}
+			};
+			client.addListener(transportationListener);
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -124,10 +163,14 @@ public class ConnectionStatus extends ContributionItem {
 
 	@Override
 	public void dispose() {
-		super.dispose();
+		client.removeListener(connectionListener);
+		client.removeListener(transportationListener);
 		if (connectionButton != null 
 				&& ! connectionButton.isDisposed())
 			connectionButton.dispose();
+		if (handCursor != null 
+				&& ! handCursor.isDisposed())
+			handCursor.dispose();
 		if (connectionImage != null 
 				&& ! connectionImage.isDisposed())
 			connectionImage.dispose();
@@ -137,6 +180,13 @@ public class ConnectionStatus extends ContributionItem {
 		if (transportationImage != null 
 				&& ! transportationImage.isDisposed())
 			transportationImage.dispose();
+		if (executionDialog != null)
+			executionDialog.dispose();
+		if (exceptionDialog != null)
+			exceptionDialog.dispose();
+		if (controlDialog != null)
+			controlDialog.dispose();
+		super.dispose();
 	}
 
 }
