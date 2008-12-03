@@ -1,6 +1,7 @@
 package com.googlecode.struts4rcp.server.action;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.serializer.PageSerializer;
@@ -44,5 +45,25 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 
 	public Validator getValidator() {
 		return validator;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Class<M> getModelClass() {
+		try {
+			return (Class<M>) ((ParameterizedType) getClass()
+					.getGenericSuperclass()).getActualTypeArguments()[0];
+		} catch (Throwable e) {
+			throw new RuntimeException(getClass().getName() + " generic type undefined!");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Class<R> getReturnClass() {
+		try {
+			return (Class<R>) ((ParameterizedType) getClass()
+					.getGenericSuperclass()).getActualTypeArguments()[1];
+		} catch (Throwable e) {
+			throw new RuntimeException(getClass().getName() + " generic type undefined!");
+		}
 	}
 }

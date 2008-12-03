@@ -2,7 +2,7 @@ package com.googlecode.struts4rcp.server.mapper;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class SuffixActionMapper extends AbstractActionMapper {
+public class PrefixActionMapper extends AbstractActionMapper {
 
 	/**
 	 * 获取序列化器的名称
