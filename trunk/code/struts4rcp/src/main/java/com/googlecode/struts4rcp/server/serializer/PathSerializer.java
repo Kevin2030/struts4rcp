@@ -41,7 +41,7 @@ public class PathSerializer extends AbstractServletSerializer {
 		} else {
 			path = getPath(action);
 		}
-		return deserializePath(result, path);
+		return deserializePath(request, result, path);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class PathSerializer extends AbstractServletSerializer {
 		return null;
 	}
 
-	protected Serializable deserializePath(Serializable result, String path) {
+	protected Serializable deserializePath(HttpServletRequest request, Serializable result, String path) {
 		if (path == null || path.length() == 0)
 			return result;
 		return result;
