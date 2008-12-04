@@ -4,13 +4,12 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.util.Shutdownable;
 
 /**
  * Action工厂SPI接口
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public interface ActionProvider extends Shutdownable {
+public interface ActionProvider {
 
 	/**
 	 * 获取Action实例

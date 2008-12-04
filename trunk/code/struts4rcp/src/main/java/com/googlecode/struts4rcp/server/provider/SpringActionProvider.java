@@ -21,25 +21,13 @@ import com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack;
  */
 public class SpringActionProvider extends AbstractActionProvider {
 
-	private ServletContext servletContext;
-
 	private ApplicationContext applicationContext;
 
-	private ContextLoader contextLoader;
-
 	protected void init(ServletContext servletContext, ServletConfig servletConfig) {
-		this.servletContext = servletContext;
 		this.applicationContext = ContextLoader.getCurrentWebApplicationContext();
 		if (this.applicationContext == null) { // 如果未配置Spring上下文，启用缺省配置
-			this.contextLoader = new ContextLoader();
-			this.contextLoader.initWebApplicationContext(servletContext);
-			this.applicationContext = ContextLoader.getCurrentWebApplicationContext();
+			throw new IllegalStateException("Spring framework non initialized! Please config web.xml: \n<listener><listener-class>org.springframework.web.context.ContextLoaderListener</listener-class></listener>" );
 		}
-	}
-
-	public void shutdown() {
-		if (this.contextLoader != null)
-			this.contextLoader.closeWebApplicationContext(servletContext);
 	}
 
 	@SuppressWarnings("unchecked")

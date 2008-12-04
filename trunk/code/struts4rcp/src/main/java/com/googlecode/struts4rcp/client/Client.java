@@ -12,10 +12,9 @@ import com.googlecode.struts4rcp.client.event.TransportationListener;
 import com.googlecode.struts4rcp.client.transporter.HttpURLConnectionTransporter;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ServiceUtils;
-import com.googlecode.struts4rcp.util.Shutdownable;
 import com.googlecode.struts4rcp.util.UnmodifiableProperties;
 
-public class Client implements Shutdownable {
+public class Client {
 
 	/**
 	 * 传输器配置参数名
