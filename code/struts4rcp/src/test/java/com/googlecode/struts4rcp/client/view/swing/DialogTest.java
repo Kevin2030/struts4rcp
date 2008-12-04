@@ -8,7 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import com.googlecode.struts4rcp.client.Actions;
+import com.googlecode.struts4rcp.client.Client;
 
 public class DialogTest {
 
@@ -22,14 +22,14 @@ public class DialogTest {
 		properties.setProperty("server.host", "localhost");
 		properties.setProperty("server.port", "8080");
 		properties.setProperty("context.path", "rcpstrutsdemo");
-		Actions.init(properties);
+		Client.init(properties);
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(800, 600);
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				Actions.destroy();
+				Client.destroy();
 			}
 		});
 		JDialog dialog = createTestDialog(frame);
@@ -39,7 +39,7 @@ public class DialogTest {
 	}
 
 	public static JDialog createTestDialog(JFrame frame) {
-		return new ControlDialog(frame, Actions.getClient());
+		return new ControlDialog(frame, Client.getClient());
 	}
 
 }

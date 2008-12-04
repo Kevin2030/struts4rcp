@@ -211,7 +211,7 @@ public class ActionFactory implements ClientElement {
 		exceptionPublisher.publishEvent(new ExceptionEvent(this, exception, back));
 	}
 
-	public void destroy() {
+	public void shutdown() {
 		try {
 			executionPublisher.clearListeners();
 		} finally {
