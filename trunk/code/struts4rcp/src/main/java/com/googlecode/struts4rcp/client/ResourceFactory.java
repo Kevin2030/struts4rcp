@@ -26,91 +26,91 @@ public class ResourceFactory implements ClientElement {
 
 	/**
 	 * 获取资源代理
-	 * @param <M> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @return 资源
 	 */
-	public <M extends Serializable> Resource<M> getResource(String uri) {
+	public <R extends Serializable> Resource<R> getResource(String uri) {
 		return null;
 	}
 
 	/**
 	 * 获取异步资源代理
-	 * @param <M> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param callback 获取结果的回调接口
 	 * @return 资源
 	 */
-	public <M extends Serializable> Resource<M> getAsyncResource(String uri, Callback<M> callback) {
+	public <R extends Serializable> Resource<R> getAsyncResource(String uri, Callback<R> callback) {
 		return null;
 	}
 
 	/**
 	 * 获取资源代理
-	 * @param <M> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param backable 是否允许转为后台运行
 	 * @param abortable 是否允许中止
 	 * @return 资源
 	 */
-	public <M extends Serializable> Resource<M> getResource(String uri, boolean backable, boolean abortable) {
+	public <R extends Serializable> Resource<R> getResource(String uri, boolean backable, boolean abortable) {
 		return null;
 	}
 
 	/**
 	 * 获取异步资源代理
-	 * @param <M> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param callback 获取结果的回调接口
 	 * @param backable 是否允许转为后台运行
 	 * @param abortable 是否允许中止
 	 * @return 资源
 	 */
-	public <M extends Serializable> Resource<M> getAsyncResource(String uri, Callback<M> callback, boolean backable, boolean abortable) {
+	public <R extends Serializable> Resource<R> getAsyncResource(String uri, Callback<R> callback, boolean backable, boolean abortable) {
 		return null;
 	}
 
 	/**
 	 * 获取后台资源代理
-	 * @param <M> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @return 资源
 	 */
-	public <M extends Serializable> Resource<M> getBackResource(String uri) {
+	public <R extends Serializable> Resource<R> getBackResource(String uri) {
 		return null;
 	}
 
 	/**
 	 * 获取后台异步资源代理
-	 * @param <M> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param callback 获取结果的回调接口
 	 * @return 资源
 	 */
-	public <M extends Serializable> Resource<M> getBackAsyncResource(String uri, Callback<M> callback) {
+	public <R extends Serializable> Resource<R> getBackAsyncResource(String uri, Callback<R> callback) {
 		return null;
 	}
 
 	/**
 	 * 获取后台资源代理
-	 * @param <M> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param abortable 是否允许中止
 	 * @return 资源
 	 */
-	public <M extends Serializable> Resource<M> getBackResource(String uri, boolean abortable) {
+	public <R extends Serializable> Resource<R> getBackResource(String uri, boolean abortable) {
 		return null;
 	}
 
 	/**
 	 * 获取后台异步资源代理
-	 * @param <M> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param callback 获取结果的回调接口
 	 * @param abortable 是否允许中止
 	 * @return 资源
 	 */
-	public <M extends Serializable> Resource<M> getBackAsyncResource(String uri, Callback<M> callback, boolean abortable) {
+	public <R extends Serializable> Resource<R> getBackAsyncResource(String uri, Callback<R> callback, boolean abortable) {
 		return null;
 	}
 

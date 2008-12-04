@@ -19,7 +19,7 @@ public class Resources {
 	 *            resource名称
 	 * @return 同步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getResource(
+	public static <R extends Serializable> Resource<R> getResource(
 			String resourceName) {
 		return getResource(null, resourceName);
 	}
@@ -32,7 +32,7 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 同步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getResource(
+	public static <R extends Serializable> Resource<R> getResource(
 			String resourceName, boolean backable,
 			boolean abortable) {
 		return getResource(null, resourceName, backable,
@@ -48,8 +48,8 @@ public class Resources {
 	 *            回调接口
 	 * @return 异步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getAsyncResource(
-			String resourceName, Callback<M> resourceCallback) {
+	public static <R extends Serializable> Resource<R> getAsyncResource(
+			String resourceName, Callback<R> resourceCallback) {
 		return getAsyncResource(null, resourceName, resourceCallback);
 	}
 
@@ -64,8 +64,8 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 异步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getAsyncResource(
-			String resourceName, Callback<M> resourceCallback,
+	public static <R extends Serializable> Resource<R> getAsyncResource(
+			String resourceName, Callback<R> resourceCallback,
 			boolean backable, boolean abortable) {
 		return getAsyncResource(null, resourceName, resourceCallback,
 				backable, abortable);
@@ -78,7 +78,7 @@ public class Resources {
 	 *            resource名称
 	 * @return 后台同步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getBackResource(String resourceName) {
+	public static <R extends Serializable> Resource<R> getBackResource(String resourceName) {
 		return getBackResource(null, resourceName);
 	}
 
@@ -90,7 +90,7 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 后台同步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getBackResource(String resourceName, boolean abortable) {
+	public static <R extends Serializable> Resource<R> getBackResource(String resourceName, boolean abortable) {
 		return getBackResource(null, resourceName, abortable);
 	}
 
@@ -103,8 +103,8 @@ public class Resources {
 	 *            回调接口
 	 * @return 后台异步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getBackAsyncResource(String resourceName,
-			Callback<M> resourceCallback) {
+	public static <R extends Serializable> Resource<R> getBackAsyncResource(String resourceName,
+			Callback<R> resourceCallback) {
 		return getBackAsyncResource(null, resourceName, resourceCallback);
 	}
 
@@ -118,8 +118,8 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 后台异步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getBackAsyncResource(String resourceName,
-			Callback<M> resourceCallback, boolean abortable) {
+	public static <R extends Serializable> Resource<R> getBackAsyncResource(String resourceName,
+			Callback<R> resourceCallback, boolean abortable) {
 		return getBackAsyncResource(null, resourceName, resourceCallback, abortable);
 	}
 
@@ -132,7 +132,7 @@ public class Resources {
 	 *            resource名称
 	 * @return 同步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getResource(
+	public static <R extends Serializable> Resource<R> getResource(
 			String clientName, String resourceName) {
 		return getResource(clientName, resourceName);
 	}
@@ -147,7 +147,7 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 同步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getResource(
+	public static <R extends Serializable> Resource<R> getResource(
 			String clientName, String resourceName,
 			boolean backable, boolean abortable) {
 		return Client.getClient(clientName).getResourceFactory().getResource(resourceName,
@@ -165,9 +165,9 @@ public class Resources {
 	 *            回调接口
 	 * @return 异步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getAsyncResource(
+	public static <R extends Serializable> Resource<R> getAsyncResource(
 			String clientName, String resourceName,
-			Callback<M> resourceCallback) {
+			Callback<R> resourceCallback) {
 		return getAsyncResource(clientName, resourceName, resourceCallback);
 	}
 
@@ -184,9 +184,9 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 异步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getAsyncResource(
+	public static <R extends Serializable> Resource<R> getAsyncResource(
 			String clientName, String resourceName,
-			Callback<M> resourceCallback,
+			Callback<R> resourceCallback,
 			boolean backable, boolean abortable) {
 		return Client.getClient(clientName).getResourceFactory().getAsyncResource(resourceName,
 				resourceCallback, backable, abortable);
@@ -201,7 +201,7 @@ public class Resources {
 	 *            resource名称
 	 * @return 后台同步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getBackResource(
+	public static <R extends Serializable> Resource<R> getBackResource(
 			String clientName, String resourceName) {
 		return getBackResource(clientName, resourceName);
 	}
@@ -216,7 +216,7 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 后台同步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getBackResource(
+	public static <R extends Serializable> Resource<R> getBackResource(
 			String clientName, String resourceName, boolean abortable) {
 		return Client.getClient(clientName).getResourceFactory().getBackResource(resourceName, abortable);
 	}
@@ -232,9 +232,9 @@ public class Resources {
 	 *            回调接口
 	 * @return 后台异步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getBackAsyncResource(
+	public static <R extends Serializable> Resource<R> getBackAsyncResource(
 			String clientName, String resourceName,
-			Callback<M> resourceCallback) {
+			Callback<R> resourceCallback) {
 		return getBackAsyncResource(clientName, resourceName, resourceCallback);
 	}
 
@@ -250,9 +250,9 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 后台异步Resource代理
 	 */
-	public static <M extends Serializable> Resource<M> getBackAsyncResource(
+	public static <R extends Serializable> Resource<R> getBackAsyncResource(
 			String clientName, String resourceName,
-			Callback<M> resourceCallback, boolean abortable) {
+			Callback<R> resourceCallback, boolean abortable) {
 		return Client.getClient(clientName).getResourceFactory().getBackAsyncResource(resourceName,
 				resourceCallback, abortable);
 	}
