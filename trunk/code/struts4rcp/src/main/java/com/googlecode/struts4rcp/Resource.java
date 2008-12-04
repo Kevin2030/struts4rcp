@@ -3,7 +3,7 @@ package com.googlecode.struts4rcp;
 import java.io.Serializable;
 
 /**
- * RESTful资源接口
+ * RESTful远程资源接口
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  * @param <R> 资源类型
  */
