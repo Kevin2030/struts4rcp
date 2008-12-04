@@ -174,7 +174,7 @@ public class ConfigurationManager implements ClientElement {
 		configurationPublisher.removeListener(listener);
 	}
 
-	public void shutdown() {
+	public void destroy() {
 		configurationPublisher.clearListeners();
 	}
 

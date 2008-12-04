@@ -118,14 +118,14 @@ public class Client {
 		return actionFactory;
 	}
 
-	public void shutdown() {
+	public void destroy() {
 		try {
-			transporter.shutdown();
+			transporter.destroy();
 		} finally {
 			try {
-				actionFactory.shutdown();
+				actionFactory.destroy();
 			} finally {
-				configurationManager.shutdown();
+				configurationManager.destroy();
 			}
 		}
 	}

@@ -60,9 +60,9 @@ public class HttpClientTransporter extends AbstractHttpTransporter<HttpPost> {
 	}
 
 	@Override
-	public void shutdown() {
+	public void destroy() {
 		try {
-			super.shutdown();
+			super.destroy();
 		} finally {
 			httpClient.getConnectionManager().shutdown();
 		}
