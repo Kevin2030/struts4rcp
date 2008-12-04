@@ -3,7 +3,7 @@ package com.googlecode.struts4rcp.server;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Action收接方案映射器
+ * Action名称映射器
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
 public interface ActionMapper {
