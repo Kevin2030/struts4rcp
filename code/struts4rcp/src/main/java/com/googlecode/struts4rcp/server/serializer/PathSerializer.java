@@ -20,6 +20,8 @@ public class PathSerializer extends AbstractServletSerializer {
 
 	public PathSerializer(Serializer serializer) {
 		super();
+		if (serializer == null)
+			throw new NullPointerException("Serializer == null!");
 		this.serializer = serializer;
 	}
 

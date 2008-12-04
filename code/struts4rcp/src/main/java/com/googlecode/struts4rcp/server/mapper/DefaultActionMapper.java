@@ -124,15 +124,21 @@ public class DefaultActionMapper implements ActionMapper {
 	}
 
 	public Serializer getSerializer(HttpServletRequest request) {
-		String contentType = request.getContentType();
+		return getSerializer(request.getContentType());
+	}
+
+	protected Serializer getSerializer(String contentType) {
 		if (contentType != null)
-			contentType = contentType.toLowerCase();
-		Serializer serializer = serializers.get(contentType);
-		if (serializer == null) {
-			String accept = request.getHeader("Accept");
-			serializer = serializers.get(accept);
-		}
-		return serializer;
+			contentType = contentType.trim().toLowerCase();
+		return serializers.get(contentType);
+	}
+
+	protected Serializer addSerializer(String contentType, Serializer serializer) {
+		return serializers.put(contentType, serializer);
+	}
+
+	protected Serializer removeSerializer(String contentType) {
+		return serializers.remove(contentType);
 	}
 
 }
