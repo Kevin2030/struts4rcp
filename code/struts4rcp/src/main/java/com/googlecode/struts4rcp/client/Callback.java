@@ -10,10 +10,10 @@ import com.googlecode.struts4rcp.util.logger.LoggerFactory;
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  * @param <R> 执行结果类型
  */
-public abstract class ActionCallback<R extends Serializable> {
+public abstract class Callback<R extends Serializable> {
 
 	// 日志输出接口
-	protected static final Logger logger = LoggerFactory.getLogger(ActionCallback.class);
+	protected static final Logger logger = LoggerFactory.getLogger(Callback.class);
 
 	/**
 	 * Action异步执行成功回调接口函数

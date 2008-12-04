@@ -54,7 +54,7 @@ public class Actions {
 	 * @return 异步Action代理
 	 */
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(
-			String actionName, ActionCallback<R> actionCallback) {
+			String actionName, Callback<R> actionCallback) {
 		return getAsyncAction(null, actionName, actionCallback);
 	}
 
@@ -70,7 +70,7 @@ public class Actions {
 	 * @return 异步Action代理
 	 */
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(
-			String actionName, ActionCallback<R> actionCallback,
+			String actionName, Callback<R> actionCallback,
 			boolean backable, boolean abortable) {
 		return getAsyncAction(null, actionName, actionCallback,
 				backable, abortable);
@@ -109,7 +109,7 @@ public class Actions {
 	 * @return 后台异步Action代理
 	 */
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(String actionName,
-			ActionCallback<R> actionCallback) {
+			Callback<R> actionCallback) {
 		return getBackAsyncAction(null, actionName, actionCallback);
 	}
 
@@ -124,7 +124,7 @@ public class Actions {
 	 * @return 后台异步Action代理
 	 */
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(String actionName,
-			ActionCallback<R> actionCallback, boolean abortable) {
+			Callback<R> actionCallback, boolean abortable) {
 		return getBackAsyncAction(null, actionName, actionCallback, abortable);
 	}
 
@@ -174,7 +174,7 @@ public class Actions {
 	 */
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(
 			String clientName, String actionName,
-			ActionCallback<R> actionCallback) {
+			Callback<R> actionCallback) {
 		return getAsyncAction(clientName, actionName, actionCallback);
 	}
 
@@ -193,7 +193,7 @@ public class Actions {
 	 */
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(
 			String clientName, String actionName,
-			ActionCallback<R> actionCallback,
+			Callback<R> actionCallback,
 			boolean backable, boolean abortable) {
 		return Client.getClient(clientName).getActionFactory().getAsyncAction(actionName,
 				actionCallback, backable, abortable);
@@ -241,7 +241,7 @@ public class Actions {
 	 */
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(
 			String clientName, String actionName,
-			ActionCallback<R> actionCallback) {
+			Callback<R> actionCallback) {
 		return getBackAsyncAction(clientName, actionName, actionCallback);
 	}
 
@@ -259,7 +259,7 @@ public class Actions {
 	 */
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(
 			String clientName, String actionName,
-			ActionCallback<R> actionCallback, boolean abortable) {
+			Callback<R> actionCallback, boolean abortable) {
 		return Client.getClient(clientName).getActionFactory().getBackAsyncAction(actionName,
 				actionCallback, abortable);
 	}
