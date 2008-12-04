@@ -18,7 +18,7 @@ import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
 
 /**
- * Action代理供给策略接口
+ * Action代理工厂
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
 public class ActionFactory implements ClientElement {

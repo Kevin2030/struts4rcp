@@ -15,8 +15,6 @@ public class Actions {
 	private Actions() {
 	}
 
-	/////////////////////////////////////////
-
 	/**
 	 * 从默认客户端实例中，获取同步Action代理
 	 *
@@ -127,8 +125,6 @@ public class Actions {
 			Callback<R> actionCallback, boolean abortable) {
 		return getBackAsyncAction(null, actionName, actionCallback, abortable);
 	}
-
-	/////////////////////////////////////////
 
 	/**
 	 * 从指定客户端实例中，获取同步Action代理
