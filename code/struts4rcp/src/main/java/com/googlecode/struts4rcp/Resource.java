@@ -11,17 +11,17 @@ public interface Resource<R extends Serializable> {
 
 	/**
 	 * 创建资源
-	 * @param model 资源信息
+	 * @param resource 资源信息
 	 * @throws Exception 创建失败或网络连接出错时抛出
 	 */
-	void create(R model) throws Exception;
+	void create(R resource) throws Exception;
 
 	/**
 	 * 更新资源
-	 * @param model 资源信息
+	 * @param resource 资源信息
 	 * @throws Exception 更新失败或网络连接出错时抛出
 	 */
-	void update(R model) throws Exception;
+	void update(R resource) throws Exception;
 
 	/**
 	 * 移除资源
