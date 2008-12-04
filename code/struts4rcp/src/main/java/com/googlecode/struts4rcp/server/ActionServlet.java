@@ -38,9 +38,9 @@ import com.googlecode.struts4rcp.util.serializer.TextSerializer;
  *         &lt;/param-value&gt;
  *     &lt;/init-param&gt;
  *     &lt;init-param&gt;
- *         &lt;param-name&gt;serializer&lt;/param-name&gt;
+ *         &lt;param-name&gt;actionMapper&lt;/param-name&gt;
  *         &lt;param-value&gt;
- *             com.googlecode.struts4rcp.util.serializer.JavaSerializer
+ *             com.googlecode.struts4rcp.server.mapper.DefaultActionMapper
  *         &lt;/param-value&gt;
  *     &lt;/init-param&gt;
  *     &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
