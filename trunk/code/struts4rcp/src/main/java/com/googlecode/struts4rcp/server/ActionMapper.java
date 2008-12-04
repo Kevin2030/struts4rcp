@@ -12,9 +12,9 @@ import com.googlecode.struts4rcp.util.serializer.Serializer;
 public interface ActionMapper extends Shutdownable {
 
 	/**
-	 * 判断收接方案
+	 * 获取序列化器
 	 * @param request 请求信息
-	 * @return 收接器
+	 * @return 序列化器
 	 */
 	Serializer getSerializer(HttpServletRequest request);
 
