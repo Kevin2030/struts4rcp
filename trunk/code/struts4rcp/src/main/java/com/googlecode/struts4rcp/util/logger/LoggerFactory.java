@@ -1,5 +1,7 @@
 package com.googlecode.struts4rcp.util.logger;
 
+import java.util.Collection;
+
 import com.googlecode.struts4rcp.util.ServiceUtils;
 
 /**
@@ -16,11 +18,10 @@ public class LoggerFactory {
 
 	private static LoggerProvider findLoggerProvider() {
 		try {
-			Class<LoggerProvider>[] loggerProviderClasses = ServiceUtils.getServices(LoggerProvider.class);
-			if (loggerProviderClasses != null && loggerProviderClasses.length > 0) {
-				for (Class<LoggerProvider> loggerProviderClass : loggerProviderClasses) {
+			Collection<LoggerProvider> loggerProviders = ServiceUtils.getServiceInstances(LoggerProvider.class);
+			if (loggerProviders != null && loggerProviders.size() > 0) {
+				for (LoggerProvider loggerProvider : loggerProviders) {
 					try {
-						LoggerProvider loggerProvider = loggerProviderClass.newInstance();
 						Logger logger = loggerProvider.getLogger(LoggerFactory.class.getName());
 						logger.info("Using LoggerProvider:" + loggerProvider.getClass().getName());
 						return loggerProvider;

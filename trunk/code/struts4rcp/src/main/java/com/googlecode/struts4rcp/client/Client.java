@@ -249,16 +249,16 @@ public class Client {
 		resourceFactory.init(this, config);
 		configurationManager.register(TRANSPORTER_PARAM_NAME,
 				"传输策略", "暂未实现传输策略动态切换，修改后不会生效!",
-				HttpURLConnectionTransporter.class.getName(), ServiceUtils.getServices(Transporter.class.getName()));
+				HttpURLConnectionTransporter.class.getName(), ServiceUtils.getServiceClassNames(Transporter.class.getName()).toArray(new String[0]));
 		configurationManager.register(ACTION_FACTORY_PARAM_NAME,
 				"Action管理器", "暂未实现Action管理器动态切换，修改后不会生效!",
-				ActionFactory.class.getName(), ServiceUtils.getServices(ActionFactory.class.getName()));
+				ActionFactory.class.getName(), ServiceUtils.getServiceClassNames(ActionFactory.class.getName()).toArray(new String[0]));
 		configurationManager.register(RESOURCE_FACTORY_PARAM_NAME,
-				"Action管理器", "暂未实现资源管理器动态切换，修改后不会生效!",
-				ResourceFactory.class.getName(), ServiceUtils.getServices(ResourceFactory.class.getName()));
+				"资源管理器", "暂未实现资源管理器动态切换，修改后不会生效!",
+				ResourceFactory.class.getName(), ServiceUtils.getServiceClassNames(ResourceFactory.class.getName()).toArray(new String[0]));
 		configurationManager.register(CONFIGURATION_MANAGER_PARAM_NAME,
 				"配置管理器", "暂未实现配置管理器动态切换，修改后不会生效!",
-				ConfigurationManager.class.getName(), ServiceUtils.getServices(ConfigurationManager.class.getName()));
+				ConfigurationManager.class.getName(), ServiceUtils.getServiceClassNames(ConfigurationManager.class.getName()).toArray(new String[0]));
 		configurationManager.register(LISTENERS_PARAM_NAME,
 				"事件监听器", "暂未实现动态注册事件监听器，修改后不会生效!", "");
 		// 读取监听器

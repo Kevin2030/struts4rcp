@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 
 /**
@@ -15,12 +16,7 @@ public class ServiceUtils {
 
 	public static final String SERVICES_DIRECTORY = "META-INF/services/";
 
-	/**
-	 * 获取接口的服务类
-	 * @param interfaceClass 接口
-	 * @return 服务类
-	 */
-	public static String[] getServices(String interfaceClassName) {
+	public static Collection<String> getServiceClassNames(String interfaceClassName) {
 		if (interfaceClassName == null)
 			throw new NullPointerException("interfaceClassName == null");
 		interfaceClassName = interfaceClassName.trim();
@@ -28,56 +24,19 @@ public class ServiceUtils {
 		Class<?> interfaceClass;
 		try {
 			interfaceClass = Class.forName(interfaceClassName, true, classLoader);
+			return getServiceClassNames(interfaceClass);
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
-		ArrayList<String> clses = new ArrayList<String>();
-		try {
-			String fileName = SERVICES_DIRECTORY + interfaceClassName;
-			Enumeration<URL> urls = classLoader.getResources(fileName);
-			if (urls != null) {
-				while (urls.hasMoreElements()) {
-					URL url = urls.nextElement();
-					try {
-						InputStream in = url.openStream();
-						BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-						String line = reader.readLine();
-						while (line != null) {
-							line = line.trim();
-							if (line.length() > 0) {
-								try {
-									Class<?> cls = Class.forName(line, true, classLoader);
-									if (interfaceClass.isAssignableFrom(cls)) {
-										clses.add(cls.getName());
-									}
-								} catch (Throwable t) {
-									// ignore
-								}
-							}
-							line = reader.readLine();
-						}
-					} catch (Throwable t) {
-						// ignore
-					}
-				}
-			}
-		} catch (Throwable t) {
-			// ignore
-		}
-		return clses.toArray(new String[clses.size()]);
 	}
 
 	/**
 	 * 获取接口的服务类
-	 * @param <T>
 	 * @param interfaceClass 接口
 	 * @return 服务类
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> Class<T>[] getServices(Class<T> interfaceClass) {
-		if (interfaceClass == null)
-			throw new NullPointerException("interfaceClass == null");
-		ArrayList<Class<T>> clses = new ArrayList<Class<T>>();
+	public static Collection<String> getServiceClassNames(Class<?> interfaceClass) {
+		ArrayList<String> classes = new ArrayList<String>();
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		try {
 			String fileName = SERVICES_DIRECTORY + interfaceClass.getName();
@@ -95,7 +54,7 @@ public class ServiceUtils {
 								try {
 									Class<?> cls = Class.forName(line, true, classLoader);
 									if (interfaceClass.isAssignableFrom(cls)) {
-										clses.add((Class<T>)cls);
+										classes.add(cls.getName());
 									}
 								} catch (Throwable t) {
 									// ignore
@@ -111,7 +70,101 @@ public class ServiceUtils {
 		} catch (Throwable t) {
 			// ignore
 		}
-		return clses.toArray(new Class[clses.size()]);
+		return classes;
+	}
+
+	/**
+	 * 获取接口的服务类
+	 * @param <T>
+	 * @param interfaceClass 接口
+	 * @return 服务类
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> Collection<Class<T>> getServiceClasses(Class<T> interfaceClass) {
+		if (interfaceClass == null)
+			throw new NullPointerException("interfaceClass == null");
+		ArrayList<Class<T>> classes = new ArrayList<Class<T>>();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		try {
+			String fileName = SERVICES_DIRECTORY + interfaceClass.getName();
+			Enumeration<URL> urls = classLoader.getResources(fileName);
+			if (urls != null) {
+				while (urls.hasMoreElements()) {
+					URL url = urls.nextElement();
+					try {
+						InputStream in = url.openStream();
+						BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+						String line = reader.readLine();
+						while (line != null) {
+							line = line.trim();
+							if (line.length() > 0) {
+								try {
+									Class<?> cls = Class.forName(line, true, classLoader);
+									if (interfaceClass.isAssignableFrom(cls)) {
+										classes.add((Class<T>)cls);
+									}
+								} catch (Throwable t) {
+									// ignore
+								}
+							}
+							line = reader.readLine();
+						}
+					} catch (Throwable t) {
+						// ignore
+					}
+				}
+			}
+		} catch (Throwable t) {
+			// ignore
+		}
+		return classes;
+	}
+
+	/**
+	 * 获取接口的服务类
+	 * @param <T>
+	 * @param interfaceClass 接口
+	 * @return 服务类
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> Collection<T> getServiceInstances(Class<T> interfaceClass) {
+		if (interfaceClass == null)
+			throw new NullPointerException("interfaceClass == null");
+		ArrayList<T> instnaces = new ArrayList<T>();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		try {
+			String fileName = SERVICES_DIRECTORY + interfaceClass.getName();
+			Enumeration<URL> urls = classLoader.getResources(fileName);
+			if (urls != null) {
+				while (urls.hasMoreElements()) {
+					URL url = urls.nextElement();
+					try {
+						InputStream in = url.openStream();
+						BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+						String line = reader.readLine();
+						while (line != null) {
+							line = line.trim();
+							if (line.length() > 0) {
+								try {
+									Class<?> cls = Class.forName(line, true, classLoader);
+									if (interfaceClass.isAssignableFrom(cls)) {
+										instnaces.add((T)cls.newInstance());
+									}
+								} catch (Throwable t) {
+									// ignore
+								}
+							}
+							line = reader.readLine();
+						}
+					} catch (Throwable t) {
+						// ignore
+					}
+				}
+			}
+		} catch (Throwable t) {
+			// ignore
+		}
+		return instnaces;
 	}
 
 }
