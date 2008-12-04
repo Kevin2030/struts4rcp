@@ -165,9 +165,14 @@ public class Client {
 	public static final String TRANSPORTER_PARAM_NAME = "transporter";
 
 	/**
-	 * Action代理供给策略配置参数名
+	 * Action代理工厂配置参数名
 	 */
-	public static final String ACTION_MANAGER_PARAM_NAME = "actionFactory";
+	public static final String ACTION_FACTORY_PARAM_NAME = "actionFactory";
+
+	/**
+	 * 资源代理工厂配置参数名
+	 */
+	public static final String RESOURCE_FACTORY_PARAM_NAME = "resourceFactory";
 
 	/**
 	 * Action代理供给策略配置参数名
@@ -185,6 +190,8 @@ public class Client {
 
 	private final ActionFactory actionFactory;
 
+	private final ResourceFactory resourceFactory;
+
 	private static Transporter loadTransporter(Properties config) {
 		 return PropertiesUtils.getInstanceProperty(config,
 					TRANSPORTER_PARAM_NAME, Transporter.class,
@@ -193,8 +200,14 @@ public class Client {
 
 	private static ActionFactory loadActionFactory(Properties config) {
 		 return PropertiesUtils.getInstanceProperty(
-					config, ACTION_MANAGER_PARAM_NAME, ActionFactory.class,
+					config, ACTION_FACTORY_PARAM_NAME, ActionFactory.class,
 					ActionFactory.class);
+	}
+
+	private static ResourceFactory loadResourceFactory(Properties config) {
+		 return PropertiesUtils.getInstanceProperty(
+					config, RESOURCE_FACTORY_PARAM_NAME, ResourceFactory.class,
+					ResourceFactory.class);
 	}
 
 	private static ConfigurationManager loadConfigurationManager(Properties config) {
@@ -204,15 +217,15 @@ public class Client {
 	}
 
 	public Client(Properties config) {
-		this(config, loadTransporter(config), loadActionFactory(config), loadConfigurationManager(config));
+		this(config, loadTransporter(config), loadActionFactory(config), loadResourceFactory(config), loadConfigurationManager(config));
 	}
 
 	public Client(Properties config, Transporter transporter) {
-		this(config, transporter, loadActionFactory(config), loadConfigurationManager(config));
+		this(config, transporter, loadActionFactory(config), loadResourceFactory(config), loadConfigurationManager(config));
 	}
 
 	public Client(Properties config, Transporter transporter,
-			ActionFactory actionFactory,
+			ActionFactory actionFactory, ResourceFactory resourceFactory,
 			ConfigurationManager configurationManager) {
 		if (config == null)
 			throw new NullPointerException("properties == null!");
@@ -222,20 +235,27 @@ public class Client {
 				throw new NullPointerException("transporter == null!");
 		if (actionFactory == null)
 			throw new NullPointerException("actionFactory == null!");
+		if (resourceFactory == null)
+			throw new NullPointerException("resourceFactory == null!");
 
 		this.configurationManager = configurationManager;
 		this.transporter = transporter;
 		this.actionFactory = actionFactory;
+		this.resourceFactory = resourceFactory;
 		config = new UnmodifiableProperties(config);
 		configurationManager.init(this, config);
 		transporter.init(this, config);
 		actionFactory.init(this, config);
+		resourceFactory.init(this, config);
 		configurationManager.register(TRANSPORTER_PARAM_NAME,
 				"传输策略", "暂未实现传输策略动态切换，修改后不会生效!",
 				HttpURLConnectionTransporter.class.getName(), ServiceUtils.getServices(Transporter.class.getName()));
-		configurationManager.register(ACTION_MANAGER_PARAM_NAME,
+		configurationManager.register(ACTION_FACTORY_PARAM_NAME,
 				"Action管理器", "暂未实现Action管理器动态切换，修改后不会生效!",
 				ActionFactory.class.getName(), ServiceUtils.getServices(ActionFactory.class.getName()));
+		configurationManager.register(RESOURCE_FACTORY_PARAM_NAME,
+				"Action管理器", "暂未实现资源管理器动态切换，修改后不会生效!",
+				ResourceFactory.class.getName(), ServiceUtils.getServices(ResourceFactory.class.getName()));
 		configurationManager.register(CONFIGURATION_MANAGER_PARAM_NAME,
 				"配置管理器", "暂未实现配置管理器动态切换，修改后不会生效!",
 				ConfigurationManager.class.getName(), ServiceUtils.getServices(ConfigurationManager.class.getName()));
@@ -261,6 +281,10 @@ public class Client {
 		return actionFactory;
 	}
 
+	public ResourceFactory getResourceFactory() {
+		return resourceFactory;
+	}
+
 	public void shutdown() {
 		try {
 			transporter.shutdown();
@@ -268,7 +292,11 @@ public class Client {
 			try {
 				actionFactory.shutdown();
 			} finally {
-				configurationManager.shutdown();
+				try {
+					resourceFactory.shutdown();
+				} finally {
+					configurationManager.shutdown();
+				}
 			}
 		}
 	}

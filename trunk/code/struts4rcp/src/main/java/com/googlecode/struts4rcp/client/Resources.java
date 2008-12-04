@@ -12,8 +12,249 @@ public class Resources {
 
 	private Resources() {}
 
-	public static <M extends Serializable> Resource<M> getResource(String uri) {
-		return null;
+	/**
+	 * 从默认客户端实例中，获取同步Resource代理
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @return 同步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getResource(
+			String resourceName) {
+		return getResource(null, resourceName);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取同步Resource代理，并设置可选参数
+	 *
+	 * @param resourceName resource名称
+	 * @param backable 是否允许转为后台运行
+	 * @param abortable 是否允许中止
+	 * @return 同步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getResource(
+			String resourceName, boolean backable,
+			boolean abortable) {
+		return getResource(null, resourceName, backable,
+				abortable);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取异步Resource代理
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @return 异步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getAsyncResource(
+			String resourceName, Callback<M> resourceCallback) {
+		return getAsyncResource(null, resourceName, resourceCallback);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取异步Resource代理，并设置可选参数
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @param backable 是否允许转为后台运行
+	 * @param abortable 是否允许中止
+	 * @return 异步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getAsyncResource(
+			String resourceName, Callback<M> resourceCallback,
+			boolean backable, boolean abortable) {
+		return getAsyncResource(null, resourceName, resourceCallback,
+				backable, abortable);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取后台同步Resource代理
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @return 后台同步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getBackResource(String resourceName) {
+		return getBackResource(null, resourceName);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取后台同步Resource代理，并设置可选参数
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @param abortable 是否允许中止
+	 * @return 后台同步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getBackResource(String resourceName, boolean abortable) {
+		return getBackResource(null, resourceName, abortable);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取后台异步Resource代理
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @return 后台异步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getBackAsyncResource(String resourceName,
+			Callback<M> resourceCallback) {
+		return getBackAsyncResource(null, resourceName, resourceCallback);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取后台异步Resource代理
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @param abortable 是否允许中止
+	 * @return 后台异步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getBackAsyncResource(String resourceName,
+			Callback<M> resourceCallback, boolean abortable) {
+		return getBackAsyncResource(null, resourceName, resourceCallback, abortable);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取同步Resource代理
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @return 同步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getResource(
+			String clientName, String resourceName) {
+		return getResource(clientName, resourceName);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取同步Resource代理，并设置可选参数
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName resource名称
+	 * @param backable 是否允许转为后台运行
+	 * @param abortable 是否允许中止
+	 * @return 同步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getResource(
+			String clientName, String resourceName,
+			boolean backable, boolean abortable) {
+		return Client.getClient(clientName).getResourceFactory().getResource(resourceName,
+				backable, abortable);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取异步Resource代理
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @return 异步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getAsyncResource(
+			String clientName, String resourceName,
+			Callback<M> resourceCallback) {
+		return getAsyncResource(clientName, resourceName, resourceCallback);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取异步Resource代理，并设置可选参数
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @param backable 是否允许转为后台运行
+	 * @param abortable 是否允许中止
+	 * @return 异步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getAsyncResource(
+			String clientName, String resourceName,
+			Callback<M> resourceCallback,
+			boolean backable, boolean abortable) {
+		return Client.getClient(clientName).getResourceFactory().getAsyncResource(resourceName,
+				resourceCallback, backable, abortable);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取后台同步Resource代理
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @return 后台同步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getBackResource(
+			String clientName, String resourceName) {
+		return getBackResource(clientName, resourceName);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取后台同步Resource代理，并设置可选参数
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @param abortable 是否允许中止
+	 * @return 后台同步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getBackResource(
+			String clientName, String resourceName, boolean abortable) {
+		return Client.getClient(clientName).getResourceFactory().getBackResource(resourceName, abortable);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取后台异步Resource代理
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @return 后台异步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getBackAsyncResource(
+			String clientName, String resourceName,
+			Callback<M> resourceCallback) {
+		return getBackAsyncResource(clientName, resourceName, resourceCallback);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取后台异步Resource代理
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @param abortable 是否允许中止
+	 * @return 后台异步Resource代理
+	 */
+	public static <M extends Serializable> Resource<M> getBackAsyncResource(
+			String clientName, String resourceName,
+			Callback<M> resourceCallback, boolean abortable) {
+		return Client.getClient(clientName).getResourceFactory().getBackAsyncResource(resourceName,
+				resourceCallback, abortable);
 	}
 
 }
