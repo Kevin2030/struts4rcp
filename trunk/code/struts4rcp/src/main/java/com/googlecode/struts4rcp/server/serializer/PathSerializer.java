@@ -63,9 +63,14 @@ public class PathSerializer extends AbstractServletSerializer {
 		return result;
 	}
 
-	public void serialize(Serializable obj, HttpServletResponse response)
+	public void serialize(Serializable result, HttpServletResponse response)
 			throws IOException {
-		serializer.serialize(obj);
+		if (serializer instanceof ServletSerializer)
+			((ServletSerializer)serializer).serialize(result, response);
+		else if (serializer instanceof TextSerializer)
+			((TextSerializer)serializer).serialize(result, response.getWriter());
+		else
+			serializer.serialize(result, response.getOutputStream());
 	}
 
 	public String getContentType() {
