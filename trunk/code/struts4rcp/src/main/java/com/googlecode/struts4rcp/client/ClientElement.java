@@ -18,7 +18,7 @@ public interface ClientElement {
 	/**
 	 * 停止
 	 */
-	void destroy();
+	void shutdown();
 
 	/**
 	 * 获取当前所属客户端实例

@@ -2,7 +2,7 @@ package com.googlecode.struts4rcp.client.launcher;
 
 import java.util.Properties;
 
-import com.googlecode.struts4rcp.client.Actions;
+import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.transporter.AbstractHttpTransporter;
 
 public class AbstractLauncher implements Launcher {
@@ -18,7 +18,7 @@ public class AbstractLauncher implements Launcher {
 	}
 
 	protected void start(Properties properties) {
-		Actions.init(properties);
+		Client.init(properties);
 	}
 
 }

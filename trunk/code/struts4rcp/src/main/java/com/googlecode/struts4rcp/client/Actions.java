@@ -1,14 +1,8 @@
 package com.googlecode.struts4rcp.client;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.util.PropertiesUtils;
-import com.googlecode.struts4rcp.util.ThreadUtils;
 
 /**
  * 客户端Action客户端静态门面
@@ -19,145 +13,6 @@ public class Actions {
 
 	// 静态门面，私有化构造函数，禁止实例化
 	private Actions() {
-	}
-
-	/**
-	 * 初始化默认客户端实例
-	 *
-	 * @param configPath
-	 *            配置文件路径
-	 * @throws IOException
-	 *             加载配置文件失败时抛出
-	 */
-	public static void init(String configPath) throws IOException {
-		ThreadUtils.init();
-		addClient(null, configPath);
-	}
-
-	/**
-	 * 初始化默认客户端实例
-	 *
-	 * @see java.util.Properties#load(java.io.InputStream)
-	 * @see com.googlecode.struts4rcp.util.PropertiesUtils#loadFromClassPath(String)
-	 * @see com.googlecode.struts4rcp.util.PropertiesUtils#loadFromFileSystem(String)
-	 * @param config
-	 *            配置
-	 */
-	public static void init(Properties config) {
-		ThreadUtils.init();
-		addClient(null, config);
-	}
-
-	public static void init(Client client) {
-		ThreadUtils.init();
-		addClient(null, client);
-	}
-
-	// 客户端
-	private static final Map<String, Client> clients = new HashMap<String, Client>();
-
-	/**
-	 * 添加客户端实例
-	 *
-	 * @param clientName 客户端实例名
-	 * @param configPath
-	 *            配置文件路径
-	 * @throws IOException
-	 *             加载配置文件失败时抛出
-	 */
-	public static void addClient(String clientName, String configPath)
-			throws IOException {
-		addClient(clientName, PropertiesUtils.load(configPath));
-	}
-
-	/**
-	 * 添加客户端实例
-	 *
-	 * @see java.util.Properties#load(java.io.InputStream)
-	 * @see com.googlecode.struts4rcp.util.PropertiesUtils#loadFromClassPath(String)
-	 * @see com.googlecode.struts4rcp.util.PropertiesUtils#loadFromFileSystem(String)
-	 * @param clientName 客户端实例名
-	 * @param config
-	 *            配置
-	 */
-	public static void addClient(String clientName, Properties config) {
-		if (config == null)
-			throw new NullPointerException("properties == null!");
-		addClient(clientName, new Client(config));
-	}
-
-	/**
-	 * 添加客户端实例
-	 *
-	 * @param clientName 客户端实例名
-	 * @param client
-	 *            客户端实例
-	 */
-	public static void addClient(String clientName, Client client) {
-		synchronized (clients) {
-			Client old = clients.get(clientName);
-			if (old != null)
-				old.destroy();
-			clients.put(clientName, client);
-		}
-	}
-
-	/**
-	 * 获取默认客户端实例
-	 *
-	 * @return 默认客户端实例
-	 */
-	public static Client getClient() {
-		return getClient(null);
-	}
-
-	/**
-	 * 获取指定客户端实例
-	 *
-	 * @param clientName 客户端实例名
-	 */
-	public static Client getClient(String clientName) {
-		Client client;
-		synchronized (clients) {
-			client = clients.get(clientName);
-		}
-		if (client == null)
-			throw new NullPointerException("Not found client: " + clientName);
-		return client;
-	}
-
-	/**
-	 * 移除指定客户端实例
-	 *
-	 * @param clientName 客户端实例名
-	 */
-	public static void removeClient(String clientName) {
-		Client client;
-		synchronized (clients) {
-			client = clients.remove(clientName);
-		}
-		if (client != null)
-			client.destroy();
-	}
-
-	/**
-	 * 锁毁所有客户端实例
-	 */
-	public static void destroy() {
-		try {
-			synchronized (clients) {
-				for (Client client : clients.values()) {
-					try {
-						client.destroy();
-					} catch (Throwable t) {
-						// ignore
-					}
-				}
-				clients.clear();
-			}
-		} finally {
-			ThreadUtils.destroy();
-		}
 	}
 
 	/////////////////////////////////////////
@@ -302,7 +157,7 @@ public class Actions {
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getAction(
 			String clientName, String actionName,
 			boolean backable, boolean abortable) {
-		return getClient(clientName).getActionFactory().getAction(actionName,
+		return Client.getClient(clientName).getActionFactory().getAction(actionName,
 				backable, abortable);
 	}
 
@@ -340,7 +195,7 @@ public class Actions {
 			String clientName, String actionName,
 			ActionCallback<R> actionCallback,
 			boolean backable, boolean abortable) {
-		return getClient(clientName).getActionFactory().getAsyncAction(actionName,
+		return Client.getClient(clientName).getActionFactory().getAsyncAction(actionName,
 				actionCallback, backable, abortable);
 	}
 
@@ -370,7 +225,7 @@ public class Actions {
 	 */
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getBackAction(
 			String clientName, String actionName, boolean abortable) {
-		return getClient(clientName).getActionFactory().getBackAction(actionName, abortable);
+		return Client.getClient(clientName).getActionFactory().getBackAction(actionName, abortable);
 	}
 
 	/**
@@ -405,7 +260,7 @@ public class Actions {
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(
 			String clientName, String actionName,
 			ActionCallback<R> actionCallback, boolean abortable) {
-		return getClient(clientName).getActionFactory().getBackAsyncAction(actionName,
+		return Client.getClient(clientName).getActionFactory().getBackAsyncAction(actionName,
 				actionCallback, abortable);
 	}
 

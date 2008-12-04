@@ -98,9 +98,9 @@ public class CommonsHttpClientTransporter extends AbstractHttpTransporter<PostMe
 	}
 
 	@Override
-	public void destroy() {
+	public void shutdown() {
 		try {
-			super.destroy();
+			super.shutdown();
 		} finally {
 			try {
 				HttpConnectionManager connectionManager = httpClient.getHttpConnectionManager();
