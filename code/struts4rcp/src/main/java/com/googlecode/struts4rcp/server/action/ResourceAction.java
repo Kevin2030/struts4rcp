@@ -2,7 +2,9 @@ package com.googlecode.struts4rcp.server.action;
 
 import java.io.Serializable;
 
+import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.ActionContext;
+import com.googlecode.struts4rcp.server.serializer.PathSerializer;
 
 /**
  * 资源Action基类
@@ -19,12 +21,11 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		this.path = path;
 	}
 
+	@SuppressWarnings("unchecked")
 	public String getPath() {
 		if (path != null && path.length() > 0)
 			return path;
-		if (getClass().isAnnotationPresent(Path.class))
-			return getClass().getAnnotation(Path.class).value();
-		throw new IllegalStateException("The resource action \"" + getClass().getName() + "\" unsetting the resource path, please add annotation @Path(\"xxx\") on action class definition, or configure <bean><property name=\"path\" value=\"xxx\"/></bean>");
+		return PathSerializer.getPath((Action<Serializable, Serializable>)this);
 	}
 
 	public R execute(R model) throws Exception {
