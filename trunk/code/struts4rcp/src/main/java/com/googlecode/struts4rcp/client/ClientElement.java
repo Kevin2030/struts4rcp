@@ -16,14 +16,14 @@ public interface ClientElement {
 	void init(Client client, Properties properties);
 
 	/**
+	 * 停止
+	 */
+	void destroy();
+
+	/**
 	 * 获取当前所属客户端实例
 	 * @return 客户端实例
 	 */
 	Client getClient();
-
-	/**
-	 * 停止
-	 */
-	void shutdown();
 
 }

@@ -97,7 +97,7 @@ public class Actions {
 		synchronized (clients) {
 			Client old = clients.get(clientName);
 			if (old != null)
-				old.shutdown();
+				old.destroy();
 			clients.put(clientName, client);
 		}
 	}
@@ -137,7 +137,7 @@ public class Actions {
 			client = clients.remove(clientName);
 		}
 		if (client != null)
-			client.shutdown();
+			client.destroy();
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class Actions {
 			synchronized (clients) {
 				for (Client client : clients.values()) {
 					try {
-						client.shutdown();
+						client.destroy();
 					} catch (Throwable t) {
 						// ignore
 					}

@@ -248,7 +248,7 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 		urlSuffix = "." + actionSuffix;
 	}
 
-	public void shutdown() {
+	public void destroy() {
 		try {
 			transportationPublisher.clearListeners();
 		} finally {
