@@ -20,9 +20,11 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	}
 
 	public String getPath() {
+		if (path != null && path.length() > 0)
+			return path;
 		if (getClass().isAnnotationPresent(Path.class))
 			return getClass().getAnnotation(Path.class).value();
-		return path;
+		throw new IllegalStateException("The resource action \"" + getClass().getName() + "\" unsetting the resource path, please add annotation @Path(\"xxx\") on action class definition, or configure <bean><property name=\"path\" value=\"xxx\"/></bean>");
 	}
 
 	public R execute(R model) throws Exception {
