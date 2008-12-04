@@ -107,7 +107,16 @@ public class ActionServlet extends HttpServlet {
 	@Override
 	public void destroy() {
 		super.destroy();
-		ActionServletContext.destroy(); // 销毁上下文
+		if (actionServletContext != null) {
+			ActionMapper actionMapper = actionServletContext.getActionMapper();
+			if (actionMapper != null) {
+				actionMapper.shutdown();
+			}
+			ActionProvider actionProvider = actionServletContext.getActionProvider();
+			if (actionProvider != null) {
+				actionProvider.shutdown();
+			}
+		}
 	}
 
 	// 请求适配
