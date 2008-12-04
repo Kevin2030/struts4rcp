@@ -9,35 +9,22 @@ import javax.servlet.ServletContext;
  */
 public class ActionServletContext {
 
-	private static ActionServletContext CONTEXT;
+	// 上下文线程容器
+	private static ThreadLocal<ActionServletContext> local = new ThreadLocal<ActionServletContext>();
 
 	/**
 	 * 初始化上下文
-	 * @param servletContext 应用服务上下文
-	 * @param servletConfig 应用服务配置
+	 * @param actionServletContext 应用服务上下文
 	 */
-	public static void init(ServletContext servletContext, ServletConfig servletConfig) {
-		CONTEXT = new ActionServletContext(servletContext, servletConfig);
+	public static void init(ActionServletContext actionServletContext) {
+		local.set(actionServletContext);
 	}
 
 	/**
 	 * 销毁上下文
 	 */
 	public static void destroy() {
-		if (CONTEXT != null) {
-			try {
-				if (CONTEXT.actionProvider != null) {
-					CONTEXT.actionProvider.shutdown();
-					CONTEXT.actionProvider = null;
-				}
-			} finally {
-				if (CONTEXT.actionMapper != null) {
-					CONTEXT.actionMapper.shutdown();
-					CONTEXT.actionMapper = null;
-				}
-			}
-			CONTEXT = null;
-		}
+		local.remove();
 	}
 
 	/**
@@ -45,14 +32,14 @@ public class ActionServletContext {
 	 * @return 当前服务器上下文
 	 */
 	public static ActionServletContext getContext() {
-		return CONTEXT;
+		return local.get();
 	}
 
 	private final ServletContext servletContext;
 
 	private final ServletConfig servletConfig;
 
-	private ActionServletContext(ServletContext servletContext, ServletConfig servletConfig) {
+	public ActionServletContext(ServletContext servletContext, ServletConfig servletConfig) {
 		this.servletContext = servletContext;
 		this.servletConfig = servletConfig;
 	}
