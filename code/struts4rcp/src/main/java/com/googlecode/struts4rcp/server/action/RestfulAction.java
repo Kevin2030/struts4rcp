@@ -58,16 +58,4 @@ public abstract class RestfulAction<M extends Serializable> extends DispatchActi
 		return model;
 	}
 
-	public Serializable trace(M model) throws Exception {
-		return model;
-	}
-
-	public Serializable options(M model) throws Exception {
-		return model;
-	}
-
-	public Serializable head(M model) throws Exception {
-		return model;
-	}
-
 }
