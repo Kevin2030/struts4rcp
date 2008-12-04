@@ -252,7 +252,7 @@ public class ActionFactory implements ClientElement {
 	 * @param actionCallback 回调接口
 	 * @return 异步Action代理
 	 */
-	public <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(String actionName, ActionCallback<R> actionCallback) {
+	public <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(String actionName, Callback<R> actionCallback) {
 		return getAsyncAction(actionName, actionCallback, true, true);
 	}
 
@@ -266,7 +266,7 @@ public class ActionFactory implements ClientElement {
 	 * @param abortable 是否允许中止
 	 * @return 异步Action代理
 	 */
-	public <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(String actionName, ActionCallback<R> actionCallback, boolean backable, boolean abortable) {
+	public <M extends Serializable, R extends Serializable> Action<M, R> getAsyncAction(String actionName, Callback<R> actionCallback, boolean backable, boolean abortable) {
 		Action<M, R> action = getAction(actionName, backable, abortable);
 		return new AsyncActionProxy<M, R>(action, actionCallback, false);
 	}
@@ -302,7 +302,7 @@ public class ActionFactory implements ClientElement {
 	 * @param actionCallback 回调接口
 	 * @return 后台异步Action代理
 	 */
-	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(String actionName, ActionCallback<R> actionCallback) {
+	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(String actionName, Callback<R> actionCallback) {
 		return getBackAsyncAction(actionName, actionCallback, true);
 	}
 
@@ -316,7 +316,7 @@ public class ActionFactory implements ClientElement {
 	 * @return 后台异步Action代理
 	 */
 	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAsyncAction(String actionName,
-			ActionCallback<R> actionCallback, boolean abortable) {
+			Callback<R> actionCallback, boolean abortable) {
 		Action<M, R> action = getBackAction(actionName, abortable);
 		return new AsyncActionProxy<M, R>(action, actionCallback, true);
 	}
@@ -384,11 +384,11 @@ public class ActionFactory implements ClientElement {
 
 		protected final Action<M, R> action;
 
-		protected final ActionCallback<R> actionCallback;
+		protected final Callback<R> actionCallback;
 
 		protected final boolean back;
 
-		AsyncActionProxy(Action<M, R> action, ActionCallback<R> actionCallback, boolean back) {
+		AsyncActionProxy(Action<M, R> action, Callback<R> actionCallback, boolean back) {
 			this.action = action;
 			this.actionCallback = actionCallback;
 			this.back = back;
