@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.server.mapper.SuffixActionMapper;
+import com.googlecode.struts4rcp.server.mapper.DefaultActionMapper;
 import com.googlecode.struts4rcp.server.provider.SpringActionProvider;
 import com.googlecode.struts4rcp.server.serializer.ServletSerializer;
 import com.googlecode.struts4rcp.util.BeanUtils;
@@ -20,6 +20,7 @@ import com.googlecode.struts4rcp.util.ClassUtils;
 import com.googlecode.struts4rcp.util.ExceptionUtils;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
+import com.googlecode.struts4rcp.util.serializer.JavaSerializer;
 import com.googlecode.struts4rcp.util.serializer.Serializer;
 import com.googlecode.struts4rcp.util.serializer.TextSerializer;
 
@@ -38,11 +39,9 @@ import com.googlecode.struts4rcp.util.serializer.TextSerializer;
  *         &lt;/param-value&gt;
  *     &lt;/init-param&gt;
  *     &lt;init-param&gt;
- *         &lt;param-name&gt;serializers&lt;/param-name&gt;
+ *         &lt;param-name&gt;serializer&lt;/param-name&gt;
  *         &lt;param-value&gt;
- *             data: com.googlecode.struts4rcp.util.serializer.JavaSerializer,
- *             json: com.googlecode.struts4rcp.server.serializer.JsonSerializer,
- *             page: com.googlecode.struts4rcp.server.serializer.JspSerializer
+ *             com.googlecode.struts4rcp.util.serializer.JavaSerializer
  *         &lt;/param-value&gt;
  *     &lt;/init-param&gt;
  *     &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
@@ -50,14 +49,6 @@ import com.googlecode.struts4rcp.util.serializer.TextSerializer;
  * &lt;servlet-mapping&gt;
  *     &lt;servlet-name&gt;actionServlet&lt;/servlet-name&gt;
  *     &lt;url-pattern&gt;*.data&lt;/url-pattern&gt;
- * &lt;/servlet-mapping&gt;
- * &lt;servlet-mapping&gt;
- *     &lt;servlet-name&gt;actionServlet&lt;/servlet-name&gt;
- *     &lt;url-pattern&gt;*.json&lt;/url-pattern&gt;
- * &lt;/servlet-mapping&gt;
- * &lt;servlet-mapping&gt;
- *     &lt;servlet-name&gt;actionServlet&lt;/servlet-name&gt;
- *     &lt;url-pattern&gt;*.page&lt;/url-pattern&gt;
  * &lt;/servlet-mapping&gt;
  * </pre>
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
@@ -90,8 +81,13 @@ public class ActionServlet extends HttpServlet {
 			// 加载Action接收器
 			ActionMapper actionMapper = getActionMapper();
 			if (actionMapper == null) // 缺省使用ActionMapper
-				actionMapper = new SuffixActionMapper();
+				actionMapper = new DefaultActionMapper();
 			ActionServletContext.getContext().setActionMapper(actionMapper);
+
+			Serializer serializer = getSerializer();
+			if (serializer == null)
+				serializer = new JavaSerializer();
+			ActionServletContext.getContext().setSerializer(serializer);
 		} catch (ServletException e) {
 			logger.error(e.getMessage(), e);
 			throw e;
@@ -107,16 +103,6 @@ public class ActionServlet extends HttpServlet {
 	@Override
 	public void destroy() {
 		super.destroy();
-		if (actionServletContext != null) {
-			ActionMapper actionMapper = actionServletContext.getActionMapper();
-			if (actionMapper != null) {
-				actionMapper.shutdown();
-			}
-			ActionProvider actionProvider = actionServletContext.getActionProvider();
-			if (actionProvider != null) {
-				actionProvider.shutdown();
-			}
-		}
 	}
 
 	// 请求适配
@@ -145,9 +131,7 @@ public class ActionServlet extends HttpServlet {
 			throws ServletException, IOException {
 		ActionServletContext.init(actionServletContext); // 初始化上下文
 		try {
-			Serializer serializer = ActionServletContext.getContext().getActionMapper().getSerializer(request);
-			if (serializer == null) // 接收器不允许为空
-				throw new NullPointerException("Not found serializer by request: " + request.getRequestURI());
+			Serializer serializer = ActionServletContext.getContext().getSerializer();
 			String contentType = serializer.getContentType();
 			if (serializer instanceof TextSerializer) {
 				TextSerializer textSerializer = (TextSerializer)serializer;
@@ -295,6 +279,32 @@ public class ActionServlet extends HttpServlet {
 					return (ActionMapper)actionMapperClass.newInstance();
 				} else {
 					logger.error(actionMapperClass.getName() + " unimplementet interface " + ActionMapper.class.getName());
+				}
+			} catch (Exception e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * serializers的配置参数名
+	 */
+	protected static final String SERIALIZER_PARAM_NAME = "serializer";
+
+	/**
+	 * 加载序列化器，子类可通过覆写该方法，拦截加载方式
+	 * @return 序列化器
+	 */
+	protected Serializer getSerializer() {
+		String serializerConfig = getInitParameter(SERIALIZER_PARAM_NAME);
+		if (serializerConfig != null && serializerConfig.trim().length() > 0) {
+			try {
+				Class<?> serializerClass = ClassUtils.forName(serializerConfig.trim());
+				if (Serializer.class.isAssignableFrom(serializerClass)) {
+					return (Serializer)serializerClass.newInstance();
+				} else {
+					logger.error(serializerClass.getName() + " unimplementet interface " + Serializer.class.getName());
 				}
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);

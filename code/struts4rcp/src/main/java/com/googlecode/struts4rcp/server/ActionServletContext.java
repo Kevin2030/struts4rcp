@@ -3,6 +3,8 @@ package com.googlecode.struts4rcp.server;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
+import com.googlecode.struts4rcp.util.serializer.Serializer;
+
 /**
  * Action工厂上下文
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
@@ -88,7 +90,21 @@ public class ActionServletContext {
 	}
 
 	public void setActionMapper(ActionMapper actionMapper) {
+		if (actionMapper == null)
+			throw new NullPointerException("ActionMapper == null!");
 		this.actionMapper = actionMapper;
+	}
+
+	private Serializer serializer;
+
+	public Serializer getSerializer() {
+		return serializer;
+	}
+
+	public void setSerializer(Serializer serializer) {
+		if (serializer == null)
+			throw new NullPointerException("Serializer == null!");
+		this.serializer = serializer;
 	}
 
 }

@@ -62,10 +62,6 @@ public class SimpleActionProvider extends AbstractActionProvider {
 		}
 	}
 
-	public void shutdown() {
-		actionInterceptors.clear();
-	}
-
 	protected Action<Serializable, Serializable> findAction(String actionName) throws Exception {
 		return actions.get(actionName);
 	}

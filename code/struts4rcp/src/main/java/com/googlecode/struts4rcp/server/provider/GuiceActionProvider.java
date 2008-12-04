@@ -40,10 +40,6 @@ public class GuiceActionProvider extends AbstractActionProvider {
 		}
 	}
 
-	public void shutdown() {
-
-	}
-
 	@SuppressWarnings("unchecked")
 	protected Action<Serializable, Serializable> findAction(String actionName) throws Exception {
 		Class<?> actionClass = ClassUtils.forName(actionName);
