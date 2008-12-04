@@ -20,7 +20,6 @@ import com.googlecode.struts4rcp.util.ClassUtils;
 import com.googlecode.struts4rcp.util.ExceptionUtils;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
-import com.googlecode.struts4rcp.util.serializer.JavaSerializer;
 import com.googlecode.struts4rcp.util.serializer.Serializer;
 import com.googlecode.struts4rcp.util.serializer.TextSerializer;
 
@@ -83,11 +82,6 @@ public class ActionServlet extends HttpServlet {
 			if (actionMapper == null) // 缺省使用ActionMapper
 				actionMapper = new DefaultActionMapper();
 			ActionServletContext.getContext().setActionMapper(actionMapper);
-
-			Serializer serializer = getSerializer();
-			if (serializer == null)
-				serializer = new JavaSerializer();
-			ActionServletContext.getContext().setSerializer(serializer);
 		} catch (ServletException e) {
 			logger.error(e.getMessage(), e);
 			throw e;
@@ -131,7 +125,7 @@ public class ActionServlet extends HttpServlet {
 			throws ServletException, IOException {
 		ActionServletContext.init(actionServletContext); // 初始化上下文
 		try {
-			Serializer serializer = ActionServletContext.getContext().getSerializer();
+			Serializer serializer = ActionServletContext.getContext().getActionMapper().getSerializer(request);
 			String contentType = serializer.getContentType();
 			if (serializer instanceof TextSerializer) {
 				TextSerializer textSerializer = (TextSerializer)serializer;
@@ -279,32 +273,6 @@ public class ActionServlet extends HttpServlet {
 					return (ActionMapper)actionMapperClass.newInstance();
 				} else {
 					logger.error(actionMapperClass.getName() + " unimplementet interface " + ActionMapper.class.getName());
-				}
-			} catch (Exception e) {
-				logger.error(e.getMessage(), e);
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * serializers的配置参数名
-	 */
-	protected static final String SERIALIZER_PARAM_NAME = "serializer";
-
-	/**
-	 * 加载序列化器，子类可通过覆写该方法，拦截加载方式
-	 * @return 序列化器
-	 */
-	protected Serializer getSerializer() {
-		String serializerConfig = getInitParameter(SERIALIZER_PARAM_NAME);
-		if (serializerConfig != null && serializerConfig.trim().length() > 0) {
-			try {
-				Class<?> serializerClass = ClassUtils.forName(serializerConfig.trim());
-				if (Serializer.class.isAssignableFrom(serializerClass)) {
-					return (Serializer)serializerClass.newInstance();
-				} else {
-					logger.error(serializerClass.getName() + " unimplementet interface " + Serializer.class.getName());
 				}
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);

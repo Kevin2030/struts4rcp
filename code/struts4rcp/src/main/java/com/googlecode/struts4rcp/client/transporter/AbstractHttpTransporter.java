@@ -190,7 +190,7 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 		// 读取序列化器
 		serializer = PropertiesUtils.getInstanceProperty(config, SERIALIZER_PARAM_NAME, Serializer.class, JavaSerializer.class);
 		client.getConfigurationManager().register(SERIALIZER_PARAM_NAME, "序列化策略", "暂未实现动态切换序列化策略，修改后不会生效!",
-				JavaSerializer.class.getName(), ServiceUtils.getServices(Serializer.class.getName()));
+				JavaSerializer.class.getName(), ServiceUtils.getServiceClassNames(Serializer.class).toArray(new String[0]));
 
 		// 读取服务器主机名
 		serverHost = PropertiesUtils.getStringProperty(config, SERVER_HOST_PARAM_NAME, null);

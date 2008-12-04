@@ -1,13 +1,19 @@
 package com.googlecode.struts4rcp.server.mapper;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import com.googlecode.struts4rcp.server.ActionMapper;
 import com.googlecode.struts4rcp.server.ActionServletContext;
+import com.googlecode.struts4rcp.util.ServiceUtils;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
+import com.googlecode.struts4rcp.util.serializer.Serializer;
 
 /**
  * 后缀Action映射器
@@ -20,6 +26,8 @@ public class DefaultActionMapper implements ActionMapper {
 	 */
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+	protected final Map<String, Serializer> serializers = new HashMap<String, Serializer>();
+
 	private boolean directoryMapping;
 
 	private boolean extensionMapping;
@@ -31,6 +39,13 @@ public class DefaultActionMapper implements ActionMapper {
 	protected void init(ServletContext servletContext, ServletConfig servletConfig) {
 		directoryMapping = isDirectoryMapping(servletContext, servletConfig);
 		extensionMapping = isExtensionMapping(servletContext, servletConfig);
+		Collection<Serializer> serializerInstances = ServiceUtils.getServiceInstances(Serializer.class);
+		for (Serializer serializer : serializerInstances) {
+			String contentType = serializer.getContentType();
+			if (contentType != null)
+				contentType = contentType.toLowerCase();
+			serializers.put(contentType, serializer);
+		}
 	}
 
 	public void shutdown() {}
@@ -106,6 +121,18 @@ public class DefaultActionMapper implements ActionMapper {
 				actionName = actionName.substring(0, extensionIndex);
 		}
 		return actionName;
+	}
+
+	public Serializer getSerializer(HttpServletRequest request) {
+		String contentType = request.getContentType();
+		if (contentType != null)
+			contentType = contentType.toLowerCase();
+		Serializer serializer = serializers.get(contentType);
+		if (serializer == null) {
+			String accept = request.getHeader("Accept");
+			serializer = serializers.get(accept);
+		}
+		return serializer;
 	}
 
 }

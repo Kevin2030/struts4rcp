@@ -9,7 +9,7 @@ import com.googlecode.struts4rcp.server.ActionContext;
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  * @param <R> 资源类型
  */
-public abstract class ResourceAction<R extends Serializable> extends AbstractAction<R, R> {
+public abstract class ResourceAction<R extends Serializable> extends AbstractAction<R, R> implements PathAction<R, R> {
 
 	private String path;
 
