@@ -71,11 +71,14 @@ public class ActionServlet extends HttpServlet {
 	 */
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+	protected ActionServletContext actionServletContext;
+
 	// 初始化
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		ActionServletContext.init(getServletContext(), getServletConfig()); // 初始化上下文
+		actionServletContext = new ActionServletContext(getServletContext(), getServletConfig());
+		ActionServletContext.init(actionServletContext); // 初始化上下文
 		try {
 			// 加载Action工厂
 			ActionProvider actionProvider = getActionProvider();
@@ -95,6 +98,8 @@ public class ActionServlet extends HttpServlet {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			throw new ServletException(e.getMessage(), e);
+		} finally {
+			ActionServletContext.destroy();
 		}
 	}
 
@@ -129,6 +134,7 @@ public class ActionServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		ActionServletContext.init(actionServletContext); // 初始化上下文
 		try {
 			Serializer serializer = ActionServletContext.getContext().getActionMapper().getSerializer(request);
 			if (serializer == null) // 接收器不允许为空
@@ -188,6 +194,8 @@ public class ActionServlet extends HttpServlet {
 			logger.error(e.getMessage(), e);
 			String msg = ExceptionUtils.getDetailMessage(e);
 			response.sendError(500, msg); // 不能序列化则发送HTTP错误信息报头
+		} finally {
+			ActionServletContext.destroy();
 		}
 	}
 
