@@ -16,7 +16,7 @@ import org.jboss.serial.io.JBossObjectOutputStream;
  * @see org.jboss.serial.io.JBossObjectOutputStream
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class JbossSerializer implements StreamSerializer {
+public class JbossStreamSerializer implements StreamSerializer {
 
 	public String getContentType() {
 		return "application/jboss-serialization";
