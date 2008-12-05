@@ -2,8 +2,8 @@ package com.googlecode.struts4rcp.client.event;
 
 public class ExceptionAdapter extends Adapter implements ExceptionListener {
 
-	public void onBackCatched(ExceptionEvent event) {}
+	public void onBackExceptionCatched(ExceptionEvent event) {}
 
-	public void onCatched(ExceptionEvent event) {}
+	public void onExceptionCatched(ExceptionEvent event) {}
 
 }

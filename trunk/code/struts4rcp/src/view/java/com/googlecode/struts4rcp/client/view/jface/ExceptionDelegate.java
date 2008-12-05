@@ -25,17 +25,17 @@ public class ExceptionDelegate implements ExceptionListener {
 		this.runOnNonUI = runOnNonUI;
 	}
 
-	public void onCatched(final ExceptionEvent event) {
+	public void onExceptionCatched(final ExceptionEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onCatched(event);
+					listener.onExceptionCatched(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onCatched(event);
+							listener.onExceptionCatched(event);
 						}
 					});
 				}
@@ -45,17 +45,17 @@ public class ExceptionDelegate implements ExceptionListener {
 		}
 	}
 
-	public void onBackCatched(final ExceptionEvent event) {
+	public void onBackExceptionCatched(final ExceptionEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onBackCatched(event);
+					listener.onBackExceptionCatched(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onBackCatched(event);
+							listener.onBackExceptionCatched(event);
 						}
 					});
 				}
