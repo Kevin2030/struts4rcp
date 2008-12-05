@@ -1,5 +1,7 @@
 package com.googlecode.struts4rcp.server.action;
 
-public class BatchResourceAction {
+import java.io.Serializable;
+
+public class BatchResourceAction<R extends Serializable> extends ResourceAction<R[]> {
 
 }

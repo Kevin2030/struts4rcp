@@ -37,7 +37,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 			update(model);
 			return null;
 		} else if ("delete".equalsIgnoreCase(method)) {
-			remove(model);
+			delete(model);
 			return null;
 		} else if ("get".equalsIgnoreCase(method)) {
 			return get(model);
@@ -50,7 +50,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 
 	public void update(R resource) throws Exception {}
 
-	public void remove(R resource) throws Exception {}
+	public void delete(R resource) throws Exception {}
 
 	public R get(R resource) throws Exception {
 		return resource;
