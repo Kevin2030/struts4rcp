@@ -118,91 +118,91 @@ public class ResourceFactory implements ClientElement {
 
 	/**
 	 * 获取资源代理
-	 * @param <R, C> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @return 资源
 	 */
-	public <R extends Serializable, C extends Serializable> BatchResource<R, C> getBatchResource(String uri) {
+	public <R extends Serializable> BatchResource<R> getBatchResource(String uri) {
 		return null;
 	}
 
 	/**
 	 * 获取异步资源代理
-	 * @param <R, C> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param callback 获取结果的回调接口
 	 * @return 资源
 	 */
-	public <R extends Serializable, C extends Serializable> BatchResource<R, C> getAsyncBatchResource(String uri, Callback<R[]> callback) {
+	public <R extends Serializable> BatchResource<R> getAsyncBatchResource(String uri, Callback<R[]> callback) {
 		return null;
 	}
 
 	/**
 	 * 获取资源代理
-	 * @param <R, C> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param backable 是否允许转为后台运行
 	 * @param abortable 是否允许中止
 	 * @return 资源
 	 */
-	public <R extends Serializable, C extends Serializable> BatchResource<R, C> getBatchResource(String uri, boolean backable, boolean abortable) {
+	public <R extends Serializable> BatchResource<R> getBatchResource(String uri, boolean backable, boolean abortable) {
 		return null;
 	}
 
 	/**
 	 * 获取异步资源代理
-	 * @param <R, C> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param callback 获取结果的回调接口
 	 * @param backable 是否允许转为后台运行
 	 * @param abortable 是否允许中止
 	 * @return 资源
 	 */
-	public <R extends Serializable, C extends Serializable> BatchResource<R, C> getAsyncBatchResource(String uri, Callback<R[]> callback, boolean backable, boolean abortable) {
+	public <R extends Serializable> BatchResource<R> getAsyncBatchResource(String uri, Callback<R[]> callback, boolean backable, boolean abortable) {
 		return null;
 	}
 
 	/**
 	 * 获取后台资源代理
-	 * @param <R, C> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @return 资源
 	 */
-	public <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackBatchResource(String uri) {
+	public <R extends Serializable> BatchResource<R> getBackBatchResource(String uri) {
 		return null;
 	}
 
 	/**
 	 * 获取后台异步资源代理
-	 * @param <R, C> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param callback 获取结果的回调接口
 	 * @return 资源
 	 */
-	public <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackAsyncBatchResource(String uri, Callback<R[]> callback) {
+	public <R extends Serializable> BatchResource<R> getBackAsyncBatchResource(String uri, Callback<R[]> callback) {
 		return null;
 	}
 
 	/**
 	 * 获取后台资源代理
-	 * @param <R, C> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param abortable 是否允许中止
 	 * @return 资源
 	 */
-	public <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackBatchResource(String uri, boolean abortable) {
+	public <R extends Serializable> BatchResource<R> getBackBatchResource(String uri, boolean abortable) {
 		return null;
 	}
 
 	/**
 	 * 获取后台异步资源代理
-	 * @param <R, C> 资源类型
+	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param callback 获取结果的回调接口
 	 * @param abortable 是否允许中止
 	 * @return 资源
 	 */
-	public <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackAsyncBatchResource(String uri, Callback<R[]> callback, boolean abortable) {
+	public <R extends Serializable> BatchResource<R> getBackAsyncBatchResource(String uri, Callback<R[]> callback, boolean abortable) {
 		return null;
 	}
 

@@ -266,7 +266,7 @@ public class Resources {
 	 *            resource名称
 	 * @return 同步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBatchResource(
+	public static <R extends Serializable> BatchResource<R> getBatchResource(
 			String resourceName) {
 		return getBatchResource(null, resourceName);
 	}
@@ -279,7 +279,7 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 同步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBatchResource(
+	public static <R extends Serializable> BatchResource<R> getBatchResource(
 			String resourceName, boolean backable,
 			boolean abortable) {
 		return getBatchResource(null, resourceName, backable,
@@ -295,7 +295,7 @@ public class Resources {
 	 *            回调接口
 	 * @return 异步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getAsyncBatchResource(
+	public static <R extends Serializable> BatchResource<R> getAsyncBatchResource(
 			String resourceName, Callback<R[]> resourceCallback) {
 		return getAsyncBatchResource(null, resourceName, resourceCallback);
 	}
@@ -311,7 +311,7 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 异步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getAsyncBatchResource(
+	public static <R extends Serializable> BatchResource<R> getAsyncBatchResource(
 			String resourceName, Callback<R[]> resourceCallback,
 			boolean backable, boolean abortable) {
 		return getAsyncBatchResource(null, resourceName, resourceCallback,
@@ -325,7 +325,7 @@ public class Resources {
 	 *            resource名称
 	 * @return 后台同步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackBatchResource(String resourceName) {
+	public static <R extends Serializable> BatchResource<R> getBackBatchResource(String resourceName) {
 		return getBackBatchResource(null, resourceName);
 	}
 
@@ -337,7 +337,7 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 后台同步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackBatchResource(String resourceName, boolean abortable) {
+	public static <R extends Serializable> BatchResource<R> getBackBatchResource(String resourceName, boolean abortable) {
 		return getBackBatchResource(null, resourceName, abortable);
 	}
 
@@ -350,7 +350,7 @@ public class Resources {
 	 *            回调接口
 	 * @return 后台异步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackAsyncBatchResource(String resourceName,
+	public static <R extends Serializable> BatchResource<R> getBackAsyncBatchResource(String resourceName,
 			Callback<R[]> resourceCallback) {
 		return getBackAsyncBatchResource(null, resourceName, resourceCallback);
 	}
@@ -365,7 +365,7 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 后台异步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackAsyncBatchResource(String resourceName,
+	public static <R extends Serializable> BatchResource<R> getBackAsyncBatchResource(String resourceName,
 			Callback<R[]> resourceCallback, boolean abortable) {
 		return getBackAsyncBatchResource(null, resourceName, resourceCallback, abortable);
 	}
@@ -379,7 +379,7 @@ public class Resources {
 	 *            resource名称
 	 * @return 同步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBatchResource(
+	public static <R extends Serializable> BatchResource<R> getBatchResource(
 			String clientName, String resourceName) {
 		return getBatchResource(clientName, resourceName);
 	}
@@ -394,7 +394,7 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 同步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBatchResource(
+	public static <R extends Serializable> BatchResource<R> getBatchResource(
 			String clientName, String resourceName,
 			boolean backable, boolean abortable) {
 		return Client.getClient(clientName).getResourceFactory().getBatchResource(resourceName,
@@ -412,7 +412,7 @@ public class Resources {
 	 *            回调接口
 	 * @return 异步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getAsyncBatchResource(
+	public static <R extends Serializable> BatchResource<R> getAsyncBatchResource(
 			String clientName, String resourceName,
 			Callback<R[]> resourceCallback) {
 		return getAsyncBatchResource(clientName, resourceName, resourceCallback);
@@ -431,7 +431,7 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 异步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getAsyncBatchResource(
+	public static <R extends Serializable> BatchResource<R> getAsyncBatchResource(
 			String clientName, String resourceName,
 			Callback<R[]> resourceCallback,
 			boolean backable, boolean abortable) {
@@ -448,7 +448,7 @@ public class Resources {
 	 *            resource名称
 	 * @return 后台同步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackBatchResource(
+	public static <R extends Serializable> BatchResource<R> getBackBatchResource(
 			String clientName, String resourceName) {
 		return getBackBatchResource(clientName, resourceName);
 	}
@@ -463,7 +463,7 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 后台同步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackBatchResource(
+	public static <R extends Serializable> BatchResource<R> getBackBatchResource(
 			String clientName, String resourceName, boolean abortable) {
 		return Client.getClient(clientName).getResourceFactory().getBackBatchResource(resourceName, abortable);
 	}
@@ -479,7 +479,7 @@ public class Resources {
 	 *            回调接口
 	 * @return 后台异步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackAsyncBatchResource(
+	public static <R extends Serializable> BatchResource<R> getBackAsyncBatchResource(
 			String clientName, String resourceName,
 			Callback<R[]> resourceCallback) {
 		return getBackAsyncBatchResource(clientName, resourceName, resourceCallback);
@@ -497,7 +497,7 @@ public class Resources {
 	 * @param abortable 是否允许中止
 	 * @return 后台异步BatchResource代理
 	 */
-	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackAsyncBatchResource(
+	public static <R extends Serializable> BatchResource<R> getBackAsyncBatchResource(
 			String clientName, String resourceName,
 			Callback<R[]> resourceCallback, boolean abortable) {
 		return Client.getClient(clientName).getResourceFactory().getBackAsyncBatchResource(resourceName,

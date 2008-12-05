@@ -8,21 +8,21 @@ import java.io.Serializable;
  * @param <R> 资源类型
  * @param <C> 条件类型
  */
-public interface BatchResource<R extends Serializable, C extends Serializable> extends Resource<R[]> {
+public interface BatchResource<R extends Serializable> extends Resource<R[]> {
 
 	/**
-	 * 根据条件移除资源
-	 * @param condition 条件
+	 * 移除匹配的资源
+	 * @param resource 匹配条件(如果条件复杂，可以传入资源类型的子类作为条件)
 	 * @throws Exception 移除失败或网络连接出错时抛出
 	 */
-	void remove(C condition) throws Exception;
+	void remove(R resource) throws Exception;
 
 	/**
-	 * 根据条件获取资源
-	 * @param condition 条件
+	 * 获取匹配的资源
+	 * @param resource 匹配条件(如果条件复杂，可以传入资源类型的子类作为条件)
 	 * @return 资源
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	R[] get(C condition) throws Exception;
+	R[] get(R resource) throws Exception;
 
 }
