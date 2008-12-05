@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.server.serializer.PageSerializer;
+import com.googlecode.struts4rcp.server.serializer.PageServletSerializer;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
 import com.googlecode.struts4rcp.util.validator.Validator;
@@ -34,7 +34,7 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 	public String getPage() {
 		if (page != null && page.length() > 0)
 			return page;
-		return PageSerializer.getPage((Action<Serializable, Serializable>)this);
+		return PageServletSerializer.getPage((Action<Serializable, Serializable>)this);
 	}
 
 	private Validator validator;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.ActionContext;
-import com.googlecode.struts4rcp.server.serializer.PathSerializer;
+import com.googlecode.struts4rcp.server.serializer.PathServletSerializer;
 
 /**
  * 资源Action基类
@@ -25,7 +25,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	public String getPath() {
 		if (path != null && path.length() > 0)
 			return path;
-		return PathSerializer.getPath((Action<Serializable, Serializable>)this);
+		return PathServletSerializer.getPath((Action<Serializable, Serializable>)this);
 	}
 
 	public R execute(R model) throws Exception {

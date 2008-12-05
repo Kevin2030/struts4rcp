@@ -3,7 +3,7 @@ package com.googlecode.struts4rcp.server.mapper;
 import javax.servlet.http.HttpServletRequest;
 
 import com.googlecode.struts4rcp.server.ServletSerializer;
-import com.googlecode.struts4rcp.server.serializer.PathSerializer;
+import com.googlecode.struts4rcp.server.serializer.PathServletSerializer;
 
 public class RestfulActionMapper extends DefaultActionMapper {
 
@@ -14,7 +14,7 @@ public class RestfulActionMapper extends DefaultActionMapper {
 			serializer = super.getSerializer(request);
 		if (serializer == null)
 			return null;
-		return new PathSerializer(serializer);
+		return new PathServletSerializer(serializer);
 	}
 
 }

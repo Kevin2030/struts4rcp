@@ -19,11 +19,11 @@ import freemarker.template.TemplateException;
  * 参见：<a href="http://www.freemarker.org">http://www.freemarker.org</a>
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class FreeMarkerSerializer extends PageSerializer {
+public class FreeMarkerServletSerializer extends PageServletSerializer {
 
 	protected final Configuration configuration = new Configuration();
 
-	public FreeMarkerSerializer() {
+	public FreeMarkerServletSerializer() {
 		try {
 			configuration.setTemplateLoader(new ClasspathTemplateLoader());
 	        configuration.setSettings(PropertiesUtils.getProperties(getPropertiesName()));

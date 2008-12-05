@@ -13,11 +13,11 @@ import com.googlecode.struts4rcp.server.action.PageAction;
 import com.googlecode.struts4rcp.server.action.Path;
 import com.googlecode.struts4rcp.server.action.PathAction;
 
-public class PathSerializer implements ServletSerializer {
+public class PathServletSerializer implements ServletSerializer {
 
 	private ServletSerializer serializer;
 
-	public PathSerializer(ServletSerializer serializer) {
+	public PathServletSerializer(ServletSerializer serializer) {
 		super();
 		if (serializer == null)
 			throw new NullPointerException("Serializer == null!");

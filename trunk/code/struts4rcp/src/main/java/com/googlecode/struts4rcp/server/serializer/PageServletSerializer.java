@@ -17,7 +17,7 @@ import com.googlecode.struts4rcp.util.ClassUtils;
  * 页面序列化器
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public abstract class PageSerializer extends FormSerializer {
+public abstract class PageServletSerializer extends FormServletSerializer {
 
 	public String getContentType() {
 		return "text/html";

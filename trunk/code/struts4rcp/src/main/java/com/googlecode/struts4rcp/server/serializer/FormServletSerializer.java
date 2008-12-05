@@ -18,7 +18,7 @@ import com.googlecode.struts4rcp.util.logger.LoggerFactory;
  * 表单数据序列化器.
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public abstract class FormSerializer implements ServletSerializer {
+public abstract class FormServletSerializer implements ServletSerializer {
 
 	/**
 	 * 日志输出接口

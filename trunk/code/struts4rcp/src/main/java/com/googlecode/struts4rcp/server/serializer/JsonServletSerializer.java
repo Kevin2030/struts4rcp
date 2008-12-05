@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.struts4rcp.util.JsonUtils;
 
-public class JsonSerializer extends FormSerializer {
+public class JsonServletSerializer extends FormServletSerializer {
 
 	public String getContentType() {
 		return "text/html";

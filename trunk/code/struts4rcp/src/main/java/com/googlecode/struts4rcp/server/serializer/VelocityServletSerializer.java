@@ -20,11 +20,11 @@ import com.googlecode.struts4rcp.server.util.PropertiesUtils;
  * 参见：<a href="http://velocity.apache.org">http://velocity.apache.org</a>
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class VelocitySerializer extends PageSerializer {
+public class VelocityServletSerializer extends PageServletSerializer {
 
 	protected final VelocityEngine velocityEngine;
 
-	public VelocitySerializer() {
+	public VelocityServletSerializer() {
 		try {
 	        Properties properties = PropertiesUtils.getProperties(getPropertiesName());
 	        properties.setProperty("resource.loader", "classpath");
