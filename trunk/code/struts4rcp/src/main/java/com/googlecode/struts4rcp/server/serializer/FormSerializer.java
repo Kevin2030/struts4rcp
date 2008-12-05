@@ -7,15 +7,28 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.googlecode.struts4rcp.server.ServletSerializer;
 import com.googlecode.struts4rcp.util.BeanUtils;
 import com.googlecode.struts4rcp.util.ClassUtils;
 import com.googlecode.struts4rcp.util.ExceptionUtils;
+import com.googlecode.struts4rcp.util.logger.Logger;
+import com.googlecode.struts4rcp.util.logger.LoggerFactory;
 
 /**
  * 表单数据序列化器.
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public abstract class FormSerializer extends AbstractServletSerializer {
+public abstract class FormSerializer implements ServletSerializer {
+
+	/**
+	 * 日志输出接口
+	 */
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+	/**
+	 * 类元属性名
+	 */
+	public static final String CLASS_NAME = "className";
 
 	public Serializable deserialize(HttpServletRequest request)
 			throws IOException {

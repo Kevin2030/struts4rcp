@@ -1,19 +1,11 @@
 package com.googlecode.struts4rcp.util.serializer;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 
-/**
- * 序列化接口
- * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
- */
-public interface Serializer<I, O> {
-
-	/**
-	 * 获取序列化内容类型
-	 * @return 序列化内容类型
-	 */
-	public String getContentType();
+public interface StreamSerializer extends Serializer<InputStream, OutputStream> {
 
 	/**
 	 * 将对象序列化成文件
@@ -24,7 +16,7 @@ public interface Serializer<I, O> {
 	 * @throws IOException
 	 *             文件读取出错或序列化出错时抛出
 	 */
-	public void serialize(Serializable obj, O out) throws IOException;
+	public void serialize(Serializable obj, OutputStream out) throws IOException;
 
 	/**
 	 * 读取流反序列化成对象
@@ -34,6 +26,6 @@ public interface Serializer<I, O> {
 	 * @throws IOException
 	 *             文件读取出错或反序列化出错时抛出
 	 */
-	public Serializable deserialize(I in) throws IOException;
+	public Serializable deserialize(InputStream in) throws IOException;
 
 }

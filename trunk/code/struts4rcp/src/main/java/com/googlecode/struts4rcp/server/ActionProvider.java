@@ -24,4 +24,11 @@ public interface ActionProvider {
 	 */
 	List<ActionInterceptor> getActionInterceptors();
 
+	/**
+	 * 获取异常处理器
+	 * @param exceptionClass 异常类型
+	 * @return 异常处理器
+	 */
+	//ExceptionHandler getExceptionHandler(Class<? extends Throwable> exceptionClass);
+
 }

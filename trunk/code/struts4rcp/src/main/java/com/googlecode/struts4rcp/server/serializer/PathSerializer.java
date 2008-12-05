@@ -8,17 +8,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.ActionContext;
+import com.googlecode.struts4rcp.server.ServletSerializer;
 import com.googlecode.struts4rcp.server.action.PageAction;
 import com.googlecode.struts4rcp.server.action.Path;
 import com.googlecode.struts4rcp.server.action.PathAction;
-import com.googlecode.struts4rcp.util.serializer.Serializer;
-import com.googlecode.struts4rcp.util.serializer.TextSerializer;
 
-public class PathSerializer extends AbstractServletSerializer {
+public class PathSerializer implements ServletSerializer {
 
-	private Serializer serializer;
+	private ServletSerializer serializer;
 
-	public PathSerializer(Serializer serializer) {
+	public PathSerializer(ServletSerializer serializer) {
 		super();
 		if (serializer == null)
 			throw new NullPointerException("Serializer == null!");
@@ -27,14 +26,7 @@ public class PathSerializer extends AbstractServletSerializer {
 
 	public Serializable deserialize(HttpServletRequest request)
 			throws IOException {
-		Serializable result;
-		if (serializer instanceof ServletSerializer) {
-			result = ((ServletSerializer)serializer).deserialize(request);
-		} else if (serializer instanceof TextSerializer) {
-			result = ((TextSerializer)serializer).deserialize(request.getReader());
-		} else {
-			result = serializer.deserialize(request.getInputStream());
-		}
+		Serializable result = serializer.deserialize(request);
 		String path;
 		Action<Serializable, Serializable> action = ActionContext.getContext().getAction();
 		if (action instanceof PageAction) {
@@ -65,12 +57,7 @@ public class PathSerializer extends AbstractServletSerializer {
 
 	public void serialize(Serializable result, HttpServletResponse response)
 			throws IOException {
-		if (serializer instanceof ServletSerializer)
-			((ServletSerializer)serializer).serialize(result, response);
-		else if (serializer instanceof TextSerializer)
-			((TextSerializer)serializer).serialize(result, response.getWriter());
-		else
-			serializer.serialize(result, response.getOutputStream());
+		serializer.serialize(result, response);
 	}
 
 	public String getContentType() {

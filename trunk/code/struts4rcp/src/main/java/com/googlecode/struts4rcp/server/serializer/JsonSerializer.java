@@ -13,7 +13,7 @@ public class JsonSerializer extends FormSerializer {
 
 	public void serialize(Serializable obj, HttpServletResponse response)
 			throws IOException {
-		String json = com.googlecode.struts4rcp.util.serializer.JsonSerializer.toJson(obj);
+		String json = com.googlecode.struts4rcp.util.serializer.JsonTextSerializer.toJson(obj);
 		response.getWriter().write(json);
 		response.getWriter().flush();
 	}

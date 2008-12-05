@@ -28,7 +28,7 @@ import com.googlecode.struts4rcp.util.logger.LoggerFactory;
  * @see org.json.JSONArray
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class JsonSerializer extends AbstractStringTextSerializer {
+public class JsonTextSerializer extends StringSerializer {
 
 	public String getContentType() {
 		return "text/json";
@@ -40,12 +40,12 @@ public class JsonSerializer extends AbstractStringTextSerializer {
 		return (Serializable)fromJson(data);
 	}
 
-	public String serializeAsString(Serializable obj) throws IOException {
+	public String serialize(Serializable obj) throws IOException {
 		return toJson(obj);
 	}
 
 	// 日志输出接口
-	protected static final Logger logger = LoggerFactory.getLogger(JsonSerializer.class);
+	protected static final Logger logger = LoggerFactory.getLogger(JsonTextSerializer.class);
 
 	/**
 	 * 将JSON字符串解析成对象(或数组)。

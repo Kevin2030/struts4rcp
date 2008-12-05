@@ -15,7 +15,7 @@ import org.apache.commons.httpclient.util.IdleConnectionTimeoutThread;
 
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
-import com.googlecode.struts4rcp.util.serializer.Serializer;
+import com.googlecode.struts4rcp.util.serializer.StreamSerializer;
 
 /**
  * 基于Commons-HttpClient的传输器实现
@@ -140,11 +140,11 @@ public class CommonsHttpClientTransporter extends AbstractHttpTransporter<PostMe
 
 	private static class SerializeEntity implements RequestEntity {
 
-		private final Serializer serializer;
+		private final StreamSerializer serializer;
 
 		private final Serializable object;
 
-		public SerializeEntity(Serializer serializer, Serializable object) {
+		public SerializeEntity(StreamSerializer serializer, Serializable object) {
 			super();
 			this.serializer = serializer;
 			this.object = object;

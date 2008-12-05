@@ -14,14 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.mapper.DefaultActionMapper;
 import com.googlecode.struts4rcp.server.provider.SpringActionProvider;
-import com.googlecode.struts4rcp.server.serializer.ServletSerializer;
 import com.googlecode.struts4rcp.util.BeanUtils;
 import com.googlecode.struts4rcp.util.ClassUtils;
 import com.googlecode.struts4rcp.util.ExceptionUtils;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
-import com.googlecode.struts4rcp.util.serializer.Serializer;
-import com.googlecode.struts4rcp.util.serializer.TextSerializer;
 
 /**
  * Action请求Servlet接收器.
@@ -125,15 +122,8 @@ public class ActionServlet extends HttpServlet {
 			throws ServletException, IOException {
 		ActionServletContext.init(actionServletContext); // 初始化上下文
 		try {
-			Serializer serializer = ActionServletContext.getContext().getActionMapper().getSerializer(request);
-			String contentType = serializer.getContentType();
-			if (serializer instanceof TextSerializer) {
-				TextSerializer textSerializer = (TextSerializer)serializer;
-				String contentEncoding = textSerializer.getContentEncoding();
-				response.setCharacterEncoding(contentEncoding);
-				contentType += ";charset=" + contentEncoding;
-			}
-			response.setContentType(contentType);
+			ServletSerializer serializer = ActionServletContext.getContext().getActionMapper().getSerializer(request);
+			response.setContentType(serializer.getContentType());
 
 			String actionName = ActionServletContext.getContext().getActionMapper().getActionName(request); // 获取Action名称
 			if (actionName == null) // action名称不允许为空
@@ -147,7 +137,7 @@ public class ActionServlet extends HttpServlet {
 			ActionContext.init(request, response, actionName, action); // 初始化上下文
 			try {
 				// 接收客户端传过来的对象
-				Serializable model = deserialize(serializer, request);
+				Serializable model = serializer.deserialize(request);
 				Serializable result;
 				try {
 					result = doExceute(actionName, delegate, model);
@@ -156,7 +146,7 @@ public class ActionServlet extends HttpServlet {
 				} catch (Exception e) { // 从Action中抛出的业务性异常，直接序列化到客户端
 					result = e;
 				}
-				serialize(serializer, response, result);
+				serializer.serialize(result, response);
 			} finally {
 				ActionContext.destroy(); // 销毁上下文
 			}
@@ -184,24 +174,6 @@ public class ActionServlet extends HttpServlet {
 		} finally {
 			ActionServletContext.destroy();
 		}
-	}
-
-	protected Serializable deserialize(Serializer serializer, HttpServletRequest request) throws Exception {
-		if (serializer instanceof ServletSerializer)
-			return ((ServletSerializer)serializer).deserialize(request);
-		else if (serializer instanceof TextSerializer)
-			return ((TextSerializer)serializer).deserialize(request.getReader());
-		else
-			return serializer.deserialize(request.getInputStream());
-	}
-
-	protected void serialize(Serializer serializer, HttpServletResponse response, Serializable result) throws Exception {
-		if (serializer instanceof ServletSerializer)
-			((ServletSerializer)serializer).serialize(result, response);
-		else if (serializer instanceof TextSerializer)
-			((TextSerializer)serializer).serialize(result, response.getWriter());
-		else
-			serializer.serialize(result, response.getOutputStream());
 	}
 
 	protected Serializable doExceute(String actionName, Action<Serializable, Serializable> action, Serializable model) throws Exception {

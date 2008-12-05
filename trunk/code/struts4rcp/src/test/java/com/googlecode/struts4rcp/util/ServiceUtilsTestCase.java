@@ -9,11 +9,13 @@ import com.googlecode.struts4rcp.util.serializer.Serializer;
 
 public class ServiceUtilsTestCase extends TestCase {
 
+	@SuppressWarnings("unchecked")
 	public void testSerializerInstancesServices() throws Exception {
 		Collection<Serializer> serializers = ServiceUtils.getServiceInstances(Serializer.class);
 		assertEquals(5, serializers.size());
 	}
 
+	@SuppressWarnings("unchecked")
 	public void testSerializerClassServices() throws Exception {
 		Collection<Class<Serializer>> serializers = ServiceUtils.getServiceClasses(Serializer.class);
 		assertEquals(5, serializers.size());

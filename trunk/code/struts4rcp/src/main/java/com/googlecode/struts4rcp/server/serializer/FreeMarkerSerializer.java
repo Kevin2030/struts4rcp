@@ -43,7 +43,7 @@ public class FreeMarkerSerializer extends PageSerializer {
 	}
 
 	protected void serialize(Serializable obj, HttpServletResponse response, String page) throws IOException {
-		Template template = configuration.getTemplate(page, getLocale(), getContentEncoding());
+		Template template = configuration.getTemplate(page, getLocale());
 		try {
 			template.process(new ModelMap(obj), response.getWriter());
 		} catch (TemplateException e) {
