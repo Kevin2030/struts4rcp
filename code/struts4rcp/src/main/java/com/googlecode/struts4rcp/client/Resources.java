@@ -2,7 +2,6 @@ package com.googlecode.struts4rcp.client;
 
 import java.io.Serializable;
 
-import com.googlecode.struts4rcp.Resource;
 
 /**
  * 资源静态门面
@@ -256,5 +255,254 @@ public class Resources {
 		return Client.getClient(clientName).getResourceFactory().getBackAsyncResource(resourceName,
 				resourceCallback, abortable);
 	}
+
+	// batch ----------
+
+
+	/**
+	 * 从默认客户端实例中，获取同步BatchResource代理
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @return 同步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBatchResource(
+			String resourceName) {
+		return getBatchResource(null, resourceName);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取同步BatchResource代理，并设置可选参数
+	 *
+	 * @param resourceName resource名称
+	 * @param backable 是否允许转为后台运行
+	 * @param abortable 是否允许中止
+	 * @return 同步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBatchResource(
+			String resourceName, boolean backable,
+			boolean abortable) {
+		return getBatchResource(null, resourceName, backable,
+				abortable);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取异步BatchResource代理
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @return 异步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getAsyncBatchResource(
+			String resourceName, Callback<R[]> resourceCallback) {
+		return getAsyncBatchResource(null, resourceName, resourceCallback);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取异步BatchResource代理，并设置可选参数
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @param backable 是否允许转为后台运行
+	 * @param abortable 是否允许中止
+	 * @return 异步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getAsyncBatchResource(
+			String resourceName, Callback<R[]> resourceCallback,
+			boolean backable, boolean abortable) {
+		return getAsyncBatchResource(null, resourceName, resourceCallback,
+				backable, abortable);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取后台同步BatchResource代理
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @return 后台同步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackBatchResource(String resourceName) {
+		return getBackBatchResource(null, resourceName);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取后台同步BatchResource代理，并设置可选参数
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @param abortable 是否允许中止
+	 * @return 后台同步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackBatchResource(String resourceName, boolean abortable) {
+		return getBackBatchResource(null, resourceName, abortable);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取后台异步BatchResource代理
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @return 后台异步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackAsyncBatchResource(String resourceName,
+			Callback<R[]> resourceCallback) {
+		return getBackAsyncBatchResource(null, resourceName, resourceCallback);
+	}
+
+	/**
+	 * 从默认客户端实例中，获取后台异步BatchResource代理
+	 *
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @param abortable 是否允许中止
+	 * @return 后台异步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackAsyncBatchResource(String resourceName,
+			Callback<R[]> resourceCallback, boolean abortable) {
+		return getBackAsyncBatchResource(null, resourceName, resourceCallback, abortable);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取同步BatchResource代理
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @return 同步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBatchResource(
+			String clientName, String resourceName) {
+		return getBatchResource(clientName, resourceName);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取同步BatchResource代理，并设置可选参数
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName resource名称
+	 * @param backable 是否允许转为后台运行
+	 * @param abortable 是否允许中止
+	 * @return 同步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBatchResource(
+			String clientName, String resourceName,
+			boolean backable, boolean abortable) {
+		return Client.getClient(clientName).getResourceFactory().getBatchResource(resourceName,
+				backable, abortable);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取异步BatchResource代理
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @return 异步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getAsyncBatchResource(
+			String clientName, String resourceName,
+			Callback<R[]> resourceCallback) {
+		return getAsyncBatchResource(clientName, resourceName, resourceCallback);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取异步BatchResource代理，并设置可选参数
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @param backable 是否允许转为后台运行
+	 * @param abortable 是否允许中止
+	 * @return 异步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getAsyncBatchResource(
+			String clientName, String resourceName,
+			Callback<R[]> resourceCallback,
+			boolean backable, boolean abortable) {
+		return Client.getClient(clientName).getResourceFactory().getAsyncBatchResource(resourceName,
+				resourceCallback, backable, abortable);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取后台同步BatchResource代理
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @return 后台同步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackBatchResource(
+			String clientName, String resourceName) {
+		return getBackBatchResource(clientName, resourceName);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取后台同步BatchResource代理，并设置可选参数
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @param abortable 是否允许中止
+	 * @return 后台同步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackBatchResource(
+			String clientName, String resourceName, boolean abortable) {
+		return Client.getClient(clientName).getResourceFactory().getBackBatchResource(resourceName, abortable);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取后台异步BatchResource代理
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @return 后台异步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackAsyncBatchResource(
+			String clientName, String resourceName,
+			Callback<R[]> resourceCallback) {
+		return getBackAsyncBatchResource(clientName, resourceName, resourceCallback);
+	}
+
+	/**
+	 * 从指定客户端实例中，获取后台异步BatchResource代理
+	 *
+	 * @param clientName
+	 *            客户端实例名称
+	 * @param resourceName
+	 *            resource名称
+	 * @param resourceCallback
+	 *            回调接口
+	 * @param abortable 是否允许中止
+	 * @return 后台异步BatchResource代理
+	 */
+	public static <R extends Serializable, C extends Serializable> BatchResource<R, C> getBackAsyncBatchResource(
+			String clientName, String resourceName,
+			Callback<R[]> resourceCallback, boolean abortable) {
+		return Client.getClient(clientName).getResourceFactory().getBackAsyncBatchResource(resourceName,
+				resourceCallback, abortable);
+	}
+
 
 }

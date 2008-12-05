@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.googlecode.struts4rcp.util.serializer.Serializer;
 
 /**
- * Action名称映射器
+ * Action接收映射接口
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
 public interface ActionMapper {

@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp;
+package com.googlecode.struts4rcp.client;
 
 import java.io.Serializable;
 
