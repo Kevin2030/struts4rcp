@@ -13,7 +13,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  * @see com.thoughtworks.xstream.XStream
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class XStreamSerializer implements StreamSerializer {
+public class XstreamStreamSerializer implements StreamSerializer {
 
 	private XStream xstream = new XStream(new DomDriver());
 
