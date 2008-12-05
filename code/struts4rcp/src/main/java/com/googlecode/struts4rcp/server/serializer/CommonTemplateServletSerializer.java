@@ -24,11 +24,11 @@ import com.googlecode.struts4rcp.server.util.PropertiesUtils;
  * 参见：<a href="http://www.commontemplate.org">http://www.commontemplate.org</a>
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class CommonTemplateSerializer extends PageSerializer {
+public class CommonTemplateServletSerializer extends PageServletSerializer {
 
 	private final Engine engine;
 
-	public CommonTemplateSerializer() {
+	public CommonTemplateServletSerializer() {
 		try {
 			ServletContext servletContext = ActionServletContext.getContext().getServletContext();
 	        Properties properties = PropertiesUtils.getProperties(getPropertiesName());

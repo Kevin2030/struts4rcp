@@ -13,13 +13,13 @@ import com.googlecode.struts4rcp.server.ServletForwardException;
  * JSP页面结果序列化器
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class JspSerializer extends PageSerializer {
+public class JspServletSerializer extends PageServletSerializer {
 
 	protected static final String DEFAULT_PAGE_DIRECTORY = "/WEB-INF/classes/";
 
 	private String pageDirectory = DEFAULT_PAGE_DIRECTORY;
 
-	public JspSerializer() {
+	public JspServletSerializer() {
 		ServletConfig servletConfig = ActionServletContext.getContext().getServletConfig();
 		String dir = servletConfig.getInitParameter("pageDirectory");
 		if (dir != null) {
