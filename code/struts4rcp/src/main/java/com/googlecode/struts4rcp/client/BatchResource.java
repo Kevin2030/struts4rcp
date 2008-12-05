@@ -11,11 +11,11 @@ import java.io.Serializable;
 public interface BatchResource<R extends Serializable> extends Resource<R[]> {
 
 	/**
-	 * 移除匹配的资源
+	 * 删除匹配的资源
 	 * @param resource 匹配条件(如果条件复杂，可以传入资源类型的子类作为条件)
-	 * @throws Exception 移除失败或网络连接出错时抛出
+	 * @throws Exception 删除失败或网络连接出错时抛出
 	 */
-	void remove(R resource) throws Exception;
+	void delete(R resource) throws Exception;
 
 	/**
 	 * 获取匹配的资源
