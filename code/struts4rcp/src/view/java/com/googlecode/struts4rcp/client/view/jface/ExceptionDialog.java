@@ -91,8 +91,8 @@ public class ExceptionDialog extends Dialog {
 		});
 
 		exceptionListener = new ExceptionAdapter() { // 只在非UI线程执行
-			public void onBackCatched(ExceptionEvent event) {}
-			public void onCatched(ExceptionEvent event) {
+			public void onBackExceptionCatched(ExceptionEvent event) {}
+			public void onExceptionCatched(ExceptionEvent event) {
 				if (UIUtils.isNonUIThread(event.getThread())) {
 					showException(event.getException());
 				}
