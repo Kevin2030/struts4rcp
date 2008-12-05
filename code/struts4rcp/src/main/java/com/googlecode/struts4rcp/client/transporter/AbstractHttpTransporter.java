@@ -26,8 +26,8 @@ import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ServiceUtils;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
-import com.googlecode.struts4rcp.util.serializer.JavaSerializer;
-import com.googlecode.struts4rcp.util.serializer.Serializer;
+import com.googlecode.struts4rcp.util.serializer.JavaStreamSerializer;
+import com.googlecode.struts4rcp.util.serializer.StreamSerializer;
 
 /**
  * HTTP传输器基类
@@ -48,7 +48,7 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 	/**
 	 * 序列化器
 	 */
-	protected Serializer serializer;
+	protected StreamSerializer serializer;
 
 	/**
 	 * 服务器主机配置参数名
@@ -188,9 +188,9 @@ public abstract class AbstractHttpTransporter<T> implements Transporter {
 		this.client = client;
 
 		// 读取序列化器
-		serializer = PropertiesUtils.getInstanceProperty(config, SERIALIZER_PARAM_NAME, Serializer.class, JavaSerializer.class);
+		serializer = PropertiesUtils.getInstanceProperty(config, SERIALIZER_PARAM_NAME, StreamSerializer.class, JavaStreamSerializer.class);
 		client.getConfigurationManager().register(SERIALIZER_PARAM_NAME, "序列化策略", "暂未实现动态切换序列化策略，修改后不会生效!",
-				JavaSerializer.class.getName(), ServiceUtils.getServiceClassNames(Serializer.class).toArray(new String[0]));
+				JavaStreamSerializer.class.getName(), ServiceUtils.getServiceClassNames(StreamSerializer.class).toArray(new String[0]));
 
 		// 读取服务器主机名
 		serverHost = PropertiesUtils.getStringProperty(config, SERVER_HOST_PARAM_NAME, null);

@@ -10,10 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.googlecode.struts4rcp.server.ActionMapper;
 import com.googlecode.struts4rcp.server.ActionServletContext;
+import com.googlecode.struts4rcp.server.ServletSerializer;
+import com.googlecode.struts4rcp.server.serializer.StreamServletSerializer;
+import com.googlecode.struts4rcp.server.serializer.TextServletSerializer;
 import com.googlecode.struts4rcp.util.ServiceUtils;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
 import com.googlecode.struts4rcp.util.serializer.Serializer;
+import com.googlecode.struts4rcp.util.serializer.StreamSerializer;
+import com.googlecode.struts4rcp.util.serializer.TextSerializer;
 
 /**
  * 后缀Action映射器
@@ -26,7 +31,7 @@ public class DefaultActionMapper implements ActionMapper {
 	 */
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected final Map<String, Serializer> serializers = new HashMap<String, Serializer>();
+	protected final Map<String, ServletSerializer> serializers = new HashMap<String, ServletSerializer>();
 
 	private boolean directoryMapping;
 
@@ -36,6 +41,7 @@ public class DefaultActionMapper implements ActionMapper {
 		init(ActionServletContext.getContext().getServletContext(), ActionServletContext.getContext().getServletConfig());
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void init(ServletContext servletContext, ServletConfig servletConfig) {
 		directoryMapping = isDirectoryMapping(servletContext, servletConfig);
 		extensionMapping = isExtensionMapping(servletContext, servletConfig);
@@ -44,7 +50,12 @@ public class DefaultActionMapper implements ActionMapper {
 			String contentType = serializer.getContentType();
 			if (contentType != null)
 				contentType = contentType.toLowerCase();
-			serializers.put(contentType, serializer);
+			if (serializer instanceof ServletSerializer)
+				serializers.put(contentType, (ServletSerializer)serializer);
+			else if (serializer instanceof TextSerializer)
+				serializers.put(contentType, new TextServletSerializer((TextSerializer)serializer));
+			else if (serializer instanceof StreamSerializer)
+				serializers.put(contentType, new StreamServletSerializer((StreamSerializer)serializer));
 		}
 	}
 
@@ -123,21 +134,21 @@ public class DefaultActionMapper implements ActionMapper {
 		return actionName;
 	}
 
-	public Serializer getSerializer(HttpServletRequest request) {
+	public ServletSerializer getSerializer(HttpServletRequest request) {
 		return getSerializer(request.getContentType());
 	}
 
-	protected Serializer getSerializer(String contentType) {
+	protected ServletSerializer getSerializer(String contentType) {
 		if (contentType != null)
 			contentType = contentType.trim().toLowerCase();
 		return serializers.get(contentType);
 	}
 
-	protected Serializer addSerializer(String contentType, Serializer serializer) {
+	protected ServletSerializer addSerializer(String contentType, ServletSerializer serializer) {
 		return serializers.put(contentType, serializer);
 	}
 
-	protected Serializer removeSerializer(String contentType) {
+	protected ServletSerializer removeSerializer(String contentType) {
 		return serializers.remove(contentType);
 	}
 

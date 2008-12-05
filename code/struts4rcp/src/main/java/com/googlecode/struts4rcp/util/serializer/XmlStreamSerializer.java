@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @see java.beans.XMLDecoder
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class XmlSerializer extends AbstractStreamTextSerializer {
+public class XmlStreamSerializer implements StreamSerializer {
 
 	public String getContentType() {
 		return "text/xml";

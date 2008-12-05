@@ -21,11 +21,11 @@ import org.apache.http.entity.AbstractHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.util.serializer.Serializer;
+import com.googlecode.struts4rcp.util.serializer.StreamSerializer;
 
 /**
  * 基于HttpClient的传输器实现
@@ -100,11 +100,11 @@ public class HttpClientTransporter extends AbstractHttpTransporter<HttpPost> {
 	 */
 	private static class SerializeEntity extends AbstractHttpEntity {
 
-		private Serializer serializer;
+		private StreamSerializer serializer;
 
 		private Serializable object;
 
-	    SerializeEntity(Serializer serializer, Serializable object) throws IOException {
+	    SerializeEntity(StreamSerializer serializer, Serializable object) throws IOException {
 	        super();
 	        this.serializer = serializer;
 	        this.object = object;

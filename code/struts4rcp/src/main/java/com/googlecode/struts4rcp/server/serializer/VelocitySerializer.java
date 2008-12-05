@@ -47,7 +47,7 @@ public class VelocitySerializer extends PageSerializer {
 
 	protected void serialize(Serializable obj, HttpServletResponse response, String page) throws IOException {
 		try {
-			Template template = velocityEngine.getTemplate(page, getContentEncoding());
+			Template template = velocityEngine.getTemplate(page);
 			Context context = new VelocityContext(new ModelMap(obj));
 			template.merge(context, response.getWriter());
 		} catch (RuntimeException e) {
