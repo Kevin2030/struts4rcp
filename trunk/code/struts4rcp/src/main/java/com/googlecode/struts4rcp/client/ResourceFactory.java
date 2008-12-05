@@ -34,6 +34,17 @@ public class ResourceFactory implements ClientElement {
 	}
 
 	/**
+	 * 获取资源代理
+	 * @param <R> 资源类型
+	 * @param uri 资源位置
+	 * @param args 资源位置占位参数
+	 * @return 资源
+	 */
+	public <R extends Serializable> Resource<R> getResource(String uri, Object... args) {
+		return null;
+	}
+
+	/**
 	 * 获取异步资源代理
 	 * @param <R> 资源类型
 	 * @param uri 资源位置
@@ -169,6 +180,17 @@ public class ResourceFactory implements ClientElement {
 	 * @return 资源
 	 */
 	public <R extends Serializable> BatchResource<R> getBackBatchResource(String uri) {
+		return null;
+	}
+
+	/**
+	 * 获取后台资源代理
+	 * @param <R> 资源类型
+	 * @param uri 资源位置
+	 * @param args 资源位置占位参数
+	 * @return 资源
+	 */
+	public <R extends Serializable> BatchResource<R> getBackBatchResource(String uri, Object... args) {
 		return null;
 	}
 
