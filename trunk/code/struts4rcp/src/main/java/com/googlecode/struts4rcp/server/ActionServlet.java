@@ -165,7 +165,7 @@ public class ActionServlet extends HttpServlet {
 					request.setAttribute(entry.getKey(), entry.getValue());
 				}
 			}
-			request.getRequestDispatcher(e.getURI()).forward(request, response);
+			request.getRequestDispatcher(e.getTarget()).forward(request, response);
 			return;
 		} catch (Throwable e) { // 服务器错误
 			logger.error(e.getMessage(), e);
@@ -181,7 +181,7 @@ public class ActionServlet extends HttpServlet {
 		try {
 			result = action.execute(model); // 执行
 		} catch (ActionForwardException e) {
-			String forwardActionName = e.getActionName(); // 不为空
+			String forwardActionName = e.getTarget(); // 不为空
 			Serializable forwardModel = e.getModel();
 			Action<Serializable, Serializable> forwardAction = ActionServletContext.getContext().getActionProvider().getAction(forwardActionName); // 获取Action实例
 			if (forwardAction == null) // action实例不允许为空
