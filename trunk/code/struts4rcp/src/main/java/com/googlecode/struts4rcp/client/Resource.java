@@ -24,10 +24,10 @@ public interface Resource<R extends Serializable> {
 	void update(R resource) throws Exception;
 
 	/**
-	 * 移除资源
-	 * @throws Exception 移除失败或网络连接出错时抛出
+	 * 删除资源
+	 * @throws Exception 删除失败或网络连接出错时抛出
 	 */
-	void remove() throws Exception;
+	void delete() throws Exception;
 
 	/**
 	 * 获取资源
