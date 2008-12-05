@@ -8,7 +8,7 @@ import java.io.Writer;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-public class XstreamText2Serializer implements TextSerializer {
+public class XstreamTextSerializer implements TextSerializer {
 
 	private XStream xstream = new XStream(new DomDriver());
 
