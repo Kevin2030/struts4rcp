@@ -30,6 +30,11 @@ import com.googlecode.struts4rcp.util.logger.LoggerFactory;
  */
 public class JsonTextSerializer extends StringSerializer {
 
+	/**
+	 * 类元属性名
+	 */
+	public static final String CLASS_NAME = "className";
+
 	public String getContentType() {
 		return "text/json";
 	}
