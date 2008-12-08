@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.ActionInterceptor;
+import com.googlecode.struts4rcp.server.ExceptionHandler;
 import com.googlecode.struts4rcp.server.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ClassUtils;
 
@@ -42,6 +43,8 @@ public class SimpleActionProvider extends AbstractActionProvider {
 					Object obj = ClassUtils.forName(value).newInstance();
 					if (obj instanceof Action)
 						actions.put(key, (Action<Serializable, Serializable>)obj);
+					else if (obj instanceof ExceptionHandler)
+						exceptionHandlers.put((Class<? extends Throwable>) ClassUtils.forName(key), (ExceptionHandler)obj);
 					else if (obj instanceof ActionInterceptor)
 						interceptors.put(key, (ActionInterceptor)obj);
 					else
@@ -70,6 +73,12 @@ public class SimpleActionProvider extends AbstractActionProvider {
 
 	protected List<ActionInterceptor> findActionInterceptors() throws Exception {
 		return actionInterceptors;
+	}
+
+	protected final Map<Class<? extends Throwable>, ExceptionHandler> exceptionHandlers = new HashMap<Class<? extends Throwable>, ExceptionHandler>();
+
+	public ExceptionHandler getExceptionHandler(Class<? extends Throwable> exceptionClass) {
+		return exceptionHandlers.get(exceptionClass);
 	}
 
 }
