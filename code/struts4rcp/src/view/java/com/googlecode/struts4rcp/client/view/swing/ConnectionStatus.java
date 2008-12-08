@@ -10,8 +10,8 @@ import javax.swing.JButton;
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.event.ConnectionAdapter;
 import com.googlecode.struts4rcp.client.event.ConnectionEvent;
-import com.googlecode.struts4rcp.client.event.TransportationAdapter;
-import com.googlecode.struts4rcp.client.event.TransportationEvent;
+import com.googlecode.struts4rcp.client.event.TransmissionAdapter;
+import com.googlecode.struts4rcp.client.event.TransmissionEvent;
 
 /**
  * 队列信息窗口显示按钮，点击该按钮将弹出Action队列信息管理窗口，可将此按钮添加到工具栏，状态栏上。
@@ -24,8 +24,8 @@ import com.googlecode.struts4rcp.client.event.TransportationEvent;
  * frame.getContentPane().add(BorderLayout.SOUTH, statusBar);
  * statusBar.add(connectionButton);
  * </pre>
- * @see com.googlecode.struts4rcp.client.view.swing.TransportationPane
- * @see com.googlecode.struts4rcp.client.view.swing.TransportationPane
+ * @see com.googlecode.struts4rcp.client.view.swing.TransmissionPane
+ * @see com.googlecode.struts4rcp.client.view.swing.TransmissionPane
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
 public class ConnectionStatus extends JButton {
@@ -122,12 +122,12 @@ public class ConnectionStatus extends JButton {
 				setConnected(false);
 			}
 		}));
-		client.addListener(new TransportationDelegate(new TransportationAdapter() {
-			public void onTransporting(final TransportationEvent event) {
-				setTransporting(client.getTransporter().isTransporting());
+		client.addListener(new TransmissionDelegate(new TransmissionAdapter() {
+			public void onTransporting(final TransmissionEvent event) {
+				setTransporting(client.getTransmitter().isTransmiting());
 			}
-			public void onTransported(TransportationEvent event) {
-				setTransporting(client.getTransporter().isTransporting());
+			public void onTransported(TransmissionEvent event) {
+				setTransporting(client.getTransmitter().isTransmiting());
 			}
 		}));
 		// 初始化状态

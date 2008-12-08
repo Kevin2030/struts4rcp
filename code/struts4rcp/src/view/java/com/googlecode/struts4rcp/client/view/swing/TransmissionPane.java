@@ -26,18 +26,18 @@ import com.googlecode.struts4rcp.client.Execution;
 import com.googlecode.struts4rcp.client.event.ExecutionAdapter;
 import com.googlecode.struts4rcp.client.event.ExecutionEvent;
 import com.googlecode.struts4rcp.client.event.ExecutionListener;
-import com.googlecode.struts4rcp.client.event.TransportationAdapter;
-import com.googlecode.struts4rcp.client.event.TransportationEvent;
-import com.googlecode.struts4rcp.client.event.TransportationListener;
+import com.googlecode.struts4rcp.client.event.TransmissionAdapter;
+import com.googlecode.struts4rcp.client.event.TransmissionEvent;
+import com.googlecode.struts4rcp.client.event.TransmissionListener;
 import com.googlecode.struts4rcp.util.ThreadUtils;
 
 /**
  * Action队列信息管理窗口，包装Action队列信息管理面板
- * @see com.googlecode.struts4rcp.client.view.swing.TransportationPane
+ * @see com.googlecode.struts4rcp.client.view.swing.TransmissionPane
  * @see com.googlecode.struts4rcp.client.view.swing.ConnectionStatus
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class TransportationPane extends JPanel {
+public class TransmissionPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -67,7 +67,7 @@ public class TransportationPane extends JPanel {
 
 	private final Client client;
 
-	public TransportationPane(final Client client) {
+	public TransmissionPane(final Client client) {
 		if (client == null)
 			throw new NullPointerException("Client == null!");
 		this.client = client;
@@ -104,25 +104,25 @@ public class TransportationPane extends JPanel {
 		abortButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (getTransportationModelSize() == 0) {
-					JOptionPane.showMessageDialog(TransportationPane.this, "没有任何传输项!", "中止", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(TransmissionPane.this, "没有任何传输项!", "中止", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				final Execution execution = (Execution)transportationList.getSelectedValue();
 				if (execution == null) {
-					JOptionPane.showMessageDialog(TransportationPane.this, "请选择传输项!", "中止", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(TransmissionPane.this, "请选择传输项!", "中止", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				if (! execution.isAbortable()) {
-					JOptionPane.showMessageDialog(TransportationPane.this, "此传输项不允许中止!", "中止", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(TransmissionPane.this, "此传输项不允许中止!", "中止", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				ThreadUtils.execute(new Runnable(){
 					public void run() {
 						try {
 							execution.abort();
-							JOptionPane.showMessageDialog(TransportationPane.this, "中止传输项完成!", "中止", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(TransmissionPane.this, "中止传输项完成!", "中止", JOptionPane.INFORMATION_MESSAGE);
 						} catch (Throwable t) {
-							JOptionPane.showMessageDialog(TransportationPane.this, "中止传输项失败! 原因: " + t.getMessage(), "中止", JOptionPane.WARNING_MESSAGE);
+							JOptionPane.showMessageDialog(TransmissionPane.this, "中止传输项失败! 原因: " + t.getMessage(), "中止", JOptionPane.WARNING_MESSAGE);
 						}
 					}
 				});
@@ -150,9 +150,9 @@ public class TransportationPane extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					refreshTransportationList();
-					JOptionPane.showMessageDialog(TransportationPane.this, "刷新传输列表成功!", "刷新", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(TransmissionPane.this, "刷新传输列表成功!", "刷新", JOptionPane.INFORMATION_MESSAGE);
 				} catch (Throwable t) {
-					JOptionPane.showMessageDialog(TransportationPane.this, "刷新传输列表失败! 原因: " + t.getMessage(), "刷新", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(TransmissionPane.this, "刷新传输列表失败! 原因: " + t.getMessage(), "刷新", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
@@ -176,8 +176,8 @@ public class TransportationPane extends JPanel {
 				}
 			}
 		});
-		transportationListener = new TransportationDelegate(new TransportationAdapter() {
-			public void onTransporting(final TransportationEvent event) {
+		transportationListener = new TransmissionDelegate(new TransmissionAdapter() {
+			public void onTransporting(final TransmissionEvent event) {
 				synchronized (transportationModel) {
 					transportationList.repaint();
 				}
@@ -188,7 +188,7 @@ public class TransportationPane extends JPanel {
 	}
 
 	private void refreshTransportationList() {
-		Collection<Execution> executions = client.getTransporter().getTransportingExecutions();
+		Collection<Execution> executions = client.getTransmitter().getTransmitingExecutions();
 		synchronized (transportationModel) {
 			transportationModel.clear();
 			for (Execution execution : executions) {
@@ -201,7 +201,7 @@ public class TransportationPane extends JPanel {
 
 	private final ExecutionListener executionListener;
 
-	private final TransportationListener transportationListener;
+	private final TransmissionListener transportationListener;
 
 	public void dispose() {
 		client.removeListener(executionListener);

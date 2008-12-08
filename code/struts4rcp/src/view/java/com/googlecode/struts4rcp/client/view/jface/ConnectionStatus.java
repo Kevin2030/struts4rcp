@@ -14,9 +14,9 @@ import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.event.ConnectionAdapter;
 import com.googlecode.struts4rcp.client.event.ConnectionEvent;
 import com.googlecode.struts4rcp.client.event.ConnectionListener;
-import com.googlecode.struts4rcp.client.event.TransportationAdapter;
-import com.googlecode.struts4rcp.client.event.TransportationEvent;
-import com.googlecode.struts4rcp.client.event.TransportationListener;
+import com.googlecode.struts4rcp.client.event.TransmissionAdapter;
+import com.googlecode.struts4rcp.client.event.TransmissionEvent;
+import com.googlecode.struts4rcp.client.event.TransmissionListener;
 
 /**
  * 传输状态项，可将此状态项添加到工具栏，状态栏上。
@@ -64,7 +64,7 @@ public class ConnectionStatus extends ContributionItem {
 	
 	private ConnectionListener connectionListener;
 	
-	private TransportationListener transportationListener;
+	private TransmissionListener transportationListener;
 
 	@Override
 	public void fill(Composite parent) {
@@ -102,18 +102,18 @@ public class ConnectionStatus extends ContributionItem {
 				}
 			};
 			client.addListener(connectionListener);
-			transportationListener = new TransportationAdapter() {
-				public void onTransporting(final TransportationEvent event) {
+			transportationListener = new TransmissionAdapter() {
+				public void onTransporting(final TransmissionEvent event) {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							setTransporting(client.getTransporter().isTransporting());
+							setTransporting(client.getTransmitter().isTransmiting());
 						}
 					});
 				}
-				public void onTransported(TransportationEvent event) {
+				public void onTransported(TransmissionEvent event) {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							setTransporting(client.getTransporter().isTransporting());
+							setTransporting(client.getTransmitter().isTransmiting());
 						}
 					});
 				}
