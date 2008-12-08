@@ -115,6 +115,12 @@ public class ActionServlet extends HttpServlet {
 		doPost(request, response);
 	}
 
+	@Override
+	protected void doHead(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
 	// 请求处理
 	@SuppressWarnings("unchecked")
 	@Override
