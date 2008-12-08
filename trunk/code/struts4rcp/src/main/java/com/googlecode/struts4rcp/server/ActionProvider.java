@@ -29,6 +29,6 @@ public interface ActionProvider {
 	 * @param exceptionClass 异常类型
 	 * @return 异常处理器
 	 */
-	//ExceptionHandler getExceptionHandler(Class<? extends Throwable> exceptionClass);
+	ExceptionHandler getExceptionHandler(Class<? extends Throwable> exceptionClass);
 
 }

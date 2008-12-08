@@ -12,6 +12,7 @@ import org.springframework.web.context.ContextLoader;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.ActionInterceptor;
+import com.googlecode.struts4rcp.server.ExceptionHandler;
 import com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack;
 
 /**
@@ -50,6 +51,10 @@ public class SpringActionProvider extends AbstractActionProvider {
 		} catch (NoSuchBeanDefinitionException e) {
 			return null;
 		}
+	}
+
+	public ExceptionHandler getExceptionHandler(Class<? extends Throwable> exceptionClass) {
+		return (ExceptionHandler)applicationContext.getBean(exceptionClass.getName());
 	}
 
 }

@@ -11,6 +11,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.ActionInterceptor;
+import com.googlecode.struts4rcp.server.ExceptionHandler;
 import com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack;
 import com.googlecode.struts4rcp.util.ClassUtils;
 
@@ -50,6 +51,11 @@ public class GuiceActionProvider extends AbstractActionProvider {
 
 	protected List<ActionInterceptor> findActionInterceptors() throws Exception {
 		return injector.getProvider(ActionInterceptorStack.class).get().getActionInterceptors();
+	}
+
+	public ExceptionHandler getExceptionHandler(
+			Class<? extends Throwable> exceptionClass) {
+		return (ExceptionHandler) injector.getInstance(ExceptionHandler.class);
 	}
 
 }
