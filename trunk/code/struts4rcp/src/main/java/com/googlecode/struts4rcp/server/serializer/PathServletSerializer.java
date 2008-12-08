@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.ActionContext;
 import com.googlecode.struts4rcp.server.ServletSerializer;
+import com.googlecode.struts4rcp.server.action.Directory;
 import com.googlecode.struts4rcp.server.action.PageAction;
 import com.googlecode.struts4rcp.server.action.Path;
 import com.googlecode.struts4rcp.server.action.PathAction;
@@ -47,6 +48,17 @@ public class PathServletSerializer implements ServletSerializer {
 		if (action.getClass().isAnnotationPresent(Path.class))
 			return action.getClass().getAnnotation(Path.class).value();
 		return null;
+	}
+
+	/**
+	 * Action缺省页面名查找方式
+	 * @param action Action实例
+	 * @return 页面路径(不包含后缀)
+	 */
+	public static String getDirectory(Action<Serializable, Serializable> action) {
+		if (action.getClass().isAnnotationPresent(Directory.class))
+			return action.getClass().getAnnotation(Directory.class).value();
+		return "";
 	}
 
 	protected Serializable deserializePath(HttpServletRequest request, Serializable result, String path) {

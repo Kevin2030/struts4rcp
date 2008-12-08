@@ -61,8 +61,11 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 		this.directory = directory;
 	}
 
+	@SuppressWarnings("unchecked")
 	public String getDirectory() {
-		return directory;
+		if (directory != null && directory.length() > 0)
+			return directory;
+		return PathServletSerializer.getDirectory((Action<Serializable, Serializable>)this);
 	}
 
 	private Validator validator;
