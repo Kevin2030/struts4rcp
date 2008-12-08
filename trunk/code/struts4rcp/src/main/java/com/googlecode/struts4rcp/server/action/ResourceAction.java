@@ -12,6 +12,7 @@ import com.googlecode.struts4rcp.server.ActionContext;
 public abstract class ResourceAction<R extends Serializable> extends AbstractAction<R, Serializable> {
 
 	public Serializable execute(R model) throws Exception {
+		String uri = ActionContext.getContext().getURI();
 		String method = ActionContext.getContext().getRequest().getMethod();
 		if ("post".equalsIgnoreCase(method)) {
 			create(model);
@@ -23,10 +24,19 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 			delete(model);
 			return null;
 		} else if ("get".equalsIgnoreCase(method)) {
-			return read(model);
+			if (uri.equalsIgnoreCase(getDirectory()))
+				return index(model);
+			else
+				return read(model);
+		} else if ("head".equalsIgnoreCase(method)) {
+			return getDirectory();
 		} else {
 			throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
 		}
+	}
+
+	protected String getDirectory() {
+		throw new UnsupportedOperationException();
 	}
 
 	protected void create(R resource) throws Exception {
