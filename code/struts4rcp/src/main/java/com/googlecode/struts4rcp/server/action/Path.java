@@ -19,7 +19,7 @@ public @interface Path {
 	 * 资源目录路径
 	 * @return 资源目录路径
 	 */
-	String type();
+	String type() default "";
 
 	/**
 	 * 资源路径
