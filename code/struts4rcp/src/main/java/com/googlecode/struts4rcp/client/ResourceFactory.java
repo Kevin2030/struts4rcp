@@ -133,7 +133,7 @@ public class ResourceFactory implements ClientElement {
 	 * @param uri 资源位置
 	 * @return 资源
 	 */
-	public <R extends Serializable> BatchResource<R> getBatchResource(String uri) {
+	public <R extends Serializable> Directory<R> getDirectory(String uri) {
 		return null;
 	}
 
@@ -144,7 +144,7 @@ public class ResourceFactory implements ClientElement {
 	 * @param callback 获取结果的回调接口
 	 * @return 资源
 	 */
-	public <R extends Serializable> BatchResource<R> getAsyncBatchResource(String uri, Callback<R[]> callback) {
+	public <R extends Serializable> Directory<R> getAsyncDirectory(String uri, Callback<R[]> callback) {
 		return null;
 	}
 
@@ -156,7 +156,7 @@ public class ResourceFactory implements ClientElement {
 	 * @param abortable 是否允许中止
 	 * @return 资源
 	 */
-	public <R extends Serializable> BatchResource<R> getBatchResource(String uri, boolean backable, boolean abortable) {
+	public <R extends Serializable> Directory<R> getDirectory(String uri, boolean backable, boolean abortable) {
 		return null;
 	}
 
@@ -169,7 +169,7 @@ public class ResourceFactory implements ClientElement {
 	 * @param abortable 是否允许中止
 	 * @return 资源
 	 */
-	public <R extends Serializable> BatchResource<R> getAsyncBatchResource(String uri, Callback<R[]> callback, boolean backable, boolean abortable) {
+	public <R extends Serializable> Directory<R> getAsyncDirectory(String uri, Callback<R[]> callback, boolean backable, boolean abortable) {
 		return null;
 	}
 
@@ -179,7 +179,7 @@ public class ResourceFactory implements ClientElement {
 	 * @param uri 资源位置
 	 * @return 资源
 	 */
-	public <R extends Serializable> BatchResource<R> getBackBatchResource(String uri) {
+	public <R extends Serializable> Directory<R> getBackDirectory(String uri) {
 		return null;
 	}
 
@@ -190,7 +190,7 @@ public class ResourceFactory implements ClientElement {
 	 * @param args 资源位置占位参数
 	 * @return 资源
 	 */
-	public <R extends Serializable> BatchResource<R> getBackBatchResource(String uri, Object... args) {
+	public <R extends Serializable> Directory<R> getBackDirectory(String uri, Object... args) {
 		return null;
 	}
 
@@ -201,7 +201,7 @@ public class ResourceFactory implements ClientElement {
 	 * @param callback 获取结果的回调接口
 	 * @return 资源
 	 */
-	public <R extends Serializable> BatchResource<R> getBackAsyncBatchResource(String uri, Callback<R[]> callback) {
+	public <R extends Serializable> Directory<R> getBackAsyncDirectory(String uri, Callback<R[]> callback) {
 		return null;
 	}
 
@@ -212,7 +212,7 @@ public class ResourceFactory implements ClientElement {
 	 * @param abortable 是否允许中止
 	 * @return 资源
 	 */
-	public <R extends Serializable> BatchResource<R> getBackBatchResource(String uri, boolean abortable) {
+	public <R extends Serializable> Directory<R> getBackDirectory(String uri, boolean abortable) {
 		return null;
 	}
 
@@ -224,7 +224,7 @@ public class ResourceFactory implements ClientElement {
 	 * @param abortable 是否允许中止
 	 * @return 资源
 	 */
-	public <R extends Serializable> BatchResource<R> getBackAsyncBatchResource(String uri, Callback<R[]> callback, boolean abortable) {
+	public <R extends Serializable> Directory<R> getBackAsyncDirectory(String uri, Callback<R[]> callback, boolean abortable) {
 		return null;
 	}
 

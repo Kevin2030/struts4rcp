@@ -260,48 +260,48 @@ public class Resources {
 
 
 	/**
-	 * 从默认客户端实例中，获取同步BatchResource代理
+	 * 从默认客户端实例中，获取同步Directory代理
 	 *
 	 * @param resourceName
 	 *            resource名称
-	 * @return 同步BatchResource代理
+	 * @return 同步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getBatchResource(
+	public static <R extends Serializable> Directory<R> getDirectory(
 			String resourceName) {
-		return getBatchResource(null, resourceName);
+		return getDirectory(null, resourceName);
 	}
 
 	/**
-	 * 从默认客户端实例中，获取同步BatchResource代理，并设置可选参数
+	 * 从默认客户端实例中，获取同步Directory代理，并设置可选参数
 	 *
 	 * @param resourceName resource名称
 	 * @param backable 是否允许转为后台运行
 	 * @param abortable 是否允许中止
-	 * @return 同步BatchResource代理
+	 * @return 同步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getBatchResource(
+	public static <R extends Serializable> Directory<R> getDirectory(
 			String resourceName, boolean backable,
 			boolean abortable) {
-		return getBatchResource(null, resourceName, backable,
+		return getDirectory(null, resourceName, backable,
 				abortable);
 	}
 
 	/**
-	 * 从默认客户端实例中，获取异步BatchResource代理
+	 * 从默认客户端实例中，获取异步Directory代理
 	 *
 	 * @param resourceName
 	 *            resource名称
 	 * @param resourceCallback
 	 *            回调接口
-	 * @return 异步BatchResource代理
+	 * @return 异步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getAsyncBatchResource(
+	public static <R extends Serializable> Directory<R> getAsyncDirectory(
 			String resourceName, Callback<R[]> resourceCallback) {
-		return getAsyncBatchResource(null, resourceName, resourceCallback);
+		return getAsyncDirectory(null, resourceName, resourceCallback);
 	}
 
 	/**
-	 * 从默认客户端实例中，获取异步BatchResource代理，并设置可选参数
+	 * 从默认客户端实例中，获取异步Directory代理，并设置可选参数
 	 *
 	 * @param resourceName
 	 *            resource名称
@@ -309,100 +309,100 @@ public class Resources {
 	 *            回调接口
 	 * @param backable 是否允许转为后台运行
 	 * @param abortable 是否允许中止
-	 * @return 异步BatchResource代理
+	 * @return 异步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getAsyncBatchResource(
+	public static <R extends Serializable> Directory<R> getAsyncDirectory(
 			String resourceName, Callback<R[]> resourceCallback,
 			boolean backable, boolean abortable) {
-		return getAsyncBatchResource(null, resourceName, resourceCallback,
+		return getAsyncDirectory(null, resourceName, resourceCallback,
 				backable, abortable);
 	}
 
 	/**
-	 * 从默认客户端实例中，获取后台同步BatchResource代理
+	 * 从默认客户端实例中，获取后台同步Directory代理
 	 *
 	 * @param resourceName
 	 *            resource名称
-	 * @return 后台同步BatchResource代理
+	 * @return 后台同步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getBackBatchResource(String resourceName) {
-		return getBackBatchResource(null, resourceName);
+	public static <R extends Serializable> Directory<R> getBackDirectory(String resourceName) {
+		return getBackDirectory(null, resourceName);
 	}
 
 	/**
-	 * 从默认客户端实例中，获取后台同步BatchResource代理，并设置可选参数
+	 * 从默认客户端实例中，获取后台同步Directory代理，并设置可选参数
 	 *
 	 * @param resourceName
 	 *            resource名称
 	 * @param abortable 是否允许中止
-	 * @return 后台同步BatchResource代理
+	 * @return 后台同步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getBackBatchResource(String resourceName, boolean abortable) {
-		return getBackBatchResource(null, resourceName, abortable);
+	public static <R extends Serializable> Directory<R> getBackDirectory(String resourceName, boolean abortable) {
+		return getBackDirectory(null, resourceName, abortable);
 	}
 
 	/**
-	 * 从默认客户端实例中，获取后台异步BatchResource代理
+	 * 从默认客户端实例中，获取后台异步Directory代理
 	 *
 	 * @param resourceName
 	 *            resource名称
 	 * @param resourceCallback
 	 *            回调接口
-	 * @return 后台异步BatchResource代理
+	 * @return 后台异步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getBackAsyncBatchResource(String resourceName,
+	public static <R extends Serializable> Directory<R> getBackAsyncDirectory(String resourceName,
 			Callback<R[]> resourceCallback) {
-		return getBackAsyncBatchResource(null, resourceName, resourceCallback);
+		return getBackAsyncDirectory(null, resourceName, resourceCallback);
 	}
 
 	/**
-	 * 从默认客户端实例中，获取后台异步BatchResource代理
+	 * 从默认客户端实例中，获取后台异步Directory代理
 	 *
 	 * @param resourceName
 	 *            resource名称
 	 * @param resourceCallback
 	 *            回调接口
 	 * @param abortable 是否允许中止
-	 * @return 后台异步BatchResource代理
+	 * @return 后台异步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getBackAsyncBatchResource(String resourceName,
+	public static <R extends Serializable> Directory<R> getBackAsyncDirectory(String resourceName,
 			Callback<R[]> resourceCallback, boolean abortable) {
-		return getBackAsyncBatchResource(null, resourceName, resourceCallback, abortable);
+		return getBackAsyncDirectory(null, resourceName, resourceCallback, abortable);
 	}
 
 	/**
-	 * 从指定客户端实例中，获取同步BatchResource代理
+	 * 从指定客户端实例中，获取同步Directory代理
 	 *
 	 * @param clientName
 	 *            客户端实例名称
 	 * @param resourceName
 	 *            resource名称
-	 * @return 同步BatchResource代理
+	 * @return 同步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getBatchResource(
+	public static <R extends Serializable> Directory<R> getDirectory(
 			String clientName, String resourceName) {
-		return getBatchResource(clientName, resourceName);
+		return getDirectory(clientName, resourceName);
 	}
 
 	/**
-	 * 从指定客户端实例中，获取同步BatchResource代理，并设置可选参数
+	 * 从指定客户端实例中，获取同步Directory代理，并设置可选参数
 	 *
 	 * @param clientName
 	 *            客户端实例名称
 	 * @param resourceName resource名称
 	 * @param backable 是否允许转为后台运行
 	 * @param abortable 是否允许中止
-	 * @return 同步BatchResource代理
+	 * @return 同步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getBatchResource(
+	public static <R extends Serializable> Directory<R> getDirectory(
 			String clientName, String resourceName,
 			boolean backable, boolean abortable) {
-		return Client.getClient(clientName).getResourceFactory().getBatchResource(resourceName,
+		return Client.getClient(clientName).getResourceFactory().getDirectory(resourceName,
 				backable, abortable);
 	}
 
 	/**
-	 * 从指定客户端实例中，获取异步BatchResource代理
+	 * 从指定客户端实例中，获取异步Directory代理
 	 *
 	 * @param clientName
 	 *            客户端实例名称
@@ -410,16 +410,16 @@ public class Resources {
 	 *            resource名称
 	 * @param resourceCallback
 	 *            回调接口
-	 * @return 异步BatchResource代理
+	 * @return 异步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getAsyncBatchResource(
+	public static <R extends Serializable> Directory<R> getAsyncDirectory(
 			String clientName, String resourceName,
 			Callback<R[]> resourceCallback) {
-		return getAsyncBatchResource(clientName, resourceName, resourceCallback);
+		return getAsyncDirectory(clientName, resourceName, resourceCallback);
 	}
 
 	/**
-	 * 从指定客户端实例中，获取异步BatchResource代理，并设置可选参数
+	 * 从指定客户端实例中，获取异步Directory代理，并设置可选参数
 	 *
 	 * @param clientName
 	 *            客户端实例名称
@@ -429,47 +429,47 @@ public class Resources {
 	 *            回调接口
 	 * @param backable 是否允许转为后台运行
 	 * @param abortable 是否允许中止
-	 * @return 异步BatchResource代理
+	 * @return 异步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getAsyncBatchResource(
+	public static <R extends Serializable> Directory<R> getAsyncDirectory(
 			String clientName, String resourceName,
 			Callback<R[]> resourceCallback,
 			boolean backable, boolean abortable) {
-		return Client.getClient(clientName).getResourceFactory().getAsyncBatchResource(resourceName,
+		return Client.getClient(clientName).getResourceFactory().getAsyncDirectory(resourceName,
 				resourceCallback, backable, abortable);
 	}
 
 	/**
-	 * 从指定客户端实例中，获取后台同步BatchResource代理
+	 * 从指定客户端实例中，获取后台同步Directory代理
 	 *
 	 * @param clientName
 	 *            客户端实例名称
 	 * @param resourceName
 	 *            resource名称
-	 * @return 后台同步BatchResource代理
+	 * @return 后台同步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getBackBatchResource(
+	public static <R extends Serializable> Directory<R> getBackDirectory(
 			String clientName, String resourceName) {
-		return getBackBatchResource(clientName, resourceName);
+		return getBackDirectory(clientName, resourceName);
 	}
 
 	/**
-	 * 从指定客户端实例中，获取后台同步BatchResource代理，并设置可选参数
+	 * 从指定客户端实例中，获取后台同步Directory代理，并设置可选参数
 	 *
 	 * @param clientName
 	 *            客户端实例名称
 	 * @param resourceName
 	 *            resource名称
 	 * @param abortable 是否允许中止
-	 * @return 后台同步BatchResource代理
+	 * @return 后台同步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getBackBatchResource(
+	public static <R extends Serializable> Directory<R> getBackDirectory(
 			String clientName, String resourceName, boolean abortable) {
-		return Client.getClient(clientName).getResourceFactory().getBackBatchResource(resourceName, abortable);
+		return Client.getClient(clientName).getResourceFactory().getBackDirectory(resourceName, abortable);
 	}
 
 	/**
-	 * 从指定客户端实例中，获取后台异步BatchResource代理
+	 * 从指定客户端实例中，获取后台异步Directory代理
 	 *
 	 * @param clientName
 	 *            客户端实例名称
@@ -477,16 +477,16 @@ public class Resources {
 	 *            resource名称
 	 * @param resourceCallback
 	 *            回调接口
-	 * @return 后台异步BatchResource代理
+	 * @return 后台异步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getBackAsyncBatchResource(
+	public static <R extends Serializable> Directory<R> getBackAsyncDirectory(
 			String clientName, String resourceName,
 			Callback<R[]> resourceCallback) {
-		return getBackAsyncBatchResource(clientName, resourceName, resourceCallback);
+		return getBackAsyncDirectory(clientName, resourceName, resourceCallback);
 	}
 
 	/**
-	 * 从指定客户端实例中，获取后台异步BatchResource代理
+	 * 从指定客户端实例中，获取后台异步Directory代理
 	 *
 	 * @param clientName
 	 *            客户端实例名称
@@ -495,12 +495,12 @@ public class Resources {
 	 * @param resourceCallback
 	 *            回调接口
 	 * @param abortable 是否允许中止
-	 * @return 后台异步BatchResource代理
+	 * @return 后台异步Directory代理
 	 */
-	public static <R extends Serializable> BatchResource<R> getBackAsyncBatchResource(
+	public static <R extends Serializable> Directory<R> getBackAsyncDirectory(
 			String clientName, String resourceName,
 			Callback<R[]> resourceCallback, boolean abortable) {
-		return Client.getClient(clientName).getResourceFactory().getBackAsyncBatchResource(resourceName,
+		return Client.getClient(clientName).getResourceFactory().getBackAsyncDirectory(resourceName,
 				resourceCallback, abortable);
 	}
 

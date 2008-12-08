@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @param <R> 资源类型
  * @param <C> 条件类型
  */
-public interface BatchResource<R extends Serializable> extends Resource<R[]> {
+public interface Directory<R extends Serializable> extends Resource<R[]> {
 
 	/**
 	 * 删除匹配的资源
