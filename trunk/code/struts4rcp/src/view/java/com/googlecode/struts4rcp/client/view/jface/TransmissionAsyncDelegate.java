@@ -25,17 +25,17 @@ public class TransmissionAsyncDelegate implements TransmissionListener {
 		this.runOnNonUI = runOnNonUI;
 	}
 
-	public void onTransporting(final TransmissionEvent event) {
+	public void onTransmit(final TransmissionEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onTransporting(event);
+					listener.onTransmit(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onTransporting(event);
+							listener.onTransmit(event);
 						}
 					});
 				}
@@ -45,17 +45,37 @@ public class TransmissionAsyncDelegate implements TransmissionListener {
 		}
 	}
 
-	public void onTransported(final TransmissionEvent event) {
+	public void onTransmiting(final TransmissionEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onTransported(event);
+					listener.onTransmiting(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onTransported(event);
+							listener.onTransmiting(event);
+						}
+					});
+				}
+			}
+		} catch (Throwable e) {
+			// ignore
+		}
+	}
+
+	public void onTransmited(final TransmissionEvent event) {
+		try {
+			if (UIUtils.isUIThread()) {
+				if (runOnUI) {
+					listener.onTransmited(event);
+				}
+			} else {
+				if (runOnNonUI) {
+					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
+						public void run() {
+							listener.onTransmited(event);
 						}
 					});
 				}

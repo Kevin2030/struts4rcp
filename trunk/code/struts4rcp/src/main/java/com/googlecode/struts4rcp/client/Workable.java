@@ -4,12 +4,12 @@ package com.googlecode.struts4rcp.client;
  * 可执行接口
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public interface Executable {
+public interface Workable {
 
 	/**
 	 * 执行
 	 * @throws Exception 执行出错时抛出
 	 */
-	void execute() throws Exception;
+	void work() throws Exception;
 
 }

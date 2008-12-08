@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Execution;
+import com.googlecode.struts4rcp.client.Transmission;
 import com.googlecode.struts4rcp.client.event.ExecutionAdapter;
 import com.googlecode.struts4rcp.client.event.ExecutionEvent;
 import com.googlecode.struts4rcp.client.event.ExecutionListener;
@@ -35,7 +35,7 @@ public class ExecutionDialog extends JDialog {
 
 	private final JButton abortButton;
 
-	private Execution execution;
+	private Transmission execution;
 
 	private final Client client;
 
@@ -89,7 +89,7 @@ public class ExecutionDialog extends JDialog {
 		backPanel.add(BorderLayout.EAST, backButton);
 		backButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				final Execution execution = ExecutionDialog.this.execution;
+				final Transmission execution = ExecutionDialog.this.execution;
 				if (execution != null && execution.isBackable()) {
 					ThreadUtils.execute(new Runnable(){
 						public void run() {
@@ -108,7 +108,7 @@ public class ExecutionDialog extends JDialog {
 		abortPanel.add(BorderLayout.EAST, abortButton);
 		abortButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				final Execution execution = ExecutionDialog.this.execution;
+				final Transmission execution = ExecutionDialog.this.execution;
 				if (execution != null && execution.isAbortable()) {
 					ThreadUtils.execute(new Runnable(){
 						public void run() {
@@ -136,7 +136,7 @@ public class ExecutionDialog extends JDialog {
 				if (UIUtils.isNonUIThread(event.getThread())) {
 					try {
 						if (client.getActionFactory().isForeExecuting()) {
-							Execution execution = client.getActionFactory().getForeExecutions().iterator().next();
+							Transmission execution = client.getActionFactory().getForeExecutions().iterator().next();
 							showExecution(execution);
 							return;
 						}
@@ -150,7 +150,7 @@ public class ExecutionDialog extends JDialog {
 		client.addListener(executionListener);
 	}
 
-	private void showExecution(Execution execution) {
+	private void showExecution(Transmission execution) {
 		if (this.execution != execution) {
 			this.execution = execution;
 			if (execution != null) {

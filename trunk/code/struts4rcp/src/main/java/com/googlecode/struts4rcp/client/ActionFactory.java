@@ -31,15 +31,15 @@ public class ActionFactory implements ClientElement {
 		return client;
 	}
 
-	public void sync(Executable executable) {
+	public void sync(Workable executable) {
 		try {
-			executable.execute();
+			executable.work();
 		} catch (Exception e) {
 
 		}
 	}
 
-	public void async(Executable executable) {
+	public void async(Workable executable) {
 
 	}
 
@@ -53,16 +53,16 @@ public class ActionFactory implements ClientElement {
 		this.client = client;
 	}
 
-	private Collection<Execution> foreExecutions = new HashSet<Execution>();
+	private Collection<Transmission> foreExecutions = new HashSet<Transmission>();
 
-	private Collection<Execution> backExecutions = new HashSet<Execution>();
+	private Collection<Transmission> backExecutions = new HashSet<Transmission>();
 
 	/**
 	 * 获取所有正在执行的执行项
 	 * @return 正在前台执行的执行项
 	 */
-	public Collection<Execution> getExecutions() {
-		Collection<Execution> copies = new HashSet<Execution>();
+	public Collection<Transmission> getExecutions() {
+		Collection<Transmission> copies = new HashSet<Transmission>();
 		synchronized (foreExecutions) {
 			copies.addAll(foreExecutions);
 		}
@@ -92,8 +92,8 @@ public class ActionFactory implements ClientElement {
 	 * 获取正在前台执行的执行项
 	 * @return 正在前台执行的执行项
 	 */
-	public Collection<Execution> getForeExecutions() {
-		Collection<Execution> copies = new HashSet<Execution>();
+	public Collection<Transmission> getForeExecutions() {
+		Collection<Transmission> copies = new HashSet<Transmission>();
 		synchronized (foreExecutions) {
 			copies.addAll(foreExecutions);
 		}
@@ -114,8 +114,8 @@ public class ActionFactory implements ClientElement {
 	 * 获取正在后台执行的执行项
 	 * @return 正在后台执行的执行项
 	 */
-	public Collection<Execution> getBackExecutions() {
-		Collection<Execution> copies = new HashSet<Execution>();
+	public Collection<Transmission> getBackExecutions() {
+		Collection<Transmission> copies = new HashSet<Transmission>();
 		synchronized (backExecutions) {
 			copies.addAll(backExecutions);
 		}
@@ -132,7 +132,7 @@ public class ActionFactory implements ClientElement {
 		}
 	}
 
-	protected void addExecution(Execution execution) {
+	protected void addExecution(Transmission execution) {
 		if (execution == null)
 			throw new NullPointerException("Execution == null!");
 		if (execution.isBack()) {
@@ -148,7 +148,7 @@ public class ActionFactory implements ClientElement {
 		executionPublisher.publishEvent(new ExecutionEvent(this, execution));
 	}
 
-	protected void removeExecution(Execution execution) {
+	protected void removeExecution(Transmission execution) {
 		if (execution == null)
 			throw new NullPointerException("Execution == null!");
 		synchronized (foreExecutions) {
@@ -163,9 +163,9 @@ public class ActionFactory implements ClientElement {
 
 	private class Backer implements Backable {
 
-		private Execution execution;
+		private Transmission execution;
 
-		public Backer(Execution execution) {
+		public Backer(Transmission execution) {
 			if (execution == null)
 				throw new NullPointerException("Execution == null!");
 			this.execution = execution;
@@ -376,7 +376,7 @@ public class ActionFactory implements ClientElement {
 
 		@SuppressWarnings("unchecked")
 		public R execute(final M model) throws Exception {
-			final Execution execution = new Execution(actionName, model, back, backable, abortable);
+			final Transmission execution = new Transmission(actionName, model, back, backable, abortable);
 			ActionFactory.this.addExecution(execution);
 			try {
 				Serializable result = transporter.transmit(execution);

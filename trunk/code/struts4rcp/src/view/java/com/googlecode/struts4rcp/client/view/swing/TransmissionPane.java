@@ -22,7 +22,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Execution;
+import com.googlecode.struts4rcp.client.Transmission;
 import com.googlecode.struts4rcp.client.event.ExecutionAdapter;
 import com.googlecode.struts4rcp.client.event.ExecutionEvent;
 import com.googlecode.struts4rcp.client.event.ExecutionListener;
@@ -107,7 +107,7 @@ public class TransmissionPane extends JPanel {
 					JOptionPane.showMessageDialog(TransmissionPane.this, "没有任何传输项!", "中止", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				final Execution execution = (Execution)transportationList.getSelectedValue();
+				final Transmission execution = (Transmission)transportationList.getSelectedValue();
 				if (execution == null) {
 					JOptionPane.showMessageDialog(TransmissionPane.this, "请选择传输项!", "中止", JOptionPane.WARNING_MESSAGE);
 					return;
@@ -132,7 +132,7 @@ public class TransmissionPane extends JPanel {
 		transportationList.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 
 			public void valueChanged(ListSelectionEvent e) {
-				final Execution execution = (Execution)transportationList.getSelectedValue();
+				final Transmission execution = (Transmission)transportationList.getSelectedValue();
 				if (execution != null) {
 					timeLabel.setText(new DecimalFormat("###,##0").format(System.currentTimeMillis() - execution.getTransportingTime().getTime()) + " ms");
 				} else {
@@ -158,7 +158,7 @@ public class TransmissionPane extends JPanel {
 		});
 		executionListener = new ExecutionDelegate(new ExecutionAdapter() {
 			public void onExecuting(ExecutionEvent event) {
-				Execution execution = event.getExecution();
+				Transmission execution = event.getExecution();
 				if (! execution.isTransported()) {
 					synchronized (transportationModel) {
 						if (! transportationModel.contains(execution))
@@ -170,14 +170,14 @@ public class TransmissionPane extends JPanel {
 				onExecuting(event);
 			}
 			public void onExecuted(ExecutionEvent event) {
-				Execution execution = event.getExecution();
+				Transmission execution = event.getExecution();
 				synchronized (transportationModel) {
 					transportationModel.removeElement(execution);
 				}
 			}
 		});
 		transportationListener = new TransmissionDelegate(new TransmissionAdapter() {
-			public void onTransporting(final TransmissionEvent event) {
+			public void onTransmiting(final TransmissionEvent event) {
 				synchronized (transportationModel) {
 					transportationList.repaint();
 				}
@@ -188,10 +188,10 @@ public class TransmissionPane extends JPanel {
 	}
 
 	private void refreshTransportationList() {
-		Collection<Execution> executions = client.getTransmitter().getTransmitingExecutions();
+		Collection<Transmission> executions = client.getTransmitter().getTransmissions();
 		synchronized (transportationModel) {
 			transportationModel.clear();
-			for (Execution execution : executions) {
+			for (Transmission execution : executions) {
 				if (! execution.isTransported()) {
 					transportationModel.addElement(execution);
 				}
@@ -221,7 +221,7 @@ public class TransmissionPane extends JPanel {
 		public Component getListCellRendererComponent(JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			Execution execution = (Execution)value;
+			Transmission execution = (Transmission)value;
 			if (execution.isTransporting())
 				this.setIcon(enableIcon);
 			else

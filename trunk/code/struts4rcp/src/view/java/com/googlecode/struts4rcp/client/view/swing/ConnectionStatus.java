@@ -123,10 +123,10 @@ public class ConnectionStatus extends JButton {
 			}
 		}));
 		client.addListener(new TransmissionDelegate(new TransmissionAdapter() {
-			public void onTransporting(final TransmissionEvent event) {
+			public void onTransmiting(final TransmissionEvent event) {
 				setTransporting(client.getTransmitter().isTransmiting());
 			}
-			public void onTransported(TransmissionEvent event) {
+			public void onTransmited(TransmissionEvent event) {
 				setTransporting(client.getTransmitter().isTransmiting());
 			}
 		}));
