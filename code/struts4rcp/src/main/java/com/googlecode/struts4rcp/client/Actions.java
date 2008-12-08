@@ -260,4 +260,20 @@ public class Actions {
 				actionCallback, abortable);
 	}
 
+	public static void sync(Executable executable) {
+		Client.getClient().getActionFactory().sync(executable);
+	}
+
+	public static void async(Executable executable) {
+		Client.getClient().getActionFactory().async(executable);
+	}
+
+	public static void sync(String clientName, Executable executable) {
+		Client.getClient(clientName).getActionFactory().sync(executable);
+	}
+
+	public static void async(String clientName, Executable executable) {
+		Client.getClient(clientName).getActionFactory().async(executable);
+	}
+
 }
