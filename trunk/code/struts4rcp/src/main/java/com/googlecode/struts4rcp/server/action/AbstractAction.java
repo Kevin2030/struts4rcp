@@ -16,7 +16,7 @@ import com.googlecode.struts4rcp.util.validator.Validator;
  * @param <M> 传入模型类型
  * @param <R> 返回值类型
  */
-public abstract class AbstractAction<M extends Serializable, R extends Serializable> implements PageAction<M, R>, ValidationAction<M, R> {
+public abstract class AbstractAction<M extends Serializable, R extends Serializable> implements PageAction<M, R>, PathAction<M, R>, ValidationAction<M, R> {
 
 	/**
 	 * 日志输出接口

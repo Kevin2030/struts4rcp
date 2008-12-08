@@ -16,7 +16,13 @@ import java.lang.annotation.Target;
 public @interface Path {
 
 	/**
-	 * 资源路径
+	 * 资源目录
+	 * @return 资源目录
+	 */
+	String directory() default "";
+
+	/**
+	 * 资源路径，如果配了资源目录，将自动作为路径前缀
 	 * @return 资源路径
 	 */
 	String value();
