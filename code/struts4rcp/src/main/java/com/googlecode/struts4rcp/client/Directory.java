@@ -15,7 +15,7 @@ public interface Directory<R extends Serializable> {
 	 * @return 资源
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	R[] find() throws Exception;
+	R[] index() throws Exception;
 
 	/**
 	 * 获取目录中匹配的资源
@@ -23,6 +23,6 @@ public interface Directory<R extends Serializable> {
 	 * @return 资源
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	R[] find(R resource) throws Exception;
+	R[] index(R resource) throws Exception;
 
 }
