@@ -23,7 +23,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 			delete(model);
 			return null;
 		} else if ("get".equalsIgnoreCase(method)) {
-			return get(model);
+			return read(model);
 		} else {
 			throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
 		}
@@ -35,11 +35,11 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 
 	public void delete(R resource) throws Exception {}
 
-	public R get(R resource) throws Exception {
+	public R read(R resource) throws Exception {
 		return resource;
 	}
 
-	public R[] find(R resource) throws Exception {
+	public R[] index(R resource) throws Exception {
 		return null;
 	}
 
