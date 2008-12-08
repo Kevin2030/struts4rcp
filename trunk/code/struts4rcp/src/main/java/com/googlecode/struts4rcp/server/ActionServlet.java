@@ -2,7 +2,6 @@ package com.googlecode.struts4rcp.server;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -201,8 +200,7 @@ public class ActionServlet extends HttpServlet {
 
 	@SuppressWarnings("unchecked")
 	protected Class<? extends Serializable> getModelClass(Action<Serializable, Serializable> action) throws Exception {
-		Method method = ClassUtils.getMethod(action.getClass(), "execute");
-		return (Class<? extends Serializable>) method.getParameterTypes()[0];
+		return (Class<? extends Serializable>) ClassUtils.getMethod(action.getClass(), "execute").getParameterTypes()[0];
 	}
 
 	/**
