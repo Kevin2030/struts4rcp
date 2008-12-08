@@ -6,7 +6,6 @@ import java.io.Serializable;
  * 资源目录
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  * @param <R> 资源类型
- * @param <C> 条件类型
  */
 public interface Directory<R extends Serializable> {
 
