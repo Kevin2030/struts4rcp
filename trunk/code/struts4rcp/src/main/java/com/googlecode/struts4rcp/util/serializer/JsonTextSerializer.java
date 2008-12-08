@@ -18,10 +18,10 @@ public class JsonTextSerializer extends StringSerializer {
 		return "text/json";
 	}
 
-	public Serializable deserialize(String data) throws IOException {
+	public Serializable deserialize(Class<? extends Serializable> cls, String data) throws IOException {
 		if (data == null || data.length() == 0)
 			return null;
-		return (Serializable)JsonUtils.fromJson(data);
+		return (Serializable)JsonUtils.fromJson(data, cls);
 	}
 
 	public String serialize(Serializable obj) throws IOException {
