@@ -154,6 +154,16 @@ public class ActionContext {
 		return info.getAction();
 	}
 
+	public String getURI() {
+		String uri = request.getRequestURI();
+		String context = request.getContextPath();
+		if (context != null
+				&& ! "/".equals(context)
+				&& uri.startsWith(context))
+			uri = uri.substring(context.length());
+		return uri;
+	}
+
 	/**
 	 * 获取HTTP请求信息
 	 * @return HTTP请求信息
