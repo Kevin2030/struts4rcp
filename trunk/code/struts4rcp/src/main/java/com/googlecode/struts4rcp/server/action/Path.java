@@ -16,8 +16,14 @@ import java.lang.annotation.Target;
 public @interface Path {
 
 	/**
-	 * Restful请求路径
-	 * @return 请求路径
+	 * 资源目录路径
+	 * @return 资源目录路径
+	 */
+	String type();
+
+	/**
+	 * 资源路径
+	 * @return 资源路径
 	 */
 	String value();
 
