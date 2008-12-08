@@ -19,8 +19,8 @@ public class TextServletSerializer implements ServletSerializer {
 		this.serializer = serializer;
 	}
 
-	public Serializable deserialize(HttpServletRequest in) throws IOException {
-		return serializer.deserialize(in.getReader());
+	public Serializable deserialize(Class<? extends Serializable> baseClass, HttpServletRequest in) throws IOException {
+		return serializer.deserialize(Serializable.class, in.getReader());
 	}
 
 	public String getContentType() {

@@ -126,7 +126,7 @@ public class CommonsHttpClientTransporter extends AbstractHttpTransporter<PostMe
 			request.setRequestEntity(new SerializeEntity(serializer, model));
 			int code = httpClient.executeMethod(request);
 			assertSuccessStatusCode(code, request.getStatusText());
-			return serializer.deserialize(request.getResponseBodyAsStream());
+			return serializer.deserialize(Serializable.class, request.getResponseBodyAsStream());
 		} finally {
 			request.releaseConnection();
 		}

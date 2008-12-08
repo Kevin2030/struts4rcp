@@ -30,7 +30,7 @@ public class HttpURLConnectionTransporter extends AbstractHttpTransporter<HttpUR
 			serializer.serialize(model, request.getOutputStream());
 			request.connect();
 			assertSuccessStatusCode(request.getResponseCode(), request.getResponseMessage());
-			return serializer.deserialize(request.getInputStream());
+			return serializer.deserialize(Serializable.class, request.getInputStream());
 		} finally {
 			request.disconnect();
 		}

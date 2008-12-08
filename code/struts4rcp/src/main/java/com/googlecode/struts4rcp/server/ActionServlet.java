@@ -2,6 +2,7 @@ package com.googlecode.struts4rcp.server;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -133,11 +134,12 @@ public class ActionServlet extends HttpServlet {
 			if (action == null) // action实例不允许为空
 				throw new NullPointerException("Not existed action: " + actionName);
 			ActionDelegate delegate = new ActionDelegate(actionInterceptor, action);
+			Class<? extends Serializable> modelClass = getModelClass(action);
 
 			ActionContext.init(request, response, actionName, action); // 初始化上下文
 			try {
 				// 接收客户端传过来的对象
-				Serializable model = serializer.deserialize(request);
+				Serializable model = serializer.deserialize(modelClass, request);
 				Serializable result;
 				try {
 					result = doExceute(actionName, delegate, model);
@@ -195,6 +197,12 @@ public class ActionServlet extends HttpServlet {
 			}
 		}
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected Class<? extends Serializable> getModelClass(Action<Serializable, Serializable> action) throws Exception {
+		Method method = ClassUtils.getMethod(action.getClass(), "execute");
+		return (Class<? extends Serializable>) method.getParameterTypes()[0];
 	}
 
 	/**

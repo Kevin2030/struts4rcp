@@ -19,8 +19,8 @@ public class StreamServletSerializer implements ServletSerializer {
 		this.serializer = serializer;
 	}
 
-	public Serializable deserialize(HttpServletRequest in) throws IOException {
-		return serializer.deserialize(in.getInputStream());
+	public Serializable deserialize(Class<? extends Serializable> baseClass, HttpServletRequest in) throws IOException {
+		return serializer.deserialize(Serializable.class, in.getInputStream());
 	}
 
 	public String getContentType() {

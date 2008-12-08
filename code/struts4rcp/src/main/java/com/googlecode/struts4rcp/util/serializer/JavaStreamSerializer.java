@@ -19,7 +19,7 @@ public class JavaStreamSerializer implements StreamSerializer {
 		return "application/java-serialization";
 	}
 
-	public Serializable deserialize(InputStream in) throws IOException {
+	public Serializable deserialize(Class<? extends Serializable> baseClass, InputStream in) throws IOException {
 		ObjectInputStream oo = new ObjectInputStream(in);
 		try {
 			return (Serializable)oo.readObject();

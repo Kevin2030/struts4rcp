@@ -22,7 +22,7 @@ public class JbossStreamSerializer implements StreamSerializer {
 		return "application/jboss-serialization";
 	}
 
-	public Serializable deserialize(InputStream in) throws IOException {
+	public Serializable deserialize(Class<? extends Serializable> baseClass, InputStream in) throws IOException {
 		ObjectInputStream oo = new JBossObjectInputStream(in);
 		try {
 			return (Serializable)oo.readObject();

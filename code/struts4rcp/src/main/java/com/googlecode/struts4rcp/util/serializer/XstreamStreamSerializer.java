@@ -21,7 +21,7 @@ public class XstreamStreamSerializer implements StreamSerializer {
 		return "text/xstream";
 	}
 
-	public Serializable deserialize(InputStream in) throws IOException {
+	public Serializable deserialize(Class<? extends Serializable> baseClass, InputStream in) throws IOException {
 		return (Serializable) xstream.fromXML(in);
 	}
 

@@ -86,7 +86,7 @@ public abstract class SerializerTestCase extends TestCase {
 
 	private Serializable deserialize(byte[] obj) throws IOException {
 		ByteArrayInputStream in = new ByteArrayInputStream(obj);
-		return serializer.deserialize(in);
+		return serializer.deserialize(Serializable.class, in);
 	}
 
 }
