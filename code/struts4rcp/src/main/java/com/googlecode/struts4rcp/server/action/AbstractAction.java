@@ -1,10 +1,11 @@
 package com.googlecode.struts4rcp.server.action;
 
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.serializer.PageServletSerializer;
+import com.googlecode.struts4rcp.server.serializer.PathServletSerializer;
+import com.googlecode.struts4rcp.util.ClassUtils;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
 import com.googlecode.struts4rcp.util.validator.Validator;
@@ -37,6 +38,21 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 		return PageServletSerializer.getPage((Action<Serializable, Serializable>)this);
 	}
 
+	private String path;
+
+	public void setPath(String path) {
+		if (path != null)
+			path = path.trim();
+		this.path = path;
+	}
+
+	@SuppressWarnings("unchecked")
+	public String getPath() {
+		if (path != null && path.length() > 0)
+			return path;
+		return PathServletSerializer.getPath((Action<Serializable, Serializable>)this);
+	}
+
 	private Validator validator;
 
 	public void setValidator(Validator validator) {
@@ -50,8 +66,7 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 	@SuppressWarnings("unchecked")
 	public Class<M> getModelClass() {
 		try {
-			return (Class<M>) ((ParameterizedType) getClass()
-					.getGenericSuperclass()).getActualTypeArguments()[0];
+			return (Class<M>) ClassUtils.getMethod(getClass(), "execute").getParameterTypes()[0];
 		} catch (Throwable e) {
 			throw new RuntimeException(getClass().getName() + " generic type undefined!");
 		}
@@ -60,8 +75,7 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 	@SuppressWarnings("unchecked")
 	public Class<R> getReturnClass() {
 		try {
-			return (Class<R>) ((ParameterizedType) getClass()
-					.getGenericSuperclass()).getActualTypeArguments()[1];
+			return (Class<R>) ClassUtils.getMethod(getClass(), "execute").getReturnType();
 		} catch (Throwable e) {
 			throw new RuntimeException(getClass().getName() + " generic type undefined!");
 		}
