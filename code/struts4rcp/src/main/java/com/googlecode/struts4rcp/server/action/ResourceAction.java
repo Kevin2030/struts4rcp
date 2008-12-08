@@ -29,14 +29,20 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		}
 	}
 
-	public void create(R resource) throws Exception {}
+	public void create(R resource) throws Exception {
+		throw new UnsupportedOperationException();
+	}
 
-	public void update(R resource) throws Exception {}
+	public void update(R resource) throws Exception {
+		throw new UnsupportedOperationException();
+	}
 
-	public void delete(R resource) throws Exception {}
+	public void delete(R resource) throws Exception {
+		throw new UnsupportedOperationException();
+	}
 
 	public R read(R resource) throws Exception {
-		return resource;
+		return null;
 	}
 
 	public R[] index(R resource) throws Exception {
