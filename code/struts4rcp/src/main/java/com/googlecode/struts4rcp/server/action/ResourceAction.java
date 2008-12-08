@@ -9,9 +9,9 @@ import com.googlecode.struts4rcp.server.ActionContext;
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  * @param <R> 资源类型
  */
-public abstract class ResourceAction<R extends Serializable> extends AbstractAction<R, R> implements PathAction<R, R> {
+public abstract class ResourceAction<R extends Serializable> extends AbstractAction<R, Serializable> {
 
-	public R execute(R model) throws Exception {
+	public Serializable execute(R model) throws Exception {
 		String method = ActionContext.getContext().getRequest().getMethod();
 		if ("post".equalsIgnoreCase(method)) {
 			create(model);
@@ -37,6 +37,10 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 
 	public R get(R resource) throws Exception {
 		return resource;
+	}
+
+	public R[] find(R resource) throws Exception {
+		return null;
 	}
 
 }

@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 public @interface Page {
 
 	/**
-	 * 页面路径，不包含扩展名
+	 * 页面路径，不包含扩展名，扩展名由框架根据请求类型识别
 	 * @return 页面路径
 	 */
 	String value();
