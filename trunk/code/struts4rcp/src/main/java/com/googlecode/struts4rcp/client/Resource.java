@@ -37,9 +37,9 @@ public interface Resource<R extends Serializable> {
 	void delete() throws Exception;
 
 	/**
-	 * 获取资源所在目录
+	 * 获取资源所在目录，通过HEAD请求查找
 	 * @return 资源所在目录
 	 */
-	Directory<R> getDirectory();
+	Directory<R> getDirectory() throws Exception;
 
 }
