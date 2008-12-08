@@ -30,6 +30,10 @@ public final class JsonUtils {
 	 */
 	public static final String CLASS_PROPERTY_NAME = "class";
 
+	public static Object fromJson(String json) {
+		return fromJson(json, Map.class); // 缺省使用Map
+	}
+
 	/**
 	 * 将JSON字符串解析成对象(或数组)。
 	 * <p>注意：
@@ -43,7 +47,7 @@ public final class JsonUtils {
 	 * @return 对象
 	 */
 	@SuppressWarnings("unchecked")
-	public static Object fromJson(String json) {
+	public static Object fromJson(String json, Class<?> cls) {
 		if (json == null || json.length() == 0)
 			return null;
 		json = json.trim();

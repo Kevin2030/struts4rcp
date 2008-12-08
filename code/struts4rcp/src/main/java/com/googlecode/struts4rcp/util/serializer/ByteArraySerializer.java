@@ -13,8 +13,8 @@ import com.googlecode.struts4rcp.util.IOUtils;
  */
 public abstract class ByteArraySerializer implements StreamSerializer {
 
-	public Serializable deserialize(Class<? extends Serializable> baseClass, InputStream in) throws IOException {
-		return deserialize(IOUtils.readToBytes(in));
+	public Serializable deserialize(Class<? extends Serializable> cls, InputStream in) throws IOException {
+		return deserialize(cls, IOUtils.readToBytes(in));
 	}
 
 	public void serialize(Serializable obj, OutputStream out)
@@ -24,7 +24,7 @@ public abstract class ByteArraySerializer implements StreamSerializer {
 		out.flush();
 	}
 
-	public abstract Serializable deserialize(byte[] in) throws IOException;
+	public abstract Serializable deserialize(Class<? extends Serializable> cls, byte[] in) throws IOException;
 
 	public abstract byte[] serialize(Serializable obj) throws IOException;
 

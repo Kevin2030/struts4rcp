@@ -17,8 +17,8 @@ public abstract class StringSerializer implements TextSerializer {
 		return "UTF-8";
 	}
 
-	public Serializable deserialize(Class<? extends Serializable> baseClass, Reader in) throws IOException {
-		return deserialize(IOUtils.readToString(in));
+	public Serializable deserialize(Class<? extends Serializable> cls, Reader in) throws IOException {
+		return deserialize(cls, IOUtils.readToString(in));
 	}
 
 	public void serialize(Serializable obj, Writer out) throws IOException {
@@ -27,7 +27,7 @@ public abstract class StringSerializer implements TextSerializer {
 		out.flush();
 	}
 
-	public abstract Serializable deserialize(String in) throws IOException;
+	public abstract Serializable deserialize(Class<? extends Serializable> cls, String in) throws IOException;
 
 	public abstract String serialize(Serializable obj) throws IOException;
 
