@@ -11,8 +11,8 @@ public class JsonStreamSerializer implements StreamSerializer {
 
 	private JsonTextSerializer serializer = new JsonTextSerializer();
 
-	public Serializable deserialize(InputStream in) throws IOException {
-		return serializer.deserialize(new InputStreamReader(in));
+	public Serializable deserialize(Class<? extends Serializable> baseClass, InputStream in) throws IOException {
+		return serializer.deserialize(Serializable.class, new InputStreamReader(in));
 	}
 
 	public void serialize(Serializable obj, OutputStream out)

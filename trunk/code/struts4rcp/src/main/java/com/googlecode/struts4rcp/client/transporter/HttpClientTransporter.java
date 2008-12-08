@@ -82,7 +82,7 @@ public class HttpClientTransporter extends AbstractHttpTransporter<HttpPost> {
 		assertSuccessStatusCode(status.getStatusCode(), status.getReasonPhrase());
 		HttpEntity entity = response.getEntity();
 		try {
-			return serializer.deserialize(entity.getContent());
+			return serializer.deserialize(Serializable.class, entity.getContent());
 		} finally {
 			entity.consumeContent();
 		}

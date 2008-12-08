@@ -20,7 +20,7 @@ public class XstreamTextSerializer implements TextSerializer {
 		return "UTF-8";
 	}
 
-	public Serializable deserialize(Reader in) throws IOException {
+	public Serializable deserialize(Class<? extends Serializable> baseClass, Reader in) throws IOException {
 		return (Serializable) xstream.fromXML(in);
 	}
 

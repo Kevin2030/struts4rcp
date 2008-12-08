@@ -28,7 +28,7 @@ public final class JsonUtils {
 	/**
 	 * 类元属性名
 	 */
-	public static final String CLASS_NAME = "className";
+	public static final String CLASS_PROPERTY_NAME = "class";
 
 	/**
 	 * 将JSON字符串解析成对象(或数组)。
@@ -100,7 +100,7 @@ public final class JsonUtils {
 	private static Object jsonToObject(JSONObject json) {
 		if (json == null)
 			return null;
-		Object classProperty = getJsonProperty(json, CLASS_NAME);
+		Object classProperty = getJsonProperty(json, CLASS_PROPERTY_NAME);
 		String className = classProperty == null ? null : String.valueOf(classProperty);
 		Object bean;
 		if (className != null && className.length() > 0) {
@@ -110,7 +110,7 @@ public final class JsonUtils {
 		}
 		for (Iterator<String> iterator = json.keys(); iterator.hasNext();) {
 			String key = (String)iterator.next();
-			if (! CLASS_NAME.equals(key)) {
+			if (! CLASS_PROPERTY_NAME.equals(key)) {
 				Object value = getJsonProperty(json, key);
 				if (value instanceof JSONObject) {
 					JSONObject obj = (JSONObject) value;
@@ -274,13 +274,13 @@ public final class JsonUtils {
 	// 添加Map
 	private static void appendMap(Class<?> cls, Map<String, Object> properties, StringBuffer buf, Stack<Object> ref) {
 		buf.append("{\"");
-		buf.append(CLASS_NAME);
+		buf.append(CLASS_PROPERTY_NAME);
 		buf.append("\":\"");
 		buf.append(cls.getName());
 		buf.append("\"");
 		for (Iterator<Map.Entry<String, Object>> iterator = properties.entrySet().iterator(); iterator.hasNext();) {
 			Map.Entry<String, Object> entry = (Map.Entry<String, Object>)iterator.next();
-			if (! CLASS_NAME.equals(entry.getKey())) {
+			if (! CLASS_PROPERTY_NAME.equals(entry.getKey())) {
 				buf.append(",\"");
 				buf.append(escapeJavaScript(entry.getKey()));
 				buf.append("\":");

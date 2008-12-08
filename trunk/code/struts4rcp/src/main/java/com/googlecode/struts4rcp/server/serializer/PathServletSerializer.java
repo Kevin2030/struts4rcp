@@ -24,9 +24,9 @@ public class PathServletSerializer implements ServletSerializer {
 		this.serializer = serializer;
 	}
 
-	public Serializable deserialize(HttpServletRequest request)
+	public Serializable deserialize(Class<? extends Serializable> baseClass, HttpServletRequest request)
 			throws IOException {
-		Serializable result = serializer.deserialize(request);
+		Serializable result = serializer.deserialize(Serializable.class, request);
 		String path;
 		Action<Serializable, Serializable> action = ActionContext.getContext().getAction();
 		if (action instanceof PageAction) {

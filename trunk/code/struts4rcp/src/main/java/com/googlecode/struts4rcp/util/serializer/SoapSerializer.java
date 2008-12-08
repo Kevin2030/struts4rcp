@@ -15,7 +15,7 @@ public class SoapSerializer implements TextSerializer {
 		return "UTF-8";
 	}
 
-	public Serializable deserialize(Reader in) throws IOException {
+	public Serializable deserialize(Class<? extends Serializable> baseClass, Reader in) throws IOException {
 		// TODO Auto-generated method stub
 		return null;
 	}

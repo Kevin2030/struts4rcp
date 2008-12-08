@@ -19,7 +19,7 @@ public class XmlStreamSerializer implements StreamSerializer {
 		return "text/xml";
 	}
 
-	public Serializable deserialize(InputStream in) throws IOException {
+	public Serializable deserialize(Class<? extends Serializable> baseClass, InputStream in) throws IOException {
 		XMLDecoder xd = new XMLDecoder(in);
 		return (Serializable)xd.readObject();
 	}

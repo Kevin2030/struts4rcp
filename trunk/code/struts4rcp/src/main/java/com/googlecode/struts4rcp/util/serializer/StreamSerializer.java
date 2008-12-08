@@ -26,6 +26,6 @@ public interface StreamSerializer extends Serializer<InputStream, OutputStream> 
 	 * @throws IOException
 	 *             文件读取出错或反序列化出错时抛出
 	 */
-	public Serializable deserialize(InputStream in) throws IOException;
+	public Serializable deserialize(Class<? extends Serializable> baseClass, InputStream in) throws IOException;
 
 }
