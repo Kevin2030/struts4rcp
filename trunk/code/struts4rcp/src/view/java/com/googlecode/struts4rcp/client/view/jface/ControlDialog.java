@@ -17,7 +17,7 @@ public class ControlDialog extends Dialog {
 	
 	private final Shell shell;
 
-	private TransportationPane transportationPane;
+	private TransmissionPane transmissionPane;
 	
 	private ExceptionPane exceptionPane;
 	
@@ -48,8 +48,8 @@ public class ControlDialog extends Dialog {
 		
 		TabItem transportationTabItem = new TabItem(tabFolder, SWT.FILL);
 		transportationTabItem.setText("传输管理");
-		transportationPane = new TransportationPane(tabFolder, client);
-		transportationTabItem.setControl(transportationPane);
+		transmissionPane = new TransmissionPane(tabFolder, client);
+		transportationTabItem.setControl(transmissionPane);
 		
 		TabItem exceptionTabItem = new TabItem(tabFolder, SWT.FILL);
 		exceptionTabItem.setText("异常管理");
@@ -72,8 +72,8 @@ public class ControlDialog extends Dialog {
 	}
 	
 	public void dispose() {
-		if (transportationPane != null && ! transportationPane.isDisposed())
-			transportationPane.dispose();
+		if (transmissionPane != null && ! transmissionPane.isDisposed())
+			transmissionPane.dispose();
 		if (exceptionPane != null && ! exceptionPane.isDisposed())
 			exceptionPane.dispose();
 		if (configurationPane != null && ! configurationPane.isDisposed())

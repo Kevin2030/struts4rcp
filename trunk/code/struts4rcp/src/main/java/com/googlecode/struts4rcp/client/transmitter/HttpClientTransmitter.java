@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.client.transporter;
+package com.googlecode.struts4rcp.client.transmitter;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -32,7 +32,7 @@ import com.googlecode.struts4rcp.util.serializer.StreamSerializer;
  * @see org.apache.http.client.HttpClient
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class HttpClientTransporter extends AbstractHttpTransporter<HttpPost> {
+public class HttpClientTransmitter extends AbstractHttpTransmitter<HttpPost> {
 
 	private HttpClient httpClient;
 

@@ -14,7 +14,7 @@ public class ControlDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private final TransportationPane transportationPane;
+	private final TransmissionPane transmissionPane;
 
 	private final ExceptionPane exceptionPane;
 
@@ -24,7 +24,7 @@ public class ControlDialog extends JDialog {
 		super(owner, true);
 		if (client == null)
 			throw new NullPointerException("Client == null!");
-		transportationPane = new TransportationPane(client);
+		transmissionPane = new TransmissionPane(client);
 		exceptionPane = new ExceptionPane(client);
 		configurationPane = new ConfigurationPane(client);
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
@@ -37,14 +37,14 @@ public class ControlDialog extends JDialog {
 		this.setLayout(new BorderLayout());
 		JTabbedPane tabPane = new JTabbedPane();
 		this.add(BorderLayout.CENTER, tabPane);
-		tabPane.addTab("传输管理", transportationPane);
+		tabPane.addTab("传输管理", transmissionPane);
 		tabPane.addTab("异常管理", exceptionPane);
 		tabPane.addTab("配置管理", configurationPane);
 		this.setVisible(false);
 	}
 
-	public TransportationPane getTransportationPane() {
-		return transportationPane;
+	public TransmissionPane getTransmissionPane() {
+		return transmissionPane;
 	}
 
 	public ExceptionPane getExceptionPane() {
@@ -57,7 +57,7 @@ public class ControlDialog extends JDialog {
 
 	@Override
 	public void dispose() {
-		transportationPane.dispose();
+		transmissionPane.dispose();
 		exceptionPane.dispose();
 		configurationPane.dispose();
 		super.dispose();

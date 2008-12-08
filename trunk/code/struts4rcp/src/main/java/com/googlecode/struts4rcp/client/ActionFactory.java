@@ -241,7 +241,7 @@ public class ActionFactory implements ClientElement {
 	 * @return 同步Action代理
 	 */
 	public <M extends Serializable, R extends Serializable> Action<M, R> getAction(String actionName, boolean backable, boolean abortable) {
-		return new ActionProxy<M, R>(client.getTransporter(), actionName, false, backable, abortable);
+		return new ActionProxy<M, R>(client.getTransmitter(), actionName, false, backable, abortable);
 	}
 
 	/**
@@ -291,7 +291,7 @@ public class ActionFactory implements ClientElement {
 	 * @return 后台同步Action代理
 	 */
 	public <M extends Serializable, R extends Serializable> Action<M, R> getBackAction(String actionName, boolean abortable) {
-		return new ActionProxy<M, R>(client.getTransporter(), actionName, true, false, abortable);
+		return new ActionProxy<M, R>(client.getTransmitter(), actionName, true, false, abortable);
 	}
 
 	/**
@@ -340,7 +340,7 @@ public class ActionFactory implements ClientElement {
 	 */
 	protected final class ActionProxy<M extends Serializable, R extends Serializable> implements Action<M, R> {
 
-		protected final Transporter transporter;
+		protected final Transmitter transporter;
 
 		protected final String actionName;
 
@@ -350,7 +350,7 @@ public class ActionFactory implements ClientElement {
 
 		protected final boolean abortable;
 
-		ActionProxy(Transporter transporter, String actionName, boolean back, boolean backable, boolean abortable) {
+		ActionProxy(Transmitter transporter, String actionName, boolean back, boolean backable, boolean abortable) {
 			if (transporter == null)
 				throw new NullPointerException("transporter == null!");
 			if (actionName == null)
@@ -367,7 +367,7 @@ public class ActionFactory implements ClientElement {
 			final Execution execution = new Execution(actionName, model, back, backable, abortable);
 			ActionFactory.this.addExecution(execution);
 			try {
-				Serializable result = transporter.transport(execution);
+				Serializable result = transporter.transmit(execution);
 				assertResult(result);
 				return (R)result;
 			} finally {

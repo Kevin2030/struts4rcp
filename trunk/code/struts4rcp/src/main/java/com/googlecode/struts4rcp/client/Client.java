@@ -11,8 +11,8 @@ import com.googlecode.struts4rcp.client.event.ConnectionListener;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
 import com.googlecode.struts4rcp.client.event.ExecutionListener;
 import com.googlecode.struts4rcp.client.event.Listener;
-import com.googlecode.struts4rcp.client.event.TransportationListener;
-import com.googlecode.struts4rcp.client.transporter.HttpURLConnectionTransporter;
+import com.googlecode.struts4rcp.client.event.TransmissionListener;
+import com.googlecode.struts4rcp.client.transmitter.HttpURLConnectionTransmitter;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ServiceUtils;
 import com.googlecode.struts4rcp.util.ThreadUtils;
@@ -186,16 +186,16 @@ public class Client {
 
 	private final ConfigurationManager configurationManager;
 
-	private final Transporter transporter;
+	private final Transmitter transmitter;
 
 	private final ActionFactory actionFactory;
 
 	private final ResourceFactory resourceFactory;
 
-	private static Transporter loadTransporter(Properties config) {
+	private static Transmitter loadTransporter(Properties config) {
 		 return PropertiesUtils.getInstanceProperty(config,
-					TRANSPORTER_PARAM_NAME, Transporter.class,
-					HttpURLConnectionTransporter.class);
+					TRANSPORTER_PARAM_NAME, Transmitter.class,
+					HttpURLConnectionTransmitter.class);
 	}
 
 	private static ActionFactory loadActionFactory(Properties config) {
@@ -220,36 +220,36 @@ public class Client {
 		this(config, loadTransporter(config), loadActionFactory(config), loadResourceFactory(config), loadConfigurationManager(config));
 	}
 
-	public Client(Properties config, Transporter transporter) {
+	public Client(Properties config, Transmitter transporter) {
 		this(config, transporter, loadActionFactory(config), loadResourceFactory(config), loadConfigurationManager(config));
 	}
 
-	public Client(Properties config, Transporter transporter,
+	public Client(Properties config, Transmitter transmitter,
 			ActionFactory actionFactory, ResourceFactory resourceFactory,
 			ConfigurationManager configurationManager) {
 		if (config == null)
 			throw new NullPointerException("properties == null!");
 		if (configurationManager == null)
 			throw new NullPointerException("configurationManager == null!");
-		if (transporter == null)
-				throw new NullPointerException("transporter == null!");
+		if (transmitter == null)
+				throw new NullPointerException("transmitter == null!");
 		if (actionFactory == null)
 			throw new NullPointerException("actionFactory == null!");
 		if (resourceFactory == null)
 			throw new NullPointerException("resourceFactory == null!");
 
 		this.configurationManager = configurationManager;
-		this.transporter = transporter;
+		this.transmitter = transmitter;
 		this.actionFactory = actionFactory;
 		this.resourceFactory = resourceFactory;
 		config = new UnmodifiableProperties(config);
 		configurationManager.init(this, config);
-		transporter.init(this, config);
+		transmitter.init(this, config);
 		actionFactory.init(this, config);
 		resourceFactory.init(this, config);
 		configurationManager.register(TRANSPORTER_PARAM_NAME,
 				"传输策略", "暂未实现传输策略动态切换，修改后不会生效!",
-				HttpURLConnectionTransporter.class.getName(), ServiceUtils.getServiceClassNames(Transporter.class.getName()).toArray(new String[0]));
+				HttpURLConnectionTransmitter.class.getName(), ServiceUtils.getServiceClassNames(Transmitter.class.getName()).toArray(new String[0]));
 		configurationManager.register(ACTION_FACTORY_PARAM_NAME,
 				"Action管理器", "暂未实现Action管理器动态切换，修改后不会生效!",
 				ActionFactory.class.getName(), ServiceUtils.getServiceClassNames(ActionFactory.class.getName()).toArray(new String[0]));
@@ -273,8 +273,8 @@ public class Client {
 		return configurationManager;
 	}
 
-	public Transporter getTransporter() {
-		return transporter;
+	public Transmitter getTransmitter() {
+		return transmitter;
 	}
 
 	public ActionFactory getActionFactory() {
@@ -287,7 +287,7 @@ public class Client {
 
 	public void shutdown() {
 		try {
-			transporter.shutdown();
+			transmitter.shutdown();
 		} finally {
 			try {
 				actionFactory.shutdown();
@@ -308,11 +308,11 @@ public class Client {
 	 */
 	public void addListener(Listener listener) {
 		if (listener instanceof ConnectionListener)
-			this.getTransporter().addConnectionListener(
+			this.getTransmitter().addConnectionListener(
 					(ConnectionListener) listener);
-		if (listener instanceof TransportationListener)
-			this.getTransporter().addTransportationListener(
-					(TransportationListener) listener);
+		if (listener instanceof TransmissionListener)
+			this.getTransmitter().addTransmissionListener(
+					(TransmissionListener) listener);
 		if (listener instanceof ExecutionListener)
 			this.getActionFactory().addExecutionListener(
 					(ExecutionListener) listener);
@@ -330,12 +330,12 @@ public class Client {
 	 */
 	public void removeListener(Listener listener) {
 		if (listener instanceof ConnectionListener)
-			this.getTransporter().removeConnectionListener(
+			this.getTransmitter().removeConnectionListener(
 					(ConnectionListener) listener);
-		if (listener instanceof TransportationListener)
-			this.getTransporter()
-					.removeTransportationListener(
-							(TransportationListener) listener);
+		if (listener instanceof TransmissionListener)
+			this.getTransmitter()
+					.removeTransmissionListener(
+							(TransmissionListener) listener);
 		if (listener instanceof ExecutionListener)
 			this.getActionFactory().removeExecutionListener(
 					(ExecutionListener) listener);

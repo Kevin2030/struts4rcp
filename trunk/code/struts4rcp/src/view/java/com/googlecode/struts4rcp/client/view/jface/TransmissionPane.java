@@ -20,11 +20,11 @@ import com.googlecode.struts4rcp.client.Execution;
 import com.googlecode.struts4rcp.client.event.ExecutionAdapter;
 import com.googlecode.struts4rcp.client.event.ExecutionEvent;
 import com.googlecode.struts4rcp.client.event.ExecutionListener;
-import com.googlecode.struts4rcp.client.event.TransportationAdapter;
-import com.googlecode.struts4rcp.client.event.TransportationEvent;
-import com.googlecode.struts4rcp.client.event.TransportationListener;
+import com.googlecode.struts4rcp.client.event.TransmissionAdapter;
+import com.googlecode.struts4rcp.client.event.TransmissionEvent;
+import com.googlecode.struts4rcp.client.event.TransmissionListener;
 
-public class TransportationPane extends Composite {
+public class TransmissionPane extends Composite {
 
 	private final Client client;
 
@@ -34,9 +34,9 @@ public class TransportationPane extends Composite {
 
 	private final ExecutionListener executionListener;
 
-	private final TransportationListener transportationListener;
+	private final TransmissionListener transportationListener;
 
-	public TransportationPane(final Composite parent, final Client client) {
+	public TransmissionPane(final Composite parent, final Client client) {
 		super(parent, SWT.NONE);
 		if (client == null)
 			throw new NullPointerException("Client == null!");
@@ -150,8 +150,8 @@ public class TransportationPane extends Composite {
 			}
 		};
 		client.addListener(executionListener);
-		transportationListener = new TransportationAdapter() {
-			public void onTransporting(final TransportationEvent event) {
+		transportationListener = new TransmissionAdapter() {
+			public void onTransporting(final TransmissionEvent event) {
 				final Execution execution = event.getExecution();
 				synchronized (executions) {
 					if (executions.contains(execution)) {
