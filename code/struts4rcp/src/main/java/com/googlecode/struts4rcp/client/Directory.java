@@ -8,14 +8,14 @@ import java.io.Serializable;
  * @param <R> 资源类型
  * @param <C> 条件类型
  */
-public interface Directory<R extends Serializable> extends Resource<R[]> {
+public interface Directory<R extends Serializable> {
 
 	/**
-	 * 删除目录中匹配的资源
-	 * @param resource 匹配条件(如果条件复杂，可以传入资源类型的子类作为条件)
-	 * @throws Exception 删除失败或网络连接出错时抛出
+	 * 获取目录中所有的资源
+	 * @return 资源
+	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	void delete(R resource) throws Exception;
+	R[] find() throws Exception;
 
 	/**
 	 * 获取目录中匹配的资源
@@ -23,6 +23,6 @@ public interface Directory<R extends Serializable> extends Resource<R[]> {
 	 * @return 资源
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	R[] get(R resource) throws Exception;
+	R[] find(R resource) throws Exception;
 
 }

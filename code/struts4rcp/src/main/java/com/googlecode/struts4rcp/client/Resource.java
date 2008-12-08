@@ -36,4 +36,10 @@ public interface Resource<R extends Serializable> {
 	 */
 	R get() throws Exception;
 
+	/**
+	 * 获取资源所在目录
+	 * @return 资源所在目录
+	 */
+	Directory<R> getDirectory();
+
 }
