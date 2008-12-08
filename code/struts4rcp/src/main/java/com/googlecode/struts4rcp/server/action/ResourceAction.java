@@ -12,7 +12,6 @@ import com.googlecode.struts4rcp.server.ActionContext;
 public abstract class ResourceAction<R extends Serializable> extends AbstractAction<R, Serializable> {
 
 	public Serializable execute(R model) throws Exception {
-		String uri = ActionContext.getContext().getURI();
 		String method = ActionContext.getContext().getRequest().getMethod();
 		if ("post".equalsIgnoreCase(method)) {
 			create(model);
@@ -24,6 +23,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 			delete(model);
 			return null;
 		} else if ("get".equalsIgnoreCase(method)) {
+			String uri = ActionContext.getContext().getURI();
 			if (uri.equalsIgnoreCase(getDirectory()))
 				return index(model);
 			else
@@ -39,16 +39,16 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		throw new UnsupportedOperationException();
 	}
 
+	protected R read(R resource) throws Exception {
+		return null;
+	}
+
 	protected void update(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
 	protected void delete(R resource) throws Exception {
 		throw new UnsupportedOperationException();
-	}
-
-	protected R read(R resource) throws Exception {
-		return null;
 	}
 
 	protected R[] index(R resource) throws Exception {
