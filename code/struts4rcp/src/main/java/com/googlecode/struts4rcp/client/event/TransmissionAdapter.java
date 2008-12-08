@@ -6,8 +6,10 @@ package com.googlecode.struts4rcp.client.event;
  */
 public class TransmissionAdapter extends Adapter implements TransmissionListener {
 
-	public void onTransporting(TransmissionEvent event) {}
+	public void onTransmit(TransmissionEvent event) {}
 
-	public void onTransported(TransmissionEvent event) {}
+	public void onTransmiting(TransmissionEvent event) {}
+
+	public void onTransmited(TransmissionEvent event) {}
 
 }

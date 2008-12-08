@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Execution;
+import com.googlecode.struts4rcp.client.Transmission;
 import com.googlecode.struts4rcp.client.event.ExecutionAdapter;
 import com.googlecode.struts4rcp.client.event.ExecutionEvent;
 import com.googlecode.struts4rcp.client.event.ExecutionListener;
@@ -34,7 +34,7 @@ public class ExecutionDialog extends Dialog {
 	
 	private Button abortButton;
 
-	private Execution execution;
+	private Transmission execution;
 
 	private final ExecutionListener executionListener;
 
@@ -76,7 +76,7 @@ public class ExecutionDialog extends Dialog {
 		backButton.setBounds(264, 110, 80, 24);
 		backButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				final Execution execution = ExecutionDialog.this.execution;
+				final Transmission execution = ExecutionDialog.this.execution;
 				if (execution != null && execution.isBackable()) {
 					ThreadUtils.execute(new Runnable(){
 						public void run() {
@@ -100,7 +100,7 @@ public class ExecutionDialog extends Dialog {
 		abortButton.setBounds(348, 110, 80, 24);
 		abortButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				final Execution execution = ExecutionDialog.this.execution;
+				final Transmission execution = ExecutionDialog.this.execution;
 				if (execution != null && execution.isAbortable()) {
 					ThreadUtils.execute(new Runnable(){
 						public void run() {
@@ -132,7 +132,7 @@ public class ExecutionDialog extends Dialog {
 				if (UIUtils.isNonUIThread(event.getThread())) {
 					try {
 						if (client.getActionFactory().isForeExecuting()) {
-							Execution execution = client.getActionFactory().getForeExecutions().iterator().next();
+							Transmission execution = client.getActionFactory().getForeExecutions().iterator().next();
 							showExecution(execution);
 							return;
 						}
@@ -162,7 +162,7 @@ public class ExecutionDialog extends Dialog {
 		return image[0];
 	}
 
-	private void showExecution(final Execution execution) {
+	private void showExecution(final Transmission execution) {
 		if (this.execution != execution) {
 			this.execution = execution;
 			shell.getDisplay().asyncExec(new Runnable() {

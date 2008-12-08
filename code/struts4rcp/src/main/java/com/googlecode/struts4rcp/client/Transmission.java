@@ -9,7 +9,7 @@ import java.util.Date;
  * Action执行过程
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class Execution implements Serializable, Backable, Abortable {
+public class Transmission implements Serializable, Backable, Abortable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -27,7 +27,7 @@ public class Execution implements Serializable, Backable, Abortable {
 
 	private Object statusLock = new Object();
 
-	public Execution(String actionName, Serializable model, boolean back, boolean backable, boolean abortable) {
+	public Transmission(String actionName, Serializable model, boolean back, boolean backable, boolean abortable) {
 		super();
 		this.id = nextId();
 		this.actionName = actionName;

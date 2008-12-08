@@ -103,14 +103,14 @@ public class ConnectionStatus extends ContributionItem {
 			};
 			client.addListener(connectionListener);
 			transportationListener = new TransmissionAdapter() {
-				public void onTransporting(final TransmissionEvent event) {
+				public void onTransmiting(final TransmissionEvent event) {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							setTransporting(client.getTransmitter().isTransmiting());
 						}
 					});
 				}
-				public void onTransported(TransmissionEvent event) {
+				public void onTransmited(TransmissionEvent event) {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							setTransporting(client.getTransmitter().isTransmiting());

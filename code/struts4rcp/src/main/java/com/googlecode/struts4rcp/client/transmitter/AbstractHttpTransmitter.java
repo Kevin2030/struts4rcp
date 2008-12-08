@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.googlecode.struts4rcp.client.Abortable;
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Execution;
+import com.googlecode.struts4rcp.client.Transmission;
 import com.googlecode.struts4rcp.client.Transmitter;
 import com.googlecode.struts4rcp.client.event.ConnectionEvent;
 import com.googlecode.struts4rcp.client.event.ConnectionListener;
@@ -266,7 +266,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		}
 	}
 
-	public Serializable transmit(Execution execution) throws IOException {
+	public Serializable transmit(Transmission execution) throws IOException {
 		String actionName = execution.getActionName();
 		Serializable model = execution.getModel();
 		actionName = urlPrefix + actionName + urlSuffix;
@@ -291,7 +291,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		}
 	}
 
-	private final Collection<Execution> executions = new HashSet<Execution>();
+	private final Collection<Transmission> executions = new HashSet<Transmission>();
 
 	public boolean isTransmiting() {
 		synchronized (executions) {
@@ -299,15 +299,15 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		}
 	}
 
-	public Collection<Execution> getTransmitingExecutions() {
-		Collection<Execution> copies = new HashSet<Execution>();
+	public Collection<Transmission> getTransmissions() {
+		Collection<Transmission> copies = new HashSet<Transmission>();
 		synchronized (executions) {
 			copies.addAll(executions);
 		}
 		return Collections.unmodifiableCollection(copies);
 	}
 
-	protected void addExecution(Execution execution, Abortable abortor) {
+	protected void addExecution(Transmission execution, Abortable abortor) {
 		synchronized (executions) {
 			if (executions.size() >= maxConnectionSize) {
 				try {
@@ -322,7 +322,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		transportationPublisher.publishEvent(new TransmissionEvent(AbstractHttpTransmitter.this, execution));
 	}
 
-	protected void removeExecution(Execution execution, Serializable result) {
+	protected void removeExecution(Transmission execution, Serializable result) {
 		synchronized (executions) {
 			executions.remove(execution);
 			executions.notify();
