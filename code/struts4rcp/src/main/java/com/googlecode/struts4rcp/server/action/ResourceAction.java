@@ -35,10 +35,6 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		}
 	}
 
-	protected String getDirectory() {
-		throw new UnsupportedOperationException();
-	}
-
 	protected void create(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
