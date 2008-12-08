@@ -31,6 +31,18 @@ public class ActionFactory implements ClientElement {
 		return client;
 	}
 
+	public void sync(Executable executable) {
+		try {
+			executable.execute();
+		} catch (Exception e) {
+
+		}
+	}
+
+	public void async(Executable executable) {
+
+	}
+
 	public void init(Client client, Properties config) {
 		if (client == null)
 			throw new NullPointerException("Client == null!");
