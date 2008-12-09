@@ -29,7 +29,7 @@ public interface Transmitter extends ConnectionMonitor {
 	 * @return 传回对象
 	 * @throws IOException 传输出错时抛出
 	 */
-	public abstract Serializable transmit(String uri, Serializable model) throws IOException;
+	public abstract Serializable transmit(String uri, Serializable model) throws Exception;
 
 	/**
 	 * 传输对象
@@ -39,7 +39,7 @@ public interface Transmitter extends ConnectionMonitor {
 	 * @return 传回对象
 	 * @throws IOException 传输出错时抛出
 	 */
-	public abstract Serializable transmit(String method, String uri, Serializable model) throws IOException;
+	public abstract Serializable transmit(String method, String uri, Serializable model) throws Exception;
 
 	/**
 	 * 获取正在前台运行的传输项列表
