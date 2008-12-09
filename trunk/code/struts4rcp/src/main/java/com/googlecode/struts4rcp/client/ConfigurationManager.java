@@ -16,7 +16,7 @@ import com.googlecode.struts4rcp.client.event.ConfigurationPublisher;
  * 配置管理器
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ConfigurationManager implements ClientElement {
+public class ConfigurationManager {
 
 	private Client client;
 
@@ -70,7 +70,7 @@ public class ConfigurationManager implements ClientElement {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void init(Client client, Properties config) {
+	public ConfigurationManager(Client client, Properties config) {
 		if (client == null)
 			throw new NullPointerException("Client == null!");
 		if (config == null)

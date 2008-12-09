@@ -1,8 +1,22 @@
 package com.googlecode.struts4rcp.client;
 
+import java.util.Properties;
+
 import com.googlecode.struts4rcp.client.event.ConnectionListener;
 
-public interface ConnectionMonitor extends ClientElement {
+public interface ConnectionMonitor {
+
+	/**
+	 * 初始化配置，只能被框架本身调用
+	 * @param client 客户端实例
+	 * @param properties 配置
+	 */
+	void init(Client client, Properties properties);
+
+	/**
+	 * 停止
+	 */
+	void shutdown();
 
 	/**
 	 * 检查服务器是否连通

@@ -1,11 +1,13 @@
 package com.googlecode.struts4rcp.client;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.client.event.ConfigurationListener;
 import com.googlecode.struts4rcp.client.event.ConnectionListener;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
@@ -166,21 +168,6 @@ public class Client implements Listenable {
 	public static final String TRANSPORTER_PARAM_NAME = "transporter";
 
 	/**
-	 * Action代理工厂配置参数名
-	 */
-	public static final String ACTION_FACTORY_PARAM_NAME = "actionFactory";
-
-	/**
-	 * 资源代理工厂配置参数名
-	 */
-	public static final String RESOURCE_FACTORY_PARAM_NAME = "resourceFactory";
-
-	/**
-	 * Action代理供给策略配置参数名
-	 */
-	public static final String CONFIGURATION_MANAGER_PARAM_NAME = "configurationManager";
-
-	/**
 	 * 事件监听器配置参数名
 	 */
 	public static final String LISTENERS_PARAM_NAME = "listeners";
@@ -199,67 +186,24 @@ public class Client implements Listenable {
 					HttpURLConnectionTransmitter.class);
 	}
 
-	private static ActionFactory loadActionFactory(Properties config) {
-		 return PropertiesUtils.getInstanceProperty(
-					config, ACTION_FACTORY_PARAM_NAME, ActionFactory.class,
-					ActionFactory.class);
-	}
-
-	private static ResourceFactory loadResourceFactory(Properties config) {
-		 return PropertiesUtils.getInstanceProperty(
-					config, RESOURCE_FACTORY_PARAM_NAME, ResourceFactory.class,
-					ResourceFactory.class);
-	}
-
-	private static ConfigurationManager loadConfigurationManager(Properties config) {
-		 return PropertiesUtils.getInstanceProperty(config,
-					CONFIGURATION_MANAGER_PARAM_NAME, ConfigurationManager.class,
-					ConfigurationManager.class);
-	}
-
 	public Client(Properties config) {
-		this(config, loadTransporter(config), loadActionFactory(config), loadResourceFactory(config), loadConfigurationManager(config));
+		this(config, loadTransporter(config));
 	}
 
-	public Client(Properties config, Transmitter transporter) {
-		this(config, transporter, loadActionFactory(config), loadResourceFactory(config), loadConfigurationManager(config));
-	}
-
-	public Client(Properties config, Transmitter transmitter,
-			ActionFactory actionFactory, ResourceFactory resourceFactory,
-			ConfigurationManager configurationManager) {
+	public Client(Properties config, Transmitter transmitter) {
 		if (config == null)
 			throw new NullPointerException("properties == null!");
-		if (configurationManager == null)
-			throw new NullPointerException("configurationManager == null!");
 		if (transmitter == null)
 				throw new NullPointerException("transmitter == null!");
-		if (actionFactory == null)
-			throw new NullPointerException("actionFactory == null!");
-		if (resourceFactory == null)
-			throw new NullPointerException("resourceFactory == null!");
-
-		this.configurationManager = configurationManager;
-		this.transmitter = transmitter;
-		this.actionFactory = actionFactory;
-		this.resourceFactory = resourceFactory;
 		config = new UnmodifiableProperties(config);
-		configurationManager.init(this, config);
+		this.transmitter = transmitter;
+		this.configurationManager = new ConfigurationManager(this, config);
+		this.actionFactory = new ActionFactory(this, config);
+		this.resourceFactory = new ResourceFactory(this, config);
 		transmitter.init(this, config);
-		actionFactory.init(this, config);
-		resourceFactory.init(this, config);
 		configurationManager.register(TRANSPORTER_PARAM_NAME,
 				"传输策略", "暂未实现传输策略动态切换，修改后不会生效!",
 				HttpURLConnectionTransmitter.class.getName(), ServiceUtils.getServiceClassNames(Transmitter.class.getName()).toArray(new String[0]));
-		configurationManager.register(ACTION_FACTORY_PARAM_NAME,
-				"Action管理器", "暂未实现Action管理器动态切换，修改后不会生效!",
-				ActionFactory.class.getName(), ServiceUtils.getServiceClassNames(ActionFactory.class.getName()).toArray(new String[0]));
-		configurationManager.register(RESOURCE_FACTORY_PARAM_NAME,
-				"资源管理器", "暂未实现资源管理器动态切换，修改后不会生效!",
-				ResourceFactory.class.getName(), ServiceUtils.getServiceClassNames(ResourceFactory.class.getName()).toArray(new String[0]));
-		configurationManager.register(CONFIGURATION_MANAGER_PARAM_NAME,
-				"配置管理器", "暂未实现配置管理器动态切换，修改后不会生效!",
-				ConfigurationManager.class.getName(), ServiceUtils.getServiceClassNames(ConfigurationManager.class.getName()).toArray(new String[0]));
 		configurationManager.register(LISTENERS_PARAM_NAME,
 				"事件监听器", "暂未实现动态注册事件监听器，修改后不会生效!", "");
 		// 读取监听器
@@ -347,6 +291,33 @@ public class Client implements Listenable {
 		if (listener instanceof ExceptionListener)
 			Worker.getWorker().removeExceptionListener(
 					(ExceptionListener) listener);
+	}
+
+	public String getValue(String key) {
+		return configurationManager.getValue(key);
+	}
+
+	public Map<String, String> getValues() {
+		return configurationManager.getValues();
+	}
+
+	public void setValue(String key, String value) {
+		configurationManager.setValue(key, value);
+	}
+
+	public <M extends Serializable, R extends Serializable> Action<M, R> getAction(
+			String actionName) {
+		return actionFactory.getAction(actionName);
+	}
+
+	public <R extends Serializable> Directory<R> getDirectory(String uri,
+			Object... args) {
+		return resourceFactory.getDirectory(uri, args);
+	}
+
+	public <R extends Serializable> Resource<R> getResource(String uri,
+			Object... args) {
+		return resourceFactory.getResource(uri, args);
 	}
 
 }
