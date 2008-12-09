@@ -17,25 +17,26 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Transmission;
-import com.googlecode.struts4rcp.client.event.ExecutionAdapter;
-import com.googlecode.struts4rcp.client.event.ExecutionEvent;
-import com.googlecode.struts4rcp.client.event.ExecutionListener;
+import com.googlecode.struts4rcp.client.Work;
+import com.googlecode.struts4rcp.client.Worker;
+import com.googlecode.struts4rcp.client.event.WorkAdapter;
+import com.googlecode.struts4rcp.client.event.WorkEvent;
+import com.googlecode.struts4rcp.client.event.WorkListener;
 import com.googlecode.struts4rcp.util.ThreadUtils;
 
-public class ExecutionDialog extends JDialog {
+public class WorkDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private final ExecutionListener executionListener;
+	private final WorkListener workListener;
 
-	private final JLabel executionLabel;
+	private final JLabel workLabel;
 
 	private final JButton backButton;
 
 	private final JButton abortButton;
 
-	private Transmission execution;
+	private Work work;
 
 	private final Client client;
 
@@ -43,7 +44,7 @@ public class ExecutionDialog extends JDialog {
 
 	private Icon disableIcon = Images.getIcon("disable.gif");
 
-	public ExecutionDialog(final Frame owner, final Client client) {
+	public WorkDialog(final Frame owner, final Client client) {
 		super(owner, true);
 		if (client == null)
 			throw new NullPointerException("Client == null!");
@@ -78,8 +79,8 @@ public class ExecutionDialog extends JDialog {
 		final JLabel messageLabel = new JLabel("正在发送请求，请稍候...");
 		messagePanel.add(BorderLayout.NORTH, messageLabel);
 
-		executionLabel = new JLabel();
-		messagePanel.add(BorderLayout.SOUTH, executionLabel);
+		workLabel = new JLabel();
+		messagePanel.add(BorderLayout.SOUTH, workLabel);
 
 		final JProgressBar progressBar = new JProgressBar();
 		progressBar.setIndeterminate(true);
@@ -89,14 +90,14 @@ public class ExecutionDialog extends JDialog {
 		backPanel.add(BorderLayout.EAST, backButton);
 		backButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				final Transmission execution = ExecutionDialog.this.execution;
-				if (execution != null && execution.isBackable()) {
+				final Work work = WorkDialog.this.work;
+				if (work != null && work.isBackable()) {
 					ThreadUtils.execute(new Runnable(){
 						public void run() {
 							try {
-								execution.back();
+								work.back();
 							} catch (Throwable t) {
-								JOptionPane.showMessageDialog(ExecutionDialog.this, "后台运行传输项失败! 原因: " + t.getMessage(), "后台运行", JOptionPane.WARNING_MESSAGE);
+								JOptionPane.showMessageDialog(WorkDialog.this, "后台运行传输项失败! 原因: " + t.getMessage(), "后台运行", JOptionPane.WARNING_MESSAGE);
 							}
 						}
 					});
@@ -108,14 +109,14 @@ public class ExecutionDialog extends JDialog {
 		abortPanel.add(BorderLayout.EAST, abortButton);
 		abortButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				final Transmission execution = ExecutionDialog.this.execution;
-				if (execution != null && execution.isAbortable()) {
+				final Work work = WorkDialog.this.work;
+				if (work != null && work.isAbortable()) {
 					ThreadUtils.execute(new Runnable(){
 						public void run() {
 							try {
-								execution.abort();
+								work.abort();
 							} catch (Throwable t) {
-								JOptionPane.showMessageDialog(ExecutionDialog.this, "中止传输项失败! 原因: " + t.getMessage(), "中止", JOptionPane.WARNING_MESSAGE);
+								JOptionPane.showMessageDialog(WorkDialog.this, "中止传输项失败! 原因: " + t.getMessage(), "中止", JOptionPane.WARNING_MESSAGE);
 							}
 						}
 					});
@@ -123,59 +124,59 @@ public class ExecutionDialog extends JDialog {
 			}
 		});
 
-		executionListener = new ExecutionAdapter() { // 只在非UI线程执行
-			public void onExecuting(ExecutionEvent event) {
+		workListener = new WorkAdapter() { // 只在非UI线程执行
+			public void onForeWorking(WorkEvent event) {
 				if (UIUtils.isNonUIThread(event.getThread())) {
-					showExecution(event.getExecution());
+					showWork(event.getWork());
 				}
 			}
-			public void onBackExecuting(ExecutionEvent event) {
-				onExecuted(event);
+			public void onBackWorking(WorkEvent event) {
+				onWorked(event);
 			}
-			public void onExecuted(ExecutionEvent event) {
+			public void onWorked(WorkEvent event) {
 				if (UIUtils.isNonUIThread(event.getThread())) {
 					try {
-						if (client.getActionFactory().isForeExecuting()) {
-							Transmission execution = client.getActionFactory().getForeExecutions().iterator().next();
-							showExecution(execution);
+						if (Worker.getWorker().isForeWorking()) {
+							Work work = Worker.getWorker().getForeWorks().iterator().next();
+							showWork(work);
 							return;
 						}
 					} catch (Throwable t) {
 						// ignore
 					}
-					showExecution(null);
+					showWork(null);
 				}
 			}
 		};
-		client.addListener(executionListener);
+		client.addListener(workListener);
 	}
 
-	private void showExecution(Transmission execution) {
-		if (this.execution != execution) {
-			this.execution = execution;
-			if (execution != null) {
-				backButton.setEnabled(execution.isBackable());
-				abortButton.setEnabled(execution.isAbortable());
-				if (execution.isAbortable())
-					executionLabel.setIcon(enableIcon);
+	private void showWork(Work work) {
+		if (this.work != work) {
+			this.work = work;
+			if (work != null) {
+				backButton.setEnabled(work.isBackable());
+				abortButton.setEnabled(work.isAbortable());
+				if (work.isAbortable())
+					workLabel.setIcon(enableIcon);
 				else
-					executionLabel.setIcon(disableIcon);
-				executionLabel.setText(execution.toString());
-				if (! ExecutionDialog.this.isVisible()) {
+					workLabel.setIcon(disableIcon);
+				workLabel.setText(work.toString());
+				if (! WorkDialog.this.isVisible()) {
 					Dimension scr = Toolkit.getDefaultToolkit().getScreenSize();
-					Dimension fra = ExecutionDialog.this.getSize();
-					ExecutionDialog.this.setLocation((scr.width - fra.width) / 2, (scr.height - fra.height) / 2);// 在屏幕居中显示
-					ExecutionDialog.this.setVisible(true);
+					Dimension fra = WorkDialog.this.getSize();
+					WorkDialog.this.setLocation((scr.width - fra.width) / 2, (scr.height - fra.height) / 2);// 在屏幕居中显示
+					WorkDialog.this.setVisible(true);
 				}
 			} else {
-				ExecutionDialog.this.setVisible(false);
+				WorkDialog.this.setVisible(false);
 			}
 		}
 	}
 
 	@Override
 	public void dispose() {
-		client.removeListener(executionListener);
+		client.removeListener(workListener);
 		super.dispose();
 	}
 

@@ -8,10 +8,12 @@ public class TransmissionPublisher extends Publisher<TransmissionListener, Trans
 
 	@Override
 	protected void doEvent(TransmissionListener listener, TransmissionEvent event) {
-		if (event.getExecution().isTransported())
+		if (event.getTransmission().isTransmited())
 			listener.onTransmited(event);
-		else
+		else if (event.getTransmission().isTransmiting())
 			listener.onTransmiting(event);
+		else
+			listener.onTransmit(event);
 	}
 
 }

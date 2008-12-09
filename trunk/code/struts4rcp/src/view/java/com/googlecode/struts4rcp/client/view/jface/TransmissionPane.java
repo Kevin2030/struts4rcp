@@ -17,9 +17,6 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.Transmission;
-import com.googlecode.struts4rcp.client.event.ExecutionAdapter;
-import com.googlecode.struts4rcp.client.event.ExecutionEvent;
-import com.googlecode.struts4rcp.client.event.ExecutionListener;
 import com.googlecode.struts4rcp.client.event.TransmissionAdapter;
 import com.googlecode.struts4rcp.client.event.TransmissionEvent;
 import com.googlecode.struts4rcp.client.event.TransmissionListener;
@@ -31,8 +28,6 @@ public class TransmissionPane extends Composite {
 	private final ArrayList<Transmission> executions = new ArrayList<Transmission>();
 
 	private final List executionList;
-
-	private final ExecutionListener executionListener;
 
 	private final TransmissionListener transportationListener;
 
@@ -96,7 +91,7 @@ public class TransmissionPane extends Composite {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							abortItem.setEnabled(execution.isAbortable());
-							timeLabel.setText(new DecimalFormat("###,##0").format(System.currentTimeMillis() - execution.getTransportingTime().getTime()) + " ms");
+							timeLabel.setText(new DecimalFormat("###,##0").format(System.currentTimeMillis() - execution.getTransmitingTime().getTime()) + " ms");
 						}
 					});
 				} else {
@@ -112,10 +107,11 @@ public class TransmissionPane extends Composite {
 				widgetSelected(e);
 			}
 		});
-		executionListener = new ExecutionAdapter() {
-			public void onExecuting(ExecutionEvent event) {
-				final Transmission execution = event.getExecution();
-				if (!execution.isTransported()) {
+		transportationListener = new TransmissionAdapter() {
+			@Override
+			public void onTransmit(TransmissionEvent event) {
+				final Transmission execution = event.getTransmission();
+				if (!execution.isTransmited()) {
 					synchronized (executions) {
 						if (! executions.contains(execution)) {
 							executions.add(execution);
@@ -131,11 +127,10 @@ public class TransmissionPane extends Composite {
 					}
 				}
 			}
-			public void onBackExecuting(ExecutionEvent event) {
-				onExecuting(event);
-			}
-			public void onExecuted(ExecutionEvent event) {
-				Transmission execution = event.getExecution();
+
+			@Override
+			public void onTransmited(TransmissionEvent event) {
+				Transmission execution = event.getTransmission();
 				synchronized (executions) {
 					final int i = executions.indexOf(execution);
 					if (i > -1 && i < executions.size()) {
@@ -148,11 +143,10 @@ public class TransmissionPane extends Composite {
 					}
 				}
 			}
-		};
-		client.addListener(executionListener);
-		transportationListener = new TransmissionAdapter() {
+
+			@Override
 			public void onTransmiting(final TransmissionEvent event) {
-				final Transmission execution = event.getExecution();
+				final Transmission execution = event.getTransmission();
 				synchronized (executions) {
 					if (executions.contains(execution)) {
 						final int i = executions.indexOf(execution);
@@ -171,16 +165,16 @@ public class TransmissionPane extends Composite {
 	}
 
 	private void refreshTransportationList(boolean isUI) {
-		Collection<Transmission> exes = client.getActionFactory().getExecutions();
+		Collection<Transmission> exes = client.getTransmitter().getTransmissions();
 		synchronized (executions) {
 			executions.clear();
 			executionList.removeAll();
 			for (final Transmission execution : exes) {
-				if (! execution.isTransported()) {
+				if (! execution.isTransmited()) {
 					executions.add(execution);
 					final int i = executions.size();
 					if (isUI) {
-						if (execution.isTransporting())
+						if (execution.isTransmiting())
 							executionList.add("(传输) " + i + ". "
 									+ execution.toString());
 						else
@@ -189,7 +183,7 @@ public class TransmissionPane extends Composite {
 					} else {
 						Display.getDefault().asyncExec(new Runnable() {
 							public void run() {
-								if (execution.isTransporting())
+								if (execution.isTransmiting())
 									executionList.add("(传输) " + i + ". "
 											+ execution.toString());
 								else
@@ -221,7 +215,6 @@ public class TransmissionPane extends Composite {
 
 	@Override
 	public void dispose() {
-		client.removeListener(executionListener);
 		client.removeListener(transportationListener);
 		super.dispose();
 	}

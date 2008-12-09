@@ -44,9 +44,9 @@ public class ConnectionStatus extends JButton {
 		return controlDialog;
 	}
 
-	private final ExecutionDialog executionDialog;
+	private final WorkDialog executionDialog;
 
-	public ExecutionDialog getExecutionDialog() {
+	public WorkDialog getExecutionDialog() {
 		return executionDialog;
 	}
 
@@ -101,7 +101,7 @@ public class ConnectionStatus extends JButton {
 		this.transportingIcon = Images.getIcon("transporting.gif");
 		// 初始化窗口
 		controlDialog = new ControlDialog(frame, client);
-		executionDialog = new ExecutionDialog(frame, client);
+		executionDialog = new WorkDialog(frame, client);
 		exceptionDialog = new ExceptionDialog(frame, client);
 		// 按钮点击事件
 		this.addActionListener(new ActionListener() {

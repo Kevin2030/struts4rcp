@@ -18,7 +18,7 @@ public class HttpURLConnectionTransmitter extends AbstractHttpTransmitter<HttpUR
 	}
 
 	@Override
-	protected Serializable transport(HttpURLConnection request, String url, Serializable model) throws IOException {
+	protected Serializable transmit(HttpURLConnection request, String url, Serializable model) throws IOException {
 		try {
 			if (connectionTimeout != UNKNOWN_CONNECTION_TIMEOUT)
 				request.setConnectTimeout(connectionTimeout);

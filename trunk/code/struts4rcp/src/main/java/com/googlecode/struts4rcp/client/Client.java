@@ -9,7 +9,7 @@ import java.util.Properties;
 import com.googlecode.struts4rcp.client.event.ConfigurationListener;
 import com.googlecode.struts4rcp.client.event.ConnectionListener;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
-import com.googlecode.struts4rcp.client.event.ExecutionListener;
+import com.googlecode.struts4rcp.client.event.WorkListener;
 import com.googlecode.struts4rcp.client.event.Listener;
 import com.googlecode.struts4rcp.client.event.TransmissionListener;
 import com.googlecode.struts4rcp.client.transmitter.HttpURLConnectionTransmitter;
@@ -313,15 +313,15 @@ public class Client {
 		if (listener instanceof TransmissionListener)
 			this.getTransmitter().addTransmissionListener(
 					(TransmissionListener) listener);
-		if (listener instanceof ExecutionListener)
-			this.getActionFactory().addExecutionListener(
-					(ExecutionListener) listener);
-		if (listener instanceof ExceptionListener)
-			this.getActionFactory().addExceptionListener(
-					(ExceptionListener) listener);
 		if (listener instanceof ConfigurationListener)
 			this.getConfigurationManager()
 					.addConfigurationListener((ConfigurationListener) listener);
+		if (listener instanceof WorkListener)
+			Worker.getWorker().addWorkListener(
+					(WorkListener) listener);
+		if (listener instanceof ExceptionListener)
+			Worker.getWorker().addExceptionListener(
+					(ExceptionListener) listener);
 	}
 
 	/**
@@ -336,16 +336,16 @@ public class Client {
 			this.getTransmitter()
 					.removeTransmissionListener(
 							(TransmissionListener) listener);
-		if (listener instanceof ExecutionListener)
-			this.getActionFactory().removeExecutionListener(
-					(ExecutionListener) listener);
-		if (listener instanceof ExceptionListener)
-			this.getActionFactory().removeExceptionListener(
-					(ExceptionListener) listener);
 		if (listener instanceof ConfigurationListener)
 			this.getConfigurationManager()
 					.removeConfigurationListener(
 							(ConfigurationListener) listener);
+		if (listener instanceof WorkListener)
+			Worker.getWorker().removeWorkListener(
+					(WorkListener) listener);
+		if (listener instanceof ExceptionListener)
+			Worker.getWorker().removeExceptionListener(
+					(ExceptionListener) listener);
 	}
 
 }

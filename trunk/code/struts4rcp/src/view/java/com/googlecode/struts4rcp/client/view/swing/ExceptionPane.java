@@ -118,7 +118,7 @@ public class ExceptionPane extends JPanel {
 			public void onBackExceptionCatched(ExceptionEvent event) {
 				ExceptionPane.this.appendText(ExceptionUtils.getDetailMessage(event.getException()));
 			}
-			public void onExceptionCatched(ExceptionEvent event) {
+			public void onForeExceptionCatched(ExceptionEvent event) {
 				ExceptionPane.this.appendText(ExceptionUtils.getDetailMessage(event.getException()));
 			}
 		});

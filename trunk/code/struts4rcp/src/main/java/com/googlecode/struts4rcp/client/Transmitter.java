@@ -14,11 +14,12 @@ public interface Transmitter extends ConnectionMonitor {
 
 	/**
 	 * 传输对象
-	 * @param transmission 执行项
+	 * @param uri 服务器端URI
+	 * @param model 传输数据
 	 * @return 传回对象
 	 * @throws IOException 传输出错时抛出
 	 */
-	public abstract Serializable transmit(Transmission transmission) throws IOException;
+	public abstract Serializable transmit(String uri, Serializable model) throws IOException;
 
 	/**
 	 * 获取正在前台运行的传输项列表

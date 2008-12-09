@@ -74,7 +74,7 @@ public class HttpClientTransmitter extends AbstractHttpTransmitter<HttpPost> {
 	}
 
 	@Override
-	protected Serializable transport(HttpPost request, String url,
+	protected Serializable transmit(HttpPost request, String url,
 			Serializable model) throws IOException {
 		request.setEntity(new SerializeEntity(serializer, model));
 		HttpResponse response = httpClient.execute(request);

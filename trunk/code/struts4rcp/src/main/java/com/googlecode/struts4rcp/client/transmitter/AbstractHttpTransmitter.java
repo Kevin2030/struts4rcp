@@ -266,16 +266,15 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		}
 	}
 
-	public Serializable transmit(Transmission execution) throws IOException {
-		String actionName = execution.getActionName();
-		Serializable model = execution.getModel();
+	public Serializable transmit(String actionName, Serializable model) throws IOException {
+		Transmission transmission = new Transmission(actionName, model);
 		actionName = urlPrefix + actionName + urlSuffix;
 		Serializable result = null;
 		T request = getRequest(actionName);
 		Abortor abortor = new Abortor(request);
-		addExecution(execution, abortor);
+		addTransmission(transmission, abortor);
 		try {
-			result = transport(request, actionName, model);
+			result = transmit(request, actionName, model);
 			return result;
 		} catch (Throwable e) {
 			result = e;
@@ -287,7 +286,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 				throw (IOException)e;
 			throw new RuntimeException(e.getMessage(), e);
 		} finally {
-			removeExecution(execution, result);
+			removeTransmission(transmission, result);
 		}
 	}
 
@@ -307,7 +306,8 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		return Collections.unmodifiableCollection(copies);
 	}
 
-	protected void addExecution(Transmission execution, Abortable abortor) {
+	protected void addTransmission(Transmission execution, Abortable abortor) {
+		transportationPublisher.publishEvent(new TransmissionEvent(AbstractHttpTransmitter.this, execution));
 		synchronized (executions) {
 			if (executions.size() >= maxConnectionSize) {
 				try {
@@ -318,16 +318,16 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 			}
 			executions.add(execution);
 		}
-		execution.transporting(abortor);
+		execution.transmiting(abortor);
 		transportationPublisher.publishEvent(new TransmissionEvent(AbstractHttpTransmitter.this, execution));
 	}
 
-	protected void removeExecution(Transmission execution, Serializable result) {
+	protected void removeTransmission(Transmission execution, Serializable result) {
 		synchronized (executions) {
 			executions.remove(execution);
 			executions.notify();
 		}
-		execution.transported(result);
+		execution.transmited(result);
 		transportationPublisher.publishEvent(new TransmissionEvent(AbstractHttpTransmitter.this, execution));
 	}
 
@@ -347,7 +347,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	 * @return 传回对象
 	 * @throws IOException 传输出错时抛出
 	 */
-	protected abstract Serializable transport(T request, String url, Serializable model) throws IOException;
+	protected abstract Serializable transmit(T request, String url, Serializable model) throws IOException;
 
 	/**
 	 * 打断连接

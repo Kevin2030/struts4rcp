@@ -7,7 +7,7 @@ public class ExceptionPublisher extends Publisher<ExceptionListener, ExceptionEv
 		if (event.isBack())
 			listener.onBackExceptionCatched(event);
 		else
-			listener.onExceptionCatched(event);
+			listener.onForeExceptionCatched(event);
 	}
 
 }

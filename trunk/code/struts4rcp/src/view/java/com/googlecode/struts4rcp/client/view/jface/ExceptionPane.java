@@ -99,7 +99,7 @@ public class ExceptionPane extends Composite {
 					}
 				});
 			}
-			public void onExceptionCatched(final ExceptionEvent event) {
+			public void onForeExceptionCatched(final ExceptionEvent event) {
 				final String msg = ExceptionUtils.getDetailMessage(event.getException());
 				Display.getDefault().asyncExec(new Runnable(){
 					public void run() {
