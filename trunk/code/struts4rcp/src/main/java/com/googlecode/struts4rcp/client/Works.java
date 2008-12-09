@@ -8,19 +8,19 @@ public class Works {
 
 	private Works() {}
 
-	public static void fore(Workable workable) {
+	public static void fore(WorkRunnable workable) {
 		Worker.getWorker().fore(workable);
 	}
 
-	public static void fore(String message, Workable workable) {
+	public static void fore(String message, WorkRunnable workable) {
 		Worker.getWorker().fore(message, workable);
 	}
 
-	public static void fore(String message, boolean backable, boolean abortable, Workable workable) {
+	public static void fore(String message, boolean backable, boolean abortable, WorkRunnable workable) {
 		Worker.getWorker().fore(message, backable, abortable, workable);
 	}
 
-	public static void back(Workable workable) {
+	public static void back(WorkRunnable workable) {
 		Worker.getWorker().back(workable);
 	}
 
