@@ -59,18 +59,7 @@ public class ActionFactory implements ClientElement {
 
 		@SuppressWarnings("unchecked")
 		public R execute(final M model) throws Exception {
-			Serializable result = client.getTransmitter().transmit(actionName, model);
-			if (result instanceof Exception) { // 抛出异常
-				Exception e = (Exception)result;
-				logger.error(e.getMessage(), new RuntimeException());
-				throw e;
-			}
-			if (result instanceof Error) { // 抛出错误
-				Error e = (Error)result;
-				logger.error(e.getMessage(), new RuntimeException());
-				throw e;
-			}
-			return (R)result;
+			return (R)client.getTransmitter().transmit(actionName, model);
 		}
 	}
 
