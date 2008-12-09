@@ -373,10 +373,6 @@ public class Client implements Listenable {
 			this.uri = uri;
 		}
 
-		public void create(R resource) throws Exception {
-			getTransmitter().transmit(Transmitter.POST_METHOD, uri, resource);
-		}
-
 		@SuppressWarnings("unchecked")
 		public R read() throws Exception {
 			return (R)getTransmitter().transmit(Transmitter.GET_METHOD, uri, null);
@@ -415,6 +411,11 @@ public class Client implements Listenable {
 
 		public R[] index(R resource) throws Exception {
 			return (R[])getTransmitter().transmit(Transmitter.GET_METHOD, uri, resource);
+		}
+
+		public Resource<R> create(R resource) throws Exception {
+			String res = (String)getTransmitter().transmit(Transmitter.POST_METHOD, uri, resource);
+			return new ResourceProxy<R>(res);
 		}
 
 	}
