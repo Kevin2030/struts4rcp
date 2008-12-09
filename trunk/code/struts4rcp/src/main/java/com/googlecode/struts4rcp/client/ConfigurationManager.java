@@ -71,7 +71,7 @@ public class ConfigurationManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public ConfigurationManager(Client client, Properties config) {
+	ConfigurationManager(Client client, Properties config) {
 		if (client == null)
 			throw new NullPointerException("Client == null!");
 		if (config == null)
@@ -86,7 +86,7 @@ public class ConfigurationManager {
 	 * 获取所有配置项
 	 * @return 不可变配置集合
 	 */
-	public Properties getProperties() {
+	Properties getProperties() {
 		return new UnmodifiableProperties(values);
 	}
 
@@ -95,7 +95,7 @@ public class ConfigurationManager {
 	 * @param key 配置项索引
 	 * @return 配置项值
 	 */
-	public String getProperty(String key) {
+	String getProperty(String key) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
 		return values.getProperty(key);
@@ -106,7 +106,7 @@ public class ConfigurationManager {
 	 * @param key 配置项索引
 	 * @param value 配置项值
 	 */
-	public void setProperty(String key, String value) {
+	void setProperty(String key, String value) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
 		if (value == null)
@@ -175,12 +175,8 @@ public class ConfigurationManager {
 		configurationPublisher.removeListener(listener);
 	}
 
-	public void shutdown() {
+	void shutdown() {
 		configurationPublisher.clearListeners();
-	}
-
-	public Client getClient() {
-		return client;
 	}
 
 }
