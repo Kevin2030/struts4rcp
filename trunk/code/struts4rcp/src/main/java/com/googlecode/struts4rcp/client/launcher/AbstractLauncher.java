@@ -7,17 +7,17 @@ import com.googlecode.struts4rcp.client.transmitter.AbstractHttpTransmitter;
 
 public class AbstractLauncher implements Launcher {
 
-	public void start(String serverHost,
+	public void launch(String serverHost,
 			int serverPort,
 			String contextPath) {
 		Properties properties = new Properties();
 		properties.setProperty(AbstractHttpTransmitter.SERVER_HOST_KEY, serverHost);
 		properties.setProperty(AbstractHttpTransmitter.SERVER_PORT_KEY, String.valueOf(serverPort));
 		properties.setProperty(AbstractHttpTransmitter.CONTEXT_PATH_KEY, contextPath);
-		start(properties);
+		launch(properties);
 	}
 
-	protected void start(Properties properties) {
+	protected void launch(Properties properties) {
 		Client.init(properties);
 	}
 
