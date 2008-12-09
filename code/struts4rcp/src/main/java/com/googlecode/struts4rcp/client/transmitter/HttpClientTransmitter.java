@@ -25,7 +25,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.util.serializer.StreamSerializer;
+import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
 
 /**
  * 基于HttpClient的传输器实现

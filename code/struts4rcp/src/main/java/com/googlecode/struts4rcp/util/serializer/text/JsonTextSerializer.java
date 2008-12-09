@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.util.serializer;
+package com.googlecode.struts4rcp.util.serializer.text;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -12,7 +12,7 @@ import com.googlecode.struts4rcp.util.JsonUtils;
  * @see org.json.JSONArray
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class JsonTextSerializer extends StringSerializer {
+public class JsonTextSerializer extends StringTextSerializer {
 
 	public String getContentType() {
 		return "text/json";

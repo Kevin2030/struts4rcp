@@ -1,7 +1,7 @@
 package com.googlecode.struts4rcp.util.serialize;
 
-import com.googlecode.struts4rcp.util.serializer.StreamSerializer;
-import com.googlecode.struts4rcp.util.serializer.XmlStreamSerializer;
+import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
+import com.googlecode.struts4rcp.util.serializer.stream.XmlStreamSerializer;
 
 public class XmlSerializerTestCase extends SerializerTestCase {
 

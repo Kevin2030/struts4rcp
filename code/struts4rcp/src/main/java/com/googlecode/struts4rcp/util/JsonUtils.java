@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
-import com.googlecode.struts4rcp.util.serializer.JsonTextSerializer;
+import com.googlecode.struts4rcp.util.serializer.text.JsonTextSerializer;
 
 public final class JsonUtils {
 

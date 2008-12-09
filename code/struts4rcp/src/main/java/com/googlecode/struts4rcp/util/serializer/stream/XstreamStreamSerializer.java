@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.util.serializer;
+package com.googlecode.struts4rcp.util.serializer.stream;
 
 import java.io.IOException;
 import java.io.InputStream;

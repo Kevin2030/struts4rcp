@@ -15,7 +15,7 @@ import org.apache.commons.httpclient.util.IdleConnectionTimeoutThread;
 
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
-import com.googlecode.struts4rcp.util.serializer.StreamSerializer;
+import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
 
 /**
  * 基于Commons-HttpClient的传输器实现

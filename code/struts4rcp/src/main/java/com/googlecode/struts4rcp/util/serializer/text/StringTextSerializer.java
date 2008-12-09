@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.util.serializer;
+package com.googlecode.struts4rcp.util.serializer.text;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -11,7 +11,7 @@ import com.googlecode.struts4rcp.util.IOUtils;
  * 字符串序列化器
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public abstract class StringSerializer implements TextSerializer {
+public abstract class StringTextSerializer implements TextSerializer {
 
 	public String getContentEncoding() {
 		return "UTF-8";

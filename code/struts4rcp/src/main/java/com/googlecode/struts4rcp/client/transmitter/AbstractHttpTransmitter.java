@@ -26,8 +26,8 @@ import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ServiceUtils;
 import com.googlecode.struts4rcp.util.logger.Logger;
 import com.googlecode.struts4rcp.util.logger.LoggerFactory;
-import com.googlecode.struts4rcp.util.serializer.JavaStreamSerializer;
-import com.googlecode.struts4rcp.util.serializer.StreamSerializer;
+import com.googlecode.struts4rcp.util.serializer.stream.JavaStreamSerializer;
+import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
 
 /**
  * HTTP传输器基类

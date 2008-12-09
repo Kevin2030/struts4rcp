@@ -1,7 +1,9 @@
-package com.googlecode.struts4rcp.util.serializer;
+package com.googlecode.struts4rcp.util.serializer.text;
 
 import java.io.Reader;
 import java.io.Writer;
+
+import com.googlecode.struts4rcp.util.serializer.Serializer;
 
 /**
  * 文本序列化器

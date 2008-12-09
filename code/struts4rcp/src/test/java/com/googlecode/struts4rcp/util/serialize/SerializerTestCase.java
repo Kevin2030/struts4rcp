@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 import junit.framework.TestCase;
 
-import com.googlecode.struts4rcp.util.serializer.StreamSerializer;
+import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
 
 public abstract class SerializerTestCase extends TestCase {
 

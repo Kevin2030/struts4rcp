@@ -1,14 +1,19 @@
-package com.googlecode.struts4rcp.util.serializer;
+package com.googlecode.struts4rcp.util.serializer.text;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
 
-public class SoapSerializer implements TextSerializer {
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+
+public class XstreamTextSerializer implements TextSerializer {
+
+	private XStream xstream = new XStream(new DomDriver());
 
 	public String getContentType() {
-		return "text/soap";
+		return "text/xstream";
 	}
 
 	public String getContentEncoding() {
@@ -16,13 +21,11 @@ public class SoapSerializer implements TextSerializer {
 	}
 
 	public Serializable deserialize(Class<? extends Serializable> baseClass, Reader in) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		return (Serializable) xstream.fromXML(in);
 	}
 
 	public void serialize(Serializable obj, Writer out) throws IOException {
-		// TODO Auto-generated method stub
-
+		xstream.toXML(obj, out);
 	}
 
 }
