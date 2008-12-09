@@ -1,20 +1,20 @@
 package com.googlecode.struts4rcp.client.event;
 
-import com.googlecode.struts4rcp.client.WorkContext;
+import com.googlecode.struts4rcp.client.Work;
 
 public class WorkEvent extends Event {
 
 	private static final long serialVersionUID = 1L;
 
-	private final WorkContext workContext;
+	private final Work work;
 
-	public WorkEvent(Object source, WorkContext workContext) {
+	public WorkEvent(Object source, Work work) {
 		super(source);
-		this.workContext = workContext;
+		this.work = work;
 	}
 
-	public WorkContext getWorkContext() {
-		return workContext;
+	public Work getWork() {
+		return work;
 	}
 
 }
