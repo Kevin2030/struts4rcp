@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.googlecode.struts4rcp.client.Client;
+import com.googlecode.struts4rcp.client.Worker;
 import com.googlecode.struts4rcp.client.event.ExceptionAdapter;
 import com.googlecode.struts4rcp.client.event.ExceptionEvent;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
@@ -32,35 +32,30 @@ public class ExceptionDialog extends Dialog {
 
 	private final ExceptionListener exceptionListener;
 
-	private final Client client;
-
 	private final Shell shell;
-	
+
 	private final Text detailText;
 
-	public ExceptionDialog(final Shell parent, final Client client) {
+	public ExceptionDialog(final Shell parent) {
 		super(parent);
-		if (client == null)
-			throw new NullPointerException("Client == null!");
-		this.client = client;
 		this.shell = new Shell(parent, SWT.DIALOG_TRIM | SWT.PRIMARY_MODAL);
 		shell.setSize(450, 200);
 		shell.setText("异常");
 		shell.addShellListener(new ShellAdapter() {
-			public void shellClosed(ShellEvent e) { 
+			public void shellClosed(ShellEvent e) {
 				e.doit = false;
 				shell.setVisible(false);
-			} 
+			}
 		});
 		shell.setVisible(false);
-		
+
 		Label imageLabel = new Label(shell, SWT.NULL);
 		Image image = getImage();
 		Rectangle imageRectangle = image.getBounds();
 		image.setBackground(imageLabel.getBackground());
 		imageLabel.setImage(image);
 		imageLabel.setBounds(16, 16, imageRectangle.width, imageRectangle.height);
-		
+
 		Label exceptionLabel = new Label(shell, SWT.WRAP);
 		exceptionLabel.setText("非常抱歉，传输过程出错或服务器端出错！");
 		exceptionLabel.setBounds(64, 24, 412, 16);
@@ -98,9 +93,9 @@ public class ExceptionDialog extends Dialog {
 				}
 			}
 		};
-		client.addListener(exceptionListener);
+		Worker.getWorker().addListener(exceptionListener);
 	}
-	
+
 	private void showException(final Throwable exception) {
 		shell.getDisplay().syncExec(new Runnable() {
 			public void run() {
@@ -128,7 +123,7 @@ public class ExceptionDialog extends Dialog {
 	}
 
 	public void dispose() {
-		client.removeListener(exceptionListener);
+		Worker.getWorker().removeListener(exceptionListener);
 		if (shell != null && ! shell.isDisposed())
 			shell.dispose();
 	}

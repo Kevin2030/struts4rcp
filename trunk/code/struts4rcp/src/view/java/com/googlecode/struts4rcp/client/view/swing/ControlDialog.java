@@ -25,7 +25,7 @@ public class ControlDialog extends JDialog {
 		if (client == null)
 			throw new NullPointerException("Client == null!");
 		transmissionPane = new TransmissionPane(client);
-		exceptionPane = new ExceptionPane(client);
+		exceptionPane = new ExceptionPane();
 		configurationPane = new ConfigurationPane(client);
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		this.setTitle("控制台");

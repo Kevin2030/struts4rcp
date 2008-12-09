@@ -19,25 +19,20 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-import com.googlecode.struts4rcp.client.Client;
+import com.googlecode.struts4rcp.client.Worker;
 import com.googlecode.struts4rcp.client.event.ExceptionAdapter;
 import com.googlecode.struts4rcp.client.event.ExceptionEvent;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
 import com.googlecode.struts4rcp.util.ExceptionUtils;
 
 public class ExceptionPane extends Composite {
-	
-	private final Client client;
 
 	private ExceptionListener exceptionListener;
-	
+
 	private Text exceptionTextArea;
-	
-	public ExceptionPane(final Composite parent, final Client client) {
+
+	public ExceptionPane(final Composite parent) {
 		super(parent, SWT.NONE);
-		if (client == null)
-			throw new NullPointerException("Client == null!");
-		this.client = client;
 		ToolBar toolBar = new ToolBar(this, SWT.NONE);
 		toolBar.setSize(400, 40);
 		ToolItem saveItem = new ToolItem(toolBar, SWT.NONE);
@@ -108,7 +103,7 @@ public class ExceptionPane extends Composite {
 				});
 			}
 		};
-		client.addListener(exceptionListener);
+		Worker.getWorker().addListener(exceptionListener);
 	}
 
 	protected void appendText(final String text) {
@@ -133,7 +128,7 @@ public class ExceptionPane extends Composite {
 
 	@Override
 	public void dispose() {
-		client.removeListener(exceptionListener);
+		Worker.getWorker().removeListener(exceptionListener);
 		super.dispose();
 	}
 

@@ -14,13 +14,13 @@ import org.eclipse.swt.widgets.TabItem;
 import com.googlecode.struts4rcp.client.Client;
 
 public class ControlDialog extends Dialog {
-	
+
 	private final Shell shell;
 
 	private TransmissionPane transmissionPane;
-	
+
 	private ExceptionPane exceptionPane;
-	
+
 	private ConfigurationPane configurationPane;
 
 	protected ControlDialog(final Shell parent, final Client client) {
@@ -36,33 +36,33 @@ public class ControlDialog extends Dialog {
 		shell.setLocation(x, y);
 		shell.setText("控制台");
 		shell.addShellListener(new ShellAdapter() {
-			public void shellClosed(ShellEvent e) { 
-				e.doit = false; 
-				shell.setVisible(false); 
-			} 
+			public void shellClosed(ShellEvent e) {
+				e.doit = false;
+				shell.setVisible(false);
+			}
 		});
 		shell.setVisible(false);
 		shell.setLayout(new FillLayout());
 		TabFolder tabFolder = new TabFolder(shell, SWT.FILL);
 		tabFolder.setLayout(new FillLayout());
-		
+
 		TabItem transportationTabItem = new TabItem(tabFolder, SWT.FILL);
 		transportationTabItem.setText("传输管理");
 		transmissionPane = new TransmissionPane(tabFolder, client);
 		transportationTabItem.setControl(transmissionPane);
-		
+
 		TabItem exceptionTabItem = new TabItem(tabFolder, SWT.FILL);
 		exceptionTabItem.setText("异常管理");
-		exceptionPane = new ExceptionPane(tabFolder, client);
+		exceptionPane = new ExceptionPane(tabFolder);
 		exceptionTabItem.setControl(exceptionPane);
 
 		TabItem configurationTabItem = new TabItem(tabFolder, SWT.FILL);
 		configurationTabItem.setText("配置管理");
 		configurationPane = new ConfigurationPane(tabFolder, client);
 		configurationTabItem.setControl(configurationPane);
-		
+
 	}
-	
+
 	public void setVisible(final boolean visible) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
@@ -70,7 +70,7 @@ public class ControlDialog extends Dialog {
 			}
 		});
 	}
-	
+
 	public void dispose() {
 		if (transmissionPane != null && ! transmissionPane.isDisposed())
 			transmissionPane.dispose();

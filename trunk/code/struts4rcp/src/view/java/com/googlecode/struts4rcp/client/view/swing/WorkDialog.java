@@ -16,7 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.Work;
 import com.googlecode.struts4rcp.client.Worker;
 import com.googlecode.struts4rcp.client.event.WorkAdapter;
@@ -38,17 +37,12 @@ public class WorkDialog extends JDialog {
 
 	private Work work;
 
-	private final Client client;
-
 	private Icon enableIcon = Images.getIcon("enable.gif");
 
 	private Icon disableIcon = Images.getIcon("disable.gif");
 
-	public WorkDialog(final Frame owner, final Client client) {
+	public WorkDialog(final Frame owner) {
 		super(owner, true);
-		if (client == null)
-			throw new NullPointerException("Client == null!");
-		this.client = client;
 		this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		this.setTitle("正在传输");
 		this.setSize(480, 200);
@@ -148,7 +142,7 @@ public class WorkDialog extends JDialog {
 				}
 			}
 		};
-		client.addListener(workListener);
+		Worker.getWorker().addListener(workListener);
 	}
 
 	private void showWork(Work work) {
@@ -176,7 +170,7 @@ public class WorkDialog extends JDialog {
 
 	@Override
 	public void dispose() {
-		client.removeListener(workListener);
+		Worker.getWorker().removeListener(workListener);
 		super.dispose();
 	}
 
