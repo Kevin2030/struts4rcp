@@ -27,7 +27,7 @@ public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<PostMe
 	/**
 	 * 空闲连接超时时间配置参数名
 	 */
-	public final static String IDLE_CONNECTION_TIMEOUT_PARAM_NAME = "idle.connection.timeout";
+	public final static String IDLE_CONNECTION_TIMEOUT_KEY = "idle.connection.timeout";
 
 	/**
 	 * 未知空闲连接超时时间
@@ -42,7 +42,7 @@ public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<PostMe
 	/**
 	 * 空闲连接检查时间间隔配置参数名
 	 */
-	public final static String IDLE_CONNECTION_CHECK_INTERVAL_PARAM_NAME = "idle.connection.check.interval";
+	public final static String IDLE_CONNECTION_CHECK_INTERVAL_KEY = "idle.connection.check.interval";
 
 	/**
 	 * 未知空闲连接检查时间间隔
@@ -74,11 +74,11 @@ public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<PostMe
 	public void init(Client client, Properties config) {
 		super.init(client, config);
 		// 读取空闲连接超时时间
-		idleConnectionTimeout = PropertiesUtils.getIntProperty(config, IDLE_CONNECTION_TIMEOUT_PARAM_NAME, UNKNOWN_IDLE_CONNECTION_TIMEOUT);
-		client.getConfigurationManager().register(IDLE_CONNECTION_TIMEOUT_PARAM_NAME,  "空闲连接超时时间(ms)", "暂未实现动态修改空闲连接超时时间，修改后不会生效!", "3000");
+		idleConnectionTimeout = PropertiesUtils.getIntProperty(config, IDLE_CONNECTION_TIMEOUT_KEY, UNKNOWN_IDLE_CONNECTION_TIMEOUT);
+		client.getConfigurationManager().register(IDLE_CONNECTION_TIMEOUT_KEY,  "空闲连接超时时间(ms)", "暂未实现动态修改空闲连接超时时间，修改后不会生效!", "3000");
 		// 读取空闲连接检查时间间隔
-		idleConnectionCheckInterval = PropertiesUtils.getIntProperty(config, IDLE_CONNECTION_CHECK_INTERVAL_PARAM_NAME, UNKNOWN_IDLE_CONNECTION_CHECK_INTERVAL);
-		client.getConfigurationManager().register(IDLE_CONNECTION_CHECK_INTERVAL_PARAM_NAME,  "空闲连接检查时间间隔(ms)", "暂未实现动态修改空闲连接检查时间间隔，修改后不会生效!", "1000");
+		idleConnectionCheckInterval = PropertiesUtils.getIntProperty(config, IDLE_CONNECTION_CHECK_INTERVAL_KEY, UNKNOWN_IDLE_CONNECTION_CHECK_INTERVAL);
+		client.getConfigurationManager().register(IDLE_CONNECTION_CHECK_INTERVAL_KEY,  "空闲连接检查时间间隔(ms)", "暂未实现动态修改空闲连接检查时间间隔，修改后不会生效!", "1000");
 		// 设置
 		httpClient = createHttpClient();
 		if (httpClient == null)

@@ -11,9 +11,9 @@ public class AbstractLauncher implements Launcher {
 			int serverPort,
 			String contextPath) {
 		Properties properties = new Properties();
-		properties.setProperty(AbstractHttpTransmitter.SERVER_HOST_PARAM_NAME, serverHost);
-		properties.setProperty(AbstractHttpTransmitter.SERVER_PORT_PARAM_NAME, String.valueOf(serverPort));
-		properties.setProperty(AbstractHttpTransmitter.CONTEXT_PATH_PARAM_NAME, contextPath);
+		properties.setProperty(AbstractHttpTransmitter.SERVER_HOST_KEY, serverHost);
+		properties.setProperty(AbstractHttpTransmitter.SERVER_PORT_KEY, String.valueOf(serverPort));
+		properties.setProperty(AbstractHttpTransmitter.CONTEXT_PATH_KEY, contextPath);
 		start(properties);
 	}
 
