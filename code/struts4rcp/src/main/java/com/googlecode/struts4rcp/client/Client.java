@@ -304,16 +304,16 @@ public class Client implements Listenable {
 					(ExceptionListener) listener);
 	}
 
-	public String getProperty(String key) {
-		return configurationManager.getValue(key);
+	public Properties getProperties() {
+		return configurationManager.getProperties();
 	}
 
-	public Map<String, String> getProperties() {
-		return configurationManager.getValues();
+	public String getProperty(String key) {
+		return configurationManager.getProperty(key);
 	}
 
 	public void setProperty(String key, String value) {
-		configurationManager.setValue(key, value);
+		configurationManager.setProperty(key, value);
 	}
 
 	public <M extends Serializable, R extends Serializable> Action<M, R> getAction(
