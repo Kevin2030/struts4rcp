@@ -2,8 +2,10 @@ package com.googlecode.struts4rcp.client;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -199,10 +201,6 @@ public class Client implements Listenable {
 
 	private final Transmitter transmitter;
 
-	private final ActionFactory actionFactory;
-
-	private final ResourceFactory resourceFactory;
-
 	private Client(Properties config) {
 		this(config, PropertiesUtils.getInstanceProperty(config,
 				TRANSMITTER_KEY, Transmitter.class,
@@ -217,8 +215,6 @@ public class Client implements Listenable {
 		config = new UnmodifiableProperties(config);
 		this.transmitter = transmitter;
 		this.configurationManager = new ConfigurationManager(this, config);
-		this.actionFactory = new ActionFactory(this, config);
-		this.resourceFactory = new ResourceFactory(this, config);
 		transmitter.init(this, config);
 		configurationManager.register(TRANSMITTER_KEY, "传输策略",
 				"暂未实现传输策略动态切换，修改后不会生效!", HttpURLConnectionTransmitter.class
@@ -240,14 +236,6 @@ public class Client implements Listenable {
 
 	public Transmitter getTransmitter() {
 		return transmitter;
-	}
-
-	public ActionFactory getActionFactory() {
-		return actionFactory;
-	}
-
-	public ResourceFactory getResourceFactory() {
-		return resourceFactory;
 	}
 
 	private void shutdown() {
@@ -316,19 +304,119 @@ public class Client implements Listenable {
 		configurationManager.setProperty(key, value);
 	}
 
-	public <M extends Serializable, R extends Serializable> Action<M, R> getAction(
-			String actionName) {
-		return actionFactory.getAction(actionName);
+	/**
+	 * 获取同步Action代理
+	 *
+	 * @param actionName action名称
+	 * @return 同步Action代理
+	 */
+	public <M extends Serializable, R extends Serializable> Action<M, R> getAction(String actionName) {
+		return new ActionProxy<M, R>(actionName);
 	}
 
-	public <R extends Serializable> Directory<R> getDirectory(String uri,
-			Object... args) {
-		return resourceFactory.getDirectory(uri, args);
+	/**
+	 * 获取资源代理
+	 * @param <R> 资源类型
+	 * @param uri 资源位置
+	 * @param args 资源位置占位参数
+	 * @return 资源
+	 */
+	public <R extends Serializable> Resource<R> getResource(String uri, Object... args) {
+		return new ResourceProxy<R>(format(uri, args));
 	}
 
-	public <R extends Serializable> Resource<R> getResource(String uri,
-			Object... args) {
-		return resourceFactory.getResource(uri, args);
+	/**
+	 * 获取资源目录代理
+	 * @param <R> 资源类型
+	 * @param uri 资源位置
+	 * @return 资源
+	 */
+	public <R extends Serializable> Directory<R> getDirectory(String uri, Object... args) {
+		return new DirectoryProxy<R>(format(uri, args));
+	}
+
+	private String format(String uri, Object... args) {
+		if (uri != null && uri.length() > 0
+				&& args != null && args.length > 0) {
+			return new MessageFormat(uri, Locale.getDefault()).format(args);
+		}
+		return uri;
+	}
+
+	/**
+	 * Action代理
+	 * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
+	 */
+	private final class ActionProxy<M extends Serializable, R extends Serializable> implements Action<M, R> {
+
+		private final String actionName;
+
+		ActionProxy(String actionName) {
+			if (actionName == null)
+				throw new NullPointerException("actionName == null!");
+			this.actionName = actionName;
+		}
+
+		@SuppressWarnings("unchecked")
+		public R execute(final M model) throws Exception {
+			return (R)getTransmitter().transmit(actionName, model);
+		}
+	}
+
+	private class ResourceProxy<R extends Serializable> implements Resource<R> {
+
+		private final String uri;
+
+		ResourceProxy(String uri) {
+			if (uri == null)
+				throw new NullPointerException("uri == null!");
+			this.uri = uri;
+		}
+
+		public void create(R resource) throws Exception {
+			getTransmitter().transmit(Transmitter.POST_METHOD, uri, resource);
+		}
+
+		@SuppressWarnings("unchecked")
+		public R read() throws Exception {
+			return (R)getTransmitter().transmit(Transmitter.GET_METHOD, uri, null);
+		}
+
+		public void update(R resource) throws Exception {
+			getTransmitter().transmit(Transmitter.PUT_METHOD, uri, resource);
+		}
+
+		public void delete() throws Exception {
+			getTransmitter().transmit(Transmitter.DELETE_METHOD, uri, null);
+		}
+
+		public Directory<R> getDirectory() throws Exception {
+			String dir = (String)getTransmitter().transmit(Transmitter.HEAD_METHOD, uri, null);
+			if (dir == null)
+				return null;
+			return new DirectoryProxy<R>(dir);
+		}
+
+	}
+
+	private class DirectoryProxy<R extends Serializable> implements Directory<R> {
+
+		private final String uri;
+
+		DirectoryProxy(String uri) {
+			if (uri == null)
+				throw new NullPointerException("uri == null!");
+			this.uri = uri;
+		}
+
+		public R[] index() throws Exception {
+			return index(null);
+		}
+
+		public R[] index(R resource) throws Exception {
+			return (R[])getTransmitter().transmit(Transmitter.GET_METHOD, uri, resource);
+		}
+
 	}
 
 }
