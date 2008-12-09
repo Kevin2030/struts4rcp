@@ -43,7 +43,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	/**
 	 * 序列化器配置参数名
 	 */
-	public final static String SERIALIZER_PARAM_NAME = "serializer";
+	public final static String SERIALIZER_KEY = "serializer";
 
 	/**
 	 * 序列化器
@@ -53,7 +53,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	/**
 	 * 服务器主机配置参数名
 	 */
-	public final static String SERVER_HOST_PARAM_NAME = "server.host";
+	public final static String SERVER_HOST_KEY = "server.host";
 
 	/**
 	 * 服务器主机
@@ -63,7 +63,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	/**
 	 * 服务器端口配置参数名
 	 */
-	public final static String SERVER_PORT_PARAM_NAME = "server.port";
+	public final static String SERVER_PORT_KEY = "server.port";
 
 	/**
 	 * 未知服务器端口
@@ -78,7 +78,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	/**
 	 * 应用上下文路径配置参数名
 	 */
-	public final static String CONTEXT_PATH_PARAM_NAME = "context.path";
+	public final static String CONTEXT_PATH_KEY = "context.path";
 
 	/**
 	 * 应用上下文路径
@@ -88,7 +88,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	/**
 	 * Action请求后缀配置参数名
 	 */
-	public final static String ACTION_SUFFIX_PARAM_NAME = "action.suffix";
+	public final static String ACTION_SUFFIX_KEY = "action.suffix";
 
 	/**
 	 * 缺省Action后缀
@@ -103,7 +103,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	/**
 	 * 连接超时时间配置参数名
 	 */
-	public final static String CONNECTION_TIMEOUT_PARAM_NAME = "connection.timeout";
+	public final static String CONNECTION_TIMEOUT_KEY = "connection.timeout";
 
 	/**
 	 * 未知连接超时时间
@@ -118,7 +118,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	/**
 	 * 套接字读取超时时间配置参数名
 	 */
-	public final static String SOCKET_TIMEOUT_PARAM_NAME = "socket.timeout";
+	public final static String SOCKET_TIMEOUT_KEY = "socket.timeout";
 
 	/**
 	 * 未知套接字读取时间
@@ -133,7 +133,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	/**
 	 * 连接监控时间间隔配置参数名
 	 */
-	public final static String CONNECTION_CHECK_INTERVAL_PARAM_NAME = "connection.check.interval";
+	public final static String CONNECTION_CHECK_INTERVAL_KEY = "connection.check.interval";
 
 	/**
 	 * 缺省连接监控时间间隔
@@ -148,7 +148,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	/**
 	 * 最大连接数配置参数名
 	 */
-	public final static String MAX_CONNECTION_SIZE_PARAM_NAME = "max.connection.size";
+	public final static String MAX_CONNECTION_SIZE_KEY = "max.connection.size";
 
 	/**
 	 * 缺省最大连接数
@@ -188,39 +188,39 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		this.client = client;
 
 		// 读取序列化器
-		serializer = PropertiesUtils.getInstanceProperty(config, SERIALIZER_PARAM_NAME, StreamSerializer.class, JavaStreamSerializer.class);
-		client.getConfigurationManager().register(SERIALIZER_PARAM_NAME, "序列化策略", "暂未实现动态切换序列化策略，修改后不会生效!",
+		serializer = PropertiesUtils.getInstanceProperty(config, SERIALIZER_KEY, StreamSerializer.class, JavaStreamSerializer.class);
+		client.getConfigurationManager().register(SERIALIZER_KEY, "序列化策略", "暂未实现动态切换序列化策略，修改后不会生效!",
 				JavaStreamSerializer.class.getName(), ServiceUtils.getServiceClassNames(StreamSerializer.class).toArray(new String[0]));
 
 		// 读取服务器主机名
-		serverHost = PropertiesUtils.getStringProperty(config, SERVER_HOST_PARAM_NAME, null);
+		serverHost = PropertiesUtils.getStringProperty(config, SERVER_HOST_KEY, null);
 		if (serverHost == null)
 			throw new NullPointerException("server.host == null, 服务器主机名不能为空!");
-		client.getConfigurationManager().register(SERVER_HOST_PARAM_NAME, "服务器主机名", "暂未实现动态切换服务器名，修改后不会生效!", "");
+		client.getConfigurationManager().register(SERVER_HOST_KEY, "服务器主机名", "暂未实现动态切换服务器名，修改后不会生效!", "");
 
 		// 读取服务器端口
-		serverPort = PropertiesUtils.getIntProperty(config, SERVER_PORT_PARAM_NAME, UNKNOWN_SERVER_PORT);
-		client.getConfigurationManager().register(SERVER_PORT_PARAM_NAME,  "服务器端口", "暂未实现动态切换服务器端口，修改后不会生效!", "80");
+		serverPort = PropertiesUtils.getIntProperty(config, SERVER_PORT_KEY, UNKNOWN_SERVER_PORT);
+		client.getConfigurationManager().register(SERVER_PORT_KEY,  "服务器端口", "暂未实现动态切换服务器端口，修改后不会生效!", "80");
 
 		// 读取上下文路径
-		contextPath = PropertiesUtils.getStringProperty(config, CONTEXT_PATH_PARAM_NAME, "");
-		client.getConfigurationManager().register(CONTEXT_PATH_PARAM_NAME,  "应用上下文路径", "暂未实现动态切换应用上下文路径，修改后不会生效!", "/");
+		contextPath = PropertiesUtils.getStringProperty(config, CONTEXT_PATH_KEY, "");
+		client.getConfigurationManager().register(CONTEXT_PATH_KEY,  "应用上下文路径", "暂未实现动态切换应用上下文路径，修改后不会生效!", "/");
 
 		// 读取Action后缀
-		actionSuffix = PropertiesUtils.getStringProperty(config, ACTION_SUFFIX_PARAM_NAME, DEFAULT_ACTION_SUFFIX);
-		client.getConfigurationManager().register(ACTION_SUFFIX_PARAM_NAME,  "Action后缀", "暂未实现动态修改Action后缀，修改后不会生效!", "data");
+		actionSuffix = PropertiesUtils.getStringProperty(config, ACTION_SUFFIX_KEY, DEFAULT_ACTION_SUFFIX);
+		client.getConfigurationManager().register(ACTION_SUFFIX_KEY,  "Action后缀", "暂未实现动态修改Action后缀，修改后不会生效!", "data");
 
 		// 读取连接超时时间
-		connectionTimeout = PropertiesUtils.getIntProperty(config, CONNECTION_TIMEOUT_PARAM_NAME, UNKNOWN_CONNECTION_TIMEOUT);
-		client.getConfigurationManager().register(CONNECTION_TIMEOUT_PARAM_NAME,  "HTTP请求连接超时时间(ms)", "暂未实现动态修改HTTP请求连接超时时间，修改后不会生效!", "30000");
+		connectionTimeout = PropertiesUtils.getIntProperty(config, CONNECTION_TIMEOUT_KEY, UNKNOWN_CONNECTION_TIMEOUT);
+		client.getConfigurationManager().register(CONNECTION_TIMEOUT_KEY,  "HTTP请求连接超时时间(ms)", "暂未实现动态修改HTTP请求连接超时时间，修改后不会生效!", "30000");
 
 		// 读取套接字读取超时时间
-		socketTimeout = PropertiesUtils.getIntProperty(config, SOCKET_TIMEOUT_PARAM_NAME, UNKNOWN_SOCKET_TIMEOUT);
-		client.getConfigurationManager().register(SOCKET_TIMEOUT_PARAM_NAME,  "套接字读取超时时间(ms)", "暂未实现动态修改套接字读取超时时间，修改后不会生效!", "0");
+		socketTimeout = PropertiesUtils.getIntProperty(config, SOCKET_TIMEOUT_KEY, UNKNOWN_SOCKET_TIMEOUT);
+		client.getConfigurationManager().register(SOCKET_TIMEOUT_KEY,  "套接字读取超时时间(ms)", "暂未实现动态修改套接字读取超时时间，修改后不会生效!", "0");
 
 		// 读取监控时间间隔
-		connectionCheckInterval = PropertiesUtils.getIntProperty(config, CONNECTION_CHECK_INTERVAL_PARAM_NAME, DEFAULT_CONNECTION_CHECK_INTERVAL);
-		client.getConfigurationManager().register(CONNECTION_CHECK_INTERVAL_PARAM_NAME,  "网络连接状态检查时间间隔(ms)", "暂未实现动态修改网络连接状态检查时间间隔，修改后不会生效!", "0");
+		connectionCheckInterval = PropertiesUtils.getIntProperty(config, CONNECTION_CHECK_INTERVAL_KEY, DEFAULT_CONNECTION_CHECK_INTERVAL);
+		client.getConfigurationManager().register(CONNECTION_CHECK_INTERVAL_KEY,  "网络连接状态检查时间间隔(ms)", "暂未实现动态修改网络连接状态检查时间间隔，修改后不会生效!", "0");
 		if (connectionCheckInterval > 0) {
 			scheduler = Executors.newScheduledThreadPool(1);
 			future = scheduler.scheduleWithFixedDelay(new Runnable() {
