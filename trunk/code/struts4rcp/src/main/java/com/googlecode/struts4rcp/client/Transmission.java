@@ -1,6 +1,5 @@
 package com.googlecode.struts4rcp.client;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -99,7 +98,7 @@ public class Transmission implements Serializable, Abortable {
 	/**
 	 * 中止传输
 	 */
-	public void abort() throws IOException {
+	public void abort() throws Exception {
 		if (abortor != null) {
 			synchronized (abortor) {
 				abortor.abort();

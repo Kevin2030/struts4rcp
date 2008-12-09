@@ -409,7 +409,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 			this.request = request;
 		}
 
-		public void abort() throws IOException {
+		public void abort() throws Exception {
 			AbstractHttpTransmitter.this.abort(request);
 		}
 	}
