@@ -60,7 +60,7 @@ public class TransmissionPane extends Composite {
 					return;
 				}
 				try {
-					execution.abort();
+					execution.cancel();
 					MessageDialog.openInformation(parent.getShell(), "中止",
 							"中止传输项成功!");
 				} catch (Throwable t) {

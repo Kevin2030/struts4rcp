@@ -116,7 +116,7 @@ public class TransmissionPane extends JPanel {
 				ThreadUtils.execute(new Runnable(){
 					public void run() {
 						try {
-							execution.abort();
+							execution.cancel();
 							JOptionPane.showMessageDialog(TransmissionPane.this, "中止传输项完成!", "中止", JOptionPane.INFORMATION_MESSAGE);
 						} catch (Throwable t) {
 							JOptionPane.showMessageDialog(TransmissionPane.this, "中止传输项失败! 原因: " + t.getMessage(), "中止", JOptionPane.WARNING_MESSAGE);

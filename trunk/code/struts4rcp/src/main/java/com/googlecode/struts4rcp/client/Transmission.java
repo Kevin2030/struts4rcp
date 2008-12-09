@@ -8,7 +8,7 @@ import java.util.Date;
  * Action执行过程
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class Transmission implements Serializable, Abortable {
+public class Transmission implements Serializable, Cancellable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -93,15 +93,15 @@ public class Transmission implements Serializable, Abortable {
 		}
 	}
 
-	private Abortable abortor;
+	private Cancellable abortor;
 
 	/**
 	 * 中止传输
 	 */
-	public void abort() throws Exception {
+	public void cancel() throws Exception {
 		if (abortor != null) {
 			synchronized (abortor) {
-				abortor.abort();
+				abortor.cancel();
 			}
 		}
 	}
@@ -134,7 +134,7 @@ public class Transmission implements Serializable, Abortable {
 	 * 开始传输
 	 * @param abortor 中止传输封装体
 	 */
-	public void transmiting(Abortable abortor) {
+	public void transmiting(Cancellable abortor) {
 		synchronized (statusLock) {
 			if (status != TRANSMIT_STATUS)
 				throw new IllegalStateException("This transportation already transported!");
