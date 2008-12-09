@@ -9,24 +9,24 @@ public class Work implements Abortable, Backable {
 		this.back = back;
 	}
 
-	private String title;
+	private String message;
 
-	public String getTitle() {
-		return title;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
-	private String description;
+	private String detail;
 
-	public String getDescription() {
-		return description;
+	public String getDetail() {
+		return detail;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDetail(String detail) {
+		this.detail = detail;
 	}
 
 	private final Stack<Abortable> abortorStack = new Stack<Abortable>();
