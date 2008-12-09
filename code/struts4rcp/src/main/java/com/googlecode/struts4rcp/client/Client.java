@@ -250,7 +250,7 @@ public class Client implements Listenable {
 		return resourceFactory;
 	}
 
-	public void shutdown() {
+	private void shutdown() {
 		try {
 			transmitter.shutdown();
 		} finally {
