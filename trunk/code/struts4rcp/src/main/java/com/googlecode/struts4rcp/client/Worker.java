@@ -36,7 +36,7 @@ public class Worker {
 	 * 前台工作
 	 * @param workable 工作内容
 	 */
-	public void fore(final Workable workable) {
+	public void fore(Workable workable) {
 		fore("", workable);
 	}
 
@@ -53,7 +53,7 @@ public class Worker {
 	 * @param workable 工作内容
 	 * @param backable 是否可转为后台运行
 	 */
-	public void fore(String title, boolean backable, final Workable workable) {
+	public void fore(String title, boolean backable, Workable workable) {
 		work(new Work(title, backable), workable);
 	}
 
