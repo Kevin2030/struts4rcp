@@ -66,24 +66,22 @@ public class Worker implements Listenable {
 	}
 
 	private void work(final Work work, final Workable workable) {
-		Work.setCurrent(work);
+		addWork(work);
 		try {
-			addWork(work);
-			try {
-				ThreadUtils.execute(new Runnable() {
-					public void run() {
-						try {
-							workable.work(work);
-						} catch (Throwable e) {
-							publishException(e, work.isBack());
-						}
+			ThreadUtils.execute(new Runnable() {
+				public void run() {
+					Work.setCurrent(work);
+					try {
+						workable.work(work);
+					} catch (Throwable e) {
+						publishException(e, work.isBack());
+					} finally {
+						Work.removeCurrent();
 					}
-				});
-			} finally {
-				removeWork(work);
-			}
+				}
+			});
 		} finally {
-			Work.removeCurrent();
+			removeWork(work);
 		}
 	}
 
