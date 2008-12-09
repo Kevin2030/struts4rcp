@@ -20,7 +20,7 @@ public final class Actions {
 	 * @return 同步Action代理
 	 */
 	public static <M extends Serializable, R extends Serializable> Action<M, R> getAction(String actionName) {
-		return getAction(Client.getClient(), actionName);
+		return Client.getClient().getAction(actionName);
 	}
 
 	/**
