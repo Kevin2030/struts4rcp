@@ -58,7 +58,7 @@ public class PathServletSerializer implements ServletSerializer {
 	public static String getDirectory(Action<Serializable, Serializable> action) {
 		if (action.getClass().isAnnotationPresent(Directory.class))
 			return action.getClass().getAnnotation(Directory.class).value();
-		return "";
+		return null;
 	}
 
 	protected Serializable deserializePath(HttpServletRequest request, Serializable result, String path) {

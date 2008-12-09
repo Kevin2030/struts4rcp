@@ -49,17 +49,17 @@ public abstract class AbstractAction<M extends Serializable, R extends Serializa
 	@SuppressWarnings("unchecked")
 	public String getPath() {
 		String dir = getDirectory();
+		if (dir == null)
+			dir = "";
 		if (path != null && path.length() > 0)
 			return dir + path;
 		return dir + PathServletSerializer.getPath((Action<Serializable, Serializable>)this);
 	}
 
-	private String directory = "";
+	private String directory;
 
 	public void setDirectory(String directory) {
-		if (directory == null)
-			directory = "";
-		else
+		if (directory != null)
 			directory = directory.trim();
 		this.directory = directory;
 	}
