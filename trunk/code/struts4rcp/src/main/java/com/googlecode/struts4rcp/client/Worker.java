@@ -7,6 +7,8 @@ import java.util.HashSet;
 import com.googlecode.struts4rcp.client.event.ExceptionEvent;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
 import com.googlecode.struts4rcp.client.event.ExceptionPublisher;
+import com.googlecode.struts4rcp.client.event.Listenable;
+import com.googlecode.struts4rcp.client.event.Listener;
 import com.googlecode.struts4rcp.client.event.WorkEvent;
 import com.googlecode.struts4rcp.client.event.WorkListener;
 import com.googlecode.struts4rcp.client.event.WorkPublisher;
@@ -16,7 +18,7 @@ import com.googlecode.struts4rcp.util.ThreadUtils;
  * 工作
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class Worker {
+public class Worker implements Listenable {
 
 	private Worker() {}
 
@@ -263,6 +265,33 @@ public class Worker {
 		} finally {
 			exceptionPublisher.clearListeners();
 		}
+	}
+
+	/**
+	 * 向默认客户端实例中，注册事件监听器
+	 *
+	 * @param listener 事件监听器
+	 */
+	public void addListener(Listener listener) {
+		if (listener instanceof WorkListener)
+			addWorkListener(
+					(WorkListener) listener);
+		if (listener instanceof ExceptionListener)
+			addExceptionListener(
+					(ExceptionListener) listener);
+	}
+
+	/**
+	 * 从默认客户端实例中，移除事件监听器
+	 * @param listener 事件监听器
+	 */
+	public void removeListener(Listener listener) {
+		if (listener instanceof WorkListener)
+			removeWorkListener(
+					(WorkListener) listener);
+		if (listener instanceof ExceptionListener)
+			removeExceptionListener(
+					(ExceptionListener) listener);
 	}
 
 }
