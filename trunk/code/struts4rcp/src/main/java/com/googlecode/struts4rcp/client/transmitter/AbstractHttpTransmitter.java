@@ -266,11 +266,11 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		}
 	}
 
-	public Serializable transmit(String uri, Serializable model) throws IOException {
+	public Serializable transmit(String uri, Serializable model) throws Exception {
 		return transmit(POST_METHOD, uri, model);
 	}
 
-	public Serializable transmit(String method, String uri, Serializable model) throws IOException {
+	public Serializable transmit(String method, String uri, Serializable model) throws Exception {
 		Transmission transmission = new Transmission(uri, model);
 		uri = urlPrefix + uri + urlSuffix;
 		Serializable result = null;
@@ -279,6 +279,16 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		addTransmission(transmission, abortor);
 		try {
 			result = transmit(request, uri, model);
+			if (result instanceof Exception) { // 抛出异常
+				Exception e = (Exception)result;
+				logger.error(e.getMessage(), new RuntimeException());
+				throw e;
+			}
+			if (result instanceof Error) { // 抛出错误
+				Error e = (Error)result;
+				logger.error(e.getMessage(), new RuntimeException());
+				throw e;
+			}
 			return result;
 		} catch (Throwable e) {
 			result = e;
