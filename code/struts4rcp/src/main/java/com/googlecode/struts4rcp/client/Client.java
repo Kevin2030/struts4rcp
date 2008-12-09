@@ -9,16 +9,17 @@ import java.util.Properties;
 import com.googlecode.struts4rcp.client.event.ConfigurationListener;
 import com.googlecode.struts4rcp.client.event.ConnectionListener;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
-import com.googlecode.struts4rcp.client.event.WorkListener;
+import com.googlecode.struts4rcp.client.event.Listenable;
 import com.googlecode.struts4rcp.client.event.Listener;
 import com.googlecode.struts4rcp.client.event.TransmissionListener;
+import com.googlecode.struts4rcp.client.event.WorkListener;
 import com.googlecode.struts4rcp.client.transmitter.HttpURLConnectionTransmitter;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ServiceUtils;
 import com.googlecode.struts4rcp.util.ThreadUtils;
 import com.googlecode.struts4rcp.util.UnmodifiableProperties;
 
-public class Client {
+public class Client implements Listenable {
 
 	/**
 	 * 初始化默认客户端实例
