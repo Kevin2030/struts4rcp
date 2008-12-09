@@ -101,8 +101,8 @@ public class ConnectionStatus extends JButton {
 		this.transportingIcon = Images.getIcon("transporting.gif");
 		// 初始化窗口
 		controlDialog = new ControlDialog(frame, client);
-		executionDialog = new WorkDialog(frame, client);
-		exceptionDialog = new ExceptionDialog(frame, client);
+		executionDialog = new WorkDialog(frame);
+		exceptionDialog = new ExceptionDialog(frame);
 		// 按钮点击事件
 		this.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

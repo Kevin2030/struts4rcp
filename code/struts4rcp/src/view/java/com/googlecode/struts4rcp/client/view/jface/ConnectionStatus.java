@@ -49,11 +49,11 @@ public class ConnectionStatus extends ContributionItem {
 	private Cursor handCursor = new Cursor(null, SWT.CURSOR_HAND);
 
 	private Label connectionButton;
-	
+
 	private WorkDialog executionDialog;
-	
+
 	private ExceptionDialog exceptionDialog;
-	
+
 	private ControlDialog controlDialog;
 
 	private final Image connectionImage;
@@ -61,16 +61,16 @@ public class ConnectionStatus extends ContributionItem {
 	private final Image disconnectionImage;
 
 	private final Image transportationImage;
-	
+
 	private ConnectionListener connectionListener;
-	
+
 	private TransmissionListener transportationListener;
 
 	@Override
 	public void fill(Composite parent) {
 		try {
-			executionDialog = new WorkDialog(parent.getShell(), client);
-			exceptionDialog = new ExceptionDialog(parent.getShell(), client);
+			executionDialog = new WorkDialog(parent.getShell());
+			exceptionDialog = new ExceptionDialog(parent.getShell());
 			controlDialog = new ControlDialog(parent.getShell(), client);
 			connectionButton = new Label(parent, SWT.NONE);
 			connectionButton.setCursor(handCursor);
@@ -79,7 +79,7 @@ public class ConnectionStatus extends ContributionItem {
 				public void mouseDoubleClick(MouseEvent event) {}
 				public void mouseDown(MouseEvent event) {}
 				public void mouseUp(MouseEvent event) {
-					controlDialog.setVisible(true); 
+					controlDialog.setVisible(true);
 				}
 			});
 			// 初始化状态
@@ -165,19 +165,19 @@ public class ConnectionStatus extends ContributionItem {
 	public void dispose() {
 		client.removeListener(connectionListener);
 		client.removeListener(transportationListener);
-		if (connectionButton != null 
+		if (connectionButton != null
 				&& ! connectionButton.isDisposed())
 			connectionButton.dispose();
-		if (handCursor != null 
+		if (handCursor != null
 				&& ! handCursor.isDisposed())
 			handCursor.dispose();
-		if (connectionImage != null 
+		if (connectionImage != null
 				&& ! connectionImage.isDisposed())
 			connectionImage.dispose();
-		if (disconnectionImage != null 
+		if (disconnectionImage != null
 				&& ! disconnectionImage.isDisposed())
 			disconnectionImage.dispose();
-		if (transportationImage != null 
+		if (transportationImage != null
 				&& ! transportationImage.isDisposed())
 			transportationImage.dispose();
 		if (executionDialog != null)

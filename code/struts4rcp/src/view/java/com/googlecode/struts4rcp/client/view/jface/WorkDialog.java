@@ -15,7 +15,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 
-import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.Work;
 import com.googlecode.struts4rcp.client.Worker;
 import com.googlecode.struts4rcp.client.event.WorkAdapter;
@@ -24,8 +23,6 @@ import com.googlecode.struts4rcp.client.event.WorkListener;
 import com.googlecode.struts4rcp.util.ThreadUtils;
 
 public class WorkDialog extends Dialog {
-
-	private final Client client;
 
 	private final Shell shell;
 
@@ -39,11 +36,8 @@ public class WorkDialog extends Dialog {
 
 	private final WorkListener workListener;
 
-	protected WorkDialog(final Shell parent, final Client client) {
+	protected WorkDialog(final Shell parent) {
 		super(parent);
-		if (client == null)
-			throw new NullPointerException("Client == null!");
-		this.client = client;
 		this.shell = new Shell(parent, SWT.TITLE | SWT.BORDER | SWT.PRIMARY_MODAL);
 		shell.setSize(450, 180);
 		shell.setText("传输");
@@ -144,11 +138,11 @@ public class WorkDialog extends Dialog {
 				}
 			}
 		};
-		client.addListener(workListener);
+		Worker.getWorker().addListener(workListener);
 	}
 
 	public void dispose() {
-		client.removeListener(workListener);
+		Worker.getWorker().removeListener(workListener);
 		if (shell != null && ! shell.isDisposed())
 			shell.dispose();
 	}

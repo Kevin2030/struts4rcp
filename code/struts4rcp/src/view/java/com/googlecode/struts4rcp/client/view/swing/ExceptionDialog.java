@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import com.googlecode.struts4rcp.client.Client;
+import com.googlecode.struts4rcp.client.Worker;
 import com.googlecode.struts4rcp.client.event.ExceptionAdapter;
 import com.googlecode.struts4rcp.client.event.ExceptionEvent;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
@@ -32,11 +32,8 @@ public class ExceptionDialog extends JDialog {
 
 	private final ExceptionListener exceptionListener;
 
-	private final Client client;
-
-	public ExceptionDialog(Frame owner, Client client) {
+	public ExceptionDialog(Frame owner) {
 		super(owner, true);
-		this.client = client;
 
 		this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 		this.setTitle("传输出错");
@@ -105,12 +102,12 @@ public class ExceptionDialog extends JDialog {
 				}
 			}
 		};
-		client.addListener(exceptionListener);
+		Worker.getWorker().addListener(exceptionListener);
 	}
 
 	@Override
 	public void dispose() {
-		client.removeListener(exceptionListener);
+		Worker.getWorker().removeListener(exceptionListener);
 		super.dispose();
 	}
 

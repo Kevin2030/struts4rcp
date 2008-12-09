@@ -21,7 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 
-import com.googlecode.struts4rcp.client.Client;
+import com.googlecode.struts4rcp.client.Worker;
 import com.googlecode.struts4rcp.client.event.ExceptionAdapter;
 import com.googlecode.struts4rcp.client.event.ExceptionEvent;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
@@ -43,12 +43,7 @@ public class ExceptionPane extends JPanel {
 
 	private final ExceptionListener exceptionListener;
 
-	private final Client client;
-
-	public ExceptionPane(Client client) {
-		if (client == null)
-			throw new NullPointerException("Client == null!");
-		this.client = client;
+	public ExceptionPane() {
 		this.setLayout(new BorderLayout());
 
 		toolBar.setFloatable(false);
@@ -122,7 +117,7 @@ public class ExceptionPane extends JPanel {
 				ExceptionPane.this.appendText(ExceptionUtils.getDetailMessage(event.getException()));
 			}
 		});
-		client.addListener(exceptionListener);
+		Worker.getWorker().addListener(exceptionListener);
 	}
 
 	protected void appendText(String text) {
@@ -152,7 +147,7 @@ public class ExceptionPane extends JPanel {
 	}
 
 	public void dispose() {
-		client.removeListener(exceptionListener);
+		Worker.getWorker().removeListener(exceptionListener);
 	}
 
 }
