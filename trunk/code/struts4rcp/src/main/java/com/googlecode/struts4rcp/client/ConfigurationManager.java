@@ -11,6 +11,7 @@ import java.util.Properties;
 import com.googlecode.struts4rcp.client.event.ConfigurationEvent;
 import com.googlecode.struts4rcp.client.event.ConfigurationListener;
 import com.googlecode.struts4rcp.client.event.ConfigurationPublisher;
+import com.googlecode.struts4rcp.util.UnmodifiableProperties;
 
 /**
  * 配置管理器
@@ -20,7 +21,7 @@ public class ConfigurationManager {
 
 	private Client client;
 
-	private final Map<String, String> values = Collections.synchronizedMap(new HashMap<String, String>());
+	private final Properties values = new Properties();
 
 	private final Map<String, String> names = Collections.synchronizedMap(new HashMap<String, String>());
 
@@ -36,7 +37,7 @@ public class ConfigurationManager {
 	 * @return 配置项
 	 */
 	public Configuration getConfiguration(String key) {
-		return new Configuration(key, values.get(key), names.get(key), descriptions.get(key), defaults.get(key), options.get(key));
+		return new Configuration(key, values.getProperty(key), names.get(key), descriptions.get(key), defaults.get(key), options.get(key));
 	}
 
 	/**
@@ -46,9 +47,9 @@ public class ConfigurationManager {
 	public Collection<Configuration> getConfigurations() {
 		Collection<Configuration> configurations = new ArrayList<Configuration>();
 		synchronized (values) {
-			for (Map.Entry<String, String> entry : values.entrySet()) {
-				String key = entry.getKey();
-				String value = entry.getValue();
+			for (Map.Entry<Object, Object> entry : values.entrySet()) {
+				String key = (String)entry.getKey();
+				String value = (String)entry.getValue();
 				configurations.add(new Configuration(key, value, names.get(key), descriptions.get(key), defaults.get(key), options.get(key)));
 			}
 		}
@@ -62,7 +63,7 @@ public class ConfigurationManager {
 	public void removeConfiguration(String key) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
-		Configuration configuration = new Configuration(key, values.get(key), names.get(key), descriptions.get(key), defaults.get(key), options.get(key));
+		Configuration configuration = new Configuration(key, values.getProperty(key), names.get(key), descriptions.get(key), defaults.get(key), options.get(key));
 		values.remove(key);
 		names.remove(key);
 		descriptions.remove(key);
@@ -85,8 +86,8 @@ public class ConfigurationManager {
 	 * 获取所有配置项
 	 * @return 不可变配置集合
 	 */
-	public Map<String, String> getValues() {
-		return Collections.unmodifiableMap(values);
+	public Properties getProperties() {
+		return new UnmodifiableProperties(values);
 	}
 
 	/**
@@ -94,10 +95,10 @@ public class ConfigurationManager {
 	 * @param key 配置项索引
 	 * @return 配置项值
 	 */
-	public String getValue(String key) {
+	public String getProperty(String key) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
-		return values.get(key);
+		return values.getProperty(key);
 	}
 
 	/**
@@ -105,12 +106,12 @@ public class ConfigurationManager {
 	 * @param key 配置项索引
 	 * @param value 配置项值
 	 */
-	public void setValue(String key, String value) {
+	public void setProperty(String key, String value) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
 		if (value == null)
 			value = "";
-		String old = values.get(key);
+		String old = values.getProperty(key);
 		if (isChanged(old, value)) {
 			values.put(key, value);
 			configurationPublisher.publishEvent(new ConfigurationEvent(this, new Configuration(key, value, names.get(key), descriptions.get(key), defaults.get(key), options.get(key)), old, false));

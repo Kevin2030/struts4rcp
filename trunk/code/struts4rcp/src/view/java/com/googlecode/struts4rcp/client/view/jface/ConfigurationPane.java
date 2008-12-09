@@ -24,15 +24,15 @@ import com.googlecode.struts4rcp.client.event.ConfigurationEvent;
 import com.googlecode.struts4rcp.client.event.ConfigurationListener;
 
 public class ConfigurationPane extends Composite {
-	
+
 	private final Client client;
 
 	private final ConfigurationListener configurationListener;
 
 	private final ArrayList<Configuration> configurations = new ArrayList<Configuration>();
-	
+
 	private final List configurationList;
-	
+
 	public ConfigurationPane(final Composite parent, final Client client) {
 		super(parent, SWT.NONE);
 		if (client == null)
@@ -58,7 +58,7 @@ public class ConfigurationPane extends Composite {
 					FileWriter writer = null;
 					try {
 						writer = new FileWriter(file);
-						for (Map.Entry<String, String> entry : client.getConfigurationManager().getValues().entrySet()) {
+						for (Map.Entry<Object, Object> entry : client.getConfigurationManager().getProperties().entrySet()) {
 							writer.write(entry.getKey() + "=" + entry.getValue() + "\n");
 						}
 						writer.flush();
@@ -103,7 +103,7 @@ public class ConfigurationPane extends Composite {
 				if (ch == InputDialog.OK) {
 					String newValue = configurationInputDialog.getValue();
 					if (! newValue.equals(configuration.getValue())) {
-						client.getConfigurationManager().setValue(configuration.getKey(), newValue);
+						client.getConfigurationManager().setProperty(configuration.getKey(), newValue);
 						MessageDialog.openInformation(parent.getShell(), "修改", "修改配置项成功!");
 					}
 				}
