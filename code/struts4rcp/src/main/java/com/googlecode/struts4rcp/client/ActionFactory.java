@@ -11,7 +11,7 @@ import com.googlecode.struts4rcp.util.logger.LoggerFactory;
  * Action代理工厂
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ActionFactory implements ClientElement {
+public class ActionFactory {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -21,7 +21,7 @@ public class ActionFactory implements ClientElement {
 		return client;
 	}
 
-	public void init(Client client, Properties config) {
+	public ActionFactory(Client client, Properties config) {
 		if (client == null)
 			throw new NullPointerException("Client == null!");
 		if (config == null)

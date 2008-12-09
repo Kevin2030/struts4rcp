@@ -9,7 +9,7 @@ import java.util.Properties;
  * 资源代理工厂
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ResourceFactory implements ClientElement {
+public class ResourceFactory {
 
 	private Client client;
 
@@ -17,7 +17,7 @@ public class ResourceFactory implements ClientElement {
 		return client;
 	}
 
-	public void init(Client client, Properties properties) {
+	public ResourceFactory(Client client, Properties properties) {
 		this.client = client;
 	}
 
