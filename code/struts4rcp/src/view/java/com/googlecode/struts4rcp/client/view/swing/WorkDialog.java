@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-import com.googlecode.struts4rcp.client.WorkContext;
+import com.googlecode.struts4rcp.client.Work;
 import com.googlecode.struts4rcp.client.Worker;
 import com.googlecode.struts4rcp.client.event.WorkAdapter;
 import com.googlecode.struts4rcp.client.event.WorkEvent;
@@ -35,7 +35,7 @@ public class WorkDialog extends JDialog {
 
 	private final JButton abortButton;
 
-	private WorkContext work;
+	private Work work;
 
 	private Icon enableIcon = Images.getIcon("enable.gif");
 
@@ -84,7 +84,7 @@ public class WorkDialog extends JDialog {
 		backPanel.add(BorderLayout.EAST, backButton);
 		backButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				final WorkContext work = WorkDialog.this.work;
+				final Work work = WorkDialog.this.work;
 				if (work != null && work.isBackable()) {
 					ThreadUtils.execute(new Runnable(){
 						public void run() {
@@ -103,7 +103,7 @@ public class WorkDialog extends JDialog {
 		abortPanel.add(BorderLayout.EAST, abortButton);
 		abortButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				final WorkContext work = WorkDialog.this.work;
+				final Work work = WorkDialog.this.work;
 				if (work != null && work.isAbortable()) {
 					ThreadUtils.execute(new Runnable(){
 						public void run() {
@@ -121,7 +121,7 @@ public class WorkDialog extends JDialog {
 		workListener = new WorkAdapter() { // 只在非UI线程执行
 			public void onForeWorking(WorkEvent event) {
 				if (UIUtils.isNonUIThread(event.getThread())) {
-					showWork(event.getWorkContext());
+					showWork(event.getWork());
 				}
 			}
 			public void onBackWorking(WorkEvent event) {
@@ -131,7 +131,7 @@ public class WorkDialog extends JDialog {
 				if (UIUtils.isNonUIThread(event.getThread())) {
 					try {
 						if (Worker.getWorker().isForeWorking()) {
-							WorkContext work = Worker.getWorker().getForeWorks().iterator().next();
+							Work work = Worker.getWorker().getForeWorks().iterator().next();
 							showWork(work);
 							return;
 						}
@@ -145,7 +145,7 @@ public class WorkDialog extends JDialog {
 		Worker.getWorker().addListener(workListener);
 	}
 
-	private void showWork(WorkContext work) {
+	private void showWork(Work work) {
 		if (this.work != work) {
 			this.work = work;
 			if (work != null) {

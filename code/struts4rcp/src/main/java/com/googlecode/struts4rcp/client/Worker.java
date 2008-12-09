@@ -32,7 +32,7 @@ public class Worker implements Listenable {
 	 * 前台工作
 	 * @param workable 工作内容
 	 */
-	public void fore(WorkRunnable workable) {
+	public void fore(Workable workable) {
 		fore(null, workable);
 	}
 
@@ -40,7 +40,7 @@ public class Worker implements Listenable {
 	 * 前台工作
 	 * @param workable 工作内容
 	 */
-	public void fore(String message, WorkRunnable workable) {
+	public void fore(String message, Workable workable) {
 		fore(message, false, true, workable);
 	}
 
@@ -49,8 +49,8 @@ public class Worker implements Listenable {
 	 * @param workable 工作内容
 	 * @param backable 是否可转为后台运行
 	 */
-	public void fore(String message, boolean backable, boolean abortable, WorkRunnable workable) {
-		WorkContext work = new WorkContext(false);
+	public void fore(String message, boolean backable, boolean abortable, Workable workable) {
+		Work work = new Work(false);
 		work.setMessage(message);
 		work.setBackable(backable);
 		work.setAbortable(abortable);
@@ -61,19 +61,19 @@ public class Worker implements Listenable {
 	 * 后台工作
 	 * @param workable 工作内容
 	 */
-	public void back(WorkRunnable workable) {
-		work(new WorkContext(true), workable);
+	public void back(Workable workable) {
+		work(new Work(true), workable);
 	}
 
-	private void work(final WorkContext work, final WorkRunnable workable) {
-		WorkContext.setContext(work);
+	private void work(final Work work, final Workable workable) {
+		Work.setCurrent(work);
 		try {
 			addWork(work);
 			try {
 				ThreadUtils.execute(new Runnable() {
 					public void run() {
 						try {
-							workable.run(work);
+							workable.work(work);
 						} catch (Throwable e) {
 							publishException(e, work.isBack());
 						}
@@ -83,7 +83,7 @@ public class Worker implements Listenable {
 				removeWork(work);
 			}
 		} finally {
-			WorkContext.removeContext();
+			Work.removeCurrent();
 		}
 	}
 
@@ -123,16 +123,16 @@ public class Worker implements Listenable {
 		exceptionPublisher.removeListener(listener);
 	}
 
-	private Collection<WorkContext> foreWorks = new HashSet<WorkContext>();
+	private Collection<Work> foreWorks = new HashSet<Work>();
 
-	private Collection<WorkContext> backWorks = new HashSet<WorkContext>();
+	private Collection<Work> backWorks = new HashSet<Work>();
 
 	/**
 	 * 获取所有正在执行的执行项
 	 * @return 正在前台执行的执行项
 	 */
-	public Collection<WorkContext> getWorks() {
-		Collection<WorkContext> copies = new HashSet<WorkContext>();
+	public Collection<Work> getWorks() {
+		Collection<Work> copies = new HashSet<Work>();
 		synchronized (foreWorks) {
 			copies.addAll(foreWorks);
 		}
@@ -162,8 +162,8 @@ public class Worker implements Listenable {
 	 * 获取正在前台执行的执行项
 	 * @return 正在前台执行的执行项
 	 */
-	public Collection<WorkContext> getForeWorks() {
-		Collection<WorkContext> copies = new HashSet<WorkContext>();
+	public Collection<Work> getForeWorks() {
+		Collection<Work> copies = new HashSet<Work>();
 		synchronized (foreWorks) {
 			copies.addAll(foreWorks);
 		}
@@ -184,8 +184,8 @@ public class Worker implements Listenable {
 	 * 获取正在后台执行的执行项
 	 * @return 正在后台执行的执行项
 	 */
-	public Collection<WorkContext> getBackWorks() {
-		Collection<WorkContext> copies = new HashSet<WorkContext>();
+	public Collection<Work> getBackWorks() {
+		Collection<Work> copies = new HashSet<Work>();
 		synchronized (backWorks) {
 			copies.addAll(backWorks);
 		}
@@ -202,7 +202,7 @@ public class Worker implements Listenable {
 		}
 	}
 
-	private void addWork(WorkContext work) {
+	private void addWork(Work work) {
 		if (work == null)
 			throw new NullPointerException("Work == null!");
 		if (work.isBack()) {
@@ -218,7 +218,7 @@ public class Worker implements Listenable {
 		workPublisher.publishEvent(new WorkEvent(this, work));
 	}
 
-	private void removeWork(WorkContext work) {
+	private void removeWork(Work work) {
 		if (work == null)
 			throw new NullPointerException("Work == null!");
 		synchronized (foreWorks) {
@@ -237,9 +237,9 @@ public class Worker implements Listenable {
 
 	private class Backer implements Backable {
 
-		private WorkContext work;
+		private Work work;
 
-		public Backer(WorkContext work) {
+		public Backer(Work work) {
 			if (work == null)
 				throw new NullPointerException("Work == null!");
 			this.work = work;

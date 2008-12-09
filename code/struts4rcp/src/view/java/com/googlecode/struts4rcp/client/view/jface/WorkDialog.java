@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 
-import com.googlecode.struts4rcp.client.WorkContext;
+import com.googlecode.struts4rcp.client.Work;
 import com.googlecode.struts4rcp.client.Worker;
 import com.googlecode.struts4rcp.client.event.WorkAdapter;
 import com.googlecode.struts4rcp.client.event.WorkEvent;
@@ -32,7 +32,7 @@ public class WorkDialog extends Dialog {
 
 	private Button abortButton;
 
-	private WorkContext work;
+	private Work work;
 
 	private final WorkListener workListener;
 
@@ -71,7 +71,7 @@ public class WorkDialog extends Dialog {
 		backButton.setBounds(264, 110, 80, 24);
 		backButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				final WorkContext work = WorkDialog.this.work;
+				final Work work = WorkDialog.this.work;
 				if (work != null && work.isBackable()) {
 					ThreadUtils.execute(new Runnable(){
 						public void run() {
@@ -95,7 +95,7 @@ public class WorkDialog extends Dialog {
 		abortButton.setBounds(348, 110, 80, 24);
 		abortButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				final WorkContext work = WorkDialog.this.work;
+				final Work work = WorkDialog.this.work;
 				if (work != null && work.isAbortable()) {
 					ThreadUtils.execute(new Runnable(){
 						public void run() {
@@ -117,7 +117,7 @@ public class WorkDialog extends Dialog {
 		workListener = new WorkAdapter() { // 只在非UI线程执行
 			public void onForeWorking(WorkEvent event) {
 				if (UIUtils.isNonUIThread(event.getThread())) {
-					showWork(event.getWorkContext());
+					showWork(event.getWork());
 				}
 			}
 			public void onBackWorking(WorkEvent event) {
@@ -127,7 +127,7 @@ public class WorkDialog extends Dialog {
 				if (UIUtils.isNonUIThread(event.getThread())) {
 					try {
 						if (Worker.getWorker().isForeWorking()) {
-							WorkContext work = Worker.getWorker().getForeWorks().iterator().next();
+							Work work = Worker.getWorker().getForeWorks().iterator().next();
 							showWork(work);
 							return;
 						}
@@ -157,7 +157,7 @@ public class WorkDialog extends Dialog {
 		return image[0];
 	}
 
-	private void showWork(final WorkContext work) {
+	private void showWork(final Work work) {
 		if (this.work != work) {
 			this.work = work;
 			shell.getDisplay().asyncExec(new Runnable() {
