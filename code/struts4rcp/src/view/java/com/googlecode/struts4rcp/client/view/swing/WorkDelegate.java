@@ -1,41 +1,41 @@
-package com.googlecode.struts4rcp.client.view.jface;
+package com.googlecode.struts4rcp.client.view.swing;
 
-import com.googlecode.struts4rcp.client.event.ExecutionEvent;
-import com.googlecode.struts4rcp.client.event.ExecutionListener;
+import com.googlecode.struts4rcp.client.event.WorkEvent;
+import com.googlecode.struts4rcp.client.event.WorkListener;
 
 /**
  * 阻塞事件监听器UI线程执行委托，如果UI线程非空闲，则等待。
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ExecutionDelegate implements ExecutionListener {
+public class WorkDelegate implements WorkListener {
 
-	private final ExecutionListener listener;
+	private final WorkListener listener;
 
 	private final boolean runOnUI;
 
 	private final boolean runOnNonUI;
 
-	public ExecutionDelegate(ExecutionListener listener) {
+	public WorkDelegate(WorkListener listener) {
 		this(listener, true, true);
 	}
 
-	public ExecutionDelegate(ExecutionListener listener, boolean runOnUI, boolean runOnNonUI) {
+	public WorkDelegate(WorkListener listener, boolean runOnUI, boolean runOnNonUI) {
 		this.listener = listener;
 		this.runOnUI = runOnUI;
 		this.runOnNonUI = runOnNonUI;
 	}
 
-	public void onExecuting(final ExecutionEvent event) {
+	public void onForeWorking(final WorkEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onExecuting(event);
+					listener.onForeWorking(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onExecuting(event);
+							listener.onForeWorking(event);
 						}
 					});
 				}
@@ -45,17 +45,17 @@ public class ExecutionDelegate implements ExecutionListener {
 		}
 	}
 
-	public void onBackExecuting(final ExecutionEvent event) {
+	public void onBackWorking(final WorkEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onBackExecuting(event);
+					listener.onBackWorking(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onBackExecuting(event);
+							listener.onBackWorking(event);
 						}
 					});
 				}
@@ -65,17 +65,17 @@ public class ExecutionDelegate implements ExecutionListener {
 		}
 	}
 
-	public void onExecuted(final ExecutionEvent event) {
+	public void onWorked(final WorkEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onExecuted(event);
+					listener.onWorked(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onExecuted(event);
+							listener.onWorked(event);
 						}
 					});
 				}

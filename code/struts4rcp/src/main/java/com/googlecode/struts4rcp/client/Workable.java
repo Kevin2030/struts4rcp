@@ -10,6 +10,6 @@ public interface Workable {
 	 * 工作
 	 * @throws Exception 工作出错时抛出
 	 */
-	void work() throws Exception;
+	void work(Work work) throws Exception;
 
 }

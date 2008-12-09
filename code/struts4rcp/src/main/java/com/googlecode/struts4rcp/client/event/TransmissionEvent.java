@@ -10,20 +10,20 @@ public class TransmissionEvent extends Event {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Transmission execution;
+	private final Transmission transmission;
 
 	/**
 	 * 构造处理工作事件信息
 	 * @param source 事件源(事件发起者)
-	 * @param execution 传输项
+	 * @param transmission 传输项
 	 */
-	public TransmissionEvent(Object source, Transmission execution) {
+	public TransmissionEvent(Object source, Transmission transmission) {
 		super(source);
-		this.execution = execution;
+		this.transmission = transmission;
 	}
 
-	public Transmission getExecution() {
-		return execution;
+	public Transmission getTransmission() {
+		return transmission;
 	}
 
 }

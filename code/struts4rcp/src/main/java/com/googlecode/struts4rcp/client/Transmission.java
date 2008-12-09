@@ -9,32 +9,25 @@ import java.util.Date;
  * Action执行过程
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class Transmission implements Serializable, Backable, Abortable {
+public class Transmission implements Serializable, Abortable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int INITIALIZING_STATUS = 0;
+	private static final int TRANSMIT_STATUS = 0;
 
-	private static final int EXECUTING_STATUS = 1;
+	private static final int TRANSMITING_STATUS = 1;
 
-	private static final int TRANSPORTING_STATUS = 2;
+	private static final int TRANSMITED_STATUS = 2;
 
-	private static final int TRANSPORTED_STATUS = 3;
-
-	private static final int EXECUTED_STATUS = 4;
-
-	private int status = INITIALIZING_STATUS;
+	private int status = TRANSMIT_STATUS;
 
 	private Object statusLock = new Object();
 
-	public Transmission(String actionName, Serializable model, boolean back, boolean backable, boolean abortable) {
+	public Transmission(String actionName, Serializable model) {
 		super();
 		this.id = nextId();
 		this.actionName = actionName;
 		this.model = model;
-		this.back = back;
-		this.backable = backable;
-		this.abortable = abortable;
 	}
 
 	// -------- init --------
@@ -81,139 +74,24 @@ public class Transmission implements Serializable, Backable, Abortable {
 		return model;
 	}
 
-	private final Date initializingTime = new Date();
+	private final Date transmitTime = new Date();
 
 	/**
 	 * 获取初始化开始时间
 	 * @return 初始化开始时间
 	 */
-	public Date getInitializingTime() {
-		return initializingTime;
+	public Date getTransmitTime() {
+		return transmitTime;
 	}
 
 	/**
 	 * 是否开始执行
 	 * @return 是否开始执行
 	 */
-	public boolean isInitializing() {
+	public boolean isTransmit() {
 		synchronized (statusLock) {
-			return status == INITIALIZING_STATUS;
+			return status == TRANSMIT_STATUS;
 		}
-	}
-
-	// -------- execute --------
-
-	private boolean back;
-
-	/**
-	 * 是否为后台运行
-	 * @return 是否为后台运行
-	 */
-	public boolean isBack() {
-		return back;
-	}
-
-	private final boolean backable;
-
-	/**
-	 * 是否允许转为后台运行
-	 * @return 是否允许转为后台运行
-	 */
-	public boolean isBackable() {
-		return backable;
-	}
-
-	private Backable backer;
-
-	/**
-	 * 转为后台运行
-	 */
-	public void back() {
-		if (isBackable() && ! back && backer != null) {
-			synchronized (backer) {
-				back = true;
-				backer.back();
-			}
-		}
-	}
-
-	private Date executingTime;
-
-	/**
-	 * 获取开始执行时间
-	 * @return 开始执行时间
-	 */
-	public Date getExecutingTime() {
-		return executingTime;
-	}
-
-	/**
-	 * 是否开始执行
-	 * @return 是否开始执行
-	 */
-	public boolean isExecuting() {
-		synchronized (statusLock) {
-			return status == EXECUTING_STATUS;
-		}
-	}
-
-	/**
-	 * 执行
-	 * @param backer 转为后台执行的封装体
-	 */
-	public void executing(Backable backer) {
-		synchronized (statusLock) {
-			if (status != INITIALIZING_STATUS)
-				throw new IllegalStateException("This execution already executed!");
-			status = EXECUTING_STATUS;
-		}
-		this.backer = backer;
-		this.executingTime = new Date();
-	}
-
-	private Date executedTime;
-
-	/**
-	 * 获取执行结束时间
-	 * @return 执行结束时间
-	 */
-	public Date getExecutedTime() {
-		return executedTime;
-	}
-
-	/**
-	 * 是否已执行结束
-	 * @return 是否已执行结束
-	 */
-	public boolean isExecuted() {
-		synchronized (statusLock) {
-			return status == EXECUTED_STATUS;
-		}
-	}
-
-	/**
-	 * 执行结束
-	 */
-	public void executed() {
-		synchronized (statusLock) {
-			if (status == EXECUTED_STATUS)
-				throw new IllegalStateException("This execution already executed!");
-			status = EXECUTED_STATUS;
-		}
-		backer = null;
-		executedTime = new Date();
-	}
-
-	// -------- transport --------
-
-	private final boolean abortable;
-
-	/**
-	 * 是否允许中止传输
-	 * @return 是否允许中止传输
-	 */
-	public boolean isAbortable() {
-		return abortable;
 	}
 
 	private Abortable abortor;
@@ -222,30 +100,34 @@ public class Transmission implements Serializable, Backable, Abortable {
 	 * 中止传输
 	 */
 	public void abort() throws IOException {
-		if (isAbortable() && abortor != null) {
+		if (abortor != null) {
 			synchronized (abortor) {
 				abortor.abort();
 			}
 		}
 	}
 
-	private Date transportingTime;
+	public boolean isAbortable() {
+		return (abortor != null);
+	}
+
+	private Date transmitingTime;
 
 	/**
 	 * 获取传输开始时间
 	 * @return 开始时间
 	 */
-	public Date getTransportingTime() {
-		return transportingTime;
+	public Date getTransmitingTime() {
+		return transmitingTime;
 	}
 
 	/**
 	 * 是否已开始传输
 	 * @return 已开始传输
 	 */
-	public boolean isTransporting() {
+	public boolean isTransmiting() {
 		synchronized (statusLock) {
-			return status == TRANSPORTING_STATUS;
+			return status == TRANSMITING_STATUS;
 		}
 	}
 
@@ -253,14 +135,14 @@ public class Transmission implements Serializable, Backable, Abortable {
 	 * 开始传输
 	 * @param abortor 中止传输封装体
 	 */
-	public void transporting(Abortable abortor) {
+	public void transmiting(Abortable abortor) {
 		synchronized (statusLock) {
-			if (status != EXECUTING_STATUS)
+			if (status != TRANSMIT_STATUS)
 				throw new IllegalStateException("This transportation already transported!");
-			status = TRANSPORTING_STATUS;
+			status = TRANSMITING_STATUS;
 		}
 		this.abortor = abortor;
-		this.transportingTime = new Date();
+		this.transmitingTime = new Date();
 	}
 
 	private Serializable result;
@@ -273,23 +155,23 @@ public class Transmission implements Serializable, Backable, Abortable {
 		return result;
 	}
 
-	private Date transportedTime;
+	private Date transmitedTime;
 
 	/**
 	 * 获取传输完成时间
 	 * @return 传输完成时间
 	 */
-	public Date getTransportedTime() {
-		return transportedTime;
+	public Date getTransmitedTime() {
+		return transmitedTime;
 	}
 
 	/**
 	 * 是否已传输完成
 	 * @return 已传输完成
 	 */
-	public boolean isTransported() {
+	public boolean isTransmited() {
 		synchronized (statusLock) {
-			return status == TRANSPORTED_STATUS || status == EXECUTED_STATUS;
+			return status == TRANSMITED_STATUS;
 		}
 	}
 
@@ -297,20 +179,20 @@ public class Transmission implements Serializable, Backable, Abortable {
 	 * 传输完成
 	 * @param result 传输完成结果
 	 */
-	public void transported(Serializable result) {
+	public void transmited(Serializable result) {
 		synchronized (statusLock) {
-			if (status == TRANSPORTED_STATUS || status == EXECUTED_STATUS)
+			if (status != TRANSMITING_STATUS)
 				throw new IllegalStateException("This transportation already transported!");
-			status = TRANSPORTED_STATUS;
+			status = TRANSMITED_STATUS;
 		}
 		this.result = result;
 		this.abortor = null;
-		this.transportedTime = new Date();
+		this.transmitedTime = new Date();
 	}
 
 	@Override
 	public String toString() {
-		return "[NO." + getId() + "] [" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(getExecutingTime()) + "] " + getActionName();
+		return "[NO." + getId() + "] [" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(getTransmitTime()) + "] " + getActionName();
 	}
 
 }

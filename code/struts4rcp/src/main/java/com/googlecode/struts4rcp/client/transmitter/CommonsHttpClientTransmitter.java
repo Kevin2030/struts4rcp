@@ -120,7 +120,7 @@ public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<PostMe
 	}
 
 	@Override
-	protected Serializable transport(PostMethod request, String url, Serializable model)
+	protected Serializable transmit(PostMethod request, String url, Serializable model)
 			throws IOException {
 		try {
 			request.setRequestEntity(new SerializeEntity(serializer, model));

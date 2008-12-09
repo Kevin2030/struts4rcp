@@ -4,6 +4,6 @@ public class ExceptionAdapter extends Adapter implements ExceptionListener {
 
 	public void onBackExceptionCatched(ExceptionEvent event) {}
 
-	public void onExceptionCatched(ExceptionEvent event) {}
+	public void onForeExceptionCatched(ExceptionEvent event) {}
 
 }

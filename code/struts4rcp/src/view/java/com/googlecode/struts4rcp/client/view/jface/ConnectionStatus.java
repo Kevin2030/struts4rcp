@@ -50,7 +50,7 @@ public class ConnectionStatus extends ContributionItem {
 
 	private Label connectionButton;
 	
-	private ExecutionDialog executionDialog;
+	private WorkDialog executionDialog;
 	
 	private ExceptionDialog exceptionDialog;
 	
@@ -69,7 +69,7 @@ public class ConnectionStatus extends ContributionItem {
 	@Override
 	public void fill(Composite parent) {
 		try {
-			executionDialog = new ExecutionDialog(parent.getShell(), client);
+			executionDialog = new WorkDialog(parent.getShell(), client);
 			exceptionDialog = new ExceptionDialog(parent.getShell(), client);
 			controlDialog = new ControlDialog(parent.getShell(), client);
 			connectionButton = new Label(parent, SWT.NONE);
