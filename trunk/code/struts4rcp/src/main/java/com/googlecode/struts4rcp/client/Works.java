@@ -12,12 +12,12 @@ public class Works {
 		Worker.getWorker().fore(workable);
 	}
 
-	public static void fore(String title, Workable workable) {
-		Worker.getWorker().fore(title, workable);
+	public static void fore(String message, Workable workable) {
+		Worker.getWorker().fore(message, workable);
 	}
 
-	public static void fore(String title, boolean backable, Workable workable) {
-		Worker.getWorker().fore(title, backable, workable);
+	public static void fore(String message, boolean backable, boolean abortable, Workable workable) {
+		Worker.getWorker().fore(message, backable, abortable, workable);
 	}
 
 	public static void back(Workable workable) {

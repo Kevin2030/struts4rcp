@@ -46,8 +46,8 @@ public class Worker implements Listenable {
 	 * 前台工作
 	 * @param workable 工作内容
 	 */
-	public void fore(String title, Workable workable) {
-		fore(title, false, workable);
+	public void fore(String message, Workable workable) {
+		fore(message, false, true, workable);
 	}
 
 	/**
@@ -55,10 +55,11 @@ public class Worker implements Listenable {
 	 * @param workable 工作内容
 	 * @param backable 是否可转为后台运行
 	 */
-	public void fore(String title, boolean backable, Workable workable) {
+	public void fore(String message, boolean backable, boolean abortable, Workable workable) {
 		Work work = new Work(false);
-		work.setTitle(title);
+		work.setMessage(message);
 		work.setBackable(backable);
+		work.setAbortable(abortable);
 		work(work, workable);
 	}
 
