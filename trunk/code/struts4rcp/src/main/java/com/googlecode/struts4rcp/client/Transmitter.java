@@ -12,6 +12,16 @@ import com.googlecode.struts4rcp.client.event.TransmissionListener;
  */
 public interface Transmitter extends ConnectionMonitor {
 
+	public static final String POST_METHOD = "post";
+
+	public static final String PUT_METHOD = "put";
+
+	public static final String GET_METHOD = "get";
+
+	public static final String DELETE_METHOD = "delete";
+
+	public static final String HEAD_METHOD = "head";
+
 	/**
 	 * 传输对象
 	 * @param uri 服务器端URI
@@ -20,6 +30,16 @@ public interface Transmitter extends ConnectionMonitor {
 	 * @throws IOException 传输出错时抛出
 	 */
 	public abstract Serializable transmit(String uri, Serializable model) throws IOException;
+
+	/**
+	 * 传输对象
+	 * @param method 传输方法
+	 * @param uri 服务器端URI
+	 * @param model 传输数据
+	 * @return 传回对象
+	 * @throws IOException 传输出错时抛出
+	 */
+	public abstract Serializable transmit(String method, String uri, Serializable model) throws IOException;
 
 	/**
 	 * 获取正在前台运行的传输项列表
