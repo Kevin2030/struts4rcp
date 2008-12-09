@@ -3,9 +3,23 @@ package com.googlecode.struts4rcp.client;
 import java.io.IOException;
 import java.util.Stack;
 
-public class Work implements Abortable, Backable {
+public class WorkContext implements Abortable, Backable {
 
-	public Work(boolean back) {
+	private static final ThreadLocal<WorkContext> local = new ThreadLocal<WorkContext>();
+
+	public static WorkContext getContext() {
+		return local.get();
+	}
+
+	public static void setContext(WorkContext workContext) {
+		local.set(workContext);
+	}
+
+	public static void removeContext() {
+		local.remove();
+	}
+
+	public WorkContext(boolean back) {
 		this.back = back;
 	}
 

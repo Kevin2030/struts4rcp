@@ -8,8 +8,9 @@ public interface WorkRunnable {
 
 	/**
 	 * 工作
+	 * @param context 上下文
 	 * @throws Exception 工作出错时抛出
 	 */
-	void run(Work work) throws Exception;
+	void run(WorkContext context) throws Exception;
 
 }

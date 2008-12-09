@@ -28,12 +28,6 @@ public class Worker implements Listenable {
 		return WORKER;
 	}
 
-	private final ThreadLocal<Work> local = new ThreadLocal<Work>();
-
-	public Work getCurrentWork() {
-		return local.get();
-	}
-
 	/**
 	 * 前台工作
 	 * @param workable 工作内容
@@ -56,7 +50,7 @@ public class Worker implements Listenable {
 	 * @param backable 是否可转为后台运行
 	 */
 	public void fore(String message, boolean backable, boolean abortable, WorkRunnable workable) {
-		Work work = new Work(false);
+		WorkContext work = new WorkContext(false);
 		work.setMessage(message);
 		work.setBackable(backable);
 		work.setAbortable(abortable);
@@ -68,11 +62,11 @@ public class Worker implements Listenable {
 	 * @param workable 工作内容
 	 */
 	public void back(WorkRunnable workable) {
-		work(new Work(true), workable);
+		work(new WorkContext(true), workable);
 	}
 
-	private void work(final Work work, final WorkRunnable workable) {
-		local.set(work);
+	private void work(final WorkContext work, final WorkRunnable workable) {
+		WorkContext.setContext(work);
 		try {
 			addWork(work);
 			try {
@@ -89,7 +83,7 @@ public class Worker implements Listenable {
 				removeWork(work);
 			}
 		} finally {
-			local.remove();
+			WorkContext.removeContext();
 		}
 	}
 
@@ -129,16 +123,16 @@ public class Worker implements Listenable {
 		exceptionPublisher.removeListener(listener);
 	}
 
-	private Collection<Work> foreWorks = new HashSet<Work>();
+	private Collection<WorkContext> foreWorks = new HashSet<WorkContext>();
 
-	private Collection<Work> backWorks = new HashSet<Work>();
+	private Collection<WorkContext> backWorks = new HashSet<WorkContext>();
 
 	/**
 	 * 获取所有正在执行的执行项
 	 * @return 正在前台执行的执行项
 	 */
-	public Collection<Work> getWorks() {
-		Collection<Work> copies = new HashSet<Work>();
+	public Collection<WorkContext> getWorks() {
+		Collection<WorkContext> copies = new HashSet<WorkContext>();
 		synchronized (foreWorks) {
 			copies.addAll(foreWorks);
 		}
@@ -168,8 +162,8 @@ public class Worker implements Listenable {
 	 * 获取正在前台执行的执行项
 	 * @return 正在前台执行的执行项
 	 */
-	public Collection<Work> getForeWorks() {
-		Collection<Work> copies = new HashSet<Work>();
+	public Collection<WorkContext> getForeWorks() {
+		Collection<WorkContext> copies = new HashSet<WorkContext>();
 		synchronized (foreWorks) {
 			copies.addAll(foreWorks);
 		}
@@ -190,8 +184,8 @@ public class Worker implements Listenable {
 	 * 获取正在后台执行的执行项
 	 * @return 正在后台执行的执行项
 	 */
-	public Collection<Work> getBackWorks() {
-		Collection<Work> copies = new HashSet<Work>();
+	public Collection<WorkContext> getBackWorks() {
+		Collection<WorkContext> copies = new HashSet<WorkContext>();
 		synchronized (backWorks) {
 			copies.addAll(backWorks);
 		}
@@ -208,7 +202,7 @@ public class Worker implements Listenable {
 		}
 	}
 
-	private void addWork(Work work) {
+	private void addWork(WorkContext work) {
 		if (work == null)
 			throw new NullPointerException("Work == null!");
 		if (work.isBack()) {
@@ -224,7 +218,7 @@ public class Worker implements Listenable {
 		workPublisher.publishEvent(new WorkEvent(this, work));
 	}
 
-	private void removeWork(Work work) {
+	private void removeWork(WorkContext work) {
 		if (work == null)
 			throw new NullPointerException("Work == null!");
 		synchronized (foreWorks) {
@@ -243,9 +237,9 @@ public class Worker implements Listenable {
 
 	private class Backer implements Backable {
 
-		private Work work;
+		private WorkContext work;
 
-		public Backer(Work work) {
+		public Backer(WorkContext work) {
 			if (work == null)
 				throw new NullPointerException("Work == null!");
 			this.work = work;
