@@ -18,7 +18,7 @@ public final class Resources {
 	 * @return 同步Resource代理
 	 */
 	public static <R extends Serializable> Resource<R> getResource(String resourceName, Object... args) {
-		return getResource(Client.getClient(), resourceName, args);
+		return Client.getClient().getResource(resourceName, args);
 	}
 
 	/**
@@ -29,7 +29,7 @@ public final class Resources {
 	 * @return 同步Resource代理
 	 */
 	public static <R extends Serializable> Directory<R> getDirectory(String resourceName, Object... args) {
-		return getDirectory(Client.getClient(), resourceName, args);
+		return Client.getClient().getDirectory(resourceName, args);
 	}
 
 	/**
@@ -40,7 +40,7 @@ public final class Resources {
 	 * @return 同步Resource代理
 	 */
 	public static <R extends Serializable> Resource<R> getResource(Client cleint, String resourceName, Object... args) {
-		return cleint.getResourceFactory().getResource(resourceName, args);
+		return cleint.getResource(resourceName, args);
 	}
 
 	/**
@@ -51,7 +51,7 @@ public final class Resources {
 	 * @return 同步Resource代理
 	 */
 	public static <R extends Serializable> Directory<R> getDirectory(Client cleint, String resourceName, Object... args) {
-		return cleint.getResourceFactory().getDirectory(resourceName, args);
+		return cleint.getDirectory(resourceName, args);
 	}
 
 }
