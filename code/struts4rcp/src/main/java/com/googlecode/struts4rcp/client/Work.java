@@ -2,7 +2,7 @@ package com.googlecode.struts4rcp.client;
 
 import java.util.Stack;
 
-public class Work implements Abortable, Backable {
+public class Work implements Cancellable, Backable {
 
 	private static final ThreadLocal<Work> local = new ThreadLocal<Work>();
 
@@ -42,9 +42,9 @@ public class Work implements Abortable, Backable {
 		this.detail = detail;
 	}
 
-	private final Stack<Abortable> abortorStack = new Stack<Abortable>();
+	private final Stack<Cancellable> abortorStack = new Stack<Cancellable>();
 
-	public void pushAbortor(Abortable abortor) {
+	public void pushAbortor(Cancellable abortor) {
 		if (abortor == null)
 			throw new NullPointerException("Abortable == null!");
 		abortorStack.push(abortor);
@@ -55,11 +55,11 @@ public class Work implements Abortable, Backable {
 			abortorStack.pop();
 	}
 
-	public void abort() throws Exception {
+	public void cancel() throws Exception {
 		if (abortable && ! abortorStack.isEmpty()) {
-			Abortable abortable = abortorStack.pop();
+			Cancellable abortable = abortorStack.pop();
 			if (abortable != null)
-				abortable.abort();
+				abortable.cancel();
 		}
 	}
 
