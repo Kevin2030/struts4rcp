@@ -58,7 +58,7 @@ public class ConfigurationPane extends Composite {
 					FileWriter writer = null;
 					try {
 						writer = new FileWriter(file);
-						for (Map.Entry<Object, Object> entry : client.getConfigurationManager().getProperties().entrySet()) {
+						for (Map.Entry<Object, Object> entry : client.getProperties().entrySet()) {
 							writer.write(entry.getKey() + "=" + entry.getValue() + "\n");
 						}
 						writer.flush();
@@ -103,7 +103,7 @@ public class ConfigurationPane extends Composite {
 				if (ch == InputDialog.OK) {
 					String newValue = configurationInputDialog.getValue();
 					if (! newValue.equals(configuration.getValue())) {
-						client.getConfigurationManager().setProperty(configuration.getKey(), newValue);
+						client.setProperty(configuration.getKey(), newValue);
 						MessageDialog.openInformation(parent.getShell(), "修改", "修改配置项成功!");
 					}
 				}

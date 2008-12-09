@@ -111,7 +111,7 @@ public class ConfigurationPane extends JPanel {
 						FileWriter writer = null;
 						try {
 							writer = new FileWriter(file);
-							for (Map.Entry<Object, Object> entry : client.getConfigurationManager().getProperties().entrySet()) {
+							for (Map.Entry<Object, Object> entry : client.getProperties().entrySet()) {
 								writer.write(entry.getKey() + "=" + entry.getValue() + "\n");
 							}
 							writer.flush();
@@ -155,7 +155,7 @@ public class ConfigurationPane extends JPanel {
 				else
 					newValue = (String)JOptionPane.showInputDialog(ConfigurationPane.this, "请选择配置项\"" + configuration.getNameOrKey() + "\"的新值：", "选择", JOptionPane.INFORMATION_MESSAGE, Images.getIcon("edit.gif"), options.toArray(), configuration.getValueOrDefault());
 				if (newValue != null) {
-					client.getConfigurationManager().setProperty(configuration.getKey(), newValue);
+					client.setProperty(configuration.getKey(), newValue);
 					JOptionPane.showMessageDialog(ConfigurationPane.this, "修改配置项成功!", "修改", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
