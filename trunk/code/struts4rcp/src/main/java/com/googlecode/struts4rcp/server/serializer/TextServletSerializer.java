@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.struts4rcp.server.ServletSerializer;
-import com.googlecode.struts4rcp.util.serializer.TextSerializer;
+import com.googlecode.struts4rcp.util.serializer.text.TextSerializer;
 
 public class TextServletSerializer implements ServletSerializer {
 

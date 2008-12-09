@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.util.serializer;
+package com.googlecode.struts4rcp.util.serializer.stream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,23 +7,20 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import org.jboss.serial.io.JBossObjectInputStream;
-import org.jboss.serial.io.JBossObjectOutputStream;
-
 /**
  * Java默认的序列化方式实现
- * @see org.jboss.serial.io.JBossObjectInputStream
- * @see org.jboss.serial.io.JBossObjectOutputStream
+ * @see java.io.ObjectInputStream
+ * @see java.io.ObjectOutputStream
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class JbossStreamSerializer implements StreamSerializer {
+public class JavaStreamSerializer implements StreamSerializer {
 
 	public String getContentType() {
-		return "application/jboss-serialization";
+		return "application/java-serialization";
 	}
 
 	public Serializable deserialize(Class<? extends Serializable> baseClass, InputStream in) throws IOException {
-		ObjectInputStream oo = new JBossObjectInputStream(in);
+		ObjectInputStream oo = new ObjectInputStream(in);
 		try {
 			return (Serializable)oo.readObject();
 		} catch (ClassNotFoundException e) {// 此异常是运行期不可恢复的错误，不应强制调用者捕获
@@ -31,8 +28,9 @@ public class JbossStreamSerializer implements StreamSerializer {
 		}
 	}
 
-	public void serialize(Serializable obj, OutputStream out) throws IOException {
-		ObjectOutputStream oo = new JBossObjectOutputStream(out);
+	public void serialize(Serializable obj, OutputStream out)
+			throws IOException {
+		ObjectOutputStream oo = new ObjectOutputStream(out);
 		oo.writeObject(obj);
 		oo.flush();
 	}

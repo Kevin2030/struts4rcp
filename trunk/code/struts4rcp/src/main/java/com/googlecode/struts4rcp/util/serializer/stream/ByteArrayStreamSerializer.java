@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.util.serializer;
+package com.googlecode.struts4rcp.util.serializer.stream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +11,7 @@ import com.googlecode.struts4rcp.util.IOUtils;
  * 字节序列化器
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public abstract class ByteArraySerializer implements StreamSerializer {
+public abstract class ByteArrayStreamSerializer implements StreamSerializer {
 
 	public Serializable deserialize(Class<? extends Serializable> cls, InputStream in) throws IOException {
 		return deserialize(cls, IOUtils.readToBytes(in));

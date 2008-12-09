@@ -1,9 +1,11 @@
-package com.googlecode.struts4rcp.util.serializer;
+package com.googlecode.struts4rcp.util.serializer.stream;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+
+import com.googlecode.struts4rcp.util.serializer.Serializer;
 
 public interface StreamSerializer extends Serializer<InputStream, OutputStream> {
 
