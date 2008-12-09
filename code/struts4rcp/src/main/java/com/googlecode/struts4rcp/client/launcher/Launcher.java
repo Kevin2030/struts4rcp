@@ -8,10 +8,10 @@ public interface Launcher {
 
 	/**
 	 * 启动
-	 * @param host
-	 * @param port
+	 * @param hostAddress 主机
+	 * @param hostPort 端口
 	 * @param contextPath
 	 */
-	void launch(String host, int port, String contextPath);
+	void launch(String hostAddress, int hostPort, String contextPath);
 
 }

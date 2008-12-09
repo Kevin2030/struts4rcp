@@ -85,7 +85,7 @@ public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<PostMe
 			throw new NullPointerException("HttpClient == null!");
 		idleConnectionTimeoutThread = new IdleConnectionTimeoutThread();
 		idleConnectionTimeoutThread.addConnectionManager(httpClient.getHttpConnectionManager());
-		httpClient.getHostConfiguration().setHost(serverHost, serverPort);
+		httpClient.getHostConfiguration().setHost(hostAddress, hostPort);
 		if (connectionTimeout != UNKNOWN_CONNECTION_TIMEOUT)
 			httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(connectionTimeout);
 		if (socketTimeout != UNKNOWN_SOCKET_TIMEOUT)

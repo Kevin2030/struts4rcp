@@ -53,27 +53,27 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	/**
 	 * 服务器主机配置参数名
 	 */
-	public final static String SERVER_HOST_KEY = "server.host";
+	public final static String HOST_ADDRESS_KEY = "host.address";
 
 	/**
 	 * 服务器主机
 	 */
-	protected String serverHost;
+	protected String hostAddress;
 
 	/**
 	 * 服务器端口配置参数名
 	 */
-	public final static String SERVER_PORT_KEY = "server.port";
+	public final static String HOST_PORT_KEY = "host.port";
 
 	/**
 	 * 未知服务器端口
 	 */
-	protected final static int UNKNOWN_SERVER_PORT = -1;
+	protected final static int UNKNOWN_HOST_PORT = -1;
 
 	/**
 	 * 服务器端口
 	 */
-	protected int serverPort = UNKNOWN_SERVER_PORT;
+	protected int hostPort = UNKNOWN_HOST_PORT;
 
 	/**
 	 * 应用上下文路径配置参数名
@@ -86,19 +86,29 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	protected String contextPath;
 
 	/**
+	 * 应用上下文路径配置参数名
+	 */
+	public final static String MAPPING_PATH_KEY = "mapping.path";
+
+	/**
+	 * 应用上下文路径
+	 */
+	protected String mappingPath;
+
+	/**
 	 * Action请求后缀配置参数名
 	 */
-	public final static String ACTION_SUFFIX_KEY = "action.suffix";
+	public final static String MAPPING_EXTENSION_KEY = "mapping.extension";
 
 	/**
 	 * 缺省Action后缀
 	 */
-	protected final static String DEFAULT_ACTION_SUFFIX = "data";
+	protected final static String DEFAULT_MAPPING_EXTENSION = "data";
 
 	/**
 	 * Action请求后缀
 	 */
-	protected String actionSuffix;
+	protected String mappingExtension;
 
 	/**
 	 * 连接超时时间配置参数名
@@ -193,22 +203,22 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 				JavaStreamSerializer.class.getName(), ServiceUtils.getServiceClassNames(StreamSerializer.class).toArray(new String[0]));
 
 		// 读取服务器主机名
-		serverHost = PropertiesUtils.getStringProperty(config, SERVER_HOST_KEY, null);
-		if (serverHost == null)
+		hostAddress = PropertiesUtils.getStringProperty(config, HOST_ADDRESS_KEY, null);
+		if (hostAddress == null)
 			throw new NullPointerException("server.host == null, 服务器主机名不能为空!");
-		client.getConfigurationManager().register(SERVER_HOST_KEY, "服务器主机名", "暂未实现动态切换服务器名，修改后不会生效!", "");
+		client.getConfigurationManager().register(HOST_ADDRESS_KEY, "服务器主机名", "暂未实现动态切换服务器名，修改后不会生效!", "");
 
 		// 读取服务器端口
-		serverPort = PropertiesUtils.getIntProperty(config, SERVER_PORT_KEY, UNKNOWN_SERVER_PORT);
-		client.getConfigurationManager().register(SERVER_PORT_KEY,  "服务器端口", "暂未实现动态切换服务器端口，修改后不会生效!", "80");
+		hostPort = PropertiesUtils.getIntProperty(config, HOST_PORT_KEY, UNKNOWN_HOST_PORT);
+		client.getConfigurationManager().register(HOST_PORT_KEY,  "服务器端口", "暂未实现动态切换服务器端口，修改后不会生效!", "80");
 
 		// 读取上下文路径
 		contextPath = PropertiesUtils.getStringProperty(config, CONTEXT_PATH_KEY, "");
 		client.getConfigurationManager().register(CONTEXT_PATH_KEY,  "应用上下文路径", "暂未实现动态切换应用上下文路径，修改后不会生效!", "/");
 
 		// 读取Action后缀
-		actionSuffix = PropertiesUtils.getStringProperty(config, ACTION_SUFFIX_KEY, DEFAULT_ACTION_SUFFIX);
-		client.getConfigurationManager().register(ACTION_SUFFIX_KEY,  "Action后缀", "暂未实现动态修改Action后缀，修改后不会生效!", "data");
+		mappingExtension = PropertiesUtils.getStringProperty(config, MAPPING_EXTENSION_KEY, DEFAULT_MAPPING_EXTENSION);
+		client.getConfigurationManager().register(MAPPING_EXTENSION_KEY,  "Action后缀", "暂未实现动态修改Action后缀，修改后不会生效!", "data");
 
 		// 读取连接超时时间
 		connectionTimeout = PropertiesUtils.getIntProperty(config, CONNECTION_TIMEOUT_KEY, UNKNOWN_CONNECTION_TIMEOUT);
@@ -238,14 +248,14 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 			connectionPublisher.publishEvent(new ConnectionEvent(AbstractHttpTransmitter.this, isConnected()));
 
 		// ---- 组装前缀 ----
-		urlPrefix = HTTP_PROTOCAL + serverHost;
-		if (serverPort != UNKNOWN_SERVER_PORT && serverPort != HTTP_DEFAULT_PORT)
-			urlPrefix += ":" + serverPort;
+		urlPrefix = HTTP_PROTOCAL + hostAddress;
+		if (hostPort != UNKNOWN_HOST_PORT && hostPort != HTTP_DEFAULT_PORT)
+			urlPrefix += ":" + hostPort;
 		if (contextPath.length() > 0)
 			urlPrefix += "/" + contextPath;
 		urlPrefix = urlPrefix + "/";
 		// ---- 组装后缀 ----
-		urlSuffix = "." + actionSuffix;
+		urlSuffix = "." + mappingExtension;
 	}
 
 	public void shutdown() {
@@ -406,7 +416,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 
 	public boolean ping() {
 		try {
-			new Socket(serverHost, serverPort).close();
+			new Socket(hostAddress, hostPort).close();
 			return true;
 		} catch (IOException e) {
 			return false;
