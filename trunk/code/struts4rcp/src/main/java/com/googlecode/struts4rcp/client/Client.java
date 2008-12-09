@@ -50,9 +50,9 @@ public class Client implements Listenable {
 		addClient(null, config);
 	}
 
-	public static void init(Client client) {
+	public static void init(Properties config, Transmitter transmitter) {
 		ThreadUtils.init();
-		addClient(null, client);
+		addClient(null, config, transmitter);
 	}
 
 	// 客户端
@@ -61,7 +61,8 @@ public class Client implements Listenable {
 	/**
 	 * 添加客户端实例
 	 *
-	 * @param clientName 客户端实例名
+	 * @param clientName
+	 *            客户端实例名
 	 * @param configPath
 	 *            配置文件路径
 	 * @throws IOException
@@ -78,7 +79,8 @@ public class Client implements Listenable {
 	 * @see java.util.Properties#load(java.io.InputStream)
 	 * @see com.googlecode.struts4rcp.util.PropertiesUtils#loadFromClassPath(String)
 	 * @see com.googlecode.struts4rcp.util.PropertiesUtils#loadFromFileSystem(String)
-	 * @param clientName 客户端实例名
+	 * @param clientName
+	 *            客户端实例名
 	 * @param config
 	 *            配置
 	 */
@@ -91,11 +93,30 @@ public class Client implements Listenable {
 	/**
 	 * 添加客户端实例
 	 *
-	 * @param clientName 客户端实例名
+	 * @see java.util.Properties#load(java.io.InputStream)
+	 * @see com.googlecode.struts4rcp.util.PropertiesUtils#loadFromClassPath(String)
+	 * @see com.googlecode.struts4rcp.util.PropertiesUtils#loadFromFileSystem(String)
+	 * @param clientName
+	 *            客户端实例名
+	 * @param config
+	 *            配置
+	 */
+	public static void addClient(String clientName, Properties config,
+			Transmitter transmitter) {
+		if (config == null)
+			throw new NullPointerException("properties == null!");
+		addClient(clientName, new Client(config, transmitter));
+	}
+
+	/**
+	 * 添加客户端实例
+	 *
+	 * @param clientName
+	 *            客户端实例名
 	 * @param client
 	 *            客户端实例
 	 */
-	public static void addClient(String clientName, Client client) {
+	private static void addClient(String clientName, Client client) {
 		synchronized (clients) {
 			Client old = clients.get(clientName);
 			if (old != null)
@@ -116,7 +137,8 @@ public class Client implements Listenable {
 	/**
 	 * 获取指定客户端实例
 	 *
-	 * @param clientName 客户端实例名
+	 * @param clientName
+	 *            客户端实例名
 	 */
 	public static Client getClient(String clientName) {
 		Client client;
@@ -131,7 +153,8 @@ public class Client implements Listenable {
 	/**
 	 * 移除指定客户端实例
 	 *
-	 * @param clientName 客户端实例名
+	 * @param clientName
+	 *            客户端实例名
 	 */
 	public static void removeClient(String clientName) {
 		Client client;
@@ -165,12 +188,12 @@ public class Client implements Listenable {
 	/**
 	 * 传输器配置参数名
 	 */
-	public static final String TRANSPORTER_PARAM_NAME = "transporter";
+	public static final String TRANSMITTER_KEY = "transmitter";
 
 	/**
 	 * 事件监听器配置参数名
 	 */
-	public static final String LISTENERS_PARAM_NAME = "listeners";
+	public static final String LISTENERS_KEY = "listeners";
 
 	private final ConfigurationManager configurationManager;
 
@@ -180,35 +203,32 @@ public class Client implements Listenable {
 
 	private final ResourceFactory resourceFactory;
 
-	private static Transmitter loadTransporter(Properties config) {
-		 return PropertiesUtils.getInstanceProperty(config,
-					TRANSPORTER_PARAM_NAME, Transmitter.class,
-					HttpURLConnectionTransmitter.class);
+	private Client(Properties config) {
+		this(config, PropertiesUtils.getInstanceProperty(config,
+				TRANSMITTER_KEY, Transmitter.class,
+				HttpURLConnectionTransmitter.class));
 	}
 
-	public Client(Properties config) {
-		this(config, loadTransporter(config));
-	}
-
-	public Client(Properties config, Transmitter transmitter) {
+	private Client(Properties config, Transmitter transmitter) {
 		if (config == null)
 			throw new NullPointerException("properties == null!");
 		if (transmitter == null)
-				throw new NullPointerException("transmitter == null!");
+			throw new NullPointerException("transmitter == null!");
 		config = new UnmodifiableProperties(config);
 		this.transmitter = transmitter;
 		this.configurationManager = new ConfigurationManager(this, config);
 		this.actionFactory = new ActionFactory(this, config);
 		this.resourceFactory = new ResourceFactory(this, config);
 		transmitter.init(this, config);
-		configurationManager.register(TRANSPORTER_PARAM_NAME,
-				"传输策略", "暂未实现传输策略动态切换，修改后不会生效!",
-				HttpURLConnectionTransmitter.class.getName(), ServiceUtils.getServiceClassNames(Transmitter.class.getName()).toArray(new String[0]));
-		configurationManager.register(LISTENERS_PARAM_NAME,
-				"事件监听器", "暂未实现动态注册事件监听器，修改后不会生效!", "");
+		configurationManager.register(TRANSMITTER_KEY, "传输策略",
+				"暂未实现传输策略动态切换，修改后不会生效!", HttpURLConnectionTransmitter.class
+						.getName(), ServiceUtils.getServiceClassNames(
+						Transmitter.class.getName()).toArray(new String[0]));
+		configurationManager.register(LISTENERS_KEY, "事件监听器",
+				"暂未实现动态注册事件监听器，修改后不会生效!", "");
 		// 读取监听器
-		List<Listener> listeners = PropertiesUtils.getInstancesProperty(
-				config, LISTENERS_PARAM_NAME, Listener.class);
+		List<Listener> listeners = PropertiesUtils.getInstancesProperty(config,
+				LISTENERS_KEY, Listener.class);
 		for (Listener listener : listeners) {
 			addListener(listener);
 		}
@@ -241,7 +261,8 @@ public class Client implements Listenable {
 	/**
 	 * 向默认客户端实例中，注册事件监听器
 	 *
-	 * @param listener 事件监听器
+	 * @param listener
+	 *            事件监听器
 	 */
 	public void addListener(Listener listener) {
 		if (listener instanceof ConnectionListener)
@@ -251,11 +272,10 @@ public class Client implements Listenable {
 			this.getTransmitter().addTransmissionListener(
 					(TransmissionListener) listener);
 		if (listener instanceof ConfigurationListener)
-			this.getConfigurationManager()
-					.addConfigurationListener((ConfigurationListener) listener);
+			this.getConfigurationManager().addConfigurationListener(
+					(ConfigurationListener) listener);
 		if (listener instanceof WorkListener)
-			Worker.getWorker().addWorkListener(
-					(WorkListener) listener);
+			Worker.getWorker().addWorkListener((WorkListener) listener);
 		if (listener instanceof ExceptionListener)
 			Worker.getWorker().addExceptionListener(
 					(ExceptionListener) listener);
@@ -263,23 +283,22 @@ public class Client implements Listenable {
 
 	/**
 	 * 从默认客户端实例中，移除事件监听器
-	 * @param listener 事件监听器
+	 *
+	 * @param listener
+	 *            事件监听器
 	 */
 	public void removeListener(Listener listener) {
 		if (listener instanceof ConnectionListener)
 			this.getTransmitter().removeConnectionListener(
 					(ConnectionListener) listener);
 		if (listener instanceof TransmissionListener)
-			this.getTransmitter()
-					.removeTransmissionListener(
-							(TransmissionListener) listener);
+			this.getTransmitter().removeTransmissionListener(
+					(TransmissionListener) listener);
 		if (listener instanceof ConfigurationListener)
-			this.getConfigurationManager()
-					.removeConfigurationListener(
-							(ConfigurationListener) listener);
+			this.getConfigurationManager().removeConfigurationListener(
+					(ConfigurationListener) listener);
 		if (listener instanceof WorkListener)
-			Worker.getWorker().removeWorkListener(
-					(WorkListener) listener);
+			Worker.getWorker().removeWorkListener((WorkListener) listener);
 		if (listener instanceof ExceptionListener)
 			Worker.getWorker().removeExceptionListener(
 					(ExceptionListener) listener);
