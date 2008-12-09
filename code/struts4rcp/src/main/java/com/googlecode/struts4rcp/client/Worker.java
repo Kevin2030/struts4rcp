@@ -39,7 +39,7 @@ public class Worker implements Listenable {
 	 * @param workable 工作内容
 	 */
 	public void fore(Workable workable) {
-		fore("", workable);
+		fore(null, workable);
 	}
 
 	/**
@@ -56,7 +56,10 @@ public class Worker implements Listenable {
 	 * @param backable 是否可转为后台运行
 	 */
 	public void fore(String title, boolean backable, Workable workable) {
-		work(new Work(title, backable), workable);
+		Work work = new Work(false);
+		work.setTitle(title);
+		work.setBackable(backable);
+		work(work, workable);
 	}
 
 	/**

@@ -5,19 +5,8 @@ import java.util.Stack;
 
 public class Work implements Abortable, Backable {
 
-	public Work() {}
-
-	public Work(String title) {
-		this.title = title;
-	}
-
-	public Work(boolean backable) {
-		this.backable = backable;
-	}
-
-	public Work(String title, boolean backable) {
-		this.title = title;
-		this.backable = backable;
+	public Work(boolean back) {
+		this.back = back;
 	}
 
 	private String title;
@@ -69,14 +58,10 @@ public class Work implements Abortable, Backable {
 		abortorStack.clear();
 	}
 
-	private boolean back;
+	private final boolean back;
 
 	public boolean isBack() {
 		return back;
-	}
-
-	public void setBack(boolean back) {
-		this.back = back;
 	}
 
 	private boolean backable;
