@@ -304,15 +304,15 @@ public class Client implements Listenable {
 					(ExceptionListener) listener);
 	}
 
-	public String getValue(String key) {
+	public String getProperty(String key) {
 		return configurationManager.getValue(key);
 	}
 
-	public Map<String, String> getValues() {
+	public Map<String, String> getProperties() {
 		return configurationManager.getValues();
 	}
 
-	public void setValue(String key, String value) {
+	public void setProperty(String key, String value) {
 		configurationManager.setValue(key, value);
 	}
 
