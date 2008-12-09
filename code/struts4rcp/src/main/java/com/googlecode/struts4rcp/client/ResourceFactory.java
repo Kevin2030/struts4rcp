@@ -21,9 +21,6 @@ public class ResourceFactory {
 		this.client = client;
 	}
 
-	public void shutdown() {
-	}
-
 	/**
 	 * 获取资源代理
 	 * @param <R> 资源类型

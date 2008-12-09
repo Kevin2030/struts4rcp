@@ -234,15 +234,7 @@ public class Client implements Listenable {
 		try {
 			transmitter.shutdown();
 		} finally {
-			try {
-				actionFactory.shutdown();
-			} finally {
-				try {
-					resourceFactory.shutdown();
-				} finally {
-					configurationManager.shutdown();
-				}
-			}
+			configurationManager.shutdown();
 		}
 	}
 

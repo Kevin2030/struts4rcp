@@ -31,8 +31,6 @@ public class ActionFactory {
 		this.client = client;
 	}
 
-	public void shutdown() {}
-
 	/**
 	 * 获取同步Action代理
 	 *
