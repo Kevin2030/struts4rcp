@@ -35,7 +35,11 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		}
 	}
 
-	protected void create(R resource) throws Exception {
+	protected R[] index(R resource) throws Exception {
+		return null;
+	}
+
+	protected R create(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
@@ -49,10 +53,6 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 
 	protected void delete(R resource) throws Exception {
 		throw new UnsupportedOperationException();
-	}
-
-	protected R[] index(R resource) throws Exception {
-		return null;
 	}
 
 }
