@@ -373,6 +373,10 @@ public class Client implements Listenable {
 			this.uri = uri;
 		}
 
+		public String getURI() {
+			return uri;
+		}
+
 		@SuppressWarnings("unchecked")
 		public R read() throws Exception {
 			return (R)getTransmitter().transmit(Transmitter.GET_METHOD, uri, null);
@@ -403,6 +407,10 @@ public class Client implements Listenable {
 			if (uri == null)
 				throw new NullPointerException("uri == null!");
 			this.uri = uri;
+		}
+
+		public String getURI() {
+			return uri;
 		}
 
 		public R[] index() throws Exception {
