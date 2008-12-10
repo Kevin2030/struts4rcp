@@ -413,11 +413,11 @@ public class Client implements Listenable {
 			return uri;
 		}
 
-		public R[] index() throws Exception {
-			return index(null);
+		public R[] list() throws Exception {
+			return list(null);
 		}
 
-		public R[] index(R resource) throws Exception {
+		public R[] list(R resource) throws Exception {
 			return (R[])getTransmitter().transmit(Transmitter.GET_METHOD, uri, resource);
 		}
 
