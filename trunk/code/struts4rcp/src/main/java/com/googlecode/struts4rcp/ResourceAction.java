@@ -13,7 +13,7 @@ public interface ResourceAction<R extends Serializable, I extends Serializable> 
 	/**
 	 * 创建资源
 	 * @param resource 资源信息
-	 * return 资源ID
+	 * @return 资源ID
 	 * @throws Exception 创建失败或网络连接出错时抛出
 	 */
 	I create(R resource) throws Exception;
