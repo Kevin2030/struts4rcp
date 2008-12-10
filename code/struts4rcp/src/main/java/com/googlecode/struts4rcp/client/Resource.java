@@ -10,6 +10,12 @@ import java.io.Serializable;
 public interface Resource<R extends Serializable> {
 
 	/**
+	 * 获取资源URI
+	 * @return 资源URI
+	 */
+	String getURI();
+
+	/**
 	 * 获取资源
 	 * @return 资源
 	 * @throws Exception 获取失败或网络连接出错时抛出
