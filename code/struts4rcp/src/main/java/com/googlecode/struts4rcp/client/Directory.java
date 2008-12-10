@@ -20,7 +20,7 @@ public interface Directory<R extends Serializable> {
 	 * @return 资源
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	R[] index() throws Exception;
+	R[] list() throws Exception;
 
 	/**
 	 * 获取目录中匹配的资源
@@ -28,7 +28,7 @@ public interface Directory<R extends Serializable> {
 	 * @return 资源
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	R[] index(R resource) throws Exception;
+	R[] list(R resource) throws Exception;
 
 	/**
 	 * 创建资源(注：标识性属性值(如：ID值)无效，在服务器端接收时，将被替换为资源URI所指定的值)
