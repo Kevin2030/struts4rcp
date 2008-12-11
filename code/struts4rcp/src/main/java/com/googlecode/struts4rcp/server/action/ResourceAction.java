@@ -14,7 +14,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	public R execute(R model) throws Exception {
 		String method = ActionContext.getContext().getRequest().getMethod();
 		if ("post".equalsIgnoreCase(method)) {
-			create(model);
+			create(model, false);
 			return null;
 		} else if ("put".equalsIgnoreCase(method)) {
 			update(model);
@@ -34,31 +34,31 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		}
 	}
 
-	protected long count() throws Exception {
-		return count(null);
+	protected long count(boolean isReference) throws Exception {
+		return count(null, isReference);
 	}
 
-	protected long count(R condition) throws Exception {
+	protected long count(R condition, boolean isReference) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
-	protected R[] index() throws Exception {
-		return index(null, 0, Integer.MAX_VALUE);
+	protected R[] index(boolean isReference) throws Exception {
+		return index(null, 0, Integer.MAX_VALUE, isReference);
 	}
 
-	protected R[] index(long start, long limit) throws Exception {
-		return index(null, start, start);
+	protected R[] index(long start, long limit, boolean isReference) throws Exception {
+		return index(null, start, start, isReference);
 	}
 
-	protected R[] index(R condition) throws Exception {
-		return index(condition, 0, Integer.MAX_VALUE);
+	protected R[] index(R condition, boolean isReference) throws Exception {
+		return index(condition, 0, Integer.MAX_VALUE, isReference);
 	}
 
-	protected R[] index(R condition, long start, long limit) throws Exception {
+	protected R[] index(R condition, long start, long limit, boolean isReference) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
-	protected R create(R resource) throws Exception {
+	protected R create(R resource, boolean isReference) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
