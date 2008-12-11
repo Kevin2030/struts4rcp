@@ -9,15 +9,16 @@ import com.googlecode.struts4rcp.server.ActionContext;
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  * @param <R> 资源类型
  */
-public abstract class ResourceAction<R extends Serializable> extends AbstractAction<R, Serializable> {
+public abstract class ResourceAction<R extends Serializable> extends AbstractAction<Serializable, Serializable> {
 
-	public R execute(R model) throws Exception {
+	@SuppressWarnings("unchecked")
+	public Serializable execute(Serializable model) throws Exception {
 		String method = ActionContext.getContext().getRequest().getMethod();
 		if ("post".equalsIgnoreCase(method)) {
-			create(model, false);
+			create((R)model, false);
 			return null;
 		} else if ("put".equalsIgnoreCase(method)) {
-			update(model);
+			update((R)model);
 			return null;
 		} else if ("delete".equalsIgnoreCase(method)) {
 			//delete(model);
