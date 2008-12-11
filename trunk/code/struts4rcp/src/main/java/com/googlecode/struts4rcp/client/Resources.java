@@ -25,10 +25,11 @@ public interface Resources<R extends Serializable> extends Serializable {
 
 	/**
 	 * 统计资源个数
+	 * @param condition 过滤条件
 	 * @return 资源个数
 	 * @throws Exception 统计失败或网络连接出错时抛出
 	 */
-	long count(R resource) throws Exception;
+	long count(R condition) throws Exception;
 
 	/**
 	 * 获取目录中所有的资源
@@ -48,22 +49,24 @@ public interface Resources<R extends Serializable> extends Serializable {
 
 	/**
 	 * 获取目录中所有的资源
+	 * @param condition 过滤条件
 	 * @return 资源列表
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	Resource<R>[] index(R resource) throws Exception;
+	Resource<R>[] index(R condition) throws Exception;
 
 	/**
 	 * 分页获取目录中所有的资源
+	 * @param condition 过滤条件
 	 * @param start 起始
 	 * @param limit 个数
 	 * @return 资源列表
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	Resource<R>[] index(R resource, long start, long limit) throws Exception;
+	Resource<R>[] index(R condition, long start, long limit) throws Exception;
 
 	/**
-	 * 创建资源(注：标识性属性值(如：ID值)无效，在服务器端接收时，将被替换为资源URI所指定的值)
+	 * 创建资源
 	 * @param resource 资源信息
 	 * @throws Exception 创建失败或网络连接出错时抛出
 	 */
