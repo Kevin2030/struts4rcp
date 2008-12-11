@@ -23,24 +23,20 @@ public class ResourceRequest<R extends Serializable> implements Serializable {
 
 	private final R resource;
 
-	private final int skip;
+	private final long skip;
 
-	private final int limit;
+	private final long limit;
 
 	private final boolean reference;
-
-	public ResourceRequest(boolean reference) {
-		this(null, NOSKIP, LIMITLESS, reference);
-	}
 
 	public ResourceRequest(R resource, boolean reference) {
 		this(resource, NOSKIP, LIMITLESS, reference);
 	}
 
-	public ResourceRequest(R resource, int skip, int limit, boolean reference) {
+	public ResourceRequest(R resource, long skip, long limit, boolean reference) {
 		super();
-		if (skip < 0)
-			throw new IllegalArgumentException("skip < 0");
+		if (skip < NOSKIP)
+			throw new IllegalArgumentException("skip < " + NOSKIP);
 		if (limit < LIMITLESS)
 			throw new IllegalArgumentException("limit < " + LIMITLESS);
 		this.resource = resource;
@@ -61,7 +57,7 @@ public class ResourceRequest<R extends Serializable> implements Serializable {
 	 * 起始行，从0开始
 	 * @return 起始行
 	 */
-	public int getSkip() {
+	public long getSkip() {
 		return skip;
 	}
 
@@ -69,7 +65,7 @@ public class ResourceRequest<R extends Serializable> implements Serializable {
 	 * 个数
 	 * @return 个数
 	 */
-	public int getLimit() {
+	public long getLimit() {
 		return limit;
 	}
 
