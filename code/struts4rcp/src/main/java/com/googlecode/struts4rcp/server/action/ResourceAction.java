@@ -56,7 +56,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	/**
 	 * 获取资源列表
 	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
-	 * @return 资源标识列表/资源列表
+	 * @return 资源标识(ID)列表/资源列表
 	 * @throws Exception 获取失败时抛出
 	 */
 	protected R[] index(boolean isReference) throws Exception {
@@ -68,7 +68,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @param start 起始
 	 * @param limit 个数
 	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
-	 * @return 资源标识列表/资源列表
+	 * @return 资源标识(ID)列表/资源列表
 	 * @throws Exception 获取失败时抛出
 	 */
 	protected R[] index(long start, long limit, boolean isReference) throws Exception {
@@ -79,7 +79,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * 获取资源列表
 	 * @param condition 过滤条件
 	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
-	 * @return 资源标识列表/资源列表
+	 * @return 资源标识(ID)列表/资源列表
 	 * @throws Exception 获取失败时抛出
 	 */
 	protected R[] index(R condition, boolean isReference) throws Exception {
@@ -92,7 +92,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @param start 起始
 	 * @param limit 个数
 	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
-	 * @return 资源标识列表/资源列表
+	 * @return 资源标识(ID)列表/资源列表
 	 * @throws Exception 获取失败时抛出
 	 */
 	protected R[] index(R condition, long start, long limit, boolean isReference) throws Exception {
@@ -102,8 +102,8 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	/**
 	 * 创建资源
 	 * @param resource 资源
-	 * @param isReference 是否只引用标识，如果是则返回资源标识(如：ID)，否则返回完整的资源
-	 * @return 资源标识/资源
+	 * @param isReference 是否只引用标识，如果是则返回资源标识，否则返回完整的资源
+	 * @return 资源标识(ID)/资源
 	 * @throws Exception
 	 */
 	protected R create(R resource, boolean isReference) throws Exception {
@@ -112,7 +112,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 
 	/**
 	 * 读取资源
-	 * @param resource 资源标识(如：ID)
+	 * @param resource 资源标识(ID)
 	 * @return 资源
 	 * @throws Exception 读取失败时抛出
 	 */
@@ -131,7 +131,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 
 	/**
 	 * 删除资源
-	 * @param resource 资源标识(如：ID)
+	 * @param resource 资源标识(ID)
 	 * @throws Exception 删除失败时抛出
 	 */
 	protected void delete(R resource) throws Exception {
