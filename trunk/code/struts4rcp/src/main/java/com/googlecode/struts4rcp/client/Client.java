@@ -18,6 +18,8 @@ import com.googlecode.struts4rcp.client.event.Listener;
 import com.googlecode.struts4rcp.client.event.TransmissionListener;
 import com.googlecode.struts4rcp.client.event.WorkListener;
 import com.googlecode.struts4rcp.client.transmitter.HttpURLConnectionTransmitter;
+import com.googlecode.struts4rcp.internal.ResourceRequest;
+import com.googlecode.struts4rcp.internal.ResourceResponse;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ServiceUtils;
 import com.googlecode.struts4rcp.util.ThreadUtils;
@@ -333,7 +335,7 @@ public class Client implements Listenable {
 	 * @return 资源集合
 	 */
 	public <R extends Serializable> Resources<R> getResources(String uri, Object... args) {
-		return new ResourcesProxy<R>(format(uri, args));
+		return new ResourcesProxy<R>(format(uri, args), false);
 	}
 
 	/**
@@ -344,7 +346,7 @@ public class Client implements Listenable {
 	 * @return 资源集合
 	 */
 	public <R extends Serializable> Resources<R> getReferenceResources(String uri, Object... args) {
-		return new ResourcesProxy<R>(format(uri, args));
+		return new ResourcesProxy<R>(format(uri, args), true);
 	}
 
 	private String format(String uri, Object... args) {
@@ -381,48 +383,68 @@ public class Client implements Listenable {
 
 		private final String uri;
 
-		@SuppressWarnings("unchecked")
-		ResourcesProxy(String uri) {
+		private final boolean reference;
+
+		ResourcesProxy(String uri, boolean reference) {
 			if (uri == null)
 				throw new NullPointerException("uri == null!");
 			this.uri = uri;
+			this.reference = reference;
 		}
 
 		public String getURI() {
 			return uri;
 		}
 
-		public Resource<R>[] index() throws Exception {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public Resource<R>[] index(long start, long limit) throws Exception {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public Resource<R>[] index(R resource) throws Exception {
-			return (Resource<R>[])getTransmitter().transmit(Transmitter.GET_METHOD, uri, resource);
-		}
-
-		public Resource<R>[] index(R resource, long start, long limit) throws Exception {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@SuppressWarnings("unchecked")
-		public Resource<R> create(R resource) throws Exception {
-			Serializable serializable = getTransmitter().transmit(Transmitter.POST_METHOD, uri, resource);
-			return (Resource<R>)serializable;
-		}
-
 		public long count() throws Exception {
-			return (Long)getTransmitter().transmit(Transmitter.HEAD_METHOD, uri, null);
+			return count(null);
 		}
 
 		public long count(R resource) throws Exception {
 			return (Long)getTransmitter().transmit(Transmitter.HEAD_METHOD, uri, resource);
+		}
+
+		public Resource<R>[] index() throws Exception {
+			return index(null, NOSKIP, LIMITLESS);
+		}
+
+		public Resource<R>[] index(long start, long limit) throws Exception {
+			return index(null, start, limit);
+		}
+
+		public Resource<R>[] index(R resource) throws Exception {
+			return index(resource, NOSKIP, LIMITLESS);
+		}
+
+		public Resource<R>[] index(R resource, long start, long limit) throws Exception {
+			ResourceRequest<R> request = new ResourceRequest<R>(resource, start, limit, reference);
+			ResourceResponse<R>[] responses = (ResourceResponse<R>[])getTransmitter().transmit(Transmitter.GET_METHOD, uri, request);
+			return convertResources(responses);
+		}
+
+		@SuppressWarnings("unchecked")
+		public Resource<R> create(R resource) throws Exception {
+			ResourceRequest<R> request = new ResourceRequest<R>(resource, reference);
+			ResourceResponse<R> response = (ResourceResponse<R>)getTransmitter().transmit(Transmitter.POST_METHOD, uri, request);
+			return convertResource(response);
+		}
+
+		@SuppressWarnings("unchecked")
+		private Resource<R>[] convertResources(ResourceResponse<R>[] responses) {
+			if (responses == null)
+				return null;
+			Resource<R>[] resources = new Resource[responses.length];
+			for (int i = 0, n = responses.length; i < n; i ++) {
+				resources[i] = convertResource(responses[i]);
+			}
+			return resources;
+		}
+
+		private Resource<R> convertResource(ResourceResponse<R> response) {
+			if (reference)
+				return new ResourceProxy<R>(response.getURI());
+			else
+				return new ResourceProxy<R>(response.getURI(), response.getResource());
 		}
 
 	}
@@ -433,10 +455,17 @@ public class Client implements Listenable {
 
 		private final String uri;
 
+		private R resource;
+
 		ResourceProxy(String uri) {
 			if (uri == null)
 				throw new NullPointerException("uri == null!");
 			this.uri = uri;
+		}
+
+		ResourceProxy(String uri, R resource) {
+			this(uri);
+			this.resource = resource;
 		}
 
 		public String getURI() {
@@ -445,7 +474,9 @@ public class Client implements Listenable {
 
 		@SuppressWarnings("unchecked")
 		public R read() throws Exception {
-			return (R)getTransmitter().transmit(Transmitter.GET_METHOD, uri, null);
+			if (resource == null)
+				resource = (R)getTransmitter().transmit(Transmitter.GET_METHOD, uri, null);
+			return resource;
 		}
 
 		public void update(R resource) throws Exception {
