@@ -15,6 +15,11 @@ public interface Resources<R extends Serializable> extends Serializable {
 	/**
 	 * 不限制个数
 	 */
+	public static final int NOSKIP = ResourceRequest.NOSKIP;
+
+	/**
+	 * 不限制个数
+	 */
 	public static final int LIMITLESS = ResourceRequest.LIMITLESS;
 
 	/**
@@ -47,12 +52,12 @@ public interface Resources<R extends Serializable> extends Serializable {
 
 	/**
 	 * 分页获取目录中所有的资源
-	 * @param start 起始行，从0开始
-	 * @param limit 个数
+	 * @param skip 跳过个数
+	 * @param limit 限制个数
 	 * @return 资源列表
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	Resource<R>[] index(long start, long limit) throws Exception;
+	Resource<R>[] index(long skip, long limit) throws Exception;
 
 	/**
 	 * 获取目录中所有的资源
@@ -65,12 +70,12 @@ public interface Resources<R extends Serializable> extends Serializable {
 	/**
 	 * 分页获取目录中所有的资源
 	 * @param condition 过滤条件
-	 * @param start 起始行，从0开始
-	 * @param limit 个数
+	 * @param skip 跳过个数
+	 * @param limit 限制个数
 	 * @return 资源列表
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	Resource<R>[] index(R condition, long start, long limit) throws Exception;
+	Resource<R>[] index(R condition, long skip, long limit) throws Exception;
 
 	/**
 	 * 创建资源
