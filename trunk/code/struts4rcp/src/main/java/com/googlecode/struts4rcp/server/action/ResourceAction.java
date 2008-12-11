@@ -35,6 +35,10 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	}
 
 	protected long count() throws Exception {
+		return count(null);
+	}
+
+	protected long count(R condition) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
