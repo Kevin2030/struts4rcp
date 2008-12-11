@@ -418,8 +418,11 @@ public class Client implements Listenable {
 		}
 
 		public long count() throws Exception {
-			// TODO Auto-generated method stub
-			return 0;
+			return (Long)getTransmitter().transmit(Transmitter.HEAD_METHOD, uri, null);
+		}
+
+		public long count(R resource) throws Exception {
+			return (Long)getTransmitter().transmit(Transmitter.HEAD_METHOD, uri, resource);
 		}
 
 	}

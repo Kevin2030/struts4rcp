@@ -24,6 +24,13 @@ public interface Resources<R extends Serializable> extends Serializable {
 	long count() throws Exception;
 
 	/**
+	 * 统计资源个数
+	 * @return 资源个数
+	 * @throws Exception 统计失败或网络连接出错时抛出
+	 */
+	long count(R resource) throws Exception;
+
+	/**
 	 * 获取目录中所有的资源
 	 * @return 资源列表
 	 * @throws Exception 获取失败或网络连接出错时抛出
