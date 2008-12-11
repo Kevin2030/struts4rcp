@@ -12,6 +12,16 @@ import com.googlecode.struts4rcp.server.ActionContext;
  */
 public abstract class ResourceAction<R extends Serializable> extends AbstractAction<Serializable, Serializable> {
 
+	/**
+	 * 不跳过
+	 */
+	protected static final int NOSKIP = ResourceRequest.NOSKIP;
+
+	/**
+	 * 不限制个数
+	 */
+	protected static final int LIMITLESS = ResourceRequest.LIMITLESS;
+
 	@SuppressWarnings("unchecked")
 	public Serializable execute(Serializable model) throws Exception {
 		String method = ActionContext.getContext().getRequest().getMethod();
@@ -56,16 +66,6 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 			throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
 		}
 	}
-
-	/**
-	 * 不跳过
-	 */
-	protected static final int NOSKIP = ResourceRequest.NOSKIP;
-
-	/**
-	 * 不限制个数
-	 */
-	protected static final int LIMITLESS = ResourceRequest.LIMITLESS;
 
 	/**
 	 * 统计资源个数
