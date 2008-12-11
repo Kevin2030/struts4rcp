@@ -53,6 +53,9 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * 不限制个数，全部返回
+	 */
 	protected static final int LIMITLESS = ResourceRequest.LIMITLESS;
 
 	/**
