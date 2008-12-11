@@ -15,7 +15,7 @@ public class ResourceResponse<R extends Serializable> implements Serializable {
 		this.resource = resource;
 	}
 
-	public String getUri() {
+	public String getURI() {
 		return uri;
 	}
 
