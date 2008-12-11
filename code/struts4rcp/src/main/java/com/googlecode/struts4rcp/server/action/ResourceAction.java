@@ -54,7 +54,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	}
 
 	/**
-	 * 不限制个数，全部返回
+	 * 不限制个数
 	 */
 	protected static final int LIMITLESS = ResourceRequest.LIMITLESS;
 
