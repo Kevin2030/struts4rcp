@@ -34,11 +34,15 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		}
 	}
 
+	protected long count() throws Exception {
+		throw new UnsupportedOperationException();
+	}
+
 	protected R[] index() throws Exception {
 		return index(null, 0, Integer.MAX_VALUE);
 	}
 
-	protected R[] index(int start, int limit) throws Exception {
+	protected R[] index(long start, long limit) throws Exception {
 		return index(null, start, start);
 	}
 
@@ -46,7 +50,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		return index(condition, 0, Integer.MAX_VALUE);
 	}
 
-	protected R[] index(R condition, int start, int limit) throws Exception {
+	protected R[] index(R condition, long start, long limit) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
