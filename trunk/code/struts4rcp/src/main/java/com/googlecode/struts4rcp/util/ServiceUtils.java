@@ -9,7 +9,8 @@ import java.util.Collection;
 import java.util.Enumeration;
 
 /**
- * 根据JDK6.0的自动发现机制实现.
+ * 根据JDK5.0的自动发现机制实现.
+ * http://java.sun.com/j2se/1.5.0/docs/guide/jar/jar.html#Service%20Provider
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
 public class ServiceUtils {
