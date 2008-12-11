@@ -32,7 +32,19 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		} else if ("get".equalsIgnoreCase(method)) {
 			if (model instanceof ResourceRequest) {
 				ResourceRequest<R> request = (ResourceRequest<R>)model;
-				return index(request.getResource(), request.getSkip(), request.getLimit(), request.isReference());
+				if (request.getResource() == null) {
+					if (request.getSkip() == NOSKIP && request.getLimit() == LIMITLESS) {
+						return index(request.isReference());
+					} else {
+						return index(request.getSkip(), request.getLimit(), request.isReference());
+					}
+				} else {
+					if (request.getSkip() == NOSKIP && request.getLimit() == LIMITLESS) {
+						return index(request.getResource(), request.isReference());
+					} else {
+						return index(request.getResource(), request.getSkip(), request.getLimit(), request.isReference());
+					}
+				}
 			} else {
 				return read((R)model);
 			}
