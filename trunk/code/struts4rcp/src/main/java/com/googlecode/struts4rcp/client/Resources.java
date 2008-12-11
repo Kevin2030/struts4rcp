@@ -11,8 +11,8 @@ import java.io.Serializable;
 public interface Resources<R extends Serializable> extends Serializable {
 
 	/**
-	 * 获取资源目录URI
-	 * @return 资源目录URI
+	 * 获取资源集合URI
+	 * @return 资源集合URI
 	 */
 	String getURI();
 
