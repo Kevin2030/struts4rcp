@@ -34,42 +34,106 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		}
 	}
 
-	protected long count(boolean isReference) throws Exception {
-		return count(null, isReference);
+	/**
+	 * 统计资源个数
+	 * @return 资源个数
+	 * @throws Exception 统计失败时抛出
+	 */
+	protected long count() throws Exception {
+		return count(null);
 	}
 
-	protected long count(R condition, boolean isReference) throws Exception {
+	/**
+	 * 统计过滤资源个数
+	 * @param condition 过滤条件
+	 * @return 资源个数
+	 * @throws Exception 统计失败时抛出
+	 */
+	protected long count(R condition) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * 获取资源列表
+	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
+	 * @return 资源标识列表/资源列表
+	 * @throws Exception 获取失败时抛出
+	 */
 	protected R[] index(boolean isReference) throws Exception {
 		return index(null, 0, Integer.MAX_VALUE, isReference);
 	}
 
+	/**
+	 * 获取资源列表
+	 * @param start 起始
+	 * @param limit 个数
+	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
+	 * @return 资源标识列表/资源列表
+	 * @throws Exception 获取失败时抛出
+	 */
 	protected R[] index(long start, long limit, boolean isReference) throws Exception {
 		return index(null, start, start, isReference);
 	}
 
+	/**
+	 * 获取资源列表
+	 * @param condition 过滤条件
+	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
+	 * @return 资源标识列表/资源列表
+	 * @throws Exception 获取失败时抛出
+	 */
 	protected R[] index(R condition, boolean isReference) throws Exception {
 		return index(condition, 0, Integer.MAX_VALUE, isReference);
 	}
 
+	/**
+	 * 获取资源列表
+	 * @param condition 过滤条件
+	 * @param start 起始
+	 * @param limit 个数
+	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
+	 * @return 资源标识列表/资源列表
+	 * @throws Exception 获取失败时抛出
+	 */
 	protected R[] index(R condition, long start, long limit, boolean isReference) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * 创建资源
+	 * @param resource 资源
+	 * @param isReference 是否只引用标识，如果是则返回资源标识(如：ID)，否则返回完整的资源
+	 * @return 资源标识/资源
+	 * @throws Exception
+	 */
 	protected R create(R resource, boolean isReference) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * 读取资源
+	 * @param resource 资源标识(如：ID)
+	 * @return 资源
+	 * @throws Exception 读取失败时抛出
+	 */
 	protected R read(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * 更新资源
+	 * @param resource 资源
+	 * @throws Exception 更新失败时抛出
+	 */
 	protected void update(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * 删除资源
+	 * @param resource 资源标识(如：ID)
+	 * @throws Exception 删除失败时抛出
+	 */
 	protected void delete(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
