@@ -54,15 +54,15 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		throw new UnsupportedOperationException();
 	}
 
-	protected void delete(R resource) throws Exception {
-		throw new UnsupportedOperationException();
-	}
-
 	protected R read(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
 	protected void update(R resource) throws Exception {
+		throw new UnsupportedOperationException();
+	}
+
+	protected void delete(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
