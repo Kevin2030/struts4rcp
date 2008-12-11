@@ -60,22 +60,22 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @param condition 过滤条件，为null表示获取所有资源
 	 * @param start 起始
 	 * @param limit 个数，如果为<code>LIMITLESS</code>，表示不限制
-	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
+	 * @param reference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
 	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception 获取失败时抛出
 	 */
-	protected R[] index(R condition, long start, long limit, boolean isReference) throws Exception {
+	protected R[] index(R condition, long start, long limit, boolean reference) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * 创建资源
 	 * @param resource 资源
-	 * @param isReference 是否只引用标识，如果是则返回资源标识，否则返回完整的资源
+	 * @param reference 是否只引用标识，如果是则返回资源标识，否则返回完整的资源
 	 * @return 资源标识/资源，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception
 	 */
-	protected R create(R resource, boolean isReference) throws Exception {
+	protected R create(R resource, boolean reference) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
