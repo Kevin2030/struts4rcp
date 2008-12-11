@@ -44,8 +44,8 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	}
 
 	/**
-	 * 统计过滤资源个数
-	 * @param condition 过滤条件
+	 * 统计资源个数
+	 * @param condition 过滤条件，为null表示统计所有资源
 	 * @return 资源个数
 	 * @throws Exception 统计失败时抛出
 	 */
@@ -57,7 +57,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 
 	/**
 	 * 获取资源列表
-	 * @param condition 过滤条件
+	 * @param condition 过滤条件，为null表示获取所有资源
 	 * @param start 起始
 	 * @param limit 个数，如果为<code>LIMITLESS</code>，即-1，表示不限制
 	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
