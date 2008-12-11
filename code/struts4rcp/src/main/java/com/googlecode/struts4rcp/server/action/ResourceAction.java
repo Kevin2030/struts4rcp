@@ -81,7 +81,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @throws Exception 获取失败时抛出
 	 */
 	protected R[] index(boolean reference) throws Exception {
-		return index(null, 0, LIMITLESS, reference);
+		return index(null, NOSKIP, LIMITLESS, reference);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @throws Exception 获取失败时抛出
 	 */
 	protected R[] index(R condition, boolean reference) throws Exception {
-		return index(condition, 0, LIMITLESS, reference);
+		return index(condition, NOSKIP, LIMITLESS, reference);
 	}
 
 	/**
