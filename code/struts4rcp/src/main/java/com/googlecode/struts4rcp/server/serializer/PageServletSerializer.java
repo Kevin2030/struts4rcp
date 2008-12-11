@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.ActionContext;
 import com.googlecode.struts4rcp.server.action.Page;
-import com.googlecode.struts4rcp.server.action.PageAction;
+import com.googlecode.struts4rcp.server.action.Pageable;
 import com.googlecode.struts4rcp.util.ClassUtils;
 
 /**
@@ -27,8 +27,8 @@ public abstract class PageServletSerializer extends FormServletSerializer {
 			throws IOException {
 		String page;
 		Action<Serializable, Serializable> action = ActionContext.getContext().getAction();
-		if (action instanceof PageAction) {
-			PageAction<Serializable, Serializable> pageAction = (PageAction<Serializable, Serializable>)action;
+		if (action instanceof Pageable) {
+			Pageable pageAction = (Pageable)action;
 			page = pageAction.getPage();
 		} else {
 			page = getPage(action);
