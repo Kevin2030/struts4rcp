@@ -6,7 +6,7 @@ public class ResourceRequest<R extends Serializable> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final int LIMITLESS = -1;
+	public static final int LIMITLESS = 0;
 
 	private final R resource;
 
