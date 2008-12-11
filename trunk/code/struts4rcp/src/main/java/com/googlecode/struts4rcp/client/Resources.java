@@ -2,6 +2,8 @@ package com.googlecode.struts4rcp.client;
 
 import java.io.Serializable;
 
+import com.googlecode.struts4rcp.internal.ResourceRequest;
+
 /**
  * 资源集合
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
@@ -9,6 +11,11 @@ import java.io.Serializable;
  * @param <S> 接收表形类型(将发送对应的Accept头信息)
  */
 public interface Resources<R extends Serializable> extends Serializable {
+
+	/**
+	 * 不限制个数
+	 */
+	public static final int LIMITLESS = ResourceRequest.LIMITLESS;
 
 	/**
 	 * 获取资源集合URI
@@ -40,7 +47,7 @@ public interface Resources<R extends Serializable> extends Serializable {
 
 	/**
 	 * 分页获取目录中所有的资源
-	 * @param start 起始
+	 * @param start 起始行，从0开始
 	 * @param limit 个数
 	 * @return 资源列表
 	 * @throws Exception 获取失败或网络连接出错时抛出
@@ -58,7 +65,7 @@ public interface Resources<R extends Serializable> extends Serializable {
 	/**
 	 * 分页获取目录中所有的资源
 	 * @param condition 过滤条件
-	 * @param start 起始
+	 * @param start 起始行，从0开始
 	 * @param limit 个数
 	 * @return 资源列表
 	 * @throws Exception 获取失败或网络连接出错时抛出
