@@ -13,7 +13,7 @@ import com.googlecode.struts4rcp.internal.ResourceRequest;
 public interface Resources<R extends Serializable> extends Serializable {
 
 	/**
-	 * 不限制个数
+	 * 不跳过
 	 */
 	public static final int NOSKIP = ResourceRequest.NOSKIP;
 

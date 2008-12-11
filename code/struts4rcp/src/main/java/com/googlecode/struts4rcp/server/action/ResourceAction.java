@@ -46,7 +46,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	}
 
 	/**
-	 * 不限制个数
+	 * 不跳过
 	 */
 	protected static final int NOSKIP = ResourceRequest.NOSKIP;
 
