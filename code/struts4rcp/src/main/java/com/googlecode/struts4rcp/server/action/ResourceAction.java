@@ -3,6 +3,7 @@ package com.googlecode.struts4rcp.server.action;
 import java.io.Serializable;
 
 import com.googlecode.struts4rcp.internal.ResourceRequest;
+import com.googlecode.struts4rcp.internal.ResourceResponse;
 import com.googlecode.struts4rcp.server.ActionContext;
 
 /**
@@ -28,11 +29,10 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		if ("post".equalsIgnoreCase(method)) {
 			if (model instanceof ResourceRequest) {
 				ResourceRequest<R> request = (ResourceRequest<R>)model;
-				create(request.getResource(), request.isReference());
+				return convertResource(create(request.getResource(), request.isReference()), request.isReference());
 			} else {
-				create((R)model, false);
+				return convertResource(create((R)model, false), false);
 			}
-			return null;
 		} else if ("put".equalsIgnoreCase(method)) {
 			update((R)model);
 			return null;
@@ -42,19 +42,21 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		} else if ("get".equalsIgnoreCase(method)) {
 			if (model instanceof ResourceRequest) {
 				ResourceRequest<R> request = (ResourceRequest<R>)model;
+				R[] result;
 				if (request.getResource() == null) {
 					if (request.getSkip() == NOSKIP && request.getLimit() == LIMITLESS) {
-						return index(request.isReference());
+						result = index(request.isReference());
 					} else {
-						return index(request.getSkip(), request.getLimit(), request.isReference());
+						result = index(request.getSkip(), request.getLimit(), request.isReference());
 					}
 				} else {
 					if (request.getSkip() == NOSKIP && request.getLimit() == LIMITLESS) {
-						return index(request.getResource(), request.isReference());
+						result = index(request.getResource(), request.isReference());
 					} else {
-						return index(request.getResource(), request.getSkip(), request.getLimit(), request.isReference());
+						result = index(request.getResource(), request.getSkip(), request.getLimit(), request.isReference());
 					}
 				}
+				return convertResources(result, request.isReference());
 			} else {
 				return read((R)model);
 			}
@@ -65,6 +67,30 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		} else {
 			throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private ResourceResponse<R>[] convertResources(R[] resources, boolean reference) {
+		if (resources == null)
+			return null;
+		ResourceResponse<R>[] responses = new ResourceResponse[resources.length];
+		for (int i = 0, n = resources.length; i < n; i ++) {
+			responses[i] = convertResource(resources[i], reference);
+		}
+		return responses;
+	}
+
+	private ResourceResponse<R> convertResource(R resource, boolean reference) {
+		if (reference)
+			return new ResourceResponse<R>(convertResourceURI(resource), null);
+		else
+			return new ResourceResponse<R>(convertResourceURI(resource), resource);
+	}
+
+	private String convertResourceURI(R resource) {
+		String uri = getPath();
+		// TODO 格式化未处理
+		return uri;
 	}
 
 	/**
