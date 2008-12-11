@@ -2,7 +2,6 @@ package com.googlecode.struts4rcp.client;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -330,50 +329,22 @@ public class Client implements Listenable {
 	 * 获取资源目录代理
 	 * @param <R> 资源类型
 	 * @param uri 资源位置
-	 * @return 资源
+	 * @param args 资源位置占位参数
+	 * @return 资源集合
 	 */
-	public <R extends Serializable, S extends Serializable> Resources<R, S> getResources(String uri, Object... args) {
-		return new ResourcesProxy<R, S>(format(uri, args));
+	public <R extends Serializable> Resources<R> getResources(String uri, Object... args) {
+		return new ResourcesProxy<R>(format(uri, args));
 	}
 
 	/**
-	 * 获取资源目录代理
+	 * 获取资源集合引用代理 (只下载引用URI，在每个资源read()时去取具体资源)
 	 * @param <R> 资源类型
 	 * @param uri 资源位置
-	 * @return 资源
+	 * @param args 资源位置占位参数
+	 * @return 资源集合
 	 */
-	public <R extends Serializable> Resources<R, R> getEntityResources(String uri, Object... args) {
-		return new ResourcesProxy<R, R>(format(uri, args));
-	}
-
-	/**
-	 * 获取资源目录代理
-	 * @param <R> 资源类型
-	 * @param uri 资源位置
-	 * @return 资源
-	 */
-	public <R extends Serializable> Resources<R, Serializable> getIdResources(String uri, Object... args) {
-		return new ResourcesProxy<R, Serializable>(format(uri, args));
-	}
-
-	/**
-	 * 获取资源目录代理
-	 * @param <R> 资源类型
-	 * @param uri 资源位置
-	 * @return 资源
-	 */
-	public <R extends Serializable> Resources<R, Resource<R>> getRefResources(String uri, Object... args) {
-		return new ResourcesProxy<R, Resource<R>>(format(uri, args));
-	}
-
-	/**
-	 * 获取资源目录代理
-	 * @param <R> 资源类型
-	 * @param uri 资源位置
-	 * @return 资源
-	 */
-	public <R extends Serializable> Resources<R, String> getUriResources(String uri, Object... args) {
-		return new ResourcesProxy<R, String>(format(uri, args));
+	public <R extends Serializable> Resources<R> getReferenceResources(String uri, Object... args) {
+		return new ResourcesProxy<R>(format(uri, args));
 	}
 
 	private String format(String uri, Object... args) {
@@ -404,54 +375,51 @@ public class Client implements Listenable {
 		}
 	}
 
-	private class ResourcesProxy<R extends Serializable, S extends Serializable> implements Resources<R, S> {
+	private class ResourcesProxy<R extends Serializable> implements Resources<R> {
 
 		private static final long serialVersionUID = 1L;
 
 		private final String uri;
-
-		private final Class<S> represent;
 
 		@SuppressWarnings("unchecked")
 		ResourcesProxy(String uri) {
 			if (uri == null)
 				throw new NullPointerException("uri == null!");
 			this.uri = uri;
-			this.represent = (Class<S>) ((ParameterizedType) getClass()
-					.getGenericSuperclass()).getActualTypeArguments()[1];
 		}
 
 		public String getURI() {
 			return uri;
 		}
 
-		public S[] index() throws Exception {
+		public Resource<R>[] index() throws Exception {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public S[] index(int start, int limit) throws Exception {
+		public Resource<R>[] index(long start, long limit) throws Exception {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		public S[] index(R resource) throws Exception {
-			return (S[])getTransmitter().transmit(Transmitter.GET_METHOD, uri, resource);
+		public Resource<R>[] index(R resource) throws Exception {
+			return (Resource<R>[])getTransmitter().transmit(Transmitter.GET_METHOD, uri, resource);
 		}
 
-		public S[] index(R resource, int start, int limit) throws Exception {
+		public Resource<R>[] index(R resource, long start, long limit) throws Exception {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@SuppressWarnings("unchecked")
-		public S create(R resource) throws Exception {
+		public Resource<R> create(R resource) throws Exception {
 			Serializable serializable = getTransmitter().transmit(Transmitter.POST_METHOD, uri, resource);
-			if (Resource.class.isAssignableFrom(represent)
-					&& serializable instanceof String) {
+			return (Resource<R>)serializable;
+		}
 
-			}
-			return (S)serializable;
+		public long count() throws Exception {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 
 	}
