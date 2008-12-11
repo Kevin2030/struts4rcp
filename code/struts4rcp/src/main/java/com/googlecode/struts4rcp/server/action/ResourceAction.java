@@ -15,6 +15,11 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	/**
 	 * 不限制个数
 	 */
+	protected static final int NOSKIP = ResourceRequest.NOSKIP;
+
+	/**
+	 * 不限制个数
+	 */
 	protected static final int LIMITLESS = ResourceRequest.LIMITLESS;
 
 	@SuppressWarnings("unchecked")
@@ -37,15 +42,26 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		} else if ("get".equalsIgnoreCase(method)) {
 			if (model instanceof ResourceRequest) {
 				ResourceRequest<R> request = (ResourceRequest<R>)model;
-				return index(request.getResource(), request.getStart(), request.getLimit(), request.isReference());
+				return index(request.getResource(), request.getSkip(), request.getLimit(), request.isReference());
 			} else {
 				return read((R)model);
 			}
 		} else if ("head".equalsIgnoreCase(method)) {
+			if (model == null)
+				return count();
 			return count((R)model);
 		} else {
 			throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
 		}
+	}
+
+	/**
+	 * 统计资源个数
+	 * @return 资源个数
+	 * @throws Exception 统计失败时抛出
+	 */
+	protected long count() throws Exception {
+		return count(null);
 	}
 
 	/**
@@ -60,14 +76,47 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 
 	/**
 	 * 获取资源列表
-	 * @param condition 过滤条件，为null表示获取所有资源
-	 * @param start 起始行，从0开始
-	 * @param limit 个数，如果为<code>LIMITLESS</code>，表示不限制
 	 * @param reference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
 	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception 获取失败时抛出
 	 */
-	protected R[] index(R condition, long start, long limit, boolean reference) throws Exception {
+	protected R[] index(boolean reference) throws Exception {
+		return index(null, 0, LIMITLESS, reference);
+	}
+
+	/**
+	 * 获取资源列表
+	 * @param skip 跳过个数
+	 * @param limit 限制个数，如果为<code>LIMITLESS</code>，表示不限制
+	 * @param reference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
+	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
+	 * @throws Exception 获取失败时抛出
+	 */
+	protected R[] index(long skip, long limit, boolean reference) throws Exception {
+		return index(null, skip, limit, reference);
+	}
+
+	/**
+	 * 获取资源列表
+	 * @param condition 过滤条件，为null表示获取所有资源
+	 * @param reference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
+	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
+	 * @throws Exception 获取失败时抛出
+	 */
+	protected R[] index(R condition, boolean reference) throws Exception {
+		return index(condition, 0, LIMITLESS, reference);
+	}
+
+	/**
+	 * 获取资源列表
+	 * @param condition 过滤条件，为null表示获取所有资源
+	 * @param skip 跳过个数
+	 * @param limit 限制个数，如果为<code>LIMITLESS</code>，表示不限制
+	 * @param reference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
+	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
+	 * @throws Exception 获取失败时抛出
+	 */
+	protected R[] index(R condition, long skip, long limit, boolean reference) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
