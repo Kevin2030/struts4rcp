@@ -2,6 +2,7 @@ package com.googlecode.struts4rcp.client;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -331,8 +332,48 @@ public class Client implements Listenable {
 	 * @param uri 资源位置
 	 * @return 资源
 	 */
-	public <R extends Serializable> Directory<R> getDirectory(String uri, Object... args) {
-		return new DirectoryProxy<R>(format(uri, args));
+	public <R extends Serializable, S extends Serializable> Resources<R, S> getResources(String uri, Object... args) {
+		return new ResourcesProxy<R, S>(format(uri, args));
+	}
+
+	/**
+	 * 获取资源目录代理
+	 * @param <R> 资源类型
+	 * @param uri 资源位置
+	 * @return 资源
+	 */
+	public <R extends Serializable> Resources<R, R> getEntityResources(String uri, Object... args) {
+		return new ResourcesProxy<R, R>(format(uri, args));
+	}
+
+	/**
+	 * 获取资源目录代理
+	 * @param <R> 资源类型
+	 * @param uri 资源位置
+	 * @return 资源
+	 */
+	public <R extends Serializable> Resources<R, Serializable> getIdResources(String uri, Object... args) {
+		return new ResourcesProxy<R, Serializable>(format(uri, args));
+	}
+
+	/**
+	 * 获取资源目录代理
+	 * @param <R> 资源类型
+	 * @param uri 资源位置
+	 * @return 资源
+	 */
+	public <R extends Serializable> Resources<R, Resource<R>> getRefResources(String uri, Object... args) {
+		return new ResourcesProxy<R, Resource<R>>(format(uri, args));
+	}
+
+	/**
+	 * 获取资源目录代理
+	 * @param <R> 资源类型
+	 * @param uri 资源位置
+	 * @return 资源
+	 */
+	public <R extends Serializable> Resources<R, String> getUriResources(String uri, Object... args) {
+		return new ResourcesProxy<R, String>(format(uri, args));
 	}
 
 	private String format(String uri, Object... args) {
@@ -363,7 +404,61 @@ public class Client implements Listenable {
 		}
 	}
 
+	private class ResourcesProxy<R extends Serializable, S extends Serializable> implements Resources<R, S> {
+
+		private static final long serialVersionUID = 1L;
+
+		private final String uri;
+
+		private final Class<S> represent;
+
+		@SuppressWarnings("unchecked")
+		ResourcesProxy(String uri) {
+			if (uri == null)
+				throw new NullPointerException("uri == null!");
+			this.uri = uri;
+			this.represent = (Class<S>) ((ParameterizedType) getClass()
+					.getGenericSuperclass()).getActualTypeArguments()[1];
+		}
+
+		public String getURI() {
+			return uri;
+		}
+
+		public S[] index() throws Exception {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public S[] index(int start, int limit) throws Exception {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public S[] index(R resource) throws Exception {
+			return (S[])getTransmitter().transmit(Transmitter.GET_METHOD, uri, resource);
+		}
+
+		public S[] index(R resource, int start, int limit) throws Exception {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@SuppressWarnings("unchecked")
+		public S create(R resource) throws Exception {
+			Serializable serializable = getTransmitter().transmit(Transmitter.POST_METHOD, uri, resource);
+			if (Resource.class.isAssignableFrom(represent)
+					&& serializable instanceof String) {
+
+			}
+			return (S)serializable;
+		}
+
+	}
+
 	private class ResourceProxy<R extends Serializable> implements Resource<R> {
+
+		private static final long serialVersionUID = 6614859999242411781L;
 
 		private final String uri;
 
@@ -388,42 +483,6 @@ public class Client implements Listenable {
 
 		public void delete() throws Exception {
 			getTransmitter().transmit(Transmitter.DELETE_METHOD, uri, null);
-		}
-
-		public Directory<R> getDirectory() throws Exception {
-			String dir = (String)getTransmitter().transmit(Transmitter.HEAD_METHOD, uri, null);
-			if (dir == null)
-				return null;
-			return new DirectoryProxy<R>(dir);
-		}
-
-	}
-
-	private class DirectoryProxy<R extends Serializable> implements Directory<R> {
-
-		private final String uri;
-
-		DirectoryProxy(String uri) {
-			if (uri == null)
-				throw new NullPointerException("uri == null!");
-			this.uri = uri;
-		}
-
-		public String getURI() {
-			return uri;
-		}
-
-		public R[] list() throws Exception {
-			return list(null);
-		}
-
-		public R[] list(R resource) throws Exception {
-			return (R[])getTransmitter().transmit(Transmitter.GET_METHOD, uri, resource);
-		}
-
-		public Resource<R> create(R resource) throws Exception {
-			String res = (String)getTransmitter().transmit(Transmitter.POST_METHOD, uri, resource);
-			return new ResourceProxy<R>(res);
 		}
 
 	}

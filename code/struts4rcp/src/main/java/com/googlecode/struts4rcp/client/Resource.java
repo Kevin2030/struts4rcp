@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  * @param <R> 资源类型
  */
-public interface Resource<R extends Serializable> {
+public interface Resource<R extends Serializable> extends Serializable {
 
 	/**
 	 * 获取资源URI
@@ -34,11 +34,5 @@ public interface Resource<R extends Serializable> {
 	 * @throws Exception 删除失败或网络连接出错时抛出
 	 */
 	void delete() throws Exception;
-
-	/**
-	 * 获取资源所在目录，通过HEAD请求查找
-	 * @return 资源所在目录
-	 */
-	Directory<R> getDirectory() throws Exception;
 
 }
