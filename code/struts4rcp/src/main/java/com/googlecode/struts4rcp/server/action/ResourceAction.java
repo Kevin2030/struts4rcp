@@ -2,6 +2,7 @@ package com.googlecode.struts4rcp.server.action;
 
 import java.io.Serializable;
 
+import com.googlecode.struts4rcp.internal.ResourceRequest;
 import com.googlecode.struts4rcp.server.ActionContext;
 
 /**
@@ -15,33 +16,31 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	public Serializable execute(Serializable model) throws Exception {
 		String method = ActionContext.getContext().getRequest().getMethod();
 		if ("post".equalsIgnoreCase(method)) {
-			create((R)model, false);
+			if (model instanceof ResourceRequest) {
+				ResourceRequest<R> request = (ResourceRequest<R>)model;
+				create(request.getResource(), request.isReference());
+			} else {
+				create((R)model, false);
+			}
 			return null;
 		} else if ("put".equalsIgnoreCase(method)) {
 			update((R)model);
 			return null;
 		} else if ("delete".equalsIgnoreCase(method)) {
-			//delete(model);
+			delete((R)model);
 			return null;
 		} else if ("get".equalsIgnoreCase(method)) {
-			//String uri = ActionContext.getContext().getURI();
-			//if (uri.equalsIgnoreCase(getDirectory()))
-			//	return index(model);
-			//else
-			//	return read(model);
-			return null;
+			if (model instanceof ResourceRequest) {
+				ResourceRequest<R> request = (ResourceRequest<R>)model;
+				return index(request.getResource(), request.getStart(), request.getLimit(), request.isReference());
+			} else {
+				return read((R)model);
+			}
+		} else if ("head".equalsIgnoreCase(method)) {
+			return count((R)model);
 		} else {
 			throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
 		}
-	}
-
-	/**
-	 * 统计资源个数
-	 * @return 资源个数
-	 * @throws Exception 统计失败时抛出
-	 */
-	protected long count() throws Exception {
-		return count(null);
 	}
 
 	/**
@@ -54,44 +53,13 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * 获取资源列表
-	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
-	 * @return 资源标识(ID)列表/资源列表
-	 * @throws Exception 获取失败时抛出
-	 */
-	protected R[] index(boolean isReference) throws Exception {
-		return index(null, 0, Integer.MAX_VALUE, isReference);
-	}
-
-	/**
-	 * 获取资源列表
-	 * @param start 起始
-	 * @param limit 个数
-	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
-	 * @return 资源标识(ID)列表/资源列表
-	 * @throws Exception 获取失败时抛出
-	 */
-	protected R[] index(long start, long limit, boolean isReference) throws Exception {
-		return index(null, start, start, isReference);
-	}
-
-	/**
-	 * 获取资源列表
-	 * @param condition 过滤条件
-	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
-	 * @return 资源标识(ID)列表/资源列表
-	 * @throws Exception 获取失败时抛出
-	 */
-	protected R[] index(R condition, boolean isReference) throws Exception {
-		return index(condition, 0, Integer.MAX_VALUE, isReference);
-	}
+	protected static final int LIMITLESS = ResourceRequest.LIMITLESS;
 
 	/**
 	 * 获取资源列表
 	 * @param condition 过滤条件
 	 * @param start 起始
-	 * @param limit 个数
+	 * @param limit 个数，如果为<code>LIMITLESS</code>，即-1，表示不限制
 	 * @param isReference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
 	 * @return 资源标识(ID)列表/资源列表
 	 * @throws Exception 获取失败时抛出
