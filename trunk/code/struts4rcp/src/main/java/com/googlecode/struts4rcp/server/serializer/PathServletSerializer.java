@@ -9,10 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.server.ActionContext;
 import com.googlecode.struts4rcp.server.ServletSerializer;
-import com.googlecode.struts4rcp.server.action.Directory;
-import com.googlecode.struts4rcp.server.action.PageAction;
+import com.googlecode.struts4rcp.server.action.Pageable;
 import com.googlecode.struts4rcp.server.action.Path;
-import com.googlecode.struts4rcp.server.action.PathAction;
+import com.googlecode.struts4rcp.server.action.Pathable;
 
 public class PathServletSerializer implements ServletSerializer {
 
@@ -30,8 +29,8 @@ public class PathServletSerializer implements ServletSerializer {
 		Serializable result = serializer.deserialize(Serializable.class, request);
 		String path;
 		Action<Serializable, Serializable> action = ActionContext.getContext().getAction();
-		if (action instanceof PageAction) {
-			PathAction<Serializable, Serializable> pathAction = (PathAction<Serializable, Serializable>)action;
+		if (action instanceof Pageable) {
+			Pathable pathAction = (Pathable)action;
 			path = pathAction.getPath();
 		} else {
 			path = getPath(action);
@@ -47,17 +46,6 @@ public class PathServletSerializer implements ServletSerializer {
 	public static String getPath(Action<Serializable, Serializable> action) {
 		if (action.getClass().isAnnotationPresent(Path.class))
 			return action.getClass().getAnnotation(Path.class).value();
-		return null;
-	}
-
-	/**
-	 * Action缺省页面名查找方式
-	 * @param action Action实例
-	 * @return 页面路径(不包含后缀)
-	 */
-	public static String getDirectory(Action<Serializable, Serializable> action) {
-		if (action.getClass().isAnnotationPresent(Directory.class))
-			return action.getClass().getAnnotation(Directory.class).value();
 		return null;
 	}
 

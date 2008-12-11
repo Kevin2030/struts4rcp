@@ -1,8 +1,5 @@
 package com.googlecode.struts4rcp.server.action;
 
-import java.io.Serializable;
-
-import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.util.validator.Validator;
 
 /**
@@ -11,7 +8,7 @@ import com.googlecode.struts4rcp.util.validator.Validator;
  * @param <M> 传入模型类型
  * @param <R> 返回值类型
  */
-public interface ValidationAction<M extends Serializable, R extends Serializable> extends Action<M, R> {
+public interface Validatable {
 
 	/**
 	 * 获取验证器
