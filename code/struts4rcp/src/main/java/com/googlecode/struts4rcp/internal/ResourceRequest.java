@@ -17,23 +17,19 @@ public class ResourceRequest<R extends Serializable> implements Serializable {
 	private final boolean reference;
 
 	public ResourceRequest(boolean reference) {
-		super();
-		this.resource = null;
-		this.start = 0;
-		this.limit = LIMITLESS;
-		this.reference = reference;
+		this(null, 0, LIMITLESS, reference);
 	}
 
 	public ResourceRequest(R resource, boolean reference) {
-		super();
-		this.resource = resource;
-		this.start = 0;
-		this.limit = LIMITLESS;
-		this.reference = reference;
+		this(resource, 0, LIMITLESS, reference);
 	}
 
 	public ResourceRequest(R resource, int start, int limit, boolean reference) {
 		super();
+		if (start < 0)
+			throw new IllegalArgumentException("start < 0");
+		if (limit < 0)
+			throw new IllegalArgumentException("limit < 0");
 		this.resource = resource;
 		this.start = start;
 		this.limit = limit;
