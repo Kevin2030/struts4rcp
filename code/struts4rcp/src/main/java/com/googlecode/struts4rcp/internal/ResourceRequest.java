@@ -11,6 +11,14 @@ public class ResourceRequest<R extends Serializable> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * 第一行
+	 */
+	public static final int FIRST = 0;
+
+	/**
+	 * 不限制个数
+	 */
 	public static final int LIMITLESS = 0;
 
 	private final R resource;
@@ -22,19 +30,19 @@ public class ResourceRequest<R extends Serializable> implements Serializable {
 	private final boolean reference;
 
 	public ResourceRequest(boolean reference) {
-		this(null, 0, LIMITLESS, reference);
+		this(null, FIRST, LIMITLESS, reference);
 	}
 
 	public ResourceRequest(R resource, boolean reference) {
-		this(resource, 0, LIMITLESS, reference);
+		this(resource, FIRST, LIMITLESS, reference);
 	}
 
 	public ResourceRequest(R resource, int start, int limit, boolean reference) {
 		super();
 		if (start < 0)
 			throw new IllegalArgumentException("start < 0");
-		if (limit < 0)
-			throw new IllegalArgumentException("limit < 0");
+		if (limit < LIMITLESS)
+			throw new IllegalArgumentException("limit < " + LIMITLESS);
 		this.resource = resource;
 		this.start = start;
 		this.limit = limit;
@@ -50,7 +58,7 @@ public class ResourceRequest<R extends Serializable> implements Serializable {
 	}
 
 	/**
-	 * 起始行
+	 * 起始行，从0开始
 	 * @return 起始行
 	 */
 	public int getStart() {
