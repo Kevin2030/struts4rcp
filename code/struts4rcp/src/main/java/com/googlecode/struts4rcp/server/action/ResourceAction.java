@@ -11,7 +11,7 @@ import com.googlecode.struts4rcp.server.ActionContext;
  */
 public abstract class ResourceAction<R extends Serializable> extends AbstractAction<R, Serializable> {
 
-	public Serializable execute(R model) throws Exception {
+	public R execute(R model) throws Exception {
 		String method = ActionContext.getContext().getRequest().getMethod();
 		if ("post".equalsIgnoreCase(method)) {
 			create(model);
@@ -20,38 +20,49 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 			update(model);
 			return null;
 		} else if ("delete".equalsIgnoreCase(method)) {
-			delete(model);
+			//delete(model);
 			return null;
 		} else if ("get".equalsIgnoreCase(method)) {
-			String uri = ActionContext.getContext().getURI();
-			if (uri.equalsIgnoreCase(getDirectory()))
-				return index(model);
-			else
-				return read(model);
-		} else if ("head".equalsIgnoreCase(method)) {
-			return getDirectory();
+			//String uri = ActionContext.getContext().getURI();
+			//if (uri.equalsIgnoreCase(getDirectory()))
+			//	return index(model);
+			//else
+			//	return read(model);
+			return null;
 		} else {
 			throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
 		}
 	}
 
-	protected R[] index(R resource) throws Exception {
-		return null;
+	protected R[] index() throws Exception {
+		return index(null, 0, Integer.MAX_VALUE);
+	}
+
+	protected R[] index(int start, int limit) throws Exception {
+		return index(null, start, start);
+	}
+
+	protected R[] index(R condition) throws Exception {
+		return index(condition, 0, Integer.MAX_VALUE);
+	}
+
+	protected R[] index(R condition, int start, int limit) throws Exception {
+		throw new UnsupportedOperationException();
 	}
 
 	protected R create(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
-	protected R read(R resource) throws Exception {
-		return null;
-	}
-
-	protected void update(R resource) throws Exception {
+	protected void delete(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
-	protected void delete(R resource) throws Exception {
+	protected R read(R resource) throws Exception {
+		throw new UnsupportedOperationException();
+	}
+
+	protected void update(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
