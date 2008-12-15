@@ -5,10 +5,9 @@ import java.io.Serializable;
 import com.googlecode.struts4rcp.internal.ResourceRequest;
 
 /**
- * 资源集合
+ * 资源集合接口
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  * @param <R> 资源类型
- * @param <S> 接收表形类型(将发送对应的Accept头信息)
  */
 public interface Resources<R extends Serializable> extends Serializable {
 
