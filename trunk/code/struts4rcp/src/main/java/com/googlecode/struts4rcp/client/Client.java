@@ -447,6 +447,10 @@ public class Client implements Listenable {
 				return new ResourceProxy<R>(response.getURI(), response.getResource());
 		}
 
+		public void flush() {
+			// TODO 未实现
+		}
+
 	}
 
 	private class ResourceProxy<R extends Serializable> implements Resource<R> {
@@ -485,6 +489,10 @@ public class Client implements Listenable {
 
 		public void delete() throws Exception {
 			getTransmitter().transmit(Transmitter.DELETE_METHOD, uri, null);
+		}
+
+		public void flush() {
+			resource = null;
 		}
 
 	}
