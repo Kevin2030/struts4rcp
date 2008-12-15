@@ -28,6 +28,11 @@ public interface Resources<R extends Serializable> extends Serializable {
 	String getURI();
 
 	/**
+	 * 清除缓存
+	 */
+	void flush();
+
+	/**
 	 * 统计资源个数
 	 * @return 资源个数
 	 * @throws Exception 统计失败或网络连接出错时抛出

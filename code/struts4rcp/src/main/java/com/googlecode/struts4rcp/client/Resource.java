@@ -16,6 +16,11 @@ public interface Resource<R extends Serializable> extends Serializable {
 	String getURI();
 
 	/**
+	 * 清除缓存
+	 */
+	void flush();
+
+	/**
 	 * 获取资源
 	 * @return 资源
 	 * @throws Exception 获取失败或网络连接出错时抛出
