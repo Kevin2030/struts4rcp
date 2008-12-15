@@ -448,7 +448,7 @@ public class Client implements Listenable {
 		}
 
 		public void flush() {
-			// TODO 未实现
+			// TODO 未实现缓存
 		}
 
 	}
