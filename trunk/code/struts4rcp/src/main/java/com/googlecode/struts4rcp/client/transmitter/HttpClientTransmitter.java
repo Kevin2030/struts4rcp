@@ -10,10 +10,12 @@ import java.io.Serializable;
 import java.util.Properties;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.MultihomePlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -32,7 +34,7 @@ import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
  * @see org.apache.http.client.HttpClient
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class HttpClientTransmitter extends AbstractHttpTransmitter<HttpPost> {
+public class HttpClientTransmitter extends AbstractHttpTransmitter<HttpUriRequest> {
 
 	private HttpClient httpClient;
 
@@ -69,14 +71,20 @@ public class HttpClientTransmitter extends AbstractHttpTransmitter<HttpPost> {
 	}
 
 	@Override
-	protected HttpPost getRequest(String url) throws IOException {
+	protected HttpUriRequest getRequest(String method, String url) throws IOException {
 		return new HttpPost(url);
 	}
 
 	@Override
-	protected Serializable transmit(HttpPost request, String url,
+	protected void setHeader(HttpUriRequest request, String key, String value) throws IOException {
+		request.setHeader(key, value);
+	}
+
+	@Override
+	protected Serializable transmit(HttpUriRequest request, String url,
 			Serializable model) throws IOException {
-		request.setEntity(new SerializeEntity(serializer, model));
+		if (request instanceof HttpEntityEnclosingRequest)
+			((HttpEntityEnclosingRequest)request).setEntity(new SerializeEntity(serializer, model));
 		HttpResponse response = httpClient.execute(request);
 		StatusLine status = response.getStatusLine();
 		assertSuccessStatusCode(status.getStatusCode(), status.getReasonPhrase());
@@ -89,7 +97,7 @@ public class HttpClientTransmitter extends AbstractHttpTransmitter<HttpPost> {
 	}
 
 	@Override
-	protected void abort(HttpPost request) throws IOException {
+	protected void abort(HttpUriRequest request) throws IOException {
 		if (! request.isAborted())
 			request.abort();
 	}

@@ -3,6 +3,7 @@ package com.googlecode.struts4rcp.client;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 
 import com.googlecode.struts4rcp.client.event.TransmissionListener;
 
@@ -40,6 +41,16 @@ public interface Transmitter extends ConnectionMonitor {
 	 * @throws IOException 传输出错时抛出
 	 */
 	public abstract Serializable transmit(String method, String uri, Serializable model) throws Exception;
+
+	/**
+	 * 传输对象
+	 * @param method 传输方法
+	 * @param uri 服务器端URI
+	 * @param model 传输数据
+	 * @return 传回对象
+	 * @throws IOException 传输出错时抛出
+	 */
+	public abstract Serializable transmit(String method, String uri, Serializable model, Map<String, String> headers) throws Exception;
 
 	/**
 	 * 获取正在前台运行的传输项列表
