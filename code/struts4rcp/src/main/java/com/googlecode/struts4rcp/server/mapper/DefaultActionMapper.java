@@ -135,7 +135,10 @@ public class DefaultActionMapper implements ActionMapper {
 	}
 
 	public ServletSerializer getSerializer(HttpServletRequest request) {
-		return getSerializer(request.getContentType());
+		ServletSerializer serializer = getSerializer(request.getHeader("Accept")); // 根据接收类型查找
+		if (serializer == null)
+			serializer = getSerializer(request.getContentType()); // 如果没有设定接收类型，使用请求类型查找
+		return serializer;
 	}
 
 	protected ServletSerializer getSerializer(String contentType) {
