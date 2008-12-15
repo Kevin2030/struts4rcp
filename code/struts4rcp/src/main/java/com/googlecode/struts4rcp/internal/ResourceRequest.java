@@ -27,13 +27,13 @@ public class ResourceRequest<R extends Serializable> implements Serializable {
 
 	private final long limit;
 
-	private final boolean reference;
+	private final boolean lazy;
 
-	public ResourceRequest(R resource, boolean reference) {
-		this(resource, NOSKIP, LIMITLESS, reference);
+	public ResourceRequest(R resource, boolean lazy) {
+		this(resource, NOSKIP, LIMITLESS, lazy);
 	}
 
-	public ResourceRequest(R resource, long skip, long limit, boolean reference) {
+	public ResourceRequest(R resource, long skip, long limit, boolean lazy) {
 		super();
 		if (skip < NOSKIP)
 			throw new IllegalArgumentException("skip < " + NOSKIP);
@@ -42,7 +42,7 @@ public class ResourceRequest<R extends Serializable> implements Serializable {
 		this.resource = resource;
 		this.skip = skip;
 		this.limit = limit;
-		this.reference = reference;
+		this.lazy = lazy;
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class ResourceRequest<R extends Serializable> implements Serializable {
 	 * 是否为引用
 	 * @return 是否为引用
 	 */
-	public boolean isReference() {
-		return reference;
+	public boolean isLazy() {
+		return lazy;
 	}
 
 }

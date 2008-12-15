@@ -29,7 +29,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		if ("post".equalsIgnoreCase(method)) {
 			if (model instanceof ResourceRequest) {
 				ResourceRequest<R> request = (ResourceRequest<R>)model;
-				return convertResource(create(request.getResource(), request.isReference()), request.isReference());
+				return convertResource(create(request.getResource(), request.isLazy()), request.isLazy());
 			} else {
 				return convertResource(create((R)model, false), false);
 			}
@@ -45,20 +45,20 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 				R[] result;
 				if (request.getResource() == null) {
 					if (request.getSkip() == NOSKIP && request.getLimit() == LIMITLESS) {
-						result = index(request.isReference());
+						result = list(request.isLazy());
 					} else {
-						result = index(request.getSkip(), request.getLimit(), request.isReference());
+						result = list(request.getSkip(), request.getLimit(), request.isLazy());
 					}
 				} else {
 					if (request.getSkip() == NOSKIP && request.getLimit() == LIMITLESS) {
-						result = index(request.getResource(), request.isReference());
+						result = list(request.getResource(), request.isLazy());
 					} else {
-						result = index(request.getResource(), request.getSkip(), request.getLimit(), request.isReference());
+						result = list(request.getResource(), request.getSkip(), request.getLimit(), request.isLazy());
 					}
 				}
-				return convertResources(result, request.isReference());
+				return convertResources(result, request.isLazy());
 			} else {
-				return read((R)model);
+				return get((R)model);
 			}
 		} else if ("head".equalsIgnoreCase(method)) {
 			if (model == null)
@@ -70,18 +70,18 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	}
 
 	@SuppressWarnings("unchecked")
-	private ResourceResponse<R>[] convertResources(R[] resources, boolean reference) {
+	private ResourceResponse<R>[] convertResources(R[] resources, boolean lazy) {
 		if (resources == null)
 			return null;
 		ResourceResponse<R>[] responses = new ResourceResponse[resources.length];
 		for (int i = 0, n = resources.length; i < n; i ++) {
-			responses[i] = convertResource(resources[i], reference);
+			responses[i] = convertResource(resources[i], lazy);
 		}
 		return responses;
 	}
 
-	private ResourceResponse<R> convertResource(R resource, boolean reference) {
-		if (reference)
+	private ResourceResponse<R> convertResource(R resource, boolean lazy) {
+		if (lazy)
 			return new ResourceResponse<R>(convertResourceURI(resource), null);
 		else
 			return new ResourceResponse<R>(convertResourceURI(resource), resource);
@@ -114,35 +114,35 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 
 	/**
 	 * 获取资源列表
-	 * @param reference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
+	 * @param lazy 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
 	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception 获取失败时抛出
 	 */
-	protected R[] index(boolean reference) throws Exception {
-		return index(null, NOSKIP, LIMITLESS, reference);
+	protected R[] list(boolean lazy) throws Exception {
+		return list(null, NOSKIP, LIMITLESS, lazy);
 	}
 
 	/**
 	 * 获取资源列表
 	 * @param skip 跳过个数
 	 * @param limit 限制个数，如果为<code>LIMITLESS</code>，表示不限制
-	 * @param reference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
+	 * @param lazy 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
 	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception 获取失败时抛出
 	 */
-	protected R[] index(long skip, long limit, boolean reference) throws Exception {
-		return index(null, skip, limit, reference);
+	protected R[] list(long skip, long limit, boolean lazy) throws Exception {
+		return list(null, skip, limit, lazy);
 	}
 
 	/**
 	 * 获取资源列表
 	 * @param condition 过滤条件，为null表示获取所有资源
-	 * @param reference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
+	 * @param lazy 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
 	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception 获取失败时抛出
 	 */
-	protected R[] index(R condition, boolean reference) throws Exception {
-		return index(condition, NOSKIP, LIMITLESS, reference);
+	protected R[] list(R condition, boolean lazy) throws Exception {
+		return list(condition, NOSKIP, LIMITLESS, lazy);
 	}
 
 	/**
@@ -150,22 +150,22 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @param condition 过滤条件，为null表示获取所有资源
 	 * @param skip 跳过个数
 	 * @param limit 限制个数，如果为<code>LIMITLESS</code>，表示不限制
-	 * @param reference 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
+	 * @param lazy 是否只引用标识，如果是则返回资源标识列表，否则返回完整的资源列表
 	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception 获取失败时抛出
 	 */
-	protected R[] index(R condition, long skip, long limit, boolean reference) throws Exception {
+	protected R[] list(R condition, long skip, long limit, boolean lazy) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * 创建资源
 	 * @param resource 资源
-	 * @param reference 是否只引用标识，如果是则返回资源标识，否则返回完整的资源
+	 * @param lazy 是否只引用标识，如果是则返回资源标识，否则返回完整的资源
 	 * @return 资源标识/资源，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception
 	 */
-	protected R create(R resource, boolean reference) throws Exception {
+	protected R create(R resource, boolean lazy) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
@@ -175,7 +175,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @return 资源
 	 * @throws Exception 读取失败时抛出
 	 */
-	protected R read(R resource) throws Exception {
+	protected R get(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 

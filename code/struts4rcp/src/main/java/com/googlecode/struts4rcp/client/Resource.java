@@ -20,7 +20,7 @@ public interface Resource<R extends Serializable> extends Serializable {
 	 * @return 资源
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	R read() throws Exception;
+	R get() throws Exception;
 
 	/**
 	 * 更新资源(注：标识性属性值(如：ID值)无效，在服务器端接收时，将被替换为资源URI所指定的值)
