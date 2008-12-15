@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -277,14 +278,24 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	}
 
 	public Serializable transmit(String uri, Serializable model) throws Exception {
-		return transmit(POST_METHOD, uri, model);
+		return transmit(POST_METHOD, uri, model, null);
 	}
 
 	public Serializable transmit(String method, String uri, Serializable model) throws Exception {
+		return transmit(method, uri, model, null);
+	}
+
+	public Serializable transmit(String method, String uri, Serializable model,
+			Map<String, String> headers) throws Exception {
 		Transmission transmission = new Transmission(uri, model);
 		uri = urlPrefix + uri + urlSuffix;
 		Serializable result = null;
-		T request = getRequest(uri);
+		T request = getRequest(method, uri);
+		if (headers != null && headers.size() > 0) {
+			for (Map.Entry<String, String> entry : headers.entrySet()) {
+				setHeader(request, entry.getKey(), entry.getValue());
+			}
+		}
 		Abortor abortor = new Abortor(request);
 		addTransmission(transmission, abortor);
 		try {
@@ -361,7 +372,15 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	 * @return 请求信息
 	 * @throws IOException
 	 */
-	protected abstract T getRequest(String url) throws IOException;
+	protected abstract T getRequest(String method, String url) throws IOException;
+
+	/**
+	 * 设置头信息
+	 * @param key 名称
+	 * @param value 值
+	 * @throws IOException
+	 */
+	protected abstract void setHeader(T request, String key, String value) throws IOException;
 
 	/**
 	 * 传输对象

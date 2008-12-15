@@ -7,9 +7,15 @@ import java.util.Properties;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
+import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
+import org.apache.commons.httpclient.methods.DeleteMethod;
+import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.util.IdleConnectionTimeoutThread;
 
@@ -22,7 +28,7 @@ import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
  * @see org.apache.commons.httpclient.HttpClient
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<PostMethod> {
+public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<HttpMethod> {
 
 	/**
 	 * 空闲连接超时时间配置参数名
@@ -115,15 +121,31 @@ public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<PostMe
 	}
 
 	@Override
-	protected PostMethod getRequest(String url) throws IOException {
-		return new PostMethod(url);
+	protected HttpMethod getRequest(String method, String url) throws IOException {
+		if (POST_METHOD.equalsIgnoreCase(method))
+			return new PostMethod(url);
+		if (PUT_METHOD.equalsIgnoreCase(method))
+			return new PutMethod(url);
+		if (GET_METHOD.equalsIgnoreCase(method))
+			return new GetMethod(url);
+		if (DELETE_METHOD.equalsIgnoreCase(method))
+			return new DeleteMethod(url);
+		if (HEAD_METHOD.equalsIgnoreCase(method))
+			return new HeadMethod(url);
+		throw new IllegalArgumentException("un supported http method: " + method);
 	}
 
 	@Override
-	protected Serializable transmit(PostMethod request, String url, Serializable model)
+	protected void setHeader(HttpMethod request, String key, String value) throws IOException {
+		request.setRequestHeader(key, value);
+	}
+
+	@Override
+	protected Serializable transmit(HttpMethod request, String url, Serializable model)
 			throws IOException {
 		try {
-			request.setRequestEntity(new SerializeEntity(serializer, model));
+			if (request instanceof EntityEnclosingMethod)
+				((EntityEnclosingMethod)request).setRequestEntity(new SerializeEntity(serializer, model));
 			int code = httpClient.executeMethod(request);
 			assertSuccessStatusCode(code, request.getStatusText());
 			return serializer.deserialize(Serializable.class, request.getResponseBodyAsStream());
@@ -133,9 +155,11 @@ public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<PostMe
 	}
 
 	@Override
-	protected void abort(PostMethod request) throws IOException {
-		if(! request.isAborted())
-			request.abort();
+	protected void abort(HttpMethod request) throws IOException {
+		if(request instanceof EntityEnclosingMethod
+				&& ((EntityEnclosingMethod)request).isAborted())
+			return;
+		request.abort();
 	}
 
 	private static class SerializeEntity implements RequestEntity {
