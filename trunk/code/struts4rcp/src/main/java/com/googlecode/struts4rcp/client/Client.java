@@ -339,13 +339,13 @@ public class Client implements Listenable {
 	}
 
 	/**
-	 * 获取资源集合引用代理 (只下载引用URI，在每个资源read()时去取具体资源)
+	 * 获取资源集合引用代理 (该代理list()只下载引用URI，在每个资源get()时去取具体资源)
 	 * @param <R> 资源类型
 	 * @param uri 资源位置
 	 * @param args 资源位置占位参数
 	 * @return 资源集合
 	 */
-	public <R extends Serializable> Resources<R> getReferenceResources(String uri, Object... args) {
+	public <R extends Serializable> Resources<R> getLazyResources(String uri, Object... args) {
 		return new ResourcesProxy<R>(format(uri, args), true);
 	}
 
@@ -404,19 +404,19 @@ public class Client implements Listenable {
 			return (Long)getTransmitter().transmit(Transmitter.HEAD_METHOD, uri, resource);
 		}
 
-		public Resource<R>[] index() throws Exception {
-			return index(null, NOSKIP, LIMITLESS);
+		public Resource<R>[] list() throws Exception {
+			return list(null, NOSKIP, LIMITLESS);
 		}
 
-		public Resource<R>[] index(long start, long limit) throws Exception {
-			return index(null, start, limit);
+		public Resource<R>[] list(long start, long limit) throws Exception {
+			return list(null, start, limit);
 		}
 
-		public Resource<R>[] index(R resource) throws Exception {
-			return index(resource, NOSKIP, LIMITLESS);
+		public Resource<R>[] list(R resource) throws Exception {
+			return list(resource, NOSKIP, LIMITLESS);
 		}
 
-		public Resource<R>[] index(R resource, long start, long limit) throws Exception {
+		public Resource<R>[] list(R resource, long start, long limit) throws Exception {
 			ResourceRequest<R> request = new ResourceRequest<R>(resource, start, limit, reference);
 			ResourceResponse<R>[] responses = (ResourceResponse<R>[])getTransmitter().transmit(Transmitter.GET_METHOD, uri, request);
 			return convertResources(responses);
@@ -473,7 +473,7 @@ public class Client implements Listenable {
 		}
 
 		@SuppressWarnings("unchecked")
-		public R read() throws Exception {
+		public R get() throws Exception {
 			if (resource == null)
 				resource = (R)getTransmitter().transmit(Transmitter.GET_METHOD, uri, null);
 			return resource;

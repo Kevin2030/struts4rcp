@@ -48,7 +48,7 @@ public interface Resources<R extends Serializable> extends Serializable {
 	 * @return 资源列表
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	Resource<R>[] index() throws Exception;
+	Resource<R>[] list() throws Exception;
 
 	/**
 	 * 分页获取目录中所有的资源
@@ -57,7 +57,7 @@ public interface Resources<R extends Serializable> extends Serializable {
 	 * @return 资源列表
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	Resource<R>[] index(long skip, long limit) throws Exception;
+	Resource<R>[] list(long skip, long limit) throws Exception;
 
 	/**
 	 * 获取目录中所有的资源
@@ -65,7 +65,7 @@ public interface Resources<R extends Serializable> extends Serializable {
 	 * @return 资源列表
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	Resource<R>[] index(R condition) throws Exception;
+	Resource<R>[] list(R condition) throws Exception;
 
 	/**
 	 * 分页获取目录中所有的资源
@@ -75,7 +75,7 @@ public interface Resources<R extends Serializable> extends Serializable {
 	 * @return 资源列表
 	 * @throws Exception 获取失败或网络连接出错时抛出
 	 */
-	Resource<R>[] index(R condition, long skip, long limit) throws Exception;
+	Resource<R>[] list(R condition, long skip, long limit) throws Exception;
 
 	/**
 	 * 创建资源
