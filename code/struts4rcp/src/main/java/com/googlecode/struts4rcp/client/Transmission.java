@@ -9,7 +9,7 @@ import java.util.Map;
  * Action执行过程
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class Transmission implements Serializable, Cancellable {
+public class Transmission implements Serializable, Abortable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -125,15 +125,15 @@ public class Transmission implements Serializable, Cancellable {
 		}
 	}
 
-	private Cancellable abortor;
+	private Abortable abortor;
 
 	/**
 	 * 中止传输
 	 */
-	public void cancel() throws Exception {
+	public void abort() throws Exception {
 		if (abortor != null) {
 			synchronized (abortor) {
-				abortor.cancel();
+				abortor.abort();
 			}
 		}
 	}
@@ -166,7 +166,7 @@ public class Transmission implements Serializable, Cancellable {
 	 * 开始传输
 	 * @param abortor 中止传输封装体
 	 */
-	public void transmiting(Cancellable abortor) {
+	public void transmiting(Abortable abortor) {
 		synchronized (statusLock) {
 			if (status != TRANSMIT_STATUS)
 				throw new IllegalStateException("This transportation already transported!");

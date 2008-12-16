@@ -100,7 +100,7 @@ public class WorkDialog extends Dialog {
 					ThreadUtils.execute(new Runnable(){
 						public void run() {
 							try {
-								work.cancel();
+								work.abort();
 							} catch (final Throwable t) {
 								shell.getDisplay().asyncExec(new Runnable() {
 									public void run() {
