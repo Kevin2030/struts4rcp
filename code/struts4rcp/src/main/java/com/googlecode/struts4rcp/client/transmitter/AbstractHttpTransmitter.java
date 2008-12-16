@@ -277,17 +277,11 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		}
 	}
 
-	public Serializable transmit(String uri, Serializable model) throws Exception {
-		return transmit(uri, model, POST_METHOD, null);
-	}
-
-	public Serializable transmit(String uri, Serializable model, String method) throws Exception {
-		return transmit(uri, model, method, null);
-	}
-
-	public Serializable transmit(String uri, Serializable model, String method,
-			Map<String, String> headers) throws Exception {
-		Transmission transmission = new Transmission(uri, model);
+	public Serializable transmit(Transmission transmission) throws Exception {
+		String uri = transmission.getActionName();
+		Serializable model = transmission.getModel();
+		String method = transmission.getMethod();
+		Map<String, String> headers = transmission.getHeaders();
 		uri = urlPrefix + uri + urlSuffix;
 		Serializable result = null;
 		T request = getRequest(method, uri);

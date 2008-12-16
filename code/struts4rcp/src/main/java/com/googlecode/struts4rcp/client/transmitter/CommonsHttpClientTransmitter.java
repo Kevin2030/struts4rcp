@@ -20,6 +20,7 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.util.IdleConnectionTimeoutThread;
 
 import com.googlecode.struts4rcp.client.Client;
+import com.googlecode.struts4rcp.client.Transmission;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
 
@@ -122,15 +123,15 @@ public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<HttpMe
 
 	@Override
 	protected HttpMethod getRequest(String method, String url) throws IOException {
-		if (POST_METHOD.equalsIgnoreCase(method))
+		if (Transmission.POST_METHOD.equalsIgnoreCase(method))
 			return new PostMethod(url);
-		if (PUT_METHOD.equalsIgnoreCase(method))
+		if (Transmission.PUT_METHOD.equalsIgnoreCase(method))
 			return new PutMethod(url);
-		if (GET_METHOD.equalsIgnoreCase(method))
+		if (Transmission.GET_METHOD.equalsIgnoreCase(method))
 			return new GetMethod(url);
-		if (DELETE_METHOD.equalsIgnoreCase(method))
+		if (Transmission.DELETE_METHOD.equalsIgnoreCase(method))
 			return new DeleteMethod(url);
-		if (HEAD_METHOD.equalsIgnoreCase(method))
+		if (Transmission.HEAD_METHOD.equalsIgnoreCase(method))
 			return new HeadMethod(url);
 		throw new IllegalArgumentException("un supported http method: " + method);
 	}
