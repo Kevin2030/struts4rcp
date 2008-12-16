@@ -2,8 +2,6 @@ package com.googlecode.struts4rcp.client;
 
 import java.io.Serializable;
 
-import com.googlecode.struts4rcp.internal.ResourceRequest;
-
 /**
  * 资源集合接口
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
@@ -14,12 +12,12 @@ public interface Resources<R extends Serializable> extends Serializable {
 	/**
 	 * 不跳过
 	 */
-	public static final int NOSKIP = ResourceRequest.NOSKIP;
+	public static final int NOSKIP = 0;
 
 	/**
 	 * 不限制个数
 	 */
-	public static final int LIMITLESS = ResourceRequest.LIMITLESS;
+	public static final int LIMITLESS = 0;
 
 	/**
 	 * 获取资源集合URI

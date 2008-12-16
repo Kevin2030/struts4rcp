@@ -2,7 +2,6 @@ package com.googlecode.struts4rcp.server.action;
 
 import java.io.Serializable;
 
-import com.googlecode.struts4rcp.internal.ResourceRequest;
 import com.googlecode.struts4rcp.server.ActionContext;
 
 /**
@@ -15,12 +14,12 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	/**
 	 * 不跳过
 	 */
-	protected static final int NOSKIP = ResourceRequest.NOSKIP;
+	protected static final int NOSKIP = 0;
 
 	/**
 	 * 不限制个数
 	 */
-	protected static final int LIMITLESS = ResourceRequest.LIMITLESS;
+	protected static final int LIMITLESS = 0;
 
 	public Serializable execute(R model) throws Exception {
 		String method = ActionContext.getContext().getRequest().getMethod();
