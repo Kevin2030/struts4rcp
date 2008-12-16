@@ -34,23 +34,23 @@ public interface Transmitter extends ConnectionMonitor {
 
 	/**
 	 * 传输对象
-	 * @param method 传输方法
 	 * @param uri 服务器端URI
 	 * @param model 传输数据
+	 * @param method 传输方法
 	 * @return 传回对象
 	 * @throws IOException 传输出错时抛出
 	 */
-	public abstract Serializable transmit(String method, String uri, Serializable model) throws Exception;
+	public abstract Serializable transmit(String uri, Serializable model, String method) throws Exception;
 
 	/**
 	 * 传输对象
-	 * @param method 传输方法
 	 * @param uri 服务器端URI
 	 * @param model 传输数据
+	 * @param method 传输方法
 	 * @return 传回对象
 	 * @throws IOException 传输出错时抛出
 	 */
-	public abstract Serializable transmit(String method, String uri, Serializable model, Map<String, String> headers) throws Exception;
+	public abstract Serializable transmit(String uri, Serializable model, String method, Map<String, String> headers) throws Exception;
 
 	/**
 	 * 获取正在前台运行的传输项列表
