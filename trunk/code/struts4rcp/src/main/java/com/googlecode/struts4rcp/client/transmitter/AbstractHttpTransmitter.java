@@ -13,7 +13,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import com.googlecode.struts4rcp.client.Cancellable;
+import com.googlecode.struts4rcp.client.Abortable;
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.Transmission;
 import com.googlecode.struts4rcp.client.Transmitter;
@@ -335,7 +335,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		return Collections.unmodifiableCollection(copies);
 	}
 
-	protected void addTransmission(Transmission execution, Cancellable abortor) {
+	protected void addTransmission(Transmission execution, Abortable abortor) {
 		transportationPublisher.publishEvent(new TransmissionEvent(AbstractHttpTransmitter.this, execution));
 		synchronized (executions) {
 			if (executions.size() >= maxConnectionSize) {
@@ -414,7 +414,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		transportationPublisher.removeListener(listener);
 	}
 
-	private final class Abortor implements Cancellable {
+	private final class Abortor implements Abortable {
 
 		private final T request;
 
@@ -422,7 +422,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 			this.request = request;
 		}
 
-		public void cancel() throws Exception {
+		public void abort() throws Exception {
 			AbstractHttpTransmitter.this.abort(request);
 		}
 	}
