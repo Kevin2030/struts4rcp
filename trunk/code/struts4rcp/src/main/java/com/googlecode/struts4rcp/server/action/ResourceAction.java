@@ -3,6 +3,7 @@ package com.googlecode.struts4rcp.server.action;
 import java.io.Serializable;
 
 import com.googlecode.struts4rcp.server.ActionContext;
+import com.googlecode.struts4rcp.util.KeyValue;
 
 /**
  * 资源处理Action基类
@@ -57,9 +58,10 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 						result = list(model, skip, limit, lazy);
 					}
 				}
-				return result;
+				return convertResources(result, lazy);
 			} else if ("post".equalsIgnoreCase(method)) {
-				return create(model, lazy);
+				R result = create(model, lazy);
+				return convertResource(result, lazy);
 			} else {
 				throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
 			}
@@ -82,23 +84,22 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		return getPath().equalsIgnoreCase(ActionContext.getContext().getURI());
 	}
 
-/*
 	@SuppressWarnings("unchecked")
-	private ResourceResponse<R>[] convertResources(R[] resources, boolean lazy) {
+	private KeyValue<String, R>[] convertResources(R[] resources, boolean lazy) {
 		if (resources == null)
 			return null;
-		ResourceResponse<R>[] responses = new ResourceResponse[resources.length];
+		KeyValue<String, R>[] responses = new KeyValue[resources.length];
 		for (int i = 0, n = resources.length; i < n; i ++) {
 			responses[i] = convertResource(resources[i], lazy);
 		}
 		return responses;
 	}
 
-	private ResourceResponse<R> convertResource(R resource, boolean lazy) {
+	private KeyValue<String, R> convertResource(R resource, boolean lazy) {
 		if (lazy)
-			return new ResourceResponse<R>(convertResourceURI(resource), null);
+			return new KeyValue<String, R>(convertResourceURI(resource), null);
 		else
-			return new ResourceResponse<R>(convertResourceURI(resource), resource);
+			return new KeyValue<String, R>(convertResourceURI(resource), resource);
 	}
 
 	private String convertResourceURI(R resource) {
@@ -106,7 +107,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		// TODO 格式化未处理
 		return uri;
 	}
-*/
+
 	/**
 	 * 统计资源个数
 	 * @return 资源个数
