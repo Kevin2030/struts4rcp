@@ -373,7 +373,7 @@ public class Client implements Listenable {
 
 		@SuppressWarnings("unchecked")
 		public R execute(final M model) throws Exception {
-			return (R)getTransmitter().transmit(actionName, model);
+			return (R)getTransmitter().transmit(new Transmission(actionName, model));
 		}
 	}
 
@@ -401,7 +401,7 @@ public class Client implements Listenable {
 		}
 
 		public long count(R resource) throws Exception {
-			return (Long)getTransmitter().transmit(uri, resource, Transmitter.HEAD_METHOD);
+			return (Long)getTransmitter().transmit(new Transmission(uri, resource, Transmission.HEAD_METHOD));
 		}
 
 		public Resource<R>[] list() throws Exception {
@@ -418,14 +418,14 @@ public class Client implements Listenable {
 
 		public Resource<R>[] list(R resource, long start, long limit) throws Exception {
 			ResourceRequest<R> request = new ResourceRequest<R>(resource, start, limit, reference);
-			ResourceResponse<R>[] responses = (ResourceResponse<R>[])getTransmitter().transmit(uri, request, Transmitter.GET_METHOD);
+			ResourceResponse<R>[] responses = (ResourceResponse<R>[])getTransmitter().transmit(new Transmission(uri, request, Transmission.GET_METHOD));
 			return convertResources(responses);
 		}
 
 		@SuppressWarnings("unchecked")
 		public Resource<R> create(R resource) throws Exception {
 			ResourceRequest<R> request = new ResourceRequest<R>(resource, reference);
-			ResourceResponse<R> response = (ResourceResponse<R>)getTransmitter().transmit(uri, request, Transmitter.POST_METHOD);
+			ResourceResponse<R> response = (ResourceResponse<R>)getTransmitter().transmit(new Transmission(uri, request, Transmission.POST_METHOD));
 			return convertResource(response);
 		}
 
@@ -479,16 +479,16 @@ public class Client implements Listenable {
 		@SuppressWarnings("unchecked")
 		public R get() throws Exception {
 			if (resource == null)
-				resource = (R)getTransmitter().transmit(uri, null, Transmitter.GET_METHOD);
+				resource = (R)getTransmitter().transmit(new Transmission(uri, null, Transmission.GET_METHOD));
 			return resource;
 		}
 
 		public void update(R resource) throws Exception {
-			getTransmitter().transmit(uri, resource, Transmitter.PUT_METHOD);
+			getTransmitter().transmit(new Transmission(uri, resource, Transmission.PUT_METHOD));
 		}
 
 		public void delete() throws Exception {
-			getTransmitter().transmit(uri, null, Transmitter.DELETE_METHOD);
+			getTransmitter().transmit(new Transmission(uri, null, Transmission.DELETE_METHOD));
 		}
 
 		public void flush() {

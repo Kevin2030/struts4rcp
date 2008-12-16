@@ -3,6 +3,7 @@ package com.googlecode.struts4rcp.client;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Action执行过程
@@ -11,6 +12,16 @@ import java.util.Date;
 public class Transmission implements Serializable, Cancellable {
 
 	private static final long serialVersionUID = 1L;
+
+	public static final String POST_METHOD = "post";
+
+	public static final String PUT_METHOD = "put";
+
+	public static final String GET_METHOD = "get";
+
+	public static final String DELETE_METHOD = "delete";
+
+	public static final String HEAD_METHOD = "head";
 
 	private static final int TRANSMIT_STATUS = 0;
 
@@ -22,11 +33,20 @@ public class Transmission implements Serializable, Cancellable {
 
 	private Object statusLock = new Object();
 
-	public Transmission(String actionName, Serializable model) {
-		super();
+	public Transmission(String uri, Serializable model) {
+		this(uri, model, POST_METHOD, null);
+	}
+
+	public Transmission(String uri, Serializable model, String method) {
+		this(uri, model, method, null);
+	}
+
+	public Transmission(String uri, Serializable model, String method, Map<String, String> headers) {
 		this.id = nextId();
-		this.actionName = actionName;
+		this.actionName = uri;
 		this.model = model;
+		this.method = method;
+		this.headers = headers;
 	}
 
 	// -------- init --------
@@ -71,6 +91,18 @@ public class Transmission implements Serializable, Cancellable {
 	 */
 	public Serializable getModel() {
 		return model;
+	}
+
+	private final String method;
+
+	public String getMethod() {
+		return method;
+	}
+
+	private final Map<String, String> headers;
+
+	public Map<String, String> getHeaders() {
+		return headers;
 	}
 
 	private final Date transmitTime = new Date();

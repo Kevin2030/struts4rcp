@@ -14,7 +14,11 @@ import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.MultihomePlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -27,6 +31,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 import com.googlecode.struts4rcp.client.Client;
+import com.googlecode.struts4rcp.client.Transmission;
 import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
 
 /**
@@ -72,7 +77,17 @@ public class HttpClientTransmitter extends AbstractHttpTransmitter<HttpUriReques
 
 	@Override
 	protected HttpUriRequest getRequest(String method, String url) throws IOException {
-		return new HttpPost(url);
+		if (Transmission.POST_METHOD.equalsIgnoreCase(method))
+			return new HttpPost(url);
+		if (Transmission.PUT_METHOD.equalsIgnoreCase(method))
+			return new HttpPut(url);
+		if (Transmission.GET_METHOD.equalsIgnoreCase(method))
+			return new HttpGet(url);
+		if (Transmission.DELETE_METHOD.equalsIgnoreCase(method))
+			return new HttpDelete(url);
+		if (Transmission.HEAD_METHOD.equalsIgnoreCase(method))
+			return new HttpHead(url);
+		throw new IllegalArgumentException("un supported http method: " + method);
 	}
 
 	@Override
