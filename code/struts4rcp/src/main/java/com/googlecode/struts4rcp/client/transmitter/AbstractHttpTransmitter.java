@@ -278,14 +278,14 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	}
 
 	public Serializable transmit(String uri, Serializable model) throws Exception {
-		return transmit(POST_METHOD, uri, model, null);
+		return transmit(uri, model, POST_METHOD, null);
 	}
 
-	public Serializable transmit(String method, String uri, Serializable model) throws Exception {
-		return transmit(method, uri, model, null);
+	public Serializable transmit(String uri, Serializable model, String method) throws Exception {
+		return transmit(uri, model, method, null);
 	}
 
-	public Serializable transmit(String method, String uri, Serializable model,
+	public Serializable transmit(String uri, Serializable model, String method,
 			Map<String, String> headers) throws Exception {
 		Transmission transmission = new Transmission(uri, model);
 		uri = urlPrefix + uri + urlSuffix;
