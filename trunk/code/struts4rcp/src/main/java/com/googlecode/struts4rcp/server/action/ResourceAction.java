@@ -3,7 +3,6 @@ package com.googlecode.struts4rcp.server.action;
 import java.io.Serializable;
 
 import com.googlecode.struts4rcp.internal.ResourceRequest;
-import com.googlecode.struts4rcp.internal.ResourceResponse;
 import com.googlecode.struts4rcp.server.ActionContext;
 
 /**
@@ -11,7 +10,7 @@ import com.googlecode.struts4rcp.server.ActionContext;
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  * @param <R> 资源类型
  */
-public abstract class ResourceAction<R extends Serializable> extends AbstractAction<Serializable, Serializable> {
+public abstract class ResourceAction<R extends Serializable> extends AbstractAction<R, Serializable> {
 
 	/**
 	 * 不跳过
@@ -23,52 +22,68 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 */
 	protected static final int LIMITLESS = ResourceRequest.LIMITLESS;
 
-	@SuppressWarnings("unchecked")
-	public Serializable execute(Serializable model) throws Exception {
+	public Serializable execute(R model) throws Exception {
 		String method = ActionContext.getContext().getRequest().getMethod();
-		if ("post".equalsIgnoreCase(method)) {
-			if (model instanceof ResourceRequest) {
-				ResourceRequest<R> request = (ResourceRequest<R>)model;
-				return convertResource(create(request.getResource(), request.isLazy()), request.isLazy());
-			} else {
-				return convertResource(create((R)model, false), false);
-			}
-		} else if ("put".equalsIgnoreCase(method)) {
-			update((R)model);
-			return null;
-		} else if ("delete".equalsIgnoreCase(method)) {
-			delete((R)model);
-			return null;
-		} else if ("get".equalsIgnoreCase(method)) {
-			if (model instanceof ResourceRequest) {
-				ResourceRequest<R> request = (ResourceRequest<R>)model;
+		String skipHeader = ActionContext.getContext().getRequest().getHeader("skip");
+		long skip = NOSKIP;
+		if (skipHeader != null && skipHeader.trim().length() > 0)
+			skip = Long.parseLong(skipHeader.trim());
+		String limitHeader = ActionContext.getContext().getRequest().getHeader("limit");
+		long limit = LIMITLESS;
+		if (limitHeader != null && limitHeader.trim().length() > 0)
+			limit = Long.parseLong(limitHeader.trim());
+		String lazyHeader = ActionContext.getContext().getRequest().getHeader("lazy");
+		if (lazyHeader != null)
+			lazyHeader = lazyHeader.trim();
+		boolean lazy = "true".equalsIgnoreCase(lazyHeader)
+						|| "1".equalsIgnoreCase(lazyHeader)
+						|| "yes".equalsIgnoreCase(lazyHeader);
+		if (isResources()) {
+			if ("head".equalsIgnoreCase(method)) {
+				if (model == null)
+					return count();
+				return count(model);
+			} else if ("get".equalsIgnoreCase(method)) {
 				R[] result;
-				if (request.getResource() == null) {
-					if (request.getSkip() == NOSKIP && request.getLimit() == LIMITLESS) {
-						result = list(request.isLazy());
+				if (model == null) {
+					if (skip == NOSKIP && limit == LIMITLESS) {
+						result = list(lazy);
 					} else {
-						result = list(request.getSkip(), request.getLimit(), request.isLazy());
+						result = list(skip, limit, lazy);
 					}
 				} else {
-					if (request.getSkip() == NOSKIP && request.getLimit() == LIMITLESS) {
-						result = list(request.getResource(), request.isLazy());
+					if (skip == NOSKIP && limit == LIMITLESS) {
+						result = list(model, lazy);
 					} else {
-						result = list(request.getResource(), request.getSkip(), request.getLimit(), request.isLazy());
+						result = list(model, skip, limit, lazy);
 					}
 				}
-				return convertResources(result, request.isLazy());
+				return result;
+			} else if ("post".equalsIgnoreCase(method)) {
+				return create(model, lazy);
 			} else {
-				return get((R)model);
+				throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
 			}
-		} else if ("head".equalsIgnoreCase(method)) {
-			if (model == null)
-				return count();
-			return count((R)model);
 		} else {
-			throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
+			if ("put".equalsIgnoreCase(method)) {
+				update(model);
+				return null;
+			} else if ("delete".equalsIgnoreCase(method)) {
+				delete(model);
+				return null;
+			} else if ("get".equalsIgnoreCase(method)) {
+				return read(model);
+			} else {
+				throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
+			}
 		}
 	}
 
+	protected boolean isResources() { // TODO 分离对比目录
+		return getPath().equalsIgnoreCase(ActionContext.getContext().getURI());
+	}
+
+/*
 	@SuppressWarnings("unchecked")
 	private ResourceResponse<R>[] convertResources(R[] resources, boolean lazy) {
 		if (resources == null)
@@ -92,7 +107,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 		// TODO 格式化未处理
 		return uri;
 	}
-
+*/
 	/**
 	 * 统计资源个数
 	 * @return 资源个数
@@ -175,7 +190,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @return 资源
 	 * @throws Exception 读取失败时抛出
 	 */
-	protected R get(R resource) throws Exception {
+	protected R read(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 

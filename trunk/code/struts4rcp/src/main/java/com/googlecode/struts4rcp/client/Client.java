@@ -477,7 +477,7 @@ public class Client implements Listenable {
 		}
 
 		@SuppressWarnings("unchecked")
-		public R get() throws Exception {
+		public R read() throws Exception {
 			if (resource == null)
 				resource = (R)getTransmitter().transmit(new Transmission(uri, null, Transmission.GET_METHOD));
 			return resource;
