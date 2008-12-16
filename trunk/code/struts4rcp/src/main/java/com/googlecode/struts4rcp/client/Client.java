@@ -18,7 +18,6 @@ import com.googlecode.struts4rcp.client.event.Listener;
 import com.googlecode.struts4rcp.client.event.TransmissionListener;
 import com.googlecode.struts4rcp.client.event.WorkListener;
 import com.googlecode.struts4rcp.client.transmitter.HttpURLConnectionTransmitter;
-import com.googlecode.struts4rcp.internal.ResourceRequest;
 import com.googlecode.struts4rcp.internal.ResourceResponse;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ServiceUtils;
@@ -383,13 +382,13 @@ public class Client implements Listenable {
 
 		private final String uri;
 
-		private final boolean reference;
+		private final boolean lazy;
 
-		ResourcesProxy(String uri, boolean reference) {
+		ResourcesProxy(String uri, boolean lazy) {
 			if (uri == null)
 				throw new NullPointerException("uri == null!");
 			this.uri = uri;
-			this.reference = reference;
+			this.lazy = lazy;
 		}
 
 		public String getURI() {
@@ -417,15 +416,19 @@ public class Client implements Listenable {
 		}
 
 		public Resource<R>[] list(R resource, long start, long limit) throws Exception {
-			ResourceRequest<R> request = new ResourceRequest<R>(resource, start, limit, reference);
-			ResourceResponse<R>[] responses = (ResourceResponse<R>[])getTransmitter().transmit(new Transmission(uri, request, Transmission.GET_METHOD));
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("lazy", String.valueOf(lazy));
+			headers.put("start", String.valueOf(start));
+			headers.put("limit", String.valueOf(limit));
+			ResourceResponse<R>[] responses = (ResourceResponse<R>[])getTransmitter().transmit(new Transmission(uri, resource, Transmission.GET_METHOD, headers));
 			return convertResources(responses);
 		}
 
 		@SuppressWarnings("unchecked")
 		public Resource<R> create(R resource) throws Exception {
-			ResourceRequest<R> request = new ResourceRequest<R>(resource, reference);
-			ResourceResponse<R> response = (ResourceResponse<R>)getTransmitter().transmit(new Transmission(uri, request, Transmission.POST_METHOD));
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("lazy", String.valueOf(lazy));
+			ResourceResponse<R> response = (ResourceResponse<R>)getTransmitter().transmit(new Transmission(uri, resource, Transmission.POST_METHOD, headers));
 			return convertResource(response);
 		}
 
@@ -441,7 +444,7 @@ public class Client implements Listenable {
 		}
 
 		private Resource<R> convertResource(ResourceResponse<R> response) {
-			if (reference)
+			if (lazy)
 				return new ResourceProxy<R>(response.getURI());
 			else
 				return new ResourceProxy<R>(response.getURI(), response.getResource());
