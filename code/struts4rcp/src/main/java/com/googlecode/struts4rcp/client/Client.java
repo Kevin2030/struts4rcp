@@ -18,7 +18,7 @@ import com.googlecode.struts4rcp.client.event.Listener;
 import com.googlecode.struts4rcp.client.event.TransmissionListener;
 import com.googlecode.struts4rcp.client.event.WorkListener;
 import com.googlecode.struts4rcp.client.transmitter.HttpURLConnectionTransmitter;
-import com.googlecode.struts4rcp.internal.ResourceResponse;
+import com.googlecode.struts4rcp.util.KeyValue;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ServiceUtils;
 import com.googlecode.struts4rcp.util.ThreadUtils;
@@ -420,7 +420,7 @@ public class Client implements Listenable {
 			headers.put("lazy", String.valueOf(lazy));
 			headers.put("start", String.valueOf(start));
 			headers.put("limit", String.valueOf(limit));
-			ResourceResponse<R>[] responses = (ResourceResponse<R>[])getTransmitter().transmit(new Transmission(uri, resource, Transmission.GET_METHOD, headers));
+			KeyValue<String, R>[] responses = (KeyValue<String, R>[])getTransmitter().transmit(new Transmission(uri, resource, Transmission.GET_METHOD, headers));
 			return convertResources(responses);
 		}
 
@@ -428,12 +428,12 @@ public class Client implements Listenable {
 		public Resource<R> create(R resource) throws Exception {
 			Map<String, String> headers = new HashMap<String, String>();
 			headers.put("lazy", String.valueOf(lazy));
-			ResourceResponse<R> response = (ResourceResponse<R>)getTransmitter().transmit(new Transmission(uri, resource, Transmission.POST_METHOD, headers));
+			KeyValue<String, R> response = (KeyValue<String, R>)getTransmitter().transmit(new Transmission(uri, resource, Transmission.POST_METHOD, headers));
 			return convertResource(response);
 		}
 
 		@SuppressWarnings("unchecked")
-		private Resource<R>[] convertResources(ResourceResponse<R>[] responses) {
+		private Resource<R>[] convertResources(KeyValue<String, R>[] responses) {
 			if (responses == null)
 				return null;
 			Resource<R>[] resources = new Resource[responses.length];
@@ -443,11 +443,11 @@ public class Client implements Listenable {
 			return resources;
 		}
 
-		private Resource<R> convertResource(ResourceResponse<R> response) {
+		private Resource<R> convertResource(KeyValue<String, R> response) {
 			if (lazy)
-				return new ResourceProxy<R>(response.getURI());
+				return new ResourceProxy<R>(response.getKey());
 			else
-				return new ResourceProxy<R>(response.getURI(), response.getResource());
+				return new ResourceProxy<R>(response.getKey(), response.getValue());
 		}
 
 		public void flush() {
