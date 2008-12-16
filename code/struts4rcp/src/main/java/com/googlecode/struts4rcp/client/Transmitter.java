@@ -21,14 +21,14 @@ public interface Transmitter extends ConnectionMonitor {
 	public abstract Serializable transmit(Transmission transmission) throws Exception;
 
 	/**
-	 * 获取正在前台运行的传输项列表
-	 * @return 正在运行的传输项列表
+	 * 获取正在传输的传输项列表
+	 * @return 正在传输的传输项列表
 	 */
 	public abstract Collection<Transmission> getTransmissions();
 
 	/**
-	 * 是否正在前台传输
-	 * @return 是否正在前台传输
+	 * 是否正在传输
+	 * @return 是否正在传输
 	 */
 	public abstract boolean isTransmiting();
 
