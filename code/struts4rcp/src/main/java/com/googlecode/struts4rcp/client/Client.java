@@ -400,7 +400,8 @@ public class Client implements Listenable {
 		}
 
 		public long count(R resource) throws Exception {
-			return (Long)getTransmitter().transmit(new Transmission(uri, resource, Transmission.HEAD_METHOD));
+			String count = (String)getTransmitter().transmit(new Transmission(uri, resource, Transmission.HEAD_METHOD));
+			return Long.parseLong(count);
 		}
 
 		public Resource<R>[] list() throws Exception {
@@ -479,6 +480,15 @@ public class Client implements Listenable {
 			return uri;
 		}
 
+		public void flush() {
+			resource = null;
+		}
+
+		public boolean exist() throws Exception {
+			String exist = (String)getTransmitter().transmit(new Transmission(uri, null, Transmission.HEAD_METHOD));
+			return Boolean.parseBoolean(exist);
+		}
+
 		@SuppressWarnings("unchecked")
 		public R read() throws Exception {
 			if (resource == null)
@@ -492,10 +502,6 @@ public class Client implements Listenable {
 
 		public void delete() throws Exception {
 			getTransmitter().transmit(new Transmission(uri, null, Transmission.DELETE_METHOD));
-		}
-
-		public void flush() {
-			resource = null;
 		}
 
 	}

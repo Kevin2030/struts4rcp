@@ -66,14 +66,16 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 				throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
 			}
 		} else {
-			if ("put".equalsIgnoreCase(method)) {
+			if ("head".equalsIgnoreCase(method)) {
+				return exist(model);
+			} else if ("get".equalsIgnoreCase(method)) {
+				return read(model);
+			} else if ("put".equalsIgnoreCase(method)) {
 				update(model);
 				return null;
 			} else if ("delete".equalsIgnoreCase(method)) {
 				delete(model);
 				return null;
-			} else if ("get".equalsIgnoreCase(method)) {
-				return read(model);
 			} else {
 				throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
 			}
@@ -181,6 +183,16 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @throws Exception
 	 */
 	protected R create(R resource, boolean lazy) throws Exception {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * 检测资源是否存在
+	 * @param resource 资源标识，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
+	 * @return 是否存在
+	 * @throws Exception 检测失败时抛出
+	 */
+	protected boolean exist(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
