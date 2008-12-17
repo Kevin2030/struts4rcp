@@ -21,6 +21,13 @@ public interface Resource<R extends Serializable> extends Serializable {
 	void flush();
 
 	/**
+	 * 检测资源是否存
+	 * @return 资源是否存
+	 * @throws Exception 检测失败或网络连接出错时抛出
+	 */
+	boolean exist() throws Exception;
+
+	/**
 	 * 获取资源
 	 * @return 资源
 	 * @throws Exception 获取失败或网络连接出错时抛出
