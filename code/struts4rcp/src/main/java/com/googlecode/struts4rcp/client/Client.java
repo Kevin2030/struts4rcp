@@ -376,7 +376,7 @@ public class Client implements Listenable {
 	 * @param name 配置项名
 	 * @param desc 配置项描述
 	 */
-	public void addPropertyDescription(String key, String name, String desc, String defaultValue, String... optionsValue) {
+	public void addPropertyDescription(String key, String name, String desc, String defaultValue, String... optionValues) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
 		if (name == null)
@@ -387,10 +387,10 @@ public class Client implements Listenable {
 			}
 		}
 		Collection<String> options = null;
-		if (optionsValue != null
-				&& optionsValue.length > 0) {
+		if (optionValues != null
+				&& optionValues.length > 0) {
 			ArrayList<String> list = new ArrayList<String>();
-			list.addAll(Arrays.asList(optionsValue));
+			list.addAll(Arrays.asList(optionValues));
 			if (! list.contains(defaultValue))
 				list.add(0, defaultValue);
 			options = Collections.unmodifiableCollection(list);
