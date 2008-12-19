@@ -11,12 +11,10 @@ import java.util.Properties;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.client.event.ConfigurationListener;
-import com.googlecode.struts4rcp.client.event.NetworkListener;
-import com.googlecode.struts4rcp.client.event.ExceptionListener;
 import com.googlecode.struts4rcp.client.event.Listenable;
 import com.googlecode.struts4rcp.client.event.Listener;
+import com.googlecode.struts4rcp.client.event.NetworkListener;
 import com.googlecode.struts4rcp.client.event.TransferListener;
-import com.googlecode.struts4rcp.client.event.WorkListener;
 import com.googlecode.struts4rcp.client.transferrer.HttpURLConnectionTransferrer;
 import com.googlecode.struts4rcp.util.KeyValue;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
@@ -232,6 +230,7 @@ public class Client implements Listenable {
 				LISTENERS_KEY, Listener.class);
 		for (Listener listener : listeners) {
 			addListener(listener);
+			Worker.getWorker().addListener(listener);
 		}
 	}
 
@@ -269,11 +268,6 @@ public class Client implements Listenable {
 		if (listener instanceof ConfigurationListener)
 			this.getConfigurationManager().addConfigurationListener(
 					(ConfigurationListener) listener);
-		if (listener instanceof WorkListener)
-			Worker.getWorker().addWorkListener((WorkListener) listener);
-		if (listener instanceof ExceptionListener)
-			Worker.getWorker().addExceptionListener(
-					(ExceptionListener) listener);
 	}
 
 	/**
@@ -292,11 +286,6 @@ public class Client implements Listenable {
 		if (listener instanceof ConfigurationListener)
 			this.getConfigurationManager().removeConfigurationListener(
 					(ConfigurationListener) listener);
-		if (listener instanceof WorkListener)
-			Worker.getWorker().removeWorkListener((WorkListener) listener);
-		if (listener instanceof ExceptionListener)
-			Worker.getWorker().removeExceptionListener(
-					(ExceptionListener) listener);
 	}
 
 	public Properties getProperties() {
