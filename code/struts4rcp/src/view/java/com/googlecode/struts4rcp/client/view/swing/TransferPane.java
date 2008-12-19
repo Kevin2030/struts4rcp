@@ -22,19 +22,19 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Transmission;
-import com.googlecode.struts4rcp.client.event.TransmissionAdapter;
-import com.googlecode.struts4rcp.client.event.TransmissionEvent;
-import com.googlecode.struts4rcp.client.event.TransmissionListener;
+import com.googlecode.struts4rcp.client.Transfer;
+import com.googlecode.struts4rcp.client.event.TransferAdapter;
+import com.googlecode.struts4rcp.client.event.TransferEvent;
+import com.googlecode.struts4rcp.client.event.TransferListener;
 import com.googlecode.struts4rcp.util.ThreadUtils;
 
 /**
  * Action队列信息管理窗口，包装Action队列信息管理面板
- * @see com.googlecode.struts4rcp.client.view.swing.TransmissionPane
+ * @see com.googlecode.struts4rcp.client.view.swing.TransferPane
  * @see com.googlecode.struts4rcp.client.view.swing.ConnectionStatus
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class TransmissionPane extends JPanel {
+public class TransferPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ public class TransmissionPane extends JPanel {
 
 	private final JList transportationList;
 
-	public JList getTransmitationList() {
+	public JList getTransferList() {
 		return transportationList;
 	}
 
@@ -64,7 +64,7 @@ public class TransmissionPane extends JPanel {
 
 	private final Client client;
 
-	public TransmissionPane(final Client client) {
+	public TransferPane(final Client client) {
 		if (client == null)
 			throw new NullPointerException("Client == null!");
 		this.client = client;
@@ -88,7 +88,7 @@ public class TransmissionPane extends JPanel {
 		transportationModel = new DefaultListModel();
 		transportationList = new JList(transportationModel);
 		transportationList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		transportationList.setCellRenderer(new TransmitListCellRenderer());
+		transportationList.setCellRenderer(new TransferListCellRenderer());
 		final JScrollPane actionListPane = new JScrollPane();
 		actionListPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		actionListPane.getViewport().setView(transportationList);
@@ -100,26 +100,26 @@ public class TransmissionPane extends JPanel {
 		toolBar.add(abortButton);
 		abortButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (getTransmitationModelSize() == 0) {
-					JOptionPane.showMessageDialog(TransmissionPane.this, "没有任何传输项!", "中止", JOptionPane.WARNING_MESSAGE);
+				if (getTransferModelSize() == 0) {
+					JOptionPane.showMessageDialog(TransferPane.this, "没有任何传输项!", "中止", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				final Transmission execution = (Transmission)transportationList.getSelectedValue();
+				final Transfer execution = (Transfer)transportationList.getSelectedValue();
 				if (execution == null) {
-					JOptionPane.showMessageDialog(TransmissionPane.this, "请选择传输项!", "中止", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(TransferPane.this, "请选择传输项!", "中止", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				if (! execution.isAbortable()) {
-					JOptionPane.showMessageDialog(TransmissionPane.this, "此传输项不允许中止!", "中止", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(TransferPane.this, "此传输项不允许中止!", "中止", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				ThreadUtils.execute(new Runnable(){
 					public void run() {
 						try {
 							execution.abort();
-							JOptionPane.showMessageDialog(TransmissionPane.this, "中止传输项完成!", "中止", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(TransferPane.this, "中止传输项完成!", "中止", JOptionPane.INFORMATION_MESSAGE);
 						} catch (Throwable t) {
-							JOptionPane.showMessageDialog(TransmissionPane.this, "中止传输项失败! 原因: " + t.getMessage(), "中止", JOptionPane.WARNING_MESSAGE);
+							JOptionPane.showMessageDialog(TransferPane.this, "中止传输项失败! 原因: " + t.getMessage(), "中止", JOptionPane.WARNING_MESSAGE);
 						}
 					}
 				});
@@ -129,9 +129,9 @@ public class TransmissionPane extends JPanel {
 		transportationList.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 
 			public void valueChanged(ListSelectionEvent e) {
-				final Transmission execution = (Transmission)transportationList.getSelectedValue();
+				final Transfer execution = (Transfer)transportationList.getSelectedValue();
 				if (execution != null) {
-					timeLabel.setText(new DecimalFormat("###,##0").format(System.currentTimeMillis() - execution.getTransmitingTime().getTime()) + " ms");
+					timeLabel.setText(new DecimalFormat("###,##0").format(System.currentTimeMillis() - execution.getTransferringTime().getTime()) + " ms");
 				} else {
 					timeLabel.setText("");
 				}
@@ -146,18 +146,18 @@ public class TransmissionPane extends JPanel {
 		resetButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					refreshTransmitationList();
-					JOptionPane.showMessageDialog(TransmissionPane.this, "刷新传输列表成功!", "刷新", JOptionPane.INFORMATION_MESSAGE);
+					refreshTransferList();
+					JOptionPane.showMessageDialog(TransferPane.this, "刷新传输列表成功!", "刷新", JOptionPane.INFORMATION_MESSAGE);
 				} catch (Throwable t) {
-					JOptionPane.showMessageDialog(TransmissionPane.this, "刷新传输列表失败! 原因: " + t.getMessage(), "刷新", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(TransferPane.this, "刷新传输列表失败! 原因: " + t.getMessage(), "刷新", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
-		transportationListener = new TransmissionDelegate(new TransmissionAdapter() {
+		transportationListener = new TransferDelegate(new TransferAdapter() {
 			@Override
-			public void onTransmit(TransmissionEvent event) {
-				Transmission execution = event.getTransmission();
-				if (! execution.isTransmited()) {
+			public void onTransfer(TransferEvent event) {
+				Transfer execution = event.getTransfer();
+				if (! execution.isTransferred()) {
 					synchronized (transportationModel) {
 						if (! transportationModel.contains(execution))
 							transportationModel.addElement(execution);
@@ -165,14 +165,14 @@ public class TransmissionPane extends JPanel {
 				}
 			}
 			@Override
-			public void onTransmited(TransmissionEvent event) {
-				Transmission execution = event.getTransmission();
+			public void onTransferred(TransferEvent event) {
+				Transfer execution = event.getTransfer();
 				synchronized (transportationModel) {
 					transportationModel.removeElement(execution);
 				}
 			}
 			@Override
-			public void onTransmiting(final TransmissionEvent event) {
+			public void onTransferring(final TransferEvent event) {
 				synchronized (transportationModel) {
 					transportationList.repaint();
 				}
@@ -181,39 +181,39 @@ public class TransmissionPane extends JPanel {
 		client.addListener(transportationListener);
 	}
 
-	private void refreshTransmitationList() {
-		Collection<Transmission> executions = client.getTransmitter().getTransmissions();
+	private void refreshTransferList() {
+		Collection<Transfer> executions = client.getTransferrer().getTransfers();
 		synchronized (transportationModel) {
 			transportationModel.clear();
-			for (Transmission execution : executions) {
-				if (! execution.isTransmited()) {
+			for (Transfer execution : executions) {
+				if (! execution.isTransferred()) {
 					transportationModel.addElement(execution);
 				}
 			}
 		}
 	}
 
-	private final TransmissionListener transportationListener;
+	private final TransferListener transportationListener;
 
 	public void dispose() {
 		client.removeListener(transportationListener);
 	}
 
-	private int getTransmitationModelSize() {
+	private int getTransferModelSize() {
 		synchronized (transportationModel) {
 			return transportationModel.getSize();
 		}
 	}
 
-	private class TransmitListCellRenderer extends DefaultListCellRenderer  {
+	private class TransferListCellRenderer extends DefaultListCellRenderer  {
 
 		private static final long serialVersionUID = 1L;
 
 		public Component getListCellRendererComponent(JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			Transmission execution = (Transmission)value;
-			if (execution.isTransmiting())
+			Transfer execution = (Transfer)value;
+			if (execution.isTransferring())
 				this.setIcon(enableIcon);
 			else
 				this.setIcon(disableIcon);

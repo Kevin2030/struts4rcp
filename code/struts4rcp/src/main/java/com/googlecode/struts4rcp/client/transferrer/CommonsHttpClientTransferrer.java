@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.client.transmitter;
+package com.googlecode.struts4rcp.client.transferrer;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,7 +20,7 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.util.IdleConnectionTimeoutThread;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Transmission;
+import com.googlecode.struts4rcp.client.Transfer;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
 
@@ -29,7 +29,7 @@ import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
  * @see org.apache.commons.httpclient.HttpClient
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<HttpMethod> {
+public class CommonsHttpClientTransferrer extends AbstractHttpTransferrer<HttpMethod> {
 
 	/**
 	 * 空闲连接超时时间配置参数名
@@ -123,15 +123,15 @@ public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<HttpMe
 
 	@Override
 	protected HttpMethod getRequest(String method, String url) throws IOException {
-		if (Transmission.POST_METHOD.equalsIgnoreCase(method))
+		if (Transfer.POST_METHOD.equalsIgnoreCase(method))
 			return new PostMethod(url);
-		if (Transmission.PUT_METHOD.equalsIgnoreCase(method))
+		if (Transfer.PUT_METHOD.equalsIgnoreCase(method))
 			return new PutMethod(url);
-		if (Transmission.GET_METHOD.equalsIgnoreCase(method))
+		if (Transfer.GET_METHOD.equalsIgnoreCase(method))
 			return new GetMethod(url);
-		if (Transmission.DELETE_METHOD.equalsIgnoreCase(method))
+		if (Transfer.DELETE_METHOD.equalsIgnoreCase(method))
 			return new DeleteMethod(url);
-		if (Transmission.HEAD_METHOD.equalsIgnoreCase(method))
+		if (Transfer.HEAD_METHOD.equalsIgnoreCase(method))
 			return new HeadMethod(url);
 		throw new IllegalArgumentException("un supported http method: " + method);
 	}
@@ -142,7 +142,7 @@ public class CommonsHttpClientTransmitter extends AbstractHttpTransmitter<HttpMe
 	}
 
 	@Override
-	protected Serializable transmit(HttpMethod request, String url, Serializable model)
+	protected Serializable transfer(HttpMethod request, String url, Serializable model)
 			throws IOException {
 		try {
 			if (request instanceof EntityEnclosingMethod)

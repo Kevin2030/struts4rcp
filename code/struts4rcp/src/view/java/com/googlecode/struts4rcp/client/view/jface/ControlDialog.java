@@ -17,7 +17,7 @@ public class ControlDialog extends Dialog {
 
 	private final Shell shell;
 
-	private TransmissionPane transmissionPane;
+	private TransferPane transmissionPane;
 
 	private ExceptionPane exceptionPane;
 
@@ -48,7 +48,7 @@ public class ControlDialog extends Dialog {
 
 		TabItem transportationTabItem = new TabItem(tabFolder, SWT.FILL);
 		transportationTabItem.setText("传输管理");
-		transmissionPane = new TransmissionPane(tabFolder, client);
+		transmissionPane = new TransferPane(tabFolder, client);
 		transportationTabItem.setControl(transmissionPane);
 
 		TabItem exceptionTabItem = new TabItem(tabFolder, SWT.FILL);
