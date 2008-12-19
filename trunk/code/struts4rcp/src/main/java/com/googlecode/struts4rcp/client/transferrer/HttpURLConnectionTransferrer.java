@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.client.transmitter;
+package com.googlecode.struts4rcp.client.transferrer;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -10,7 +10,7 @@ import java.net.URL;
  * @see java.net.HttpURLConnection
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class HttpURLConnectionTransmitter extends AbstractHttpTransmitter<HttpURLConnection> {
+public class HttpURLConnectionTransferrer extends AbstractHttpTransferrer<HttpURLConnection> {
 
 	@Override
 	protected HttpURLConnection getRequest(String method, String url) throws IOException {
@@ -32,7 +32,7 @@ public class HttpURLConnectionTransmitter extends AbstractHttpTransmitter<HttpUR
 	}
 
 	@Override
-	protected Serializable transmit(HttpURLConnection request, String url, Serializable model) throws IOException {
+	protected Serializable transfer(HttpURLConnection request, String url, Serializable model) throws IOException {
 		try {
 			serializer.serialize(model, request.getOutputStream());
 			request.connect();

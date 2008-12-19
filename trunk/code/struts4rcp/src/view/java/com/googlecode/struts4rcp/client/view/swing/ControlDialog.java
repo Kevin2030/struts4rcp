@@ -14,7 +14,7 @@ public class ControlDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private final TransmissionPane transmissionPane;
+	private final TransferPane transmissionPane;
 
 	private final ExceptionPane exceptionPane;
 
@@ -24,7 +24,7 @@ public class ControlDialog extends JDialog {
 		super(owner, true);
 		if (client == null)
 			throw new NullPointerException("Client == null!");
-		transmissionPane = new TransmissionPane(client);
+		transmissionPane = new TransferPane(client);
 		exceptionPane = new ExceptionPane();
 		configurationPane = new ConfigurationPane(client);
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
@@ -43,7 +43,7 @@ public class ControlDialog extends JDialog {
 		this.setVisible(false);
 	}
 
-	public TransmissionPane getTransmissionPane() {
+	public TransferPane getTransmissionPane() {
 		return transmissionPane;
 	}
 

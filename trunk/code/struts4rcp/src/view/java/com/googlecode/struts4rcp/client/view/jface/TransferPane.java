@@ -16,22 +16,22 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Transmission;
-import com.googlecode.struts4rcp.client.event.TransmissionAdapter;
-import com.googlecode.struts4rcp.client.event.TransmissionEvent;
-import com.googlecode.struts4rcp.client.event.TransmissionListener;
+import com.googlecode.struts4rcp.client.Transfer;
+import com.googlecode.struts4rcp.client.event.TransferAdapter;
+import com.googlecode.struts4rcp.client.event.TransferEvent;
+import com.googlecode.struts4rcp.client.event.TransferListener;
 
-public class TransmissionPane extends Composite {
+public class TransferPane extends Composite {
 
 	private final Client client;
 
-	private final ArrayList<Transmission> executions = new ArrayList<Transmission>();
+	private final ArrayList<Transfer> executions = new ArrayList<Transfer>();
 
 	private final List executionList;
 
-	private final TransmissionListener transportationListener;
+	private final TransferListener transportationListener;
 
-	public TransmissionPane(final Composite parent, final Client client) {
+	public TransferPane(final Composite parent, final Client client) {
 		super(parent, SWT.NONE);
 		if (client == null)
 			throw new NullPointerException("Client == null!");
@@ -48,7 +48,7 @@ public class TransmissionPane extends Composite {
 							"没有任何传输项!");
 					return;
 				}
-				final Transmission execution = getSelectedExecution();
+				final Transfer execution = getSelectedExecution();
 				if (execution == null) {
 					MessageDialog.openWarning(parent.getShell(), "中止",
 							"请选择传输项!");
@@ -86,12 +86,12 @@ public class TransmissionPane extends Composite {
 		timeLabel.setBounds(20, 428, 200, 20);
 		executionList.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
-				final Transmission execution = getSelectedExecution();
+				final Transfer execution = getSelectedExecution();
 				if (execution != null) {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							abortItem.setEnabled(execution.isAbortable());
-							timeLabel.setText(new DecimalFormat("###,##0").format(System.currentTimeMillis() - execution.getTransmitingTime().getTime()) + " ms");
+							timeLabel.setText(new DecimalFormat("###,##0").format(System.currentTimeMillis() - execution.getTransferringTime().getTime()) + " ms");
 						}
 					});
 				} else {
@@ -107,11 +107,11 @@ public class TransmissionPane extends Composite {
 				widgetSelected(e);
 			}
 		});
-		transportationListener = new TransmissionAdapter() {
+		transportationListener = new TransferAdapter() {
 			@Override
-			public void onTransmit(TransmissionEvent event) {
-				final Transmission execution = event.getTransmission();
-				if (!execution.isTransmited()) {
+			public void onTransfer(TransferEvent event) {
+				final Transfer execution = event.getTransfer();
+				if (!execution.isTransferred()) {
 					synchronized (executions) {
 						if (! executions.contains(execution)) {
 							executions.add(execution);
@@ -129,8 +129,8 @@ public class TransmissionPane extends Composite {
 			}
 
 			@Override
-			public void onTransmited(TransmissionEvent event) {
-				Transmission execution = event.getTransmission();
+			public void onTransferred(TransferEvent event) {
+				Transfer execution = event.getTransfer();
 				synchronized (executions) {
 					final int i = executions.indexOf(execution);
 					if (i > -1 && i < executions.size()) {
@@ -145,8 +145,8 @@ public class TransmissionPane extends Composite {
 			}
 
 			@Override
-			public void onTransmiting(final TransmissionEvent event) {
-				final Transmission execution = event.getTransmission();
+			public void onTransferring(final TransferEvent event) {
+				final Transfer execution = event.getTransfer();
 				synchronized (executions) {
 					if (executions.contains(execution)) {
 						final int i = executions.indexOf(execution);
@@ -165,16 +165,16 @@ public class TransmissionPane extends Composite {
 	}
 
 	private void refreshTransportationList(boolean isUI) {
-		Collection<Transmission> exes = client.getTransmitter().getTransmissions();
+		Collection<Transfer> exes = client.getTransferrer().getTransfers();
 		synchronized (executions) {
 			executions.clear();
 			executionList.removeAll();
-			for (final Transmission execution : exes) {
-				if (! execution.isTransmited()) {
+			for (final Transfer execution : exes) {
+				if (! execution.isTransferred()) {
 					executions.add(execution);
 					final int i = executions.size();
 					if (isUI) {
-						if (execution.isTransmiting())
+						if (execution.isTransferring())
 							executionList.add("(传输) " + i + ". "
 									+ execution.toString());
 						else
@@ -183,7 +183,7 @@ public class TransmissionPane extends Composite {
 					} else {
 						Display.getDefault().asyncExec(new Runnable() {
 							public void run() {
-								if (execution.isTransmiting())
+								if (execution.isTransferring())
 									executionList.add("(传输) " + i + ". "
 											+ execution.toString());
 								else
@@ -197,7 +197,7 @@ public class TransmissionPane extends Composite {
 		}
 	}
 
-	private Transmission getSelectedExecution() {
+	private Transfer getSelectedExecution() {
 		final int i = executionList.getSelectionIndex();
 		synchronized (executions) {
 			if (i > -1 && i < executions.size()) {

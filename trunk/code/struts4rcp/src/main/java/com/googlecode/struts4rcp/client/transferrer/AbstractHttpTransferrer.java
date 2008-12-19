@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.client.transmitter;
+package com.googlecode.struts4rcp.client.transferrer;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -15,14 +15,14 @@ import java.util.concurrent.TimeUnit;
 
 import com.googlecode.struts4rcp.client.Abortable;
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Transmission;
-import com.googlecode.struts4rcp.client.Transmitter;
+import com.googlecode.struts4rcp.client.Transfer;
+import com.googlecode.struts4rcp.client.Transferrer;
 import com.googlecode.struts4rcp.client.event.ConnectionEvent;
 import com.googlecode.struts4rcp.client.event.ConnectionListener;
 import com.googlecode.struts4rcp.client.event.ConnectionPublisher;
-import com.googlecode.struts4rcp.client.event.TransmissionEvent;
-import com.googlecode.struts4rcp.client.event.TransmissionListener;
-import com.googlecode.struts4rcp.client.event.TransmissionPublisher;
+import com.googlecode.struts4rcp.client.event.TransferEvent;
+import com.googlecode.struts4rcp.client.event.TransferListener;
+import com.googlecode.struts4rcp.client.event.TransferPublisher;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ServiceUtils;
 import com.googlecode.struts4rcp.util.logger.Logger;
@@ -34,7 +34,7 @@ import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
  * HTTP传输器基类
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public abstract class AbstractHttpTransmitter<T> implements Transmitter {
+public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 
 	/**
 	 * 日志输出接口
@@ -246,7 +246,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		// 初始化连接状态事件
 		boolean changed = refresh();
 		if (! changed) // 如果未改变，也触发
-			connectionPublisher.publishEvent(new ConnectionEvent(AbstractHttpTransmitter.this, isConnected()));
+			connectionPublisher.publishEvent(new ConnectionEvent(AbstractHttpTransferrer.this, isConnected()));
 
 		// ---- 组装前缀 ----
 		urlPrefix = HTTP_PROTOCAL + hostAddress;
@@ -277,7 +277,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		}
 	}
 
-	public Serializable transmit(Transmission transmission) throws Exception {
+	public Serializable transfer(Transfer transmission) throws Exception {
 		String uri = transmission.getActionName();
 		Serializable model = transmission.getModel();
 		String method = transmission.getMethod();
@@ -291,9 +291,9 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 			}
 		}
 		Abortor abortor = new Abortor(request);
-		addTransmission(transmission, abortor);
+		addTransfer(transmission, abortor);
 		try {
-			result = transmit(request, uri, model);
+			result = transfer(request, uri, model);
 			if (result instanceof Exception) { // 抛出异常
 				Exception e = (Exception)result;
 				logger.error(e.getMessage(), new RuntimeException());
@@ -315,28 +315,28 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 				throw (IOException)e;
 			throw new RuntimeException(e.getMessage(), e);
 		} finally {
-			removeTransmission(transmission, result);
+			removeTransfer(transmission, result);
 		}
 	}
 
-	private final Collection<Transmission> executions = new HashSet<Transmission>();
+	private final Collection<Transfer> executions = new HashSet<Transfer>();
 
-	public boolean isTransmiting() {
+	public boolean isTransferring() {
 		synchronized (executions) {
 			return ! executions.isEmpty();
 		}
 	}
 
-	public Collection<Transmission> getTransmissions() {
-		Collection<Transmission> copies = new HashSet<Transmission>();
+	public Collection<Transfer> getTransfers() {
+		Collection<Transfer> copies = new HashSet<Transfer>();
 		synchronized (executions) {
 			copies.addAll(executions);
 		}
 		return Collections.unmodifiableCollection(copies);
 	}
 
-	protected void addTransmission(Transmission execution, Abortable abortor) {
-		transportationPublisher.publishEvent(new TransmissionEvent(AbstractHttpTransmitter.this, execution));
+	protected void addTransfer(Transfer execution, Abortable abortor) {
+		transportationPublisher.publishEvent(new TransferEvent(AbstractHttpTransferrer.this, execution));
 		synchronized (executions) {
 			if (executions.size() >= maxConnectionSize) {
 				try {
@@ -347,17 +347,17 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 			}
 			executions.add(execution);
 		}
-		execution.transmiting(abortor);
-		transportationPublisher.publishEvent(new TransmissionEvent(AbstractHttpTransmitter.this, execution));
+		execution.transferring(abortor);
+		transportationPublisher.publishEvent(new TransferEvent(AbstractHttpTransferrer.this, execution));
 	}
 
-	protected void removeTransmission(Transmission execution, Serializable result) {
+	protected void removeTransfer(Transfer execution, Serializable result) {
 		synchronized (executions) {
 			executions.remove(execution);
 			executions.notify();
 		}
-		execution.transmited(result);
-		transportationPublisher.publishEvent(new TransmissionEvent(AbstractHttpTransmitter.this, execution));
+		execution.transferred(result);
+		transportationPublisher.publishEvent(new TransferEvent(AbstractHttpTransferrer.this, execution));
 	}
 
 	/**
@@ -384,7 +384,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 	 * @return 传回对象
 	 * @throws IOException 传输出错时抛出
 	 */
-	protected abstract Serializable transmit(T request, String url, Serializable model) throws IOException;
+	protected abstract Serializable transfer(T request, String url, Serializable model) throws IOException;
 
 	/**
 	 * 打断连接
@@ -404,13 +404,13 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 			throw new IOException("ERROR[" + code + "] Reason: " + msg);
 	}
 
-	private TransmissionPublisher transportationPublisher = new TransmissionPublisher();
+	private TransferPublisher transportationPublisher = new TransferPublisher();
 
-	public void addTransmissionListener(TransmissionListener listener) {
+	public void addTransferListener(TransferListener listener) {
 		transportationPublisher.addListener(listener);
 	}
 
-	public void removeTransmissionListener(TransmissionListener listener) {
+	public void removeTransferListener(TransferListener listener) {
 		transportationPublisher.removeListener(listener);
 	}
 
@@ -423,7 +423,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 		}
 
 		public void abort() throws Exception {
-			AbstractHttpTransmitter.this.abort(request);
+			AbstractHttpTransferrer.this.abort(request);
 		}
 	}
 
@@ -456,7 +456,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 				boolean currentConnection = ping();
 				if (connected != currentConnection) {
 					connected = currentConnection;
-					connectionPublisher.publishEvent(new ConnectionEvent(AbstractHttpTransmitter.this, connected));
+					connectionPublisher.publishEvent(new ConnectionEvent(AbstractHttpTransferrer.this, connected));
 					return true;
 				}
 			} catch (Throwable e) {
@@ -470,7 +470,7 @@ public abstract class AbstractHttpTransmitter<T> implements Transmitter {
 
 	public void addConnectionListener(ConnectionListener listener) {
 		connectionPublisher.addListener(listener);
-		connectionPublisher.publishEvent(listener, new ConnectionEvent(AbstractHttpTransmitter.this, isConnected()));
+		connectionPublisher.publishEvent(listener, new ConnectionEvent(AbstractHttpTransferrer.this, isConnected()));
 	}
 
 	public void removeConnectionListener(ConnectionListener listener) {

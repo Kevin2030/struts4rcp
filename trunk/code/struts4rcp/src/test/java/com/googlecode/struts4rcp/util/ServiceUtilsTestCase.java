@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import junit.framework.TestCase;
 
-import com.googlecode.struts4rcp.client.Transmitter;
+import com.googlecode.struts4rcp.client.Transferrer;
 import com.googlecode.struts4rcp.util.serializer.Serializer;
 
 public class ServiceUtilsTestCase extends TestCase {
@@ -27,17 +27,17 @@ public class ServiceUtilsTestCase extends TestCase {
 	}
 
 	public void testTransporterInstancesServices() throws Exception {
-		Collection<Transmitter> transporters = ServiceUtils.getServiceInstances(Transmitter.class);
+		Collection<Transferrer> transporters = ServiceUtils.getServiceInstances(Transferrer.class);
 		assertEquals(3, transporters.size());
 	}
 
 	public void testTransporterClassServices() throws Exception {
-		Collection<Class<Transmitter>> transporters = ServiceUtils.getServiceClasses(Transmitter.class);
+		Collection<Class<Transferrer>> transporters = ServiceUtils.getServiceClasses(Transferrer.class);
 		assertEquals(3, transporters.size());
 	}
 
 	public void testTransporterStringServices() throws Exception {
-		Collection<String> transporters = ServiceUtils.getServiceClassNames(Transmitter.class.getName());
+		Collection<String> transporters = ServiceUtils.getServiceClassNames(Transferrer.class.getName());
 		assertEquals(3, transporters.size());
 	}
 

@@ -9,7 +9,7 @@ import java.util.Map;
  * Action执行过程
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class Transmission implements Serializable, Abortable {
+public class Transfer implements Serializable, Abortable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,25 +23,25 @@ public class Transmission implements Serializable, Abortable {
 
 	public static final String HEAD_METHOD = "head";
 
-	private static final int TRANSMIT_STATUS = 0;
+	private static final int INITIALIZING_STATUS = 0;
 
-	private static final int TRANSMITING_STATUS = 1;
+	private static final int TRANSFERRING_STATUS = 1;
 
-	private static final int TRANSMITED_STATUS = 2;
+	private static final int TRANSFERRED_STATUS = 2;
 
-	private int status = TRANSMIT_STATUS;
+	private int status = INITIALIZING_STATUS;
 
 	private Object statusLock = new Object();
 
-	public Transmission(String uri, Serializable model) {
+	public Transfer(String uri, Serializable model) {
 		this(uri, model, POST_METHOD, null);
 	}
 
-	public Transmission(String uri, Serializable model, String method) {
+	public Transfer(String uri, Serializable model, String method) {
 		this(uri, model, method, null);
 	}
 
-	public Transmission(String uri, Serializable model, String method, Map<String, String> headers) {
+	public Transfer(String uri, Serializable model, String method, Map<String, String> headers) {
 		this.id = nextId();
 		this.actionName = uri;
 		this.model = model;
@@ -105,23 +105,23 @@ public class Transmission implements Serializable, Abortable {
 		return headers;
 	}
 
-	private final Date transmitTime = new Date();
+	private final Date initializeTime = new Date();
 
 	/**
 	 * 获取初始化开始时间
 	 * @return 初始化开始时间
 	 */
-	public Date getTransmitTime() {
-		return transmitTime;
+	public Date getInitializeTime() {
+		return initializeTime;
 	}
 
 	/**
 	 * 是否开始执行
 	 * @return 是否开始执行
 	 */
-	public boolean isTransmit() {
+	public boolean isInitializing() {
 		synchronized (statusLock) {
-			return status == TRANSMIT_STATUS;
+			return status == INITIALIZING_STATUS;
 		}
 	}
 
@@ -142,23 +142,23 @@ public class Transmission implements Serializable, Abortable {
 		return (abortor != null);
 	}
 
-	private Date transmitingTime;
+	private Date transferringTime;
 
 	/**
 	 * 获取传输开始时间
 	 * @return 开始时间
 	 */
-	public Date getTransmitingTime() {
-		return transmitingTime;
+	public Date getTransferringTime() {
+		return transferringTime;
 	}
 
 	/**
 	 * 是否已开始传输
 	 * @return 已开始传输
 	 */
-	public boolean isTransmiting() {
+	public boolean isTransferring() {
 		synchronized (statusLock) {
-			return status == TRANSMITING_STATUS;
+			return status == TRANSFERRING_STATUS;
 		}
 	}
 
@@ -166,14 +166,14 @@ public class Transmission implements Serializable, Abortable {
 	 * 开始传输
 	 * @param abortor 中止传输封装体
 	 */
-	public void transmiting(Abortable abortor) {
+	public void transferring(Abortable abortor) {
 		synchronized (statusLock) {
-			if (status != TRANSMIT_STATUS)
+			if (status != INITIALIZING_STATUS)
 				throw new IllegalStateException("This transportation already transported!");
-			status = TRANSMITING_STATUS;
+			status = TRANSFERRING_STATUS;
 		}
 		this.abortor = abortor;
-		this.transmitingTime = new Date();
+		this.transferringTime = new Date();
 	}
 
 	private Serializable result;
@@ -186,23 +186,23 @@ public class Transmission implements Serializable, Abortable {
 		return result;
 	}
 
-	private Date transmitedTime;
+	private Date transferredTime;
 
 	/**
 	 * 获取传输完成时间
 	 * @return 传输完成时间
 	 */
-	public Date getTransmitedTime() {
-		return transmitedTime;
+	public Date getTransferredTime() {
+		return transferredTime;
 	}
 
 	/**
 	 * 是否已传输完成
 	 * @return 已传输完成
 	 */
-	public boolean isTransmited() {
+	public boolean isTransferred() {
 		synchronized (statusLock) {
-			return status == TRANSMITED_STATUS;
+			return status == TRANSFERRED_STATUS;
 		}
 	}
 
@@ -210,20 +210,20 @@ public class Transmission implements Serializable, Abortable {
 	 * 传输完成
 	 * @param result 传输完成结果
 	 */
-	public void transmited(Serializable result) {
+	public void transferred(Serializable result) {
 		synchronized (statusLock) {
-			if (status != TRANSMITING_STATUS)
+			if (status != TRANSFERRING_STATUS)
 				throw new IllegalStateException("This transportation already transported!");
-			status = TRANSMITED_STATUS;
+			status = TRANSFERRED_STATUS;
 		}
 		this.result = result;
 		this.abortor = null;
-		this.transmitedTime = new Date();
+		this.transferredTime = new Date();
 	}
 
 	@Override
 	public String toString() {
-		return "[NO." + getId() + "] [" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(getTransmitTime()) + "] " + getActionName();
+		return "[NO." + getId() + "] [" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(getInitializeTime()) + "] " + getActionName();
 	}
 
 }

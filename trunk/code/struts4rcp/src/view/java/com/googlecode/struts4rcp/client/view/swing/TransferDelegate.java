@@ -1,41 +1,41 @@
 package com.googlecode.struts4rcp.client.view.swing;
 
-import com.googlecode.struts4rcp.client.event.TransmissionEvent;
-import com.googlecode.struts4rcp.client.event.TransmissionListener;
+import com.googlecode.struts4rcp.client.event.TransferEvent;
+import com.googlecode.struts4rcp.client.event.TransferListener;
 
 /**
  * 传输事件监听器UI线程执行委托，如果UI线程非空闲，则等待。
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class TransmissionDelegate implements TransmissionListener {
+public class TransferDelegate implements TransferListener {
 
-	private final TransmissionListener listener;
+	private final TransferListener listener;
 
 	private final boolean runOnUI;
 
 	private final boolean runOnNonUI;
 
-	public TransmissionDelegate(TransmissionListener listener) {
+	public TransferDelegate(TransferListener listener) {
 		this(listener, true, true);
 	}
 
-	public TransmissionDelegate(TransmissionListener listener, boolean runOnUI, boolean runOnNonUI) {
+	public TransferDelegate(TransferListener listener, boolean runOnUI, boolean runOnNonUI) {
 		this.listener = listener;
 		this.runOnUI = runOnUI;
 		this.runOnNonUI = runOnNonUI;
 	}
 
-	public void onTransmit(final TransmissionEvent event) {
+	public void onTransfer(final TransferEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onTransmit(event);
+					listener.onTransfer(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onTransmit(event);
+							listener.onTransfer(event);
 						}
 					});
 				}
@@ -45,17 +45,17 @@ public class TransmissionDelegate implements TransmissionListener {
 		}
 	}
 
-	public void onTransmiting(final TransmissionEvent event) {
+	public void onTransferring(final TransferEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onTransmiting(event);
+					listener.onTransferring(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onTransmiting(event);
+							listener.onTransferring(event);
 						}
 					});
 				}
@@ -65,17 +65,17 @@ public class TransmissionDelegate implements TransmissionListener {
 		}
 	}
 
-	public void onTransmited(final TransmissionEvent event) {
+	public void onTransferred(final TransferEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onTransmited(event);
+					listener.onTransferred(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.syncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onTransmited(event);
+							listener.onTransferred(event);
 						}
 					});
 				}

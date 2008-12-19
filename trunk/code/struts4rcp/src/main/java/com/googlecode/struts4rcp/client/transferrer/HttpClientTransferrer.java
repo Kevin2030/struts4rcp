@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.client.transmitter;
+package com.googlecode.struts4rcp.client.transferrer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -31,7 +31,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Transmission;
+import com.googlecode.struts4rcp.client.Transfer;
 import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
 
 /**
@@ -39,7 +39,7 @@ import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
  * @see org.apache.http.client.HttpClient
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class HttpClientTransmitter extends AbstractHttpTransmitter<HttpUriRequest> {
+public class HttpClientTransferrer extends AbstractHttpTransferrer<HttpUriRequest> {
 
 	private HttpClient httpClient;
 
@@ -77,15 +77,15 @@ public class HttpClientTransmitter extends AbstractHttpTransmitter<HttpUriReques
 
 	@Override
 	protected HttpUriRequest getRequest(String method, String url) throws IOException {
-		if (Transmission.POST_METHOD.equalsIgnoreCase(method))
+		if (Transfer.POST_METHOD.equalsIgnoreCase(method))
 			return new HttpPost(url);
-		if (Transmission.PUT_METHOD.equalsIgnoreCase(method))
+		if (Transfer.PUT_METHOD.equalsIgnoreCase(method))
 			return new HttpPut(url);
-		if (Transmission.GET_METHOD.equalsIgnoreCase(method))
+		if (Transfer.GET_METHOD.equalsIgnoreCase(method))
 			return new HttpGet(url);
-		if (Transmission.DELETE_METHOD.equalsIgnoreCase(method))
+		if (Transfer.DELETE_METHOD.equalsIgnoreCase(method))
 			return new HttpDelete(url);
-		if (Transmission.HEAD_METHOD.equalsIgnoreCase(method))
+		if (Transfer.HEAD_METHOD.equalsIgnoreCase(method))
 			return new HttpHead(url);
 		throw new IllegalArgumentException("un supported http method: " + method);
 	}
@@ -96,7 +96,7 @@ public class HttpClientTransmitter extends AbstractHttpTransmitter<HttpUriReques
 	}
 
 	@Override
-	protected Serializable transmit(HttpUriRequest request, String url,
+	protected Serializable transfer(HttpUriRequest request, String url,
 			Serializable model) throws IOException {
 		if (request instanceof HttpEntityEnclosingRequest)
 			((HttpEntityEnclosingRequest)request).setEntity(new SerializeEntity(serializer, model));

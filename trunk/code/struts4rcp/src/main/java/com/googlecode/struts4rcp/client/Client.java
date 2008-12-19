@@ -15,9 +15,9 @@ import com.googlecode.struts4rcp.client.event.ConnectionListener;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
 import com.googlecode.struts4rcp.client.event.Listenable;
 import com.googlecode.struts4rcp.client.event.Listener;
-import com.googlecode.struts4rcp.client.event.TransmissionListener;
+import com.googlecode.struts4rcp.client.event.TransferListener;
 import com.googlecode.struts4rcp.client.event.WorkListener;
-import com.googlecode.struts4rcp.client.transmitter.HttpURLConnectionTransmitter;
+import com.googlecode.struts4rcp.client.transferrer.HttpURLConnectionTransferrer;
 import com.googlecode.struts4rcp.util.KeyValue;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ServiceUtils;
@@ -53,9 +53,9 @@ public class Client implements Listenable {
 		addClient(null, config);
 	}
 
-	public static void init(Properties config, Transmitter transmitter) {
+	public static void init(Properties config, Transferrer transferrer) {
 		ThreadUtils.init();
-		addClient(null, config, transmitter);
+		addClient(null, config, transferrer);
 	}
 
 	// 客户端
@@ -105,10 +105,10 @@ public class Client implements Listenable {
 	 *            配置
 	 */
 	public static void addClient(String clientName, Properties config,
-			Transmitter transmitter) {
+			Transferrer transferrer) {
 		if (config == null)
 			throw new NullPointerException("properties == null!");
-		addClient(clientName, new Client(config, transmitter));
+		addClient(clientName, new Client(config, transferrer));
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class Client implements Listenable {
 	/**
 	 * 传输器配置参数名
 	 */
-	public static final String TRANSMITTER_KEY = "transmitter";
+	public static final String TRANSFERRER_KEY = "transferrer";
 
 	/**
 	 * 事件监听器配置参数名
@@ -200,27 +200,27 @@ public class Client implements Listenable {
 
 	private final ConfigurationManager configurationManager;
 
-	private final Transmitter transmitter;
+	private final Transferrer transferrer;
 
 	private Client(Properties config) {
 		this(config, PropertiesUtils.getInstanceProperty(config,
-				TRANSMITTER_KEY, Transmitter.class,
-				HttpURLConnectionTransmitter.class));
+				TRANSFERRER_KEY, Transferrer.class,
+				HttpURLConnectionTransferrer.class));
 	}
 
-	private Client(Properties config, Transmitter transmitter) {
+	private Client(Properties config, Transferrer transferrer) {
 		if (config == null)
 			throw new NullPointerException("properties == null!");
-		if (transmitter == null)
-			throw new NullPointerException("transmitter == null!");
+		if (transferrer == null)
+			throw new NullPointerException("transferrer == null!");
 		config = new UnmodifiableProperties(config);
-		this.transmitter = transmitter;
+		this.transferrer = transferrer;
 		this.configurationManager = new ConfigurationManager(this, config);
-		transmitter.init(this, config);
-		configurationManager.register(TRANSMITTER_KEY, "传输策略",
-				"暂未实现传输策略动态切换，修改后不会生效!", HttpURLConnectionTransmitter.class
+		transferrer.init(this, config);
+		configurationManager.register(TRANSFERRER_KEY, "传输策略",
+				"暂未实现传输策略动态切换，修改后不会生效!", HttpURLConnectionTransferrer.class
 						.getName(), ServiceUtils.getServiceClassNames(
-						Transmitter.class.getName()).toArray(new String[0]));
+						Transferrer.class.getName()).toArray(new String[0]));
 		configurationManager.register(LISTENERS_KEY, "事件监听器",
 				"暂未实现动态注册事件监听器，修改后不会生效!", "");
 		// 读取监听器
@@ -235,13 +235,13 @@ public class Client implements Listenable {
 		return configurationManager;
 	}
 
-	public Transmitter getTransmitter() {
-		return transmitter;
+	public Transferrer getTransferrer() {
+		return transferrer;
 	}
 
 	private void shutdown() {
 		try {
-			transmitter.shutdown();
+			transferrer.shutdown();
 		} finally {
 			configurationManager.shutdown();
 		}
@@ -255,11 +255,11 @@ public class Client implements Listenable {
 	 */
 	public void addListener(Listener listener) {
 		if (listener instanceof ConnectionListener)
-			this.getTransmitter().addConnectionListener(
+			this.getTransferrer().addConnectionListener(
 					(ConnectionListener) listener);
-		if (listener instanceof TransmissionListener)
-			this.getTransmitter().addTransmissionListener(
-					(TransmissionListener) listener);
+		if (listener instanceof TransferListener)
+			this.getTransferrer().addTransferListener(
+					(TransferListener) listener);
 		if (listener instanceof ConfigurationListener)
 			this.getConfigurationManager().addConfigurationListener(
 					(ConfigurationListener) listener);
@@ -278,11 +278,11 @@ public class Client implements Listenable {
 	 */
 	public void removeListener(Listener listener) {
 		if (listener instanceof ConnectionListener)
-			this.getTransmitter().removeConnectionListener(
+			this.getTransferrer().removeConnectionListener(
 					(ConnectionListener) listener);
-		if (listener instanceof TransmissionListener)
-			this.getTransmitter().removeTransmissionListener(
-					(TransmissionListener) listener);
+		if (listener instanceof TransferListener)
+			this.getTransferrer().removeTransferListener(
+					(TransferListener) listener);
 		if (listener instanceof ConfigurationListener)
 			this.getConfigurationManager().removeConfigurationListener(
 					(ConfigurationListener) listener);
@@ -372,7 +372,7 @@ public class Client implements Listenable {
 
 		@SuppressWarnings("unchecked")
 		public R execute(final M model) throws Exception {
-			return (R)getTransmitter().transmit(new Transmission(actionName, model));
+			return (R)getTransferrer().transfer(new Transfer(actionName, model));
 		}
 	}
 
@@ -400,7 +400,7 @@ public class Client implements Listenable {
 		}
 
 		public long count(R resource) throws Exception {
-			String count = (String)getTransmitter().transmit(new Transmission(uri, resource, Transmission.HEAD_METHOD));
+			String count = (String)getTransferrer().transfer(new Transfer(uri, resource, Transfer.HEAD_METHOD));
 			return Long.parseLong(count);
 		}
 
@@ -421,7 +421,7 @@ public class Client implements Listenable {
 			headers.put("lazy", String.valueOf(lazy));
 			headers.put("start", String.valueOf(start));
 			headers.put("limit", String.valueOf(limit));
-			KeyValue<String, R>[] responses = (KeyValue<String, R>[])getTransmitter().transmit(new Transmission(uri, resource, Transmission.GET_METHOD, headers));
+			KeyValue<String, R>[] responses = (KeyValue<String, R>[])getTransferrer().transfer(new Transfer(uri, resource, Transfer.GET_METHOD, headers));
 			return convertResources(responses);
 		}
 
@@ -429,7 +429,7 @@ public class Client implements Listenable {
 		public Resource<R> create(R resource) throws Exception {
 			Map<String, String> headers = new HashMap<String, String>();
 			headers.put("lazy", String.valueOf(lazy));
-			KeyValue<String, R> response = (KeyValue<String, R>)getTransmitter().transmit(new Transmission(uri, resource, Transmission.POST_METHOD, headers));
+			KeyValue<String, R> response = (KeyValue<String, R>)getTransferrer().transfer(new Transfer(uri, resource, Transfer.POST_METHOD, headers));
 			return convertResource(response);
 		}
 
@@ -485,23 +485,23 @@ public class Client implements Listenable {
 		}
 
 		public boolean exist() throws Exception {
-			String exist = (String)getTransmitter().transmit(new Transmission(uri, null, Transmission.HEAD_METHOD));
+			String exist = (String)getTransferrer().transfer(new Transfer(uri, null, Transfer.HEAD_METHOD));
 			return Boolean.parseBoolean(exist);
 		}
 
 		@SuppressWarnings("unchecked")
 		public R read() throws Exception {
 			if (resource == null)
-				resource = (R)getTransmitter().transmit(new Transmission(uri, null, Transmission.GET_METHOD));
+				resource = (R)getTransferrer().transfer(new Transfer(uri, null, Transfer.GET_METHOD));
 			return resource;
 		}
 
 		public void update(R resource) throws Exception {
-			getTransmitter().transmit(new Transmission(uri, resource, Transmission.PUT_METHOD));
+			getTransferrer().transfer(new Transfer(uri, resource, Transfer.PUT_METHOD));
 		}
 
 		public void delete() throws Exception {
-			getTransmitter().transmit(new Transmission(uri, null, Transmission.DELETE_METHOD));
+			getTransferrer().transfer(new Transfer(uri, null, Transfer.DELETE_METHOD));
 		}
 
 	}
