@@ -25,17 +25,17 @@ public class ExceptionAsyncDelegate implements ExceptionListener {
 		this.runOnNonUI = runOnNonUI;
 	}
 
-	public void onForeExceptionCatched(final ExceptionEvent event) {
+	public void onForeCatched(final ExceptionEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onForeExceptionCatched(event);
+					listener.onForeCatched(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onForeExceptionCatched(event);
+							listener.onForeCatched(event);
 						}
 					});
 				}
@@ -45,17 +45,17 @@ public class ExceptionAsyncDelegate implements ExceptionListener {
 		}
 	}
 
-	public void onBackExceptionCatched(final ExceptionEvent event) {
+	public void onBackCatched(final ExceptionEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onBackExceptionCatched(event);
+					listener.onBackCatched(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onBackExceptionCatched(event);
+							listener.onBackCatched(event);
 						}
 					});
 				}

@@ -86,7 +86,7 @@ public class ExceptionPane extends Composite {
 		exceptionTextArea.setEditable(false);
 		exceptionTextArea.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		exceptionListener = new ExceptionAdapter() {
-			public void onBackExceptionCatched(final ExceptionEvent event) {
+			public void onBackCatched(final ExceptionEvent event) {
 				final String msg = ExceptionUtils.getDetailMessage(event.getException());
 				Display.getDefault().asyncExec(new Runnable(){
 					public void run() {
@@ -94,7 +94,7 @@ public class ExceptionPane extends Composite {
 					}
 				});
 			}
-			public void onForeExceptionCatched(final ExceptionEvent event) {
+			public void onForeCatched(final ExceptionEvent event) {
 				final String msg = ExceptionUtils.getDetailMessage(event.getException());
 				Display.getDefault().asyncExec(new Runnable(){
 					public void run() {

@@ -11,7 +11,7 @@ import java.util.Properties;
 
 import com.googlecode.struts4rcp.Action;
 import com.googlecode.struts4rcp.client.event.ConfigurationListener;
-import com.googlecode.struts4rcp.client.event.ConnectionListener;
+import com.googlecode.struts4rcp.client.event.NetworkListener;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
 import com.googlecode.struts4rcp.client.event.Listenable;
 import com.googlecode.struts4rcp.client.event.Listener;
@@ -254,9 +254,9 @@ public class Client implements Listenable {
 	 *            事件监听器
 	 */
 	public void addListener(Listener listener) {
-		if (listener instanceof ConnectionListener)
-			this.getTransferrer().addConnectionListener(
-					(ConnectionListener) listener);
+		if (listener instanceof NetworkListener)
+			this.getTransferrer().addNetworkListener(
+					(NetworkListener) listener);
 		if (listener instanceof TransferListener)
 			this.getTransferrer().addTransferListener(
 					(TransferListener) listener);
@@ -277,9 +277,9 @@ public class Client implements Listenable {
 	 *            事件监听器
 	 */
 	public void removeListener(Listener listener) {
-		if (listener instanceof ConnectionListener)
-			this.getTransferrer().removeConnectionListener(
-					(ConnectionListener) listener);
+		if (listener instanceof NetworkListener)
+			this.getTransferrer().removeNetworkListener(
+					(NetworkListener) listener);
 		if (listener instanceof TransferListener)
 			this.getTransferrer().removeTransferListener(
 					(TransferListener) listener);

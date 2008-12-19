@@ -110,10 +110,10 @@ public class ExceptionPane extends JPanel {
 		toolBar.add(autoScrollCheckBox);
 
 		exceptionListener = new ExceptionDelegate(new ExceptionAdapter() {
-			public void onBackExceptionCatched(ExceptionEvent event) {
+			public void onBackCatched(ExceptionEvent event) {
 				ExceptionPane.this.appendText(ExceptionUtils.getDetailMessage(event.getException()));
 			}
-			public void onForeExceptionCatched(ExceptionEvent event) {
+			public void onForeCatched(ExceptionEvent event) {
 				ExceptionPane.this.appendText(ExceptionUtils.getDetailMessage(event.getException()));
 			}
 		});

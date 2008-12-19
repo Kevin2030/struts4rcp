@@ -1,31 +1,31 @@
 package com.googlecode.struts4rcp.client.view.jface;
 
-import com.googlecode.struts4rcp.client.event.ConnectionEvent;
-import com.googlecode.struts4rcp.client.event.ConnectionListener;
+import com.googlecode.struts4rcp.client.event.NetworkEvent;
+import com.googlecode.struts4rcp.client.event.NetworkListener;
 
 /**
  * 连接事件监听器UI线程执行委托，如果UI线程非空闲，则异步延后处理。
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ConnectionAsyncDelegate implements ConnectionListener {
+public class NetworkAsyncDelegate implements NetworkListener {
 
-	private final ConnectionListener listener;
+	private final NetworkListener listener;
 
 	private final boolean runOnUI;
 
 	private final boolean runOnNonUI;
 
-	public ConnectionAsyncDelegate(ConnectionListener listener) {
+	public NetworkAsyncDelegate(NetworkListener listener) {
 		this(listener, true, true);
 	}
 
-	public ConnectionAsyncDelegate(ConnectionListener listener, boolean runOnUI, boolean runOnNonUI) {
+	public NetworkAsyncDelegate(NetworkListener listener, boolean runOnUI, boolean runOnNonUI) {
 		this.listener = listener;
 		this.runOnUI = runOnUI;
 		this.runOnNonUI = runOnNonUI;
 	}
 
-	public void onConnected(final ConnectionEvent event) {
+	public void onConnected(final NetworkEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
@@ -45,7 +45,7 @@ public class ConnectionAsyncDelegate implements ConnectionListener {
 		}
 	}
 
-	public void onDisconnected(final ConnectionEvent event) {
+	public void onDisconnected(final NetworkEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {

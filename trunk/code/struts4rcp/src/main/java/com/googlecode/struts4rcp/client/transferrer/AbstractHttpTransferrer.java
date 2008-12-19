@@ -17,9 +17,9 @@ import com.googlecode.struts4rcp.client.Abortable;
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.Transfer;
 import com.googlecode.struts4rcp.client.Transferrer;
-import com.googlecode.struts4rcp.client.event.ConnectionEvent;
-import com.googlecode.struts4rcp.client.event.ConnectionListener;
-import com.googlecode.struts4rcp.client.event.ConnectionPublisher;
+import com.googlecode.struts4rcp.client.event.NetworkEvent;
+import com.googlecode.struts4rcp.client.event.NetworkListener;
+import com.googlecode.struts4rcp.client.event.NetworkPublisher;
 import com.googlecode.struts4rcp.client.event.TransferEvent;
 import com.googlecode.struts4rcp.client.event.TransferListener;
 import com.googlecode.struts4rcp.client.event.TransferPublisher;
@@ -246,7 +246,7 @@ public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 		// 初始化连接状态事件
 		boolean changed = refresh();
 		if (! changed) // 如果未改变，也触发
-			connectionPublisher.publishEvent(new ConnectionEvent(AbstractHttpTransferrer.this, isConnected()));
+			connectionPublisher.publishEvent(new NetworkEvent(AbstractHttpTransferrer.this, isConnected()));
 
 		// ---- 组装前缀 ----
 		urlPrefix = HTTP_PROTOCAL + hostAddress;
@@ -456,7 +456,7 @@ public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 				boolean currentConnection = ping();
 				if (connected != currentConnection) {
 					connected = currentConnection;
-					connectionPublisher.publishEvent(new ConnectionEvent(AbstractHttpTransferrer.this, connected));
+					connectionPublisher.publishEvent(new NetworkEvent(AbstractHttpTransferrer.this, connected));
 					return true;
 				}
 			} catch (Throwable e) {
@@ -466,14 +466,14 @@ public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 		}
 	}
 
-	private ConnectionPublisher connectionPublisher = new ConnectionPublisher();
+	private NetworkPublisher connectionPublisher = new NetworkPublisher();
 
-	public void addConnectionListener(ConnectionListener listener) {
+	public void addNetworkListener(NetworkListener listener) {
 		connectionPublisher.addListener(listener);
-		connectionPublisher.publishEvent(listener, new ConnectionEvent(AbstractHttpTransferrer.this, isConnected()));
+		connectionPublisher.publishEvent(listener, new NetworkEvent(AbstractHttpTransferrer.this, isConnected()));
 	}
 
-	public void removeConnectionListener(ConnectionListener listener) {
+	public void removeNetworkListener(NetworkListener listener) {
 		connectionPublisher.removeListener(listener);
 	}
 

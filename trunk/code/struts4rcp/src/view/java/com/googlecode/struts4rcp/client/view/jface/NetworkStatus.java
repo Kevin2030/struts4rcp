@@ -11,9 +11,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.event.ConnectionAdapter;
-import com.googlecode.struts4rcp.client.event.ConnectionEvent;
-import com.googlecode.struts4rcp.client.event.ConnectionListener;
+import com.googlecode.struts4rcp.client.event.NetworkAdapter;
+import com.googlecode.struts4rcp.client.event.NetworkEvent;
+import com.googlecode.struts4rcp.client.event.NetworkListener;
 import com.googlecode.struts4rcp.client.event.TransferAdapter;
 import com.googlecode.struts4rcp.client.event.TransferEvent;
 import com.googlecode.struts4rcp.client.event.TransferListener;
@@ -31,12 +31,12 @@ import com.googlecode.struts4rcp.client.event.TransferListener;
  * </pre>
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ConnectionStatus extends ContributionItem {
+public class NetworkStatus extends ContributionItem {
 
 	private final Client client;
 
-	public ConnectionStatus(Client client) {
-		super(ConnectionStatus.class.getName());
+	public NetworkStatus(Client client) {
+		super(NetworkStatus.class.getName());
 		if (client == null)
 			throw new NullPointerException("Client == null!");
 		this.client = client;
@@ -62,7 +62,7 @@ public class ConnectionStatus extends ContributionItem {
 
 	private final Image transportationImage;
 
-	private ConnectionListener connectionListener;
+	private NetworkListener connectionListener;
 
 	private TransferListener transportationListener;
 
@@ -85,15 +85,15 @@ public class ConnectionStatus extends ContributionItem {
 			// 初始化状态
 			refreshStatus();
 			// 连接状态事件
-			connectionListener = new ConnectionAdapter() {
-				public void onConnected(ConnectionEvent event) {
+			connectionListener = new NetworkAdapter() {
+				public void onConnected(NetworkEvent event) {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							setConnected(true);
 						}
 					});
 				}
-				public void onDisconnected(ConnectionEvent event) {
+				public void onDisconnected(NetworkEvent event) {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							setConnected(false);

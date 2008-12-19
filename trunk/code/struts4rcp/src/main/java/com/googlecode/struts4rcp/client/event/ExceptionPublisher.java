@@ -5,9 +5,9 @@ public class ExceptionPublisher extends Publisher<ExceptionListener, ExceptionEv
 	@Override
 	protected void doEvent(ExceptionListener listener, ExceptionEvent event) {
 		if (event.isBack())
-			listener.onBackExceptionCatched(event);
+			listener.onBackCatched(event);
 		else
-			listener.onForeExceptionCatched(event);
+			listener.onForeCatched(event);
 	}
 
 }
