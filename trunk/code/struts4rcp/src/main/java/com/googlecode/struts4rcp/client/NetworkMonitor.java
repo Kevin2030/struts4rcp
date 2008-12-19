@@ -1,10 +1,11 @@
 package com.googlecode.struts4rcp.client;
 
+import java.io.Closeable;
 import java.util.Properties;
 
 import com.googlecode.struts4rcp.client.event.NetworkListener;
 
-public interface NetworkMonitor {
+public interface NetworkMonitor extends Closeable {
 
 	/**
 	 * 初始化配置，只能被框架本身调用
@@ -12,11 +13,6 @@ public interface NetworkMonitor {
 	 * @param properties 配置
 	 */
 	void init(Client client, Properties properties);
-
-	/**
-	 * 停止
-	 */
-	void shutdown();
 
 	/**
 	 * 检查服务器是否连通

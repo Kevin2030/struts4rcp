@@ -123,7 +123,7 @@ public class Client implements Listenable {
 		synchronized (clients) {
 			Client old = clients.get(clientName);
 			if (old != null)
-				old.shutdown();
+				old.close();
 			clients.put(clientName, client);
 		}
 	}
@@ -165,7 +165,7 @@ public class Client implements Listenable {
 			client = clients.remove(clientName);
 		}
 		if (client != null)
-			client.shutdown();
+			client.close();
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class Client implements Listenable {
 			synchronized (clients) {
 				for (Client client : clients.values()) {
 					try {
-						client.shutdown();
+						client.close();
 					} catch (Throwable t) {
 						// ignore
 					}
@@ -239,9 +239,11 @@ public class Client implements Listenable {
 		return transferrer;
 	}
 
-	private void shutdown() {
+	private void close() {
 		try {
-			transferrer.shutdown();
+			transferrer.close();
+		} catch (IOException e) {
+			// ignore
 		} finally {
 			configurationManager.shutdown();
 		}

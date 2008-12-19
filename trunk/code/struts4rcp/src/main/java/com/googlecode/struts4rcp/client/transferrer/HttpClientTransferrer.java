@@ -67,9 +67,9 @@ public class HttpClientTransferrer extends AbstractHttpTransferrer<HttpUriReques
 	}
 
 	@Override
-	public void shutdown() {
+	public void close() throws IOException {
 		try {
-			super.shutdown();
+			super.close();
 		} finally {
 			httpClient.getConnectionManager().shutdown();
 		}
