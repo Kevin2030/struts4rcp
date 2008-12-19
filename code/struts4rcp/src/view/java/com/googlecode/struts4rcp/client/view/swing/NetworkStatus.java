@@ -8,8 +8,8 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.event.ConnectionAdapter;
-import com.googlecode.struts4rcp.client.event.ConnectionEvent;
+import com.googlecode.struts4rcp.client.event.NetworkAdapter;
+import com.googlecode.struts4rcp.client.event.NetworkEvent;
 import com.googlecode.struts4rcp.client.event.TransferAdapter;
 import com.googlecode.struts4rcp.client.event.TransferEvent;
 
@@ -28,7 +28,7 @@ import com.googlecode.struts4rcp.client.event.TransferEvent;
  * @see com.googlecode.struts4rcp.client.view.swing.TransferPane
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ConnectionStatus extends JButton {
+public class NetworkStatus extends JButton {
 
 	private static final long serialVersionUID = 1L;
 
@@ -79,20 +79,20 @@ public class ConnectionStatus extends JButton {
 	protected void refreshStatus() {
 		if (connected) {
 			if (transporting) {
-				ConnectionStatus.this.setIcon(ConnectionStatus.this.transportingIcon);
-				ConnectionStatus.this.setToolTipText("Transporting");
+				NetworkStatus.this.setIcon(NetworkStatus.this.transportingIcon);
+				NetworkStatus.this.setToolTipText("Transporting");
 			} else {
-				ConnectionStatus.this.setIcon(ConnectionStatus.this.connectedIcon);
-				ConnectionStatus.this.setToolTipText("Online");
+				NetworkStatus.this.setIcon(NetworkStatus.this.connectedIcon);
+				NetworkStatus.this.setToolTipText("Online");
 			}
 		} else {
-			ConnectionStatus.this.setIcon(ConnectionStatus.this.disconnectedIcon);
-			ConnectionStatus.this.setToolTipText("Offline");
+			NetworkStatus.this.setIcon(NetworkStatus.this.disconnectedIcon);
+			NetworkStatus.this.setToolTipText("Offline");
 
 		}
 	}
 
-	public ConnectionStatus(Frame frame, final Client client) {
+	public NetworkStatus(Frame frame, final Client client) {
 		if (client == null)
 			throw new NullPointerException("Client == null!");
 		// 初始化图片
@@ -114,11 +114,11 @@ public class ConnectionStatus extends JButton {
 			}
 		});
 		// 连接状态事件
-		client.addListener(new ConnectionDelegate(new ConnectionAdapter() {
-			public void onConnected(ConnectionEvent event) {
+		client.addListener(new NetworkDelegate(new NetworkAdapter() {
+			public void onConnected(NetworkEvent event) {
 				setConnected(true);
 			}
-			public void onDisconnected(ConnectionEvent event) {
+			public void onDisconnected(NetworkEvent event) {
 				setConnected(false);
 			}
 		}));

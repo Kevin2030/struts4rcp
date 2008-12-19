@@ -4,10 +4,10 @@ package com.googlecode.struts4rcp.client.event;
  * 连接事件发布器
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ConnectionPublisher extends Publisher<ConnectionListener, ConnectionEvent> {
+public class NetworkPublisher extends Publisher<NetworkListener, NetworkEvent> {
 
 	@Override
-	protected void doEvent(ConnectionListener listener, ConnectionEvent event) {
+	protected void doEvent(NetworkListener listener, NetworkEvent event) {
 		if (event.isConnected())
 			listener.onConnected(event);
 		else

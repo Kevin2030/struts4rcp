@@ -2,9 +2,9 @@ package com.googlecode.struts4rcp.client;
 
 import java.util.Properties;
 
-import com.googlecode.struts4rcp.client.event.ConnectionListener;
+import com.googlecode.struts4rcp.client.event.NetworkListener;
 
-public interface ConnectionMonitor {
+public interface NetworkMonitor {
 
 	/**
 	 * 初始化配置，只能被框架本身调用
@@ -40,12 +40,12 @@ public interface ConnectionMonitor {
 	 * 添加连接事件监听器
 	 * @param listener 连接事件监听器
 	 */
-	public abstract void addConnectionListener(ConnectionListener listener);
+	public abstract void addNetworkListener(NetworkListener listener);
 
 	/**
 	 * 移除连接事件监听器
 	 * @param listener 连接事件监听器
 	 */
-	public abstract void removeConnectionListener(ConnectionListener listener);
+	public abstract void removeNetworkListener(NetworkListener listener);
 
 }

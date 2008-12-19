@@ -31,7 +31,7 @@ import com.googlecode.struts4rcp.util.ThreadUtils;
 /**
  * Action队列信息管理窗口，包装Action队列信息管理面板
  * @see com.googlecode.struts4rcp.client.view.swing.TransferPane
- * @see com.googlecode.struts4rcp.client.view.swing.ConnectionStatus
+ * @see com.googlecode.struts4rcp.client.view.swing.NetworkStatus
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
 public class TransferPane extends JPanel {
