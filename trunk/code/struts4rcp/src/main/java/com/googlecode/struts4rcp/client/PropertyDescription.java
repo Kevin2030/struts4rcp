@@ -14,14 +14,14 @@ public class PropertyDescription {
 
 	private final String defaultValue;
 
-	private final Collection<String> options;
+	private final Collection<String> optionValues;
 
-	public PropertyDescription(String name, String description, String defaultValue, Collection<String> options) {
+	public PropertyDescription(String name, String description, String defaultValue, Collection<String> optionValues) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.defaultValue = defaultValue;
-		this.options = options;
+		this.optionValues = optionValues;
 	}
 
 	/**
@@ -48,8 +48,12 @@ public class PropertyDescription {
 		return defaultValue;
 	}
 
-	public Collection<String> getOptions() {
-		return options;
+	/**
+	 * 获取选项值
+	 * @return 获取选项值
+	 */
+	public Collection<String> getOptionValues() {
+		return optionValues;
 	}
 
 }
