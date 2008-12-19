@@ -5,6 +5,10 @@ import java.util.Properties;
 
 import com.googlecode.struts4rcp.client.event.NetworkListener;
 
+/**
+ * 网络监控器接口
+ * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
+ */
 public interface NetworkMonitor extends Closeable {
 
 	/**
