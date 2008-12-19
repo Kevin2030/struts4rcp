@@ -259,7 +259,7 @@ public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 		urlSuffix = "." + mappingExtension;
 	}
 
-	public void shutdown() {
+	public void close() throws IOException {
 		try {
 			transportationPublisher.clearListeners();
 		} finally {

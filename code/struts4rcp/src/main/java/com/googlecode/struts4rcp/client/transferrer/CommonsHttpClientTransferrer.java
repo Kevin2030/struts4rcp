@@ -105,9 +105,9 @@ public class CommonsHttpClientTransferrer extends AbstractHttpTransferrer<HttpMe
 	}
 
 	@Override
-	public void shutdown() {
+	public void close() throws IOException {
 		try {
-			super.shutdown();
+			super.close();
 		} finally {
 			try {
 				HttpConnectionManager connectionManager = httpClient.getHttpConnectionManager();
