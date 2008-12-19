@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * Action执行过程
+ * 传输项
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
 public class Transfer implements Serializable, Abortable {

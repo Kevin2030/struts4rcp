@@ -2,6 +2,10 @@ package com.googlecode.struts4rcp.client;
 
 import java.util.Stack;
 
+/**
+ * 工作项
+ * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
+ */
 public class Work implements Abortable, Backable {
 
 	private static final ThreadLocal<Work> local = new ThreadLocal<Work>();

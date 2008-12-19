@@ -24,6 +24,10 @@ import com.googlecode.struts4rcp.util.ServiceUtils;
 import com.googlecode.struts4rcp.util.ThreadUtils;
 import com.googlecode.struts4rcp.util.UnmodifiableProperties;
 
+/**
+ * 客户端实例
+ * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
+ */
 public class Client implements Listenable {
 
 	/**
