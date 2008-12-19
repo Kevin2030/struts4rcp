@@ -247,7 +247,7 @@ public class Client implements Listenable {
 		} catch (IOException e) {
 			// ignore
 		} finally {
-			configurationPublisher.clearListeners();
+			propertyPublisher.clearListeners();
 		}
 	}
 
@@ -321,7 +321,7 @@ public class Client implements Listenable {
 		String old = values.getProperty(key);
 		if (isChanged(old, value)) {
 			values.put(key, value);
-			configurationPublisher.publishEvent(new PropertyEvent(this, descriptions.get(key), old, value));
+			propertyPublisher.publishEvent(new PropertyEvent(this, descriptions.get(key), old, value));
 		}
 	}
 
@@ -331,6 +331,24 @@ public class Client implements Listenable {
 		if (s1 == null || s2 == null)
 			return true;
 		return ! s1.equals(s2);
+	}
+
+	private final PropertyPublisher propertyPublisher = new PropertyPublisher();
+
+	/**
+	 * 添加配置改变事件监听器
+	 * @param listener 配置改变事件监听器
+	 */
+	public void addPropertyListener(PropertyListener listener) {
+		propertyPublisher.addListener(listener);
+	}
+
+	/**
+	 * 移除配置改变事件监听器
+	 * @param listener 配置改变事件监听器
+	 */
+	public void removePropertyListener(PropertyListener listener) {
+		propertyPublisher.removeListener(listener);
 	}
 
 	private final Map<String, PropertyDescription> descriptions = Collections.synchronizedMap(new HashMap<String, PropertyDescription>());
@@ -382,24 +400,6 @@ public class Client implements Listenable {
 
 	public void addPropertyDescription(String key, PropertyDescription description) {
 		descriptions.put(key, description);
-	}
-
-	private final PropertyPublisher configurationPublisher = new PropertyPublisher();
-
-	/**
-	 * 添加配置改变事件监听器
-	 * @param listener 配置改变事件监听器
-	 */
-	public void addPropertyListener(PropertyListener listener) {
-		configurationPublisher.addListener(listener);
-	}
-
-	/**
-	 * 移除配置改变事件监听器
-	 * @param listener 配置改变事件监听器
-	 */
-	public void removePropertyListener(PropertyListener listener) {
-		configurationPublisher.removeListener(listener);
 	}
 
 	/**
