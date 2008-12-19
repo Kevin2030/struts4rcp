@@ -3,6 +3,10 @@ package com.googlecode.struts4rcp.client;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -10,10 +14,12 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.googlecode.struts4rcp.Action;
-import com.googlecode.struts4rcp.client.event.ConfigurationListener;
 import com.googlecode.struts4rcp.client.event.Listenable;
 import com.googlecode.struts4rcp.client.event.Listener;
 import com.googlecode.struts4rcp.client.event.NetworkListener;
+import com.googlecode.struts4rcp.client.event.PropertyEvent;
+import com.googlecode.struts4rcp.client.event.PropertyListener;
+import com.googlecode.struts4rcp.client.event.PropertyPublisher;
 import com.googlecode.struts4rcp.client.event.TransferListener;
 import com.googlecode.struts4rcp.client.transferrer.HttpURLConnectionTransferrer;
 import com.googlecode.struts4rcp.util.KeyValue;
@@ -200,8 +206,6 @@ public class Client implements Listenable {
 	 */
 	public static final String LISTENERS_KEY = "listeners";
 
-	private final ConfigurationManager configurationManager;
-
 	private final Transferrer transferrer;
 
 	private Client(Properties config) {
@@ -217,13 +221,12 @@ public class Client implements Listenable {
 			throw new NullPointerException("transferrer == null!");
 		config = new UnmodifiableProperties(config);
 		this.transferrer = transferrer;
-		this.configurationManager = new ConfigurationManager(this, config);
 		transferrer.init(this, config);
-		configurationManager.register(TRANSFERRER_KEY, "传输策略",
+		addPropertyDescription(TRANSFERRER_KEY, "传输策略",
 				"暂未实现传输策略动态切换，修改后不会生效!", HttpURLConnectionTransferrer.class
 						.getName(), ServiceUtils.getServiceClassNames(
 						Transferrer.class.getName()).toArray(new String[0]));
-		configurationManager.register(LISTENERS_KEY, "事件监听器",
+		addPropertyDescription(LISTENERS_KEY, "事件监听器",
 				"暂未实现动态注册事件监听器，修改后不会生效!", "");
 		// 读取监听器
 		List<Listener> listeners = PropertiesUtils.getInstancesProperty(config,
@@ -232,10 +235,6 @@ public class Client implements Listenable {
 			addListener(listener);
 			Worker.getWorker().addListener(listener);
 		}
-	}
-
-	public ConfigurationManager getConfigurationManager() {
-		return configurationManager;
 	}
 
 	public Transferrer getTransferrer() {
@@ -248,7 +247,7 @@ public class Client implements Listenable {
 		} catch (IOException e) {
 			// ignore
 		} finally {
-			configurationManager.shutdown();
+			configurationPublisher.clearListeners();
 		}
 	}
 
@@ -265,9 +264,9 @@ public class Client implements Listenable {
 		if (listener instanceof TransferListener)
 			this.getTransferrer().addTransferListener(
 					(TransferListener) listener);
-		if (listener instanceof ConfigurationListener)
-			this.getConfigurationManager().addConfigurationListener(
-					(ConfigurationListener) listener);
+		if (listener instanceof PropertyListener)
+			this.addPropertyListener(
+					(PropertyListener) listener);
 	}
 
 	/**
@@ -283,21 +282,124 @@ public class Client implements Listenable {
 		if (listener instanceof TransferListener)
 			this.getTransferrer().removeTransferListener(
 					(TransferListener) listener);
-		if (listener instanceof ConfigurationListener)
-			this.getConfigurationManager().removeConfigurationListener(
-					(ConfigurationListener) listener);
+		if (listener instanceof PropertyListener)
+			this.removePropertyListener(
+					(PropertyListener) listener);
 	}
 
+	private final Properties values = new Properties();
+
+	/**
+	 * 获取所有配置项
+	 * @return 不可变配置集合
+	 */
 	public Properties getProperties() {
-		return configurationManager.getProperties();
+		return new UnmodifiableProperties(values);
 	}
 
+	/**
+	 * 获取配置项值
+	 * @param key 配置项索引
+	 * @return 配置项值
+	 */
 	public String getProperty(String key) {
-		return configurationManager.getProperty(key);
+		if (key == null)
+			throw new NullPointerException("key == null!");
+		return values.getProperty(key);
 	}
 
+	/**
+	 * 设置配置项值
+	 * @param key 配置项索引
+	 * @param value 配置项值
+	 */
 	public void setProperty(String key, String value) {
-		configurationManager.setProperty(key, value);
+		if (key == null)
+			throw new NullPointerException("key == null!");
+		if (value == null)
+			value = "";
+		String old = values.getProperty(key);
+		if (isChanged(old, value)) {
+			values.put(key, value);
+			configurationPublisher.publishEvent(new PropertyEvent(this, descriptions.get(key), old, value));
+		}
+	}
+
+	private boolean isChanged(String s1, String s2) {
+		if (s1 == null && s2 == null)
+			return false;
+		if (s1 == null || s2 == null)
+			return true;
+		return ! s1.equals(s2);
+	}
+
+	private final Map<String, PropertyDescription> descriptions = Collections.synchronizedMap(new HashMap<String, PropertyDescription>());
+
+	/**
+	 * 获取配置项
+	 * @param key 配置项索引
+	 * @return 配置项
+	 */
+	public PropertyDescription getPropertyDescription(String key) {
+		return descriptions.get(key);
+	}
+
+	/**
+	 * 获取所有配置项
+	 * @return 所有配置项
+	 */
+	public Map<String, PropertyDescription> getPropertyDescriptions() {
+		return Collections.unmodifiableMap(descriptions);
+	}
+
+	/**
+	 * 注册配置项名称和描述，当用户修改配置时，将提示该描述信息
+	 * @param key 配置项索引
+	 * @param name 配置项名
+	 * @param desc 配置项描述
+	 */
+	public void addPropertyDescription(String key, String name, String desc, String defaultValue, String... optionsValue) {
+		if (key == null)
+			throw new NullPointerException("key == null!");
+		if (name == null)
+			throw new NullPointerException("name == null!");
+		synchronized (values) {
+			if (! values.containsKey(key)) {
+				values.put(key, "");
+			}
+		}
+		Collection<String> options = null;
+		if (optionsValue != null
+				&& optionsValue.length > 0) {
+			ArrayList<String> list = new ArrayList<String>();
+			list.addAll(Arrays.asList(optionsValue));
+			if (! list.contains(defaultValue))
+				list.add(0, defaultValue);
+			options = Collections.unmodifiableCollection(list);
+		}
+		descriptions.put(key, new PropertyDescription(name, desc, defaultValue, options));
+	}
+
+	public void addPropertyDescription(String key, PropertyDescription description) {
+		descriptions.put(key, description);
+	}
+
+	private final PropertyPublisher configurationPublisher = new PropertyPublisher();
+
+	/**
+	 * 添加配置改变事件监听器
+	 * @param listener 配置改变事件监听器
+	 */
+	public void addPropertyListener(PropertyListener listener) {
+		configurationPublisher.addListener(listener);
+	}
+
+	/**
+	 * 移除配置改变事件监听器
+	 * @param listener 配置改变事件监听器
+	 */
+	public void removePropertyListener(PropertyListener listener) {
+		configurationPublisher.removeListener(listener);
 	}
 
 	/**
