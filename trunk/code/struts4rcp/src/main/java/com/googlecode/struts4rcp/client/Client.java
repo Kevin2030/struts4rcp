@@ -377,7 +377,7 @@ public class Client implements Listenable {
 				list.add(0, defaultValue);
 			options = Collections.unmodifiableCollection(list);
 		}
-		descriptions.put(key, new PropertyDescription(name, desc, defaultValue, options));
+		addPropertyDescription(key, new PropertyDescription(name, desc, defaultValue, options));
 	}
 
 	public void addPropertyDescription(String key, PropertyDescription description) {
