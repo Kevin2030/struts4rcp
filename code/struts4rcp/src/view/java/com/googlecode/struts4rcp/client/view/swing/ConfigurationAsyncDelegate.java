@@ -1,81 +1,41 @@
 package com.googlecode.struts4rcp.client.view.swing;
 
-import com.googlecode.struts4rcp.client.event.ConfigurationEvent;
-import com.googlecode.struts4rcp.client.event.ConfigurationListener;
+import com.googlecode.struts4rcp.client.event.PropertyEvent;
+import com.googlecode.struts4rcp.client.event.PropertyListener;
 
 /**
  * 连接事件监听器UI线程执行委托，如果UI线程非空闲，则等待。
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class ConfigurationAsyncDelegate implements ConfigurationListener {
+public class ConfigurationAsyncDelegate implements PropertyListener {
 
-	private final ConfigurationListener listener;
+	private final PropertyListener listener;
 
 	private final boolean runOnUI;
 
 	private final boolean runOnNonUI;
 
-	public ConfigurationAsyncDelegate(ConfigurationListener listener) {
+	public ConfigurationAsyncDelegate(PropertyListener listener) {
 		this(listener, true, true);
 	}
 
-	public ConfigurationAsyncDelegate(ConfigurationListener listener, boolean runOnUI, boolean runOnNonUI) {
+	public ConfigurationAsyncDelegate(PropertyListener listener, boolean runOnUI, boolean runOnNonUI) {
 		this.listener = listener;
 		this.runOnUI = runOnUI;
 		this.runOnNonUI = runOnNonUI;
 	}
 
-	public void onConfigurationChanged(final ConfigurationEvent event) {
+	public void onPropertyChanged(final PropertyEvent event) {
 		try {
 			if (UIUtils.isUIThread()) {
 				if (runOnUI) {
-					listener.onConfigurationChanged(event);
+					listener.onPropertyChanged(event);
 				}
 			} else {
 				if (runOnNonUI) {
 					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
 						public void run() {
-							listener.onConfigurationChanged(event);
-						}
-					});
-				}
-			}
-		} catch (Throwable e) {
-			// ignore
-		}
-	}
-
-	public void onConfigurationAdded(final ConfigurationEvent event) {
-		try {
-			if (UIUtils.isUIThread()) {
-				if (runOnUI) {
-					listener.onConfigurationAdded(event);
-				}
-			} else {
-				if (runOnNonUI) {
-					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
-						public void run() {
-							listener.onConfigurationAdded(event);
-						}
-					});
-				}
-			}
-		} catch (Throwable e) {
-			// ignore
-		}
-	}
-
-	public void onConfigurationRemoved(final ConfigurationEvent event) {
-		try {
-			if (UIUtils.isUIThread()) {
-				if (runOnUI) {
-					listener.onConfigurationRemoved(event);
-				}
-			} else {
-				if (runOnNonUI) {
-					UIUtils.asyncExecute(new Runnable() { // 在UI线程内执行
-						public void run() {
-							listener.onConfigurationRemoved(event);
+							listener.onPropertyChanged(event);
 						}
 					});
 				}

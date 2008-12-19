@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.jface.dialogs.InputDialog;
@@ -19,17 +18,17 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Configuration;
-import com.googlecode.struts4rcp.client.event.ConfigurationEvent;
-import com.googlecode.struts4rcp.client.event.ConfigurationListener;
+import com.googlecode.struts4rcp.client.PropertyDescription;
+import com.googlecode.struts4rcp.client.event.PropertyEvent;
+import com.googlecode.struts4rcp.client.event.PropertyListener;
 
 public class ConfigurationPane extends Composite {
 
 	private final Client client;
 
-	private final ConfigurationListener configurationListener;
+	private final PropertyListener configurationListener;
 
-	private final ArrayList<Configuration> configurations = new ArrayList<Configuration>();
+	private final ArrayList<PropertyDescription> configurations = new ArrayList<PropertyDescription>();
 
 	private final List configurationList;
 
@@ -75,17 +74,17 @@ public class ConfigurationPane extends Composite {
 		ToolItem editItem = new ToolItem(toolBar, SWT.NONE);
 		editItem.setImage(Images.getImage("edit.gif"));
 		editItem.setText("修改");
-		editItem.addSelectionListener(new SelectionAdapter() {
+		/*editItem.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				if (getConfigurationModelSize() == 0) {
 					MessageDialog.openWarning(parent.getShell(), "修改", "没有任何配置项!");
 					return;
 				}
-				Configuration configuration = null;
+				PropertyInfo configuration = null;
 				synchronized (configurations) {
 					int selected = configurationList.getSelectionIndex();
 					if (selected > -1 && selected < configurations.size())
-						configuration = (Configuration)configurations.get(selected);
+						configuration = (PropertyInfo)configurations.get(selected);
 				}
 				if (configuration == null) {
 					MessageDialog.openWarning(parent.getShell(), "修改", "请选择配置项!");
@@ -97,8 +96,7 @@ public class ConfigurationPane extends Composite {
 					if (! ch)
 						return;
 				}
-				// Collection<String> options = configuration.getOptions();
-				InputDialog configurationInputDialog = new InputDialog(parent.getShell(), "输入", "请输入配置项\"" + configuration.getNameOrKey() + "\"的新值：", configuration.getValueOrDefault(), null);
+				InputDialog configurationInputDialog = new InputDialog(parent.getShell(), "输入", "请输入配置项\"" + configuration.getName() + "\"的新值：", configuration.getDefaultValue(), null);
 				int ch = configurationInputDialog.open();
 				if (ch == InputDialog.OK) {
 					String newValue = configurationInputDialog.getValue();
@@ -108,7 +106,7 @@ public class ConfigurationPane extends Composite {
 					}
 				}
 			}
-		});
+		});*/
 		ToolItem refreshItem = new ToolItem(toolBar, SWT.NONE);
 		refreshItem.setImage(Images.getImage("refresh.gif"));
 		refreshItem.setText("刷新");
@@ -121,33 +119,14 @@ public class ConfigurationPane extends Composite {
 		configurationList = new List(this, SWT.BORDER|SWT.V_SCROLL|SWT.H_SCROLL);
 		configurationList.setBounds(0, 40, 484, 400);
 
-		configurationListener = new ConfigurationListener() {
-			public void onConfigurationChanged(final ConfigurationEvent event) {
-				final Configuration configuration = event.getConfiguration();
+		configurationListener = new PropertyListener() {
+			public void onPropertyChanged(final PropertyEvent event) {
+				final PropertyDescription configuration = event.getConfiguration();
 				synchronized (configurations) {
 					if (configurations.contains(configuration)) {
 						final int i = configurations.indexOf(configuration);
 						configurations.set(i, configuration);
 						configurationList.setItem(i, configuration.toString());
-					}
-				}
-			}
-			public void onConfigurationAdded(ConfigurationEvent event) {
-				Configuration configuration = event.getConfiguration();
-				synchronized (configurations) {
-					if (! configurations.contains(configuration)) {
-						configurations.add(configuration);
-						configurationList.add(configuration.toString());
-					}
-				}
-			}
-			public void onConfigurationRemoved(ConfigurationEvent event) {
-				Configuration configuration = event.getConfiguration();
-				synchronized (configurations) {
-					if (configurations.contains(configuration)) {
-						int i = configurations.indexOf(configuration);
-						configurations.remove(i);
-						configurationList.remove(i);
 					}
 				}
 			}
@@ -160,11 +139,11 @@ public class ConfigurationPane extends Composite {
 	}
 
 	private void refreshConfigurationList() {
-		Collection<Configuration> configs = client.getConfigurationManager().getConfigurations();
+		Map<String, PropertyDescription> configs = client.getPropertyDescriptions();
 		synchronized (configurations) {
 			configurations.clear();
 			configurationList.removeAll();
-			for (Configuration configuration : configs) {
+			for (PropertyDescription configuration : configs.values()) {
 				configurations.add(configuration);
 				configurationList.add(configuration.toString());
 			}

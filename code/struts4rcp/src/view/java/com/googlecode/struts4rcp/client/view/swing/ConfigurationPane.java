@@ -26,10 +26,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Configuration;
-import com.googlecode.struts4rcp.client.event.ConfigurationAdapter;
-import com.googlecode.struts4rcp.client.event.ConfigurationEvent;
-import com.googlecode.struts4rcp.client.event.ConfigurationListener;
+import com.googlecode.struts4rcp.client.PropertyDescription;
+import com.googlecode.struts4rcp.client.event.PropertyAdapter;
+import com.googlecode.struts4rcp.client.event.PropertyEvent;
+import com.googlecode.struts4rcp.client.event.PropertyListener;
 
 public class ConfigurationPane extends JPanel {
 
@@ -131,13 +131,13 @@ public class ConfigurationPane extends JPanel {
 		editButton.setToolTipText("修改配置项");
 		editButton.setEnabled(false);
 		toolBar.add(editButton);
-		editButton.addActionListener(new ActionListener() {
+		/*editButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (getConfigurationModelSize() == 0) {
 					JOptionPane.showMessageDialog(ConfigurationPane.this, "没有任何配置项!", "修改", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				final Configuration configuration = (Configuration)configurationList.getSelectedValue();
+				final PropertyInfo configuration = (PropertyInfo)configurationList.getSelectedValue();
 				if (configuration == null) {
 					JOptionPane.showMessageDialog(ConfigurationPane.this, "请选择配置项!", "修改", JOptionPane.WARNING_MESSAGE);
 					return;
@@ -159,10 +159,10 @@ public class ConfigurationPane extends JPanel {
 					JOptionPane.showMessageDialog(ConfigurationPane.this, "修改配置项成功!", "修改", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
-		});
+		});*/
 		configurationList.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 			public void valueChanged(ListSelectionEvent e) {
-				final Configuration configuration = (Configuration)configurationList.getSelectedValue();
+				final PropertyDescription configuration = (PropertyDescription)configurationList.getSelectedValue();
 				if (configuration != null) {
 					String name = configuration.getName();
 					if (name != null)
@@ -194,24 +194,12 @@ public class ConfigurationPane extends JPanel {
 			// ignore
 		}
 
-		configurationListener = new ConfigurationDelegate(new ConfigurationAdapter() {
-			public void onConfigurationChanged(final ConfigurationEvent event) {
-				Configuration configuration = event.getConfiguration();
+		configurationListener = new ConfigurationDelegate(new PropertyAdapter() {
+			public void onPropertyChanged(final PropertyEvent event) {
+				PropertyDescription configuration = event.getConfiguration();
 				synchronized (configurationModel) {
 					configurationModel.removeElement(configuration);
 					configurationModel.addElement(configuration);
-				}
-			}
-			public void onConfigurationAdded(ConfigurationEvent event) {
-				Configuration configuration = event.getConfiguration();
-				synchronized (configurationModel) {
-					configurationModel.addElement(configuration);
-				}
-			}
-			public void onConfigurationRemoved(ConfigurationEvent event) {
-				Configuration configuration = event.getConfiguration();
-				synchronized (configurationModel) {
-					configurationModel.removeElement(configuration);
 				}
 			}
 		});
@@ -219,16 +207,16 @@ public class ConfigurationPane extends JPanel {
 	}
 
 	private void refreshConfigurationList() {
-		Collection<Configuration> configurations = client.getConfigurationManager().getConfigurations();
+		Map<String, PropertyDescription> configurations = client.getPropertyDescriptions();
 		synchronized (configurationModel) {
 			configurationModel.clear();
-			for (Configuration configuration : configurations) {
+			for (PropertyDescription configuration : configurations.values()) {
 				configurationModel.addElement(configuration);
 			}
 		}
 	}
 
-	private final ConfigurationListener configurationListener;
+	private final PropertyListener configurationListener;
 
 	public void dispose() {
 		client.removeListener(configurationListener);
@@ -247,7 +235,7 @@ public class ConfigurationPane extends JPanel {
 		public Component getListCellRendererComponent(JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			Configuration configuration = (Configuration)value;
+			PropertyDescription configuration = (PropertyDescription)value;
 			if(configuration.getName() != null)
 				this.setIcon(enableIcon);
 			else
