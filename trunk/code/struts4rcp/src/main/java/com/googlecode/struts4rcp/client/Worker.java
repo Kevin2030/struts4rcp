@@ -32,16 +32,16 @@ public class Worker implements Listenable {
 	 * 前台工作
 	 * @param workable 工作内容
 	 */
-	public void fore(Workable workable) {
-		fore(null, workable);
+	public void runInForeground(Workable workable) {
+		runInForeground(workable, null);
 	}
 
 	/**
 	 * 前台工作
 	 * @param workable 工作内容
 	 */
-	public void fore(String message, Workable workable) {
-		fore(message, false, true, workable);
+	public void runInForeground(Workable workable, String message) {
+		runInForeground(workable, message, false, true);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class Worker implements Listenable {
 	 * @param workable 工作内容
 	 * @param backable 是否可转为后台运行
 	 */
-	public void fore(String message, boolean backable, boolean abortable, Workable workable) {
+	public void runInForeground(Workable workable, String message, boolean backable, boolean abortable) {
 		Work work = new Work(false);
 		work.setMessage(message);
 		work.setBackable(backable);
@@ -61,7 +61,15 @@ public class Worker implements Listenable {
 	 * 后台工作
 	 * @param workable 工作内容
 	 */
-	public void back(Workable workable) {
+	public void runInBackground(Workable workable) {
+		work(new Work(true), workable);
+	}
+
+	/**
+	 * 后台工作
+	 * @param workable 工作内容
+	 */
+	public void runInBackground(Workable workable, boolean abortable) {
 		work(new Work(true), workable);
 	}
 
@@ -72,7 +80,7 @@ public class Worker implements Listenable {
 				try {
 					addWork(work);
 					try {
-						workable.work(work);
+						workable.run(work);
 					} finally {
 						removeWork(work);
 					}

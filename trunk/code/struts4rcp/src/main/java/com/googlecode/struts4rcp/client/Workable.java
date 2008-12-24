@@ -11,6 +11,6 @@ public interface Workable {
 	 * @param work 工作信息
 	 * @throws Exception 工作出错时抛出
 	 */
-	void work(Work work) throws Exception;
+	void run(Work work) throws Exception;
 
 }
