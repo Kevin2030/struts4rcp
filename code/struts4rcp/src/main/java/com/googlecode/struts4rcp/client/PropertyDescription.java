@@ -10,16 +10,16 @@ public class PropertyDescription {
 
 	private final String name;
 
-	private final String description;
+	private final String prompt;
 
 	private final String defaultValue;
 
 	private final Collection<String> optionValues;
 
-	public PropertyDescription(String name, String description, String defaultValue, Collection<String> optionValues) {
+	public PropertyDescription(String name, String prompt, String defaultValue, Collection<String> optionValues) {
 		super();
 		this.name = name;
-		this.description = description;
+		this.prompt = prompt;
 		this.defaultValue = defaultValue;
 		this.optionValues = optionValues;
 	}
@@ -36,8 +36,8 @@ public class PropertyDescription {
 	 * 获取配置项描述
 	 * @return 描述
 	 */
-	public String getDescription() {
-		return description;
+	public String getPrompt() {
+		return prompt;
 	}
 
 	/**
