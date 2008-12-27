@@ -19,6 +19,7 @@ import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.util.IdleConnectionTimeoutThread;
 
+import com.googlecode.struts4rcp.client.AbstractTransferrer;
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.Transfer;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
@@ -29,7 +30,7 @@ import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
  * @see org.apache.commons.httpclient.HttpClient
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class CommonsHttpClientTransferrer extends AbstractHttpTransferrer<HttpMethod> {
+public class CommonsHttpClientTransferrer extends AbstractTransferrer<HttpMethod> {
 
 	/**
 	 * 空闲连接超时时间配置参数名

@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.client.transferrer;
+package com.googlecode.struts4rcp.client;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -13,10 +13,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import com.googlecode.struts4rcp.client.Abortable;
-import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.Transfer;
-import com.googlecode.struts4rcp.client.Transferrer;
 import com.googlecode.struts4rcp.client.event.NetworkEvent;
 import com.googlecode.struts4rcp.client.event.NetworkListener;
 import com.googlecode.struts4rcp.client.event.NetworkPublisher;
@@ -34,7 +30,7 @@ import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
  * HTTP传输器基类
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public abstract class AbstractHttpTransferrer<T> implements Transferrer {
+public abstract class AbstractTransferrer<T> implements Transferrer {
 
 	/**
 	 * 日志输出接口
@@ -246,7 +242,7 @@ public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 		// 初始化连接状态事件
 		boolean changed = refresh();
 		if (! changed) // 如果未改变，也触发
-			connectionPublisher.publishEvent(new NetworkEvent(AbstractHttpTransferrer.this, isConnected()));
+			connectionPublisher.publishEvent(new NetworkEvent(AbstractTransferrer.this, isConnected()));
 
 		// ---- 组装前缀 ----
 		urlPrefix = HTTP_PROTOCAL + hostAddress;
@@ -336,7 +332,7 @@ public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 	}
 
 	protected void addTransfer(Transfer execution, Abortable abortor) {
-		transportationPublisher.publishEvent(new TransferEvent(AbstractHttpTransferrer.this, execution));
+		transportationPublisher.publishEvent(new TransferEvent(AbstractTransferrer.this, execution));
 		synchronized (executions) {
 			if (executions.size() >= maxConnectionSize) {
 				try {
@@ -348,7 +344,7 @@ public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 			executions.add(execution);
 		}
 		execution.transferring(abortor);
-		transportationPublisher.publishEvent(new TransferEvent(AbstractHttpTransferrer.this, execution));
+		transportationPublisher.publishEvent(new TransferEvent(AbstractTransferrer.this, execution));
 	}
 
 	protected void removeTransfer(Transfer execution, Serializable result) {
@@ -357,7 +353,7 @@ public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 			executions.notify();
 		}
 		execution.transferred(result);
-		transportationPublisher.publishEvent(new TransferEvent(AbstractHttpTransferrer.this, execution));
+		transportationPublisher.publishEvent(new TransferEvent(AbstractTransferrer.this, execution));
 	}
 
 	/**
@@ -423,7 +419,7 @@ public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 		}
 
 		public void abort() throws IOException {
-			AbstractHttpTransferrer.this.abort(request);
+			AbstractTransferrer.this.abort(request);
 		}
 	}
 
@@ -456,7 +452,7 @@ public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 				boolean currentConnection = ping();
 				if (connected != currentConnection) {
 					connected = currentConnection;
-					connectionPublisher.publishEvent(new NetworkEvent(AbstractHttpTransferrer.this, connected));
+					connectionPublisher.publishEvent(new NetworkEvent(AbstractTransferrer.this, connected));
 					return true;
 				}
 			} catch (Throwable e) {
@@ -470,7 +466,7 @@ public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 
 	public void addNetworkListener(NetworkListener listener) {
 		connectionPublisher.addListener(listener);
-		connectionPublisher.publishEvent(listener, new NetworkEvent(AbstractHttpTransferrer.this, isConnected()));
+		connectionPublisher.publishEvent(listener, new NetworkEvent(AbstractTransferrer.this, isConnected()));
 	}
 
 	public void removeNetworkListener(NetworkListener listener) {

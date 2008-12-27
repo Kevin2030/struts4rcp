@@ -30,6 +30,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
+import com.googlecode.struts4rcp.client.AbstractTransferrer;
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.Transfer;
 import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
@@ -39,7 +40,7 @@ import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;
  * @see org.apache.http.client.HttpClient
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class HttpClientTransferrer extends AbstractHttpTransferrer<HttpUriRequest> {
+public class HttpClientTransferrer extends AbstractTransferrer<HttpUriRequest> {
 
 	private HttpClient httpClient;
 
