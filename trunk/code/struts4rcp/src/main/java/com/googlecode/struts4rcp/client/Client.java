@@ -492,6 +492,10 @@ public class Client implements Listenable {
 			return uri;
 		}
 
+		public void flush() {
+			// TODO 未实现缓存
+		}
+
 		public long count() throws Exception {
 			return count(null);
 		}
@@ -548,8 +552,8 @@ public class Client implements Listenable {
 				return new ResourceProxy<R>(response.getKey(), response.getValue());
 		}
 
-		public void flush() {
-			// TODO 未实现缓存
+		public void clear() throws Exception {
+			getTransferrer().transfer(new Transfer(uri, null, Transfer.DELETE_METHOD));
 		}
 
 	}

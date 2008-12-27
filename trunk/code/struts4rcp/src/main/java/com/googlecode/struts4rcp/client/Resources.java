@@ -86,4 +86,5 @@ public interface Resources<R extends Serializable> extends Serializable {
 	 */
 	Resource<R> create(R resource) throws Exception;
 
+	void clear() throws Exception;
 }
