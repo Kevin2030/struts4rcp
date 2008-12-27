@@ -62,6 +62,9 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 			} else if ("post".equalsIgnoreCase(method)) {
 				R result = create(model, lazy);
 				return convertResource(result, lazy);
+			} else if ("delete".equalsIgnoreCase(method)) {
+				clear();
+				return null;
 			} else {
 				throw new UnsupportedOperationException("Unsupported http request method \"" + method + "\"!");
 			}
@@ -115,7 +118,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @return 资源个数
 	 * @throws Exception 统计失败时抛出
 	 */
-	protected long count() throws Exception {
+	public long count() throws Exception {
 		return count(null);
 	}
 
@@ -125,7 +128,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @return 资源个数
 	 * @throws Exception 统计失败时抛出
 	 */
-	protected long count(R condition) throws Exception {
+	public long count(R condition) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
@@ -135,7 +138,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception 获取失败时抛出
 	 */
-	protected R[] list(boolean lazy) throws Exception {
+	public R[] list(boolean lazy) throws Exception {
 		return list(null, NOSKIP, LIMITLESS, lazy);
 	}
 
@@ -147,7 +150,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception 获取失败时抛出
 	 */
-	protected R[] list(long skip, long limit, boolean lazy) throws Exception {
+	public R[] list(long skip, long limit, boolean lazy) throws Exception {
 		return list(null, skip, limit, lazy);
 	}
 
@@ -158,7 +161,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception 获取失败时抛出
 	 */
-	protected R[] list(R condition, boolean lazy) throws Exception {
+	public R[] list(R condition, boolean lazy) throws Exception {
 		return list(condition, NOSKIP, LIMITLESS, lazy);
 	}
 
@@ -171,7 +174,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @return 资源标识列表/资源列表，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception 获取失败时抛出
 	 */
-	protected R[] list(R condition, long skip, long limit, boolean lazy) throws Exception {
+	public R[] list(R condition, long skip, long limit, boolean lazy) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
@@ -182,7 +185,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @return 资源标识/资源，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception
 	 */
-	protected R create(R resource, boolean lazy) throws Exception {
+	public R create(R resource, boolean lazy) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
@@ -192,7 +195,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @return 是否存在
 	 * @throws Exception 检测失败时抛出
 	 */
-	protected boolean exist(R resource) throws Exception {
+	public boolean exist(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
@@ -202,7 +205,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @return 资源
 	 * @throws Exception 读取失败时抛出
 	 */
-	protected R read(R resource) throws Exception {
+	public R read(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
@@ -211,7 +214,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @param resource 资源
 	 * @throws Exception 更新失败时抛出
 	 */
-	protected void update(R resource) throws Exception {
+	public void update(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
@@ -220,7 +223,15 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @param resource 资源标识，注：资源标识指的是可以填充URI的非完整属性资源，如：只包含ID属性值的资源
 	 * @throws Exception 删除失败时抛出
 	 */
-	protected void delete(R resource) throws Exception {
+	public void delete(R resource) throws Exception {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * 删除所有资源
+	 * @throws Exception 删除失败时抛出
+	 */
+	public void clear() throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
