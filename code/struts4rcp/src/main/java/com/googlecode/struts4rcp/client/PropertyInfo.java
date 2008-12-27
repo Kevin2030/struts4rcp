@@ -6,20 +6,20 @@ import java.util.Collection;
  * 配置项
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class PropertyDescription {
+public class PropertyInfo {
 
 	private final String name;
 
-	private final String prompt;
+	private final String description;
 
 	private final String defaultValue;
 
 	private final Collection<String> optionValues;
 
-	public PropertyDescription(String name, String prompt, String defaultValue, Collection<String> optionValues) {
+	public PropertyInfo(String name, String description, String defaultValue, Collection<String> optionValues) {
 		super();
 		this.name = name;
-		this.prompt = prompt;
+		this.description = description;
 		this.defaultValue = defaultValue;
 		this.optionValues = optionValues;
 	}
@@ -36,8 +36,8 @@ public class PropertyDescription {
 	 * 获取配置项描述
 	 * @return 描述
 	 */
-	public String getPrompt() {
-		return prompt;
+	public String getDescription() {
+		return description;
 	}
 
 	/**

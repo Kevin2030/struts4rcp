@@ -1,6 +1,6 @@
 package com.googlecode.struts4rcp.client.event;
 
-import com.googlecode.struts4rcp.client.PropertyDescription;
+import com.googlecode.struts4rcp.client.PropertyInfo;
 
 /**
  * 配置改变事件信息
@@ -10,13 +10,13 @@ public class PropertyEvent extends Event {
 
 	private static final long serialVersionUID = 1L;
 
-	private final PropertyDescription description;
+	private final PropertyInfo description;
 
 	private final String oldValue;
 
 	private final String newValue;
 
-	public PropertyEvent(Object source, PropertyDescription description, String oldValue, String newValue) {
+	public PropertyEvent(Object source, PropertyInfo description, String oldValue, String newValue) {
 		super(source);
 		this.description = description;
 		this.oldValue = oldValue;
@@ -27,7 +27,7 @@ public class PropertyEvent extends Event {
 	 * 获取改变的配置项
 	 * @return 改变的配置项
 	 */
-	public PropertyDescription getConfiguration() {
+	public PropertyInfo getConfiguration() {
 		return description;
 	}
 

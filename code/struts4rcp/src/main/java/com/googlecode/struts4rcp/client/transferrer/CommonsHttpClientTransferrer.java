@@ -82,10 +82,10 @@ public class CommonsHttpClientTransferrer extends AbstractTransferrer<HttpMethod
 		super.init(client, config);
 		// 读取空闲连接超时时间
 		idleConnectionTimeout = PropertiesUtils.getIntProperty(config, IDLE_CONNECTION_TIMEOUT_KEY, UNKNOWN_IDLE_CONNECTION_TIMEOUT);
-		client.addPropertyDescription(IDLE_CONNECTION_TIMEOUT_KEY,  "空闲连接超时时间(ms)", "暂未实现动态修改空闲连接超时时间，修改后不会生效!", "3000");
+		client.addPropertyInfo(IDLE_CONNECTION_TIMEOUT_KEY,  "空闲连接超时时间(ms)", "暂未实现动态修改空闲连接超时时间，修改后不会生效!", "3000");
 		// 读取空闲连接检查时间间隔
 		idleConnectionCheckInterval = PropertiesUtils.getIntProperty(config, IDLE_CONNECTION_CHECK_INTERVAL_KEY, UNKNOWN_IDLE_CONNECTION_CHECK_INTERVAL);
-		client.addPropertyDescription(IDLE_CONNECTION_CHECK_INTERVAL_KEY,  "空闲连接检查时间间隔(ms)", "暂未实现动态修改空闲连接检查时间间隔，修改后不会生效!", "1000");
+		client.addPropertyInfo(IDLE_CONNECTION_CHECK_INTERVAL_KEY,  "空闲连接检查时间间隔(ms)", "暂未实现动态修改空闲连接检查时间间隔，修改后不会生效!", "1000");
 		// 设置
 		httpClient = createHttpClient();
 		if (httpClient == null)

@@ -200,38 +200,38 @@ public abstract class AbstractTransferrer<T> implements Transferrer {
 
 		// 读取序列化器
 		serializer = PropertiesUtils.getInstanceProperty(config, SERIALIZER_KEY, StreamSerializer.class, JavaStreamSerializer.class);
-		client.addPropertyDescription(SERIALIZER_KEY, "序列化策略", "暂未实现动态切换序列化策略，修改后不会生效!",
+		client.addPropertyInfo(SERIALIZER_KEY, "序列化策略", "暂未实现动态切换序列化策略，修改后不会生效!",
 				JavaStreamSerializer.class.getName(), ServiceUtils.getServiceClassNames(StreamSerializer.class).toArray(new String[0]));
 
 		// 读取服务器主机名
 		hostAddress = PropertiesUtils.getStringProperty(config, HOST_ADDRESS_KEY, null);
 		if (hostAddress == null)
 			throw new NullPointerException("server.host == null, 服务器主机名不能为空!");
-		client.addPropertyDescription(HOST_ADDRESS_KEY, "服务器主机名", "暂未实现动态切换服务器名，修改后不会生效!", "");
+		client.addPropertyInfo(HOST_ADDRESS_KEY, "服务器主机名", "暂未实现动态切换服务器名，修改后不会生效!", "");
 
 		// 读取服务器端口
 		hostPort = PropertiesUtils.getIntProperty(config, HOST_PORT_KEY, UNKNOWN_HOST_PORT);
-		client.addPropertyDescription(HOST_PORT_KEY,  "服务器端口", "暂未实现动态切换服务器端口，修改后不会生效!", "80");
+		client.addPropertyInfo(HOST_PORT_KEY,  "服务器端口", "暂未实现动态切换服务器端口，修改后不会生效!", "80");
 
 		// 读取上下文路径
 		contextPath = PropertiesUtils.getStringProperty(config, CONTEXT_PATH_KEY, "");
-		client.addPropertyDescription(CONTEXT_PATH_KEY,  "应用上下文路径", "暂未实现动态切换应用上下文路径，修改后不会生效!", "/");
+		client.addPropertyInfo(CONTEXT_PATH_KEY,  "应用上下文路径", "暂未实现动态切换应用上下文路径，修改后不会生效!", "/");
 
 		// 读取Action后缀
 		mappingExtension = PropertiesUtils.getStringProperty(config, MAPPING_EXTENSION_KEY, DEFAULT_MAPPING_EXTENSION);
-		client.addPropertyDescription(MAPPING_EXTENSION_KEY,  "Action后缀", "暂未实现动态修改Action后缀，修改后不会生效!", "data");
+		client.addPropertyInfo(MAPPING_EXTENSION_KEY,  "Action后缀", "暂未实现动态修改Action后缀，修改后不会生效!", "data");
 
 		// 读取连接超时时间
 		connectionTimeout = PropertiesUtils.getIntProperty(config, CONNECTION_TIMEOUT_KEY, UNKNOWN_CONNECTION_TIMEOUT);
-		client.addPropertyDescription(CONNECTION_TIMEOUT_KEY,  "HTTP请求连接超时时间(ms)", "暂未实现动态修改HTTP请求连接超时时间，修改后不会生效!", "30000");
+		client.addPropertyInfo(CONNECTION_TIMEOUT_KEY,  "HTTP请求连接超时时间(ms)", "暂未实现动态修改HTTP请求连接超时时间，修改后不会生效!", "30000");
 
 		// 读取套接字读取超时时间
 		socketTimeout = PropertiesUtils.getIntProperty(config, SOCKET_TIMEOUT_KEY, UNKNOWN_SOCKET_TIMEOUT);
-		client.addPropertyDescription(SOCKET_TIMEOUT_KEY,  "套接字读取超时时间(ms)", "暂未实现动态修改套接字读取超时时间，修改后不会生效!", "0");
+		client.addPropertyInfo(SOCKET_TIMEOUT_KEY,  "套接字读取超时时间(ms)", "暂未实现动态修改套接字读取超时时间，修改后不会生效!", "0");
 
 		// 读取监控时间间隔
 		connectionCheckInterval = PropertiesUtils.getIntProperty(config, CONNECTION_CHECK_INTERVAL_KEY, DEFAULT_CONNECTION_CHECK_INTERVAL);
-		client.addPropertyDescription(CONNECTION_CHECK_INTERVAL_KEY,  "网络连接状态检查时间间隔(ms)", "暂未实现动态修改网络连接状态检查时间间隔，修改后不会生效!", "0");
+		client.addPropertyInfo(CONNECTION_CHECK_INTERVAL_KEY,  "网络连接状态检查时间间隔(ms)", "暂未实现动态修改网络连接状态检查时间间隔，修改后不会生效!", "0");
 		if (connectionCheckInterval > 0) {
 			scheduler = Executors.newScheduledThreadPool(1);
 			future = scheduler.scheduleWithFixedDelay(new Runnable() {

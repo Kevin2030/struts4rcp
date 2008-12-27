@@ -26,7 +26,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.PropertyDescription;
+import com.googlecode.struts4rcp.client.PropertyInfo;
 import com.googlecode.struts4rcp.client.event.PropertyAdapter;
 import com.googlecode.struts4rcp.client.event.PropertyEvent;
 import com.googlecode.struts4rcp.client.event.PropertyListener;
@@ -162,7 +162,7 @@ public class ConfigurationPane extends JPanel {
 		});*/
 		configurationList.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 			public void valueChanged(ListSelectionEvent e) {
-				final PropertyDescription configuration = (PropertyDescription)configurationList.getSelectedValue();
+				final PropertyInfo configuration = (PropertyInfo)configurationList.getSelectedValue();
 				if (configuration != null) {
 					String name = configuration.getName();
 					if (name != null)
@@ -196,7 +196,7 @@ public class ConfigurationPane extends JPanel {
 
 		configurationListener = new ConfigurationDelegate(new PropertyAdapter() {
 			public void onPropertyChanged(final PropertyEvent event) {
-				PropertyDescription configuration = event.getConfiguration();
+				PropertyInfo configuration = event.getConfiguration();
 				synchronized (configurationModel) {
 					configurationModel.removeElement(configuration);
 					configurationModel.addElement(configuration);
@@ -207,10 +207,10 @@ public class ConfigurationPane extends JPanel {
 	}
 
 	private void refreshConfigurationList() {
-		Map<String, PropertyDescription> configurations = client.getPropertyDescriptions();
+		Map<String, PropertyInfo> configurations = client.getPropertyInfos();
 		synchronized (configurationModel) {
 			configurationModel.clear();
-			for (PropertyDescription configuration : configurations.values()) {
+			for (PropertyInfo configuration : configurations.values()) {
 				configurationModel.addElement(configuration);
 			}
 		}
@@ -235,7 +235,7 @@ public class ConfigurationPane extends JPanel {
 		public Component getListCellRendererComponent(JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			PropertyDescription configuration = (PropertyDescription)value;
+			PropertyInfo configuration = (PropertyInfo)value;
 			if(configuration.getName() != null)
 				this.setIcon(enableIcon);
 			else
