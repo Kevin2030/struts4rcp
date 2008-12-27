@@ -1,5 +1,6 @@
 package com.googlecode.struts4rcp.client.work;
 
+import java.io.IOException;
 import java.util.Stack;
 
 import com.googlecode.struts4rcp.client.Abortable;
@@ -61,7 +62,7 @@ public class Work implements Abortable, Backable {
 			abortorStack.pop();
 	}
 
-	public void abort() throws Exception {
+	public void abort() throws IOException {
 		if (abortable && ! abortorStack.isEmpty()) {
 			Abortable abortable = abortorStack.pop();
 			if (abortable != null)

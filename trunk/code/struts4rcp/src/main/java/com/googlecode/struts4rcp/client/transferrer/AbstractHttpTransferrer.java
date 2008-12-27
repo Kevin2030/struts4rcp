@@ -422,7 +422,7 @@ public abstract class AbstractHttpTransferrer<T> implements Transferrer {
 			this.request = request;
 		}
 
-		public void abort() throws Exception {
+		public void abort() throws IOException {
 			AbstractHttpTransferrer.this.abort(request);
 		}
 	}

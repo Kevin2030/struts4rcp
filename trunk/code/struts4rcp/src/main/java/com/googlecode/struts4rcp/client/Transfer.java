@@ -1,5 +1,6 @@
 package com.googlecode.struts4rcp.client;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -130,7 +131,7 @@ public class Transfer implements Serializable, Abortable {
 	/**
 	 * 中止传输
 	 */
-	public void abort() throws Exception {
+	public void abort() throws IOException {
 		if (abortor != null) {
 			synchronized (abortor) {
 				abortor.abort();
