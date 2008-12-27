@@ -322,7 +322,7 @@ public class Client implements Listenable {
 		String old = values.getProperty(key);
 		if (isChanged(old, value)) {
 			values.put(key, value);
-			propertyPublisher.publishEvent(new PropertyEvent(this, infos.get(key), old, value));
+			propertyPublisher.publishEvent(new PropertyEvent(this, key, old, value, infos.get(key)));
 		}
 	}
 

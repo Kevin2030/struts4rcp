@@ -196,7 +196,7 @@ public class ConfigurationPane extends JPanel {
 
 		configurationListener = new ConfigurationDelegate(new PropertyAdapter() {
 			public void onPropertyChanged(final PropertyEvent event) {
-				PropertyInfo configuration = event.getConfiguration();
+				PropertyInfo configuration = event.getPropertyInfo();
 				synchronized (configurationModel) {
 					configurationModel.removeElement(configuration);
 					configurationModel.addElement(configuration);
