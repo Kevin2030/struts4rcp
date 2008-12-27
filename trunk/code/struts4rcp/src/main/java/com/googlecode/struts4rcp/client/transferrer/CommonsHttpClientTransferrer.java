@@ -19,7 +19,6 @@ import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.util.IdleConnectionTimeoutThread;
 
-import com.googlecode.struts4rcp.client.AbstractTransferrer;
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.Transfer;
 import com.googlecode.struts4rcp.util.PropertiesUtils;

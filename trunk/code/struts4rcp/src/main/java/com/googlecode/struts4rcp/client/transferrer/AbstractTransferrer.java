@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.client;
+package com.googlecode.struts4rcp.client.transferrer;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -13,6 +13,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import com.googlecode.struts4rcp.client.Abortable;
+import com.googlecode.struts4rcp.client.Client;
+import com.googlecode.struts4rcp.client.Transfer;
+import com.googlecode.struts4rcp.client.Transferrer;
 import com.googlecode.struts4rcp.client.event.NetworkEvent;
 import com.googlecode.struts4rcp.client.event.NetworkListener;
 import com.googlecode.struts4rcp.client.event.NetworkPublisher;
