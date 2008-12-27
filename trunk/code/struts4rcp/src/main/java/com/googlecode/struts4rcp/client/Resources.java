@@ -91,4 +91,5 @@ public interface Resources<R extends Serializable> extends Serializable {
 	 * @throws Exception 删除失败或网络连接出错时抛出
 	 */
 	void clear() throws Exception;
+
 }
