@@ -23,7 +23,7 @@ public interface Resources<R extends Serializable> extends Serializable {
 	 * 获取资源集合URI
 	 * @return 资源集合URI
 	 */
-	String getURI();
+	String uri();
 
 	/**
 	 * 清除缓存

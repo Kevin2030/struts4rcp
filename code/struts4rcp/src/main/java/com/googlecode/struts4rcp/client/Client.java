@@ -489,7 +489,7 @@ public class Client implements Listenable {
 			this.lazy = lazy;
 		}
 
-		public String getURI() {
+		public String uri() {
 			return uri;
 		}
 
@@ -578,7 +578,7 @@ public class Client implements Listenable {
 			this.resource = resource;
 		}
 
-		public String getURI() {
+		public String uri() {
 			return uri;
 		}
 
@@ -592,7 +592,7 @@ public class Client implements Listenable {
 		}
 
 		@SuppressWarnings("unchecked")
-		public R read() throws Exception {
+		public R get() throws Exception {
 			if (resource == null)
 				resource = (R)getTransferrer().transfer(new Transfer(uri, null, Transfer.GET_METHOD));
 			return resource;
