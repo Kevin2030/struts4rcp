@@ -1,4 +1,4 @@
-package com.googlecode.struts4rcp.client;
+package com.googlecode.struts4rcp.client.work;
 
 /**
  * 工作接口

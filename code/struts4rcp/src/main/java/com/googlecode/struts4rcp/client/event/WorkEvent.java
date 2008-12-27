@@ -1,6 +1,6 @@
 package com.googlecode.struts4rcp.client.event;
 
-import com.googlecode.struts4rcp.client.Work;
+import com.googlecode.struts4rcp.client.work.Work;
 
 public class WorkEvent extends Event {
 

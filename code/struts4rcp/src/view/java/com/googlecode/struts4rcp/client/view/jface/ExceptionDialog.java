@@ -20,10 +20,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.googlecode.struts4rcp.client.Worker;
 import com.googlecode.struts4rcp.client.event.ExceptionAdapter;
 import com.googlecode.struts4rcp.client.event.ExceptionEvent;
 import com.googlecode.struts4rcp.client.event.ExceptionListener;
+import com.googlecode.struts4rcp.client.work.Worker;
 import com.googlecode.struts4rcp.util.ExceptionUtils;
 
 public class ExceptionDialog extends Dialog {

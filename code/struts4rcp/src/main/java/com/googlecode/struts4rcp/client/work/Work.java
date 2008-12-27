@@ -1,6 +1,8 @@
-package com.googlecode.struts4rcp.client;
+package com.googlecode.struts4rcp.client.work;
 
 import java.util.Stack;
+
+import com.googlecode.struts4rcp.client.Abortable;
 
 /**
  * 工作项

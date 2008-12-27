@@ -22,6 +22,7 @@ import com.googlecode.struts4rcp.client.event.PropertyListener;
 import com.googlecode.struts4rcp.client.event.PropertyPublisher;
 import com.googlecode.struts4rcp.client.event.TransferListener;
 import com.googlecode.struts4rcp.client.transferrer.HttpURLConnectionTransferrer;
+import com.googlecode.struts4rcp.client.work.Worker;
 import com.googlecode.struts4rcp.util.KeyValue;
 import com.googlecode.struts4rcp.util.PropertiesUtils;
 import com.googlecode.struts4rcp.util.ServiceUtils;

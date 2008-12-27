@@ -15,11 +15,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 
-import com.googlecode.struts4rcp.client.Work;
-import com.googlecode.struts4rcp.client.Worker;
 import com.googlecode.struts4rcp.client.event.WorkAdapter;
 import com.googlecode.struts4rcp.client.event.WorkEvent;
 import com.googlecode.struts4rcp.client.event.WorkListener;
+import com.googlecode.struts4rcp.client.work.Work;
+import com.googlecode.struts4rcp.client.work.Worker;
 import com.googlecode.struts4rcp.util.ThreadUtils;
 
 public class WorkDialog extends Dialog {
