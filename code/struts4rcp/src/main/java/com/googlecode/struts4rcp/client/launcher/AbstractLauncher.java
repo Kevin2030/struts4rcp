@@ -2,8 +2,8 @@ package com.googlecode.struts4rcp.client.launcher;
 
 import java.util.Properties;
 
-import com.googlecode.struts4rcp.client.AbstractTransferrer;
 import com.googlecode.struts4rcp.client.Client;
+import com.googlecode.struts4rcp.client.transferrer.AbstractTransferrer;
 
 /**
  * 启动器基类

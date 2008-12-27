@@ -30,7 +30,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
-import com.googlecode.struts4rcp.client.AbstractTransferrer;
 import com.googlecode.struts4rcp.client.Client;
 import com.googlecode.struts4rcp.client.Transfer;
 import com.googlecode.struts4rcp.util.serializer.stream.StreamSerializer;

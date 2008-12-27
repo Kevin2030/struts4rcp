@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.googlecode.struts4rcp.client.AbstractTransferrer;
 
 /**
  * 基于HttpURLConnection的传输器实现
