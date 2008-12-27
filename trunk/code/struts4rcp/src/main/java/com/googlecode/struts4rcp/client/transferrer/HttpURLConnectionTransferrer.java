@@ -5,12 +5,14 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.googlecode.struts4rcp.client.AbstractTransferrer;
+
 /**
  * 基于HttpURLConnection的传输器实现
  * @see java.net.HttpURLConnection
  * @author <a href="mailto:liangfei0201@gmail.com">liangfei</a>
  */
-public class HttpURLConnectionTransferrer extends AbstractHttpTransferrer<HttpURLConnection> {
+public class HttpURLConnectionTransferrer extends AbstractTransferrer<HttpURLConnection> {
 
 	@Override
 	protected HttpURLConnection getRequest(String method, String url) throws IOException {
