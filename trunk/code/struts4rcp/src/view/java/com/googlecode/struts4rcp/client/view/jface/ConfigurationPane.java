@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.googlecode.struts4rcp.client.Client;
-import com.googlecode.struts4rcp.client.PropertyDescription;
+import com.googlecode.struts4rcp.client.PropertyInfo;
 import com.googlecode.struts4rcp.client.event.PropertyEvent;
 import com.googlecode.struts4rcp.client.event.PropertyListener;
 
@@ -28,7 +28,7 @@ public class ConfigurationPane extends Composite {
 
 	private final PropertyListener configurationListener;
 
-	private final ArrayList<PropertyDescription> configurations = new ArrayList<PropertyDescription>();
+	private final ArrayList<PropertyInfo> configurations = new ArrayList<PropertyInfo>();
 
 	private final List configurationList;
 
@@ -121,7 +121,7 @@ public class ConfigurationPane extends Composite {
 
 		configurationListener = new PropertyListener() {
 			public void onPropertyChanged(final PropertyEvent event) {
-				final PropertyDescription configuration = event.getConfiguration();
+				final PropertyInfo configuration = event.getConfiguration();
 				synchronized (configurations) {
 					if (configurations.contains(configuration)) {
 						final int i = configurations.indexOf(configuration);
@@ -139,11 +139,11 @@ public class ConfigurationPane extends Composite {
 	}
 
 	private void refreshConfigurationList() {
-		Map<String, PropertyDescription> configs = client.getPropertyDescriptions();
+		Map<String, PropertyInfo> configs = client.getPropertyInfos();
 		synchronized (configurations) {
 			configurations.clear();
 			configurationList.removeAll();
-			for (PropertyDescription configuration : configs.values()) {
+			for (PropertyInfo configuration : configs.values()) {
 				configurations.add(configuration);
 				configurationList.add(configuration.toString());
 			}

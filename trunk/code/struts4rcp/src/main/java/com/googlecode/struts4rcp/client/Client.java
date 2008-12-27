@@ -223,11 +223,11 @@ public class Client implements Listenable {
 		config = new UnmodifiableProperties(config);
 		this.transferrer = transferrer;
 		transferrer.init(this, config);
-		addPropertyDescription(TRANSFERRER_KEY, "传输策略",
+		addPropertyInfo(TRANSFERRER_KEY, "传输策略",
 				"暂未实现传输策略动态切换，修改后不会生效!", HttpURLConnectionTransferrer.class
 						.getName(), ServiceUtils.getServiceClassNames(
 						Transferrer.class.getName()).toArray(new String[0]));
-		addPropertyDescription(LISTENERS_KEY, "事件监听器",
+		addPropertyInfo(LISTENERS_KEY, "事件监听器",
 				"暂未实现动态注册事件监听器，修改后不会生效!", "");
 		// 读取监听器
 		List<Listener> listeners = PropertiesUtils.getInstancesProperty(config,
@@ -322,7 +322,7 @@ public class Client implements Listenable {
 		String old = values.getProperty(key);
 		if (isChanged(old, value)) {
 			values.put(key, value);
-			propertyPublisher.publishEvent(new PropertyEvent(this, descriptions.get(key), old, value));
+			propertyPublisher.publishEvent(new PropertyEvent(this, infos.get(key), old, value));
 		}
 	}
 
@@ -352,23 +352,23 @@ public class Client implements Listenable {
 		propertyPublisher.removeListener(listener);
 	}
 
-	private final Map<String, PropertyDescription> descriptions = Collections.synchronizedMap(new HashMap<String, PropertyDescription>());
+	private final Map<String, PropertyInfo> infos = Collections.synchronizedMap(new HashMap<String, PropertyInfo>());
 
 	/**
 	 * 获取配置项
 	 * @param key 配置项索引
 	 * @return 配置项
 	 */
-	public PropertyDescription getPropertyDescription(String key) {
-		return descriptions.get(key);
+	public PropertyInfo getPropertyInfo(String key) {
+		return infos.get(key);
 	}
 
 	/**
 	 * 获取所有配置项
 	 * @return 所有配置项
 	 */
-	public Map<String, PropertyDescription> getPropertyDescriptions() {
-		return Collections.unmodifiableMap(descriptions);
+	public Map<String, PropertyInfo> getPropertyInfos() {
+		return Collections.unmodifiableMap(infos);
 	}
 
 	/**
@@ -377,7 +377,7 @@ public class Client implements Listenable {
 	 * @param name 配置项名
 	 * @param desc 配置项描述
 	 */
-	public void addPropertyDescription(String key, String name, String desc, String defaultValue, String... optionValues) {
+	public void addPropertyInfo(String key, String name, String desc, String defaultValue, String... optionValues) {
 		if (key == null)
 			throw new NullPointerException("key == null!");
 		if (name == null)
@@ -396,11 +396,11 @@ public class Client implements Listenable {
 				list.add(0, defaultValue);
 			options = Collections.unmodifiableCollection(list);
 		}
-		addPropertyDescription(key, new PropertyDescription(name, desc, defaultValue, options));
+		addPropertyInfo(key, new PropertyInfo(name, desc, defaultValue, options));
 	}
 
-	public void addPropertyDescription(String key, PropertyDescription description) {
-		descriptions.put(key, description);
+	public void addPropertyInfo(String key, PropertyInfo description) {
+		infos.put(key, description);
 	}
 
 	/**
