@@ -121,7 +121,7 @@ public class ConfigurationPane extends Composite {
 
 		configurationListener = new PropertyListener() {
 			public void onPropertyChanged(final PropertyEvent event) {
-				final PropertyInfo configuration = event.getConfiguration();
+				final PropertyInfo configuration = event.getPropertyInfo();
 				synchronized (configurations) {
 					if (configurations.contains(configuration)) {
 						final int i = configurations.indexOf(configuration);

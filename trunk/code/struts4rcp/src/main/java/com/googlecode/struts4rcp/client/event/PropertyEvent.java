@@ -10,25 +10,28 @@ public class PropertyEvent extends Event {
 
 	private static final long serialVersionUID = 1L;
 
-	private final PropertyInfo description;
+	private final String key;
 
 	private final String oldValue;
 
 	private final String newValue;
 
-	public PropertyEvent(Object source, PropertyInfo description, String oldValue, String newValue) {
+	private final PropertyInfo info;
+
+	public PropertyEvent(Object source, String key, String oldValue, String newValue, PropertyInfo info) {
 		super(source);
-		this.description = description;
+		this.key = oldValue;
 		this.oldValue = oldValue;
 		this.newValue = newValue;
+		this.info = info;
 	}
 
 	/**
-	 * 获取改变的配置项
-	 * @return 改变的配置项
+	 * 获取属性索引键
+	 * @return 属性索引键
 	 */
-	public PropertyInfo getConfiguration() {
-		return description;
+	public String getKey() {
+		return key;
 	}
 
 	/**
@@ -45,6 +48,14 @@ public class PropertyEvent extends Event {
 	 */
 	public String getNewValue() {
 		return newValue;
+	}
+
+	/**
+	 * 获取改变的配置项
+	 * @return 改变的配置项
+	 */
+	public PropertyInfo getPropertyInfo() {
+		return info;
 	}
 
 }
