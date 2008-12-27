@@ -72,7 +72,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 			if ("head".equalsIgnoreCase(method)) {
 				return exist(model);
 			} else if ("get".equalsIgnoreCase(method)) {
-				return read(model);
+				return get(model);
 			} else if ("put".equalsIgnoreCase(method)) {
 				update(model);
 				return null;
@@ -205,7 +205,7 @@ public abstract class ResourceAction<R extends Serializable> extends AbstractAct
 	 * @return 资源
 	 * @throws Exception 读取失败时抛出
 	 */
-	public R read(R resource) throws Exception {
+	public R get(R resource) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 
