@@ -86,5 +86,9 @@ public interface Resources<R extends Serializable> extends Serializable {
 	 */
 	Resource<R> create(R resource) throws Exception;
 
+	/**
+	 * 删除所有资源
+	 * @throws Exception 删除失败或网络连接出错时抛出
+	 */
 	void clear() throws Exception;
 }
