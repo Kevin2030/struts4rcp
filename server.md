@@ -1,0 +1,289 @@
+# 服务器使用说明 #
+服务器端使用时需导入：struts4rcp-server.jar，并在web.xml中配置ActionServlet，如：
+```
+<servlet>
+    <servlet-name>actionServlet</servlet-name>
+    <servlet-class>com.googlecode.struts4rcp.server.ActionServlet</servlet-class>
+    <init-param>
+        <param-name>serializers</param-name>
+        <param-value>
+            data: com.googlecode.struts4rcp.util.serializer.JavaSerializer,
+            json: com.googlecode.struts4rcp.server.serializer.JsonSerializer,
+	    page: com.googlecode.struts4rcp.server.serializer.JspSerializer
+        </param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+<servlet-mapping>
+    <servlet-name>actionServlet</servlet-name>
+    <url-pattern>*.data</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>actionServlet</servlet-name>
+    <url-pattern>*.json</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>actionServlet</servlet-name>
+    <url-pattern>*.page</url-pattern>
+</servlet-mapping>
+```
+上面的配置表示，ActionServlet将接收data和json类型的请求，
+并用JavaSerializer处理data类型(后缀识别)数据的接收与发送，
+用JsonSerializer处理json类型数据的接收与发送，
+用JspSerializer处理page类型的数据。
+内置支持以下序列化器：
+  * com.googlecode.struts4rcp.util.serializer.JavaSerializer 使用Java缺省的对象序列化机制
+  * com.googlecode.struts4rcp.util.serializer.JBossSerializer 使用JBoss的提供的对象序列化机制
+  * com.googlecode.struts4rcp.util.serializer.JsonSerializer 使用JSON格式序列化对象
+  * com.googlecode.struts4rcp.util.serializer.XmlSerializer 使用Java自带的XmlEncoder和XmlDecoder序列化对象
+  * com.googlecode.struts4rcp.util.serializer.XStreamSerializer 使用XStream提供的对象XML序列化方式
+  * com.googlecode.struts4rcp.server.serializer.JsonSerializer 与util包的JsonSerializer不同，它输出JSON数据，但接收表单数据(而非JSON数据)
+  * com.googlecode.struts4rcp.server.serializer.JspSerializer JSP页面序列化适配(接收表单数据)
+  * com.googlecode.struts4rcp.server.serializer.CommonTemplateSerializer CTL模板页面序列化适配(接收表单数据)
+  * com.googlecode.struts4rcp.server.serializer.FreeMarkerSerializer FTL模板页面序列化适配(接收表单数据)
+  * com.googlecode.struts4rcp.server.serializer.VelocitySerializer VTL模板页面序列化适配(接收表单数据)
+ActionServlet另外一个初始化参数为actionFactory，用于切换Action实例化工厂(或容器)，如：
+```
+<servlet>
+    <servlet-name>actionServlet</servlet-name>
+    <servlet-class>com.googlecode.struts4rcp.server.ActionServlet</servlet-class>
+    <init-param>
+        <param-name>actionFactory</param-name>
+        <param-value>com.googlecode.struts4rcp.server.factory.SpringActionFactory</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+```
+缺省使用SpringActionFactory，内置提供：
+  * (1) com.googlecode.struts4rcp.server.factory.SpringActionFactory 与Spring IoC/DI容器的适配策略
+  * (2) com.googlecode.struts4rcp.server.factory.GuiceActionFactory 与Google-Guice IoC/DI容器的适配策略
+  * (3) com.googlecode.struts4rcp.server.factory.PropertiesActionFactory 使用一个简单的actions.properties来注册Action实例，如：loginAction=com.xxx.LoginAction，不提供注入功能，通常用于非IoC/DI的服务工厂获取方式中，如：LoginService loginService = ServiceFactory.getService("loginService");
+因为缺省使用SpringActionFactory，所以还需要配置Spring容器，框架未做任何包装，与Spring在其它地方的使用相同：
+```
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath*:beans.xml</param-value>
+</context-param>
+<listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+```
+配置好ActionServlet和Spring容器后，就可以开始注册Action实现，
+最简单的方式是直接实现Action接口，如：
+```
+public class LoginAction implements Action<Account, User> {
+
+	public User execute(Account account) throws Exception {
+		// 如果需要跳转：throw new ActionForwardException("xxxAction", account);
+		return loginService.login(account.getUsername(), account.getPassword());
+	}
+
+	private LoginService loginService;
+
+	// IoC/DI注入
+	public void setLoginService(LoginService loginService) {
+		this.loginService = loginService;
+	}
+
+}
+```
+然后，在Spring配置中注册Action实例：(SpringActionFactory将把此实例转给ActionServlet)
+```
+<bean id="loginAction" class="com.xxx.LoginAction">
+	<property name="loginService" ref="loginService" />
+</bean>
+```
+其中，loginService的实现已完全由Spring接管，这里就不再多描述，
+客户端或AJAX请求现在就可以正常访问上面的Action，传入传出数据，如：
+```
+Account account = new Account("james", "123456"); // 传入数据模型
+Action<Account, User> loginAction = Actions.getAction("loginAction"); // 对应Spring配置中的<bean id="loginAction">
+User user = loginAction.execute(account); // 同步执行，并取得结果
+```
+```
+<script type="text/javascript">
+var account = {username: "james", password: "123456", className: "com.xxx.Account"}; // 传入数据模型，若不指定className属性，表示使用Map类型
+var loginAction = Actions.getAction("loginAction"); // 对应Spring配置中的<bean id="loginAction">
+var user = loginAction.execute(account); // 同步执行，并取得结果
+</script>
+```
+更多使用方式请参见：[客户端使用说明](http://code.google.com/p/struts4rcp/wiki/client)，
+如果希望一个Action实例可以处理多个请求，可以继承于DispatchAction，它将分发请求到多个函数，如：
+```
+public class UserManageAction implements DispatchAction<User> {
+
+	public Serializable saveUser(User user) throws Exception {
+		// ......
+	}
+
+	public Serializable updateUser(User user) throws Exception {
+		// ......
+	}
+
+	public Serializable removeUser(User user) throws Exception {
+		// ......
+	}
+
+	public Serializable searchUser(User user) throws Exception {
+		// ......
+	}
+
+}
+```
+然后配置多个名称指向同一个Bean，如下： (name属性用于取别名，也可以分开写多个，如：&lt;bean id="userManageAction.saveUser"&gt;)
+```
+<bean id="userManageAction" name="userManageAction.saveUser,userManageAction.updateUser,userManageAction.removeUser,,userManageAction.searchUser" class="com.xxx.UserManageAction">
+	<property name="loginService" ref="loginService" />
+</bean>
+```
+访问如：
+```
+Actions.getAction("userManageAction.saveUser");
+```
+如果希望按HTTP请求的方法类型区分函数，可以继承于RestfulAction，如：
+```
+public class UserManageAction implements RestfulAction<User> {
+
+	public Serializable post(User user) throws Exception {
+		// save user ......
+	}
+
+	public Serializable put(User user) throws Exception {
+		// update user ......
+	}
+
+	public Serializable delete(User user) throws Exception {
+		// remove user ......
+	}
+
+	public Serializable get(User user) throws Exception {
+		// search user......
+	}
+
+}
+```
+因为分派方法是固定的，只需要配置一个bean即可，如：
+```
+<bean id="userManageAction" class="com.xxx.UserManageAction">
+	<property name="loginService" ref="loginService" />
+</bean>
+```
+如果是传统的JSP页面，或模板页面，则需要在Action实现类的旁边放置同名的页面或模板，如：
+  * com/xxx/LoginAction.java Action实现类
+  * com/xxx/LoginAction.jsp 与Action同名同目录的JSP页面(序列化器：com.googlecode.struts4rcp.server.serializer.JspSerializer)
+  * com/xxx/LoginAction.ctl 或者，CommonTemplate模板(序列化器：com.googlecode.struts4rcp.server.serializer.CommonTemplateSerializer)
+  * com/xxx/LoginAction.ftl 或者，FreeMarker模板(序列化器：com.googlecode.struts4rcp.server.serializer.FreeMarkerSerializer)
+  * com/xxx/LoginAction.vtl 或者，Velocity模板(序列化器：com.googlecode.struts4rcp.server.serializer.VelocitySerializer)
+当Action执行完后，将调用相应页面或模板进行数据格式化，并输出。
+如果是DispatchAction或RestfulAction，页面名称需带上函数名，如：
+  * com/xxx/LoginAction.login.jsp
+  * com/xxx/LoginAction.login.ctl
+  * com/xxx/LoginAction.login.ftl
+  * com/xxx/LoginAction.login.vtl
+需要注意的是，JSP页面不能打包到jar中，必须散开在/WEB-INF/classes/目录下，否则访问不到，模板页面不受此限制。
+如果想改变页面位置，可以使用Page标注：(如果是DispatchAction或RestfulAction，标注要写在函数上)
+```
+@Page("/WEB-INF/xxx") // 页面路径不要带后缀
+public class LoginAction implements Action<Account, User> {
+	// ......
+}
+```
+也可以实现PageAction接口：
+```
+public class LoginAction implements PageAction<Account, User> {
+
+	// 实现接口函数，返回页面路径
+	public String getPage() {
+		return "/WEB-INF/xxx";
+	}
+
+	// ......
+
+}
+```
+或者，改为注入配置：
+```
+public class LoginAction implements PageAction<Account, User> {
+
+	private String page;
+
+	public String setPage(String page) {
+		this.page = page;
+	}
+
+	public String getPage() {
+		return page;
+	}
+
+	// ......
+
+}
+```
+然后，配置：
+```
+<bean id="loginAction" class="com.xxx.LoginAction">
+	<property name="page" value="/WEB-INF/xxx" />
+	<property name="loginService" ref="loginService" />
+</bean>
+```
+或者继承于AbstractAction类，它将作各种检查，如：(DispatchAction和RestfulAction都继承于AbstractAction类)
+```
+public abstract class AbstractAction<M extends Serializable, R extends Serializable> implements PageAction<M, R> {
+
+	private String page;
+
+	public void setPage(String page) {
+		this.page = page;
+	}
+
+	public String getPage() {
+		if (page != null)
+			return page;
+		if (getClass().isAnnotationPresent(Page.class))
+			return getClass().getAnnotation(Page.class).value();
+		return getClass().getName().replace('.', '/');
+	}
+
+}
+```
+另外，你可能需要在Action执行的前后作一些统一的处理，如：权限控制，全局验证，异常转换，调试信息，性能监控等等，如：
+```
+<bean id="exceptionInterceptor" class="com.xxx.ExceptionInterceptor">
+</bean>
+<bean id="validationInterceptor" class="com.xxx.ValidationInterceptor">
+</bean>
+<bean id="securityInterceptor" class="com.xxx.SecurityInterceptor">
+</bean>
+```
+然后通过拦截器栈进行排序：
+```
+<bean id="actionInterceptorStack" class="com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack">
+    <property name="actionInterceptors">
+	<list>
+		<ref bean="exceptionInterceptor"/>
+		<ref bean="validationInterceptor"/>
+		<ref bean="securityInterceptor"/>
+	</list>
+    </property>
+</bean>
+```
+拦截器栈，栈之间可以相互引用，但根拦截器栈id必需为"actionInterceptorStack"，如：
+```
+<bean id="commonInterceptorStack" class="com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack">
+    <property name="actionInterceptors">
+	<list>
+		<ref bean="exceptionInterceptor"/>
+		<ref bean="validationInterceptor"/>
+	</list>
+    </property>
+</bean>
+<!--actionInterceptorStack引用commonInterceptorStack：-->
+<bean id="actionInterceptorStack" class="com.googlecode.struts4rcp.server.interceptor.ActionInterceptorStack">
+    <property name="actionInterceptors">
+	<list>
+		<ref bean="commonInterceptorStack"/>
+		<ref bean="securityInterceptor"/>
+	</list>
+    </property>
+</bean>
+```

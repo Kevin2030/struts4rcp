@@ -1,0 +1,40 @@
+## 设计说明 ##
+##### (1) 部署图 #####
+![http://struts4rcp.googlecode.com/svn/trunk/docs/design/uml/deploy_diagram.gif](http://struts4rcp.googlecode.com/svn/trunk/docs/design/uml/deploy_diagram.gif)
+  * struts4rcp-client.jar组件：客户端框架，包括：
+    * com.googlecode.struts4rcp包
+    * com.googlecode.struts4rcp.util包
+    * com.googlecode.struts4rcp.client包
+  * struts4rcp-swing.jar组件：AWT/Swing/Netbeans图形工具，包括：
+    * com.googlecode.struts4rcp.client.swing包
+  * struts4rcp-jface.jar组件：SWT/JFace/Eclipse图形工具，包括：
+    * com.googlecode.struts4rcp.client.jface包
+  * struts4rcp-server.jar组件：服务器端框架，包括：
+    * com.googlecode.struts4rcp包
+    * com.googlecode.struts4rcp.util包
+    * com.googlecode.struts4rcp.server包
+  * struts4rcp-extjs.jar组件：ExtJS标签库，包括：
+    * com.googlecode.struts4rcp.client.extjs包
+  * struts4rcp.js组件：Ajax请求封装脚本
+##### (2) 类图 #####
+![http://struts4rcp.googlecode.com/svn/trunk/docs/design/uml/class_diagram.gif](http://struts4rcp.googlecode.com/svn/trunk/docs/design/uml/class_diagram.gif)
+##### 包说明 #####
+  * com.googlecode.struts4rcp包：客户端与服务器端交互面，共享模型。(中心接口：Action)
+  * com.googlecode.struts4rcp.client包：客户端实现。(入口类：Actions)
+  * com.googlecode.struts4rcp.server包：服务器端实现。(入口类：ActionServlet)
+  * com.googlecode.struts4rcp.util包：通用工具包，辅助实现。
+##### 领域说明 #####
+  * 黄色：服务域
+  * 红色：会话域
+  * 绿色：实体域
+##### (3) 序列图 #####
+![http://struts4rcp.googlecode.com/svn/trunk/docs/design/uml/sequence_diagram.gif](http://struts4rcp.googlecode.com/svn/trunk/docs/design/uml/sequence_diagram.gif)
+  * Client：调用者
+  * Actions：客户端Action门面
+  * ActionProxy：客户端Action代理实现(非公开类)
+  * Transporter：客户端请求发送传输器(缺省采用HttpURLConnectionTransporter)
+  * Serializer：传输序列化器(缺省采用JavaSerializer)
+  * ActionServlet：服务器端请求接收器
+  * ActionFactory：服务器端Action实例化工厂(缺省采用SpringActionFactory)
+  * ActionIntercepter：服务器端Action执行过程拦截器链
+  * Action：服务器端Action实例(调用目标)
